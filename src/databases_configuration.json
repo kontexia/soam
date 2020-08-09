@@ -1,0 +1,34 @@
+{
+  "arango_db": {
+    "_system": {
+      "database_URL": "http://localhost:8529",
+      "database_name": "_system",
+      "username": "root",
+      "password": "Kontexia_1",
+      "query_language": "AQL"
+    },
+    "AMF": {
+      "database_URL": "http://localhost:8529",
+      "database_name": "AMF",
+      "username": "root",
+      "password": "kontexia.io",
+      "query_language": "AQL"
+    }
+  },
+  "json": {
+    "_system": {
+      "database_URL": "C:/Users/username/PycharmProjects/hsg/data_fabric/json_db/",
+      "database_name": "_system",
+      "username": "",
+      "password": "",
+      "query_language": "JSON"
+    },
+    "demo_db": {
+      "database_URL": "C:/Users/username/PycharmProjects/hsg/data_fabric/json_db/",
+      "database_name": "demo_db",
+      "username": "",
+      "password": "",
+      "query_language": "JSON"
+    }
+  }
+}

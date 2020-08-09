@@ -1,0 +1,335 @@
+{
+  "user_defined_query": {
+        "AQL": "FOR v, e, p IN 1..@max_depth ANY @start_node_id @edge_collection_names LIMIT @node_limit RETURN p",
+        "parameters": {
+            "max_depth": {
+                "value": 1,
+                "type": "attribute"
+            },
+            "edge_collection_names": {
+                "value": null,
+                "type": "attribute"
+            },
+            "start_node_id": {
+                "value": null,
+                "type": "attribute"
+            },
+            "node_limit": {
+                "value": 1000,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "path",
+        "type": "viz_preset",
+        "description": "create your own query..."
+  },
+  "get_shortest_path_between_two_nodes": {
+        "AQL": "FOR v, e IN ANY SHORTEST_PATH @start_node_id TO @end_node_id @edge_collection_names OPTIONS {weightAttribute: \"weight\", defaultWeight: 0} LIMIT @max_depth RETURN {\"v\": v, \"e\": e} ",
+        "parameters": {
+            "start_node_id": {
+                "value": null,
+                "type": "attribute"
+            },
+            "end_node_id": {
+                "value": null,
+                "type": "attribute"
+            },
+            "edge_collection_names": {
+                "value": null,
+                "type": "substitution"
+            },
+            "max_depth": {
+                "value": "5",
+                "type": "attribute"
+            }
+        },
+        "returned_type": "shortest_path",
+        "type": "viz_preset",
+        "description": "return the messages for a conversation"
+    },
+    "get_neighbourhood_paths_for_document": {
+        "AQL": "FOR v, e, p IN 1..@max_depth ANY @start_vertex_id @edge_collection_names LIMIT @node_limit RETURN p",
+        "parameters": {
+            "max_depth": {
+                "value": 1,
+                "type": "attribute"
+            },
+            "edge_collection_names": {
+                "value": null,
+                "type": "attribute"
+            },
+            "start_node_id": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "path",
+        "type": "exploration",
+        "description": ""
+    },
+  "get_limited_number_of_documents_from_collection": {
+    "AQL": "FOR document IN @@collection_name SORT document._id LIMIT @result_limit RETURN document",
+    "parameters": {
+      "@collection_name": {
+        "value": null,
+        "type": "collection"
+      }
+    },
+    "returned_type": "document",
+    "type": "exploration",
+    "description": ""
+    },
+    "get_number_of_edges_for_document": {
+        "AQL": "RETURN COUNT(FOR v, e, p IN 1..1 ANY @start_node @@collection_name RETURN e)",
+        "parameters": {
+            "@collection_name": {
+                "value": null,
+                "type": "collection"
+            },
+            "start_node": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+  "get_edge_types_for_document": {
+    "AQL": "FOR v, e, p IN 1..@max_depth ANY @start_node @collection_name limit @node_limit collect edge_name = split(e._id, \"/\")[0] return edge_name",
+        "parameters": {
+            "@collection_name": {
+                "value": null,
+                "type": "collection"
+            },
+            "start_node": {
+                "value": null,
+                "type": "attribute"
+            },
+            "max_depth": {
+                "value": 1,
+                "type": "attribute"
+            },
+            "node_limit": {
+                "value": 300,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+  "get_edge_types_documents": {
+        "AQL": "for doc in meta_vertex FOR v1, e1, p1 IN 1..@depth ANY doc meta_edge limit @node_limit COLLECT doc_name = doc.vertex_type INTO edge_names = e1.edge_type return {doc_name, edge_names}",
+        "parameters": {
+            "max_depth": {
+                "value": 1,
+                "type": "attribute"
+            },
+            "node_limit": {
+                "value": 300,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+  "get_document_from_collection_by_id": {
+        "AQL": "FOR document IN @@collection_name FILTER document._id == @document_id RETURN document",
+        "parameters": {
+            "@collection_name": {
+                "value": null,
+                "type": "collection"
+            },
+            "document_id": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+  "get_shortest_path": {
+        "AQL": "FOR v, e IN ANY SHORTEST_PATH @from_vertex TO @to_vertex @edge_collection_names RETURN [v, e]",
+        "parameters": {
+            "from_vertex": {
+                "value": null,
+                "type": "attribute"
+            },
+            "edge_collection_names": {
+                "value": null,
+                "type": "collection"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+  "get_edges_for_source_vertex": {
+        "AQL": "for document in @@edge_name filter document._from == @vertex_id return document",
+        "parameters": {
+            "@edge_name": {
+                "value": null,
+                "type": "collection"
+            },
+            "vertex_id": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+    "get_edges_for_target_vertex": {
+        "AQL": "for document in @@edge_name filter document._to == @vertex_id return document",
+        "parameters": {
+            "@edge_name": {
+                "value": null,
+                "type": "collection"
+            },
+            "vertex_id": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+  "get_named_query": {
+        "AQL": "for nq in @@named_query_col COLLECT named_query = nq._named_query, collection = nq._target_collection into keys = nq._target_key return {'named_query': named_query, 'collection': collection}",
+        "parameters": {
+            "named_query_col": {
+                "value": null,
+                "type": "collection"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+
+    "get_filtered_named_query": {
+        "AQL": "for nq in @@named_query_col FILTER nq._named_query in @filter_keys COLLECT named_query = nq._named_query, collection = nq._target_collection into keys = nq._target_key return {'named_query': named_query, 'collection': collection}",
+        "parameters": {
+            "named_query_col": {
+                "value": null,
+                "type": "collection"
+            },
+            "filter_keys": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+    "get_docs_in_collection": {
+        "AQL": "for doc in @@collection return doc",
+        "parameters": {
+            "collection": {
+                "value": null,
+                "type": "collection"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+    "get_docs_via_key_expiry_ts": {
+        "AQL": "for doc in @@collection FILTER doc._key in @filter_keys and doc._expired_ts == @expiry_ts return doc",
+        "parameters": {
+            "collection": {
+                "value": null,
+                "type": "collection"
+            },
+            "filter_keys": {
+                "value": null,
+                "type": "attribute"
+            },
+            "expiry_ts": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+    "get_docs_via_key": {
+        "AQL": "for doc in @@collection FILTER doc._key in @filter_keys return doc",
+        "parameters": {
+            "collection": {
+                "value": null,
+                "type": "collection"
+            },
+            "filter_keys": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+    "update_sub_graphs": {
+        "AQL": "for doc in @@collection FILTER doc._key in @filter_keys update doc with { _sub_graphs: PUSH(doc._sub_graphs, @sub_graph, true)} in @@collection",
+        "parameters": {
+            "collection": {
+                "value": null,
+                "type": "collection"
+            },
+            "filter_keys": {
+                "value": null,
+                "type": "attribute"
+            },
+            "sub_graph": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": null,
+        "type": "exploration",
+        "description": ""
+    },
+    "get_docs_via_sub_graph": {
+        "AQL": "for doc in @@collection FILTER @sub_graph in doc._sub_graphs return doc",
+        "parameters": {
+            "collection": {
+                "value": null,
+                "type": "collection"
+            },
+            "sub_graph": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    },
+    "get_docs_via_sub_graph_expiry_ts": {
+        "AQL": "for doc in @@collection FILTER @sub_graph in doc._sub_graphs and doc._expired_ts == @expiry_ts return doc",
+        "parameters": {
+            "collection": {
+                "value": null,
+                "type": "collection"
+            },
+            "filter_keys": {
+                "value": null,
+                "type": "attribute"
+            },
+            "expiry_ts": {
+                "value": null,
+                "type": "attribute"
+            }
+        },
+        "returned_type": "document",
+        "type": "exploration",
+        "description": ""
+    }
+}
