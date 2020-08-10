@@ -226,7 +226,7 @@ def print_neurons_raw_data(raw_data, fabric, title, neuron_ids=None, max_neurons
 def test():
     start_time = time.time()
 
-    file_name = '../src/example_colours.json'
+    file_name = '../data/example_colours.json'
     with open(file_name, 'r') as fp:
         raw_data = json.load(fp)
 
