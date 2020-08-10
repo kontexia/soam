@@ -75,8 +75,8 @@ class NeuroColumn:
                neuron_id: cython.int,
                prob: cython.double,
                numeric: float = None,
-               normalise_min: float = None,
-               normalise_max: float = None):
+               numeric_min: float = None,
+               numeric_max: float = None):
         """
         method to insert an edge into the SDR
 
@@ -88,8 +88,8 @@ class NeuroColumn:
         :param neuron_id: number between 0 and max number of neurons on a mini-column
         :param prob: the prob of the edge connection
         :param numeric: the numeric numeric of the edge
-        :param normalise_min: the minimum that parameter numeric can be
-        :param normalise_max: the maximum that [arameter numeric can be
+        :param numeric_min: the minimum that parameter numeric can be
+        :param numeric_max: the maximum that [arameter numeric can be
         :return: None
         """
 
@@ -114,10 +114,10 @@ class NeuroColumn:
 
             # normalise numeric if min and max provided
             #
-            if normalise_min is not None and normalise_min is not None:
-                self.edges[edge_key]['numeric'] = (numeric - normalise_min) / (normalise_max - normalise_min)
-                self.edges[edge_key]['norm_min'] = normalise_min
-                self.edges[edge_key]['norm_max'] = normalise_max
+            if numeric_min is not None and numeric_min is not None:
+                self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)
+                self.edges[edge_key]['numeric_min'] = numeric_min
+                self.edges[edge_key]['numeric_max'] = numeric_max
             else:
                 self.edges[edge_key]['numeric'] = numeric
 
@@ -140,8 +140,8 @@ class NeuroColumn:
                         neuron_id=neuron_id,
                         prob=sdr[sdr_key]['prob'],
                         numeric=sdr[sdr_key]['numeric'],
-                        normalise_min=sdr[sdr_key]['min'],
-                        normalise_max=sdr[sdr_key]['max']
+                        normalise_min=sdr[sdr_key]['numeric_min'],
+                        normalise_max=sdr[sdr_key]['numeric_max']
                         )
 
     def stack(self, sdrs: List[SDR], max_neurons: cython.int) -> None:
@@ -173,8 +173,8 @@ class NeuroColumn:
                             neuron_id=neuron_id,
                             prob=sdrs[idx][sdr_key]['prob'],
                             numeric=sdrs[idx][sdr_key]['numeric'],
-                            normalise_min=sdrs[idx][sdr_key]['min'],
-                            normalise_max=sdrs[idx][sdr_key]['max']
+                            numeric_min=sdrs[idx][sdr_key]['numeric_min'],
+                            numeric_max=sdrs[idx][sdr_key]['numeric_max']
                             )
 
     def calc_distance(self, neuro_column, filter_types: Optional[FilterType] = None) -> Tuple[float, List[ContributionType]]:
@@ -205,7 +205,7 @@ class NeuroColumn:
         #
         for edge_key in edges_to_process:
 
-            # edge_key in both SDRs
+            # edge_key in both NeuroColumns
             #
             if edge_key in self.edges and edge_key in neuro_column.edges:
                 sum_min += min(neuro_column.edges[edge_key]['prob'], self.edges[edge_key]['prob'])
@@ -217,7 +217,7 @@ class NeuroColumn:
                     sum_max += max(neuro_column.edges[edge_key]['numeric'], self.edges[edge_key]['numeric'])
                     contributions.append({'edge': edge_key, 'numeric': abs(neuro_column.edges[edge_key]['numeric'] - self.edges[edge_key]['numeric'])})
 
-            # edge key only in this SDR
+            # edge key only in this NeuroColumn
             #
             elif edge_key in self.edges:
                 sum_max += self.edges[edge_key]['prob']
@@ -227,7 +227,7 @@ class NeuroColumn:
                     sum_max += self.edges[edge_key]['numeric']
                     contributions.append({'edge': edge_key, 'numeric': self.edges[edge_key]['numeric']})
 
-            # edge_key in the SDR to compare to
+            # edge_key in the NeuroColumn to compare to
             #
             else:
                 sum_max += neuro_column.edges[edge_key]['prob']
@@ -304,9 +304,9 @@ class NeuroColumn:
                     #
                     if 'numeric' in neuro_column.edges[edge_key]:
                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
-                        if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
-                            self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
-                            self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+                        if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+                            self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+                            self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
                 elif is_bmu:
 
                     self.edges[edge_key] = {'edge_type': neuro_column.edges[edge_key]['edge_type'],
@@ -321,9 +321,9 @@ class NeuroColumn:
                     #
                     if 'numeric' in neuro_column.edges[edge_key]:
                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
-                        if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
-                            self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
-                            self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+                        if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+                            self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+                            self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
 
     def merge(self, neuro_column, merge_factor: cython.double) -> None:
         """
@@ -364,9 +364,9 @@ class NeuroColumn:
 
                 if 'numeric' in neuro_column.edges[edge_key]:
                     self.edges[edge_key]['numeric'] = (neuro_column.edges[edge_key]['numeric'] * merge_factor)
-                    if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
-                        self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
-                        self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+                    if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+                        self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+                        self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
 
     def randomize(self, neuro_column, edges_to_randomise: set = None) -> None:
         """
@@ -393,10 +393,10 @@ class NeuroColumn:
 
                     # use the normalisation boundaries to calc a random number - which will be normalised when upserted...
                     #
-                    if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
-                        rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['norm_max'] - neuro_column.edges[edge_key]['norm_min'])) + neuro_column.edges[edge_key]['norm_min']
-                        norm_min = neuro_column.edges[edge_key]['norm_min']
-                        norm_max = neuro_column.edges[edge_key]['norm_max']
+                    if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+                        rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['numeric_max'] - neuro_column.edges[edge_key]['numeric_min'])) + neuro_column.edges[edge_key]['numeric_min']
+                        numeric_min = neuro_column.edges[edge_key]['numeric_min']
+                        numeric_max = neuro_column.edges[edge_key]['numeric_max']
                     else:
                         rnd_numeric = random.random()
 
@@ -411,14 +411,14 @@ class NeuroColumn:
                             #
                             prob=random.random(),
                             numeric=rnd_numeric,
-                            normalise_min=norm_min,
-                            normalise_max=norm_max
+                            numeric_min=numeric_min,
+                            numeric_max=numeric_max
                             )
 
     def get_edge_by_max_probability(self) -> Optional[Dict[EdgeFeatureKeyType, EdgeFeatureType]]:
         """
         method to return the edge with the maximum prob
-        :return: Dictionary with keys: 'edge_type', 'source_type', 'source_uid', 'target_type', 'target_uid', 'neuron_id', 'prob', Optional['numeric', 'min', 'max']
+        :return: Dictionary with keys: 'edge_type', 'source_type', 'source_uid', 'target_type', 'target_uid', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max']
 
         """
 
@@ -452,8 +452,8 @@ class NeuroColumn:
         for edge_key in self.edges:
 
             if 'numeric' in self.edges[edge_key]:
-                if 'norm_min' in self.edges[edge_key]:
-                    numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['norm_min'] - self.edges[edge_key]['norm_max'])) + self.edges[edge_key]['norm_min']
+                if 'numeric_min' in self.edges[edge_key]:
+                    numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['numeric_min'] - self.edges[edge_key]['numeric_max'])) + self.edges[edge_key]['numeric_min']
                 else:
                     numeric = self.edges[edge_key]['numeric']
             else:
@@ -496,7 +496,7 @@ class NeuroColumn:
         """
         method to return a dictionary representation of the NeuroColumn. Any normalised numeric will be denormalised
         :return: dictionary of dictionaries with outer dict keyed by edge_key, inner dictionary with keys:\n
-                    'edge_type', 'source_type', 'source_name', 'target_type', 'target_name', 'neuron_id', 'prob', Optional['numeric', 'min', 'max']keyed by each edge
+                    'edge_type', 'source_type', 'source_name', 'target_type', 'target_name', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max'] keyed by each edge
         """
         neuro_column: FeatureMapType = {}
         edge_key: EdgeKeyType
@@ -507,6 +507,7 @@ class NeuroColumn:
 
             # denormalise numeric if required
             #
-            if 'norm_min' in neuro_column[edge_key] and 'norm_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:
-                neuro_column[edge_key]['numeric'] = (neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['norm_max'] - neuro_column[edge_key]['norm_min'])) + neuro_column[edge_key]['norm_min']
+            if 'numeric_min' in neuro_column[edge_key] and 'numeric_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:
+                neuro_column[edge_key]['numeric'] = ((neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['numeric_max'] - neuro_column[edge_key]['numeric_min'])) +
+                                                     neuro_column[edge_key]['numeric_min'])
         return neuro_column
