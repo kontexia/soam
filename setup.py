@@ -23,7 +23,7 @@ if use_cython:
     cmdclass.update({'build_ext': build_ext})
 else:
     ext_modules += [
-        Extension("src.neuro_column", ["src/sdr.c"]),
+        Extension("src.neuro_column", ["src/neuro_column.c"]),
         Extension("src.neural_fabric", ["src/neural_fabric.c"]),
     ]
 
