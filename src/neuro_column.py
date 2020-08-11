@@ -140,8 +140,8 @@ class NeuroColumn:
                         neuron_id=neuron_id,
                         prob=sdr[sdr_key]['prob'],
                         numeric=sdr[sdr_key]['numeric'],
-                        normalise_min=sdr[sdr_key]['numeric_min'],
-                        normalise_max=sdr[sdr_key]['numeric_max']
+                        numric_min=sdr[sdr_key]['numeric_min'],
+                        numeric_max=sdr[sdr_key]['numeric_max']
                         )
 
     def stack(self, sdrs: List[SDR], max_neurons: cython.int) -> None:
