@@ -831,8 +831,8 @@ struct __pyx_opt_args_3src_12neuro_column_11NeuroColumn_upsert;
 struct __pyx_opt_args_3src_12neuro_column_11NeuroColumn_upsert {
   int __pyx_n;
   PyObject *numeric;
-  PyObject *normalise_min;
-  PyObject *normalise_max;
+  PyObject *numeric_min;
+  PyObject *numeric_max;
 };
 
 /* "src/neuro_column.py":31
@@ -1215,6 +1215,9 @@ static PyObject *__Pyx__GetModuleGlobalName(PyObject *name, PY_UINT64_T *dict_ve
 static CYTHON_INLINE PyObject *__Pyx__GetModuleGlobalName(PyObject *name);
 #endif
 
+/* None.proto */
+static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname);
+
 /* PyErrExceptionMatches.proto */
 #if CYTHON_FAST_THREAD_STATE
 #define __Pyx_PyErr_ExceptionMatches(err) __Pyx_PyErr_ExceptionMatchesInState(__pyx_tstate, err)
@@ -1442,8 +1445,6 @@ static const char __pyx_k_SDR[] = "SDR";
 static const char __pyx_k_Set[] = "Set";
 static const char __pyx_k_idx[] = "idx";
 static const char __pyx_k_int[] = "int";
-static const char __pyx_k_max[] = "max";
-static const char __pyx_k_min[] = "min";
 static const char __pyx_k_new[] = "__new__";
 static const char __pyx_k_sdr[] = "sdr";
 static const char __pyx_k_set[] = "set";
@@ -1504,6 +1505,7 @@ static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
 static const char __pyx_k_FilterType[] = "FilterType";
 static const char __pyx_k_SDRKeyType[] = "SDRKeyType";
 static const char __pyx_k_learn_rate[] = "learn_rate";
+static const char __pyx_k_numric_min[] = "numric_min";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_source_uid[] = "source_uid";
@@ -1514,6 +1516,8 @@ static const char __pyx_k_NeuroColumn[] = "NeuroColumn";
 static const char __pyx_k_PickleError[] = "PickleError";
 static const char __pyx_k_feature_key[] = "feature_key";
 static const char __pyx_k_max_neurons[] = "max_neurons";
+static const char __pyx_k_numeric_max[] = "numeric_max";
+static const char __pyx_k_numeric_min[] = "numeric_min";
 static const char __pyx_k_rnd_numeric[] = "rnd_numeric";
 static const char __pyx_k_source_type[] = "source_type";
 static const char __pyx_k_target_type[] = "target_type";
@@ -1527,8 +1531,6 @@ static const char __pyx_k_use_setstate[] = "use_setstate";
 static const char __pyx_k_calc_distance[] = "calc_distance";
 static const char __pyx_k_contributions[] = "contributions";
 static const char __pyx_k_hebbian_edges[] = "hebbian_edges";
-static const char __pyx_k_normalise_max[] = "normalise_max";
-static const char __pyx_k_normalise_min[] = "normalise_min";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_FeatureMapType[] = "FeatureMapType";
 static const char __pyx_k_EdgeFeatureType[] = "EdgeFeatureType";
@@ -1619,22 +1621,21 @@ static PyObject *__pyx_n_s_keys;
 static PyObject *__pyx_n_s_learn;
 static PyObject *__pyx_n_s_learn_rate;
 static PyObject *__pyx_n_s_main;
-static PyObject *__pyx_n_s_max;
 static PyObject *__pyx_n_s_max_edge_key;
 static PyObject *__pyx_n_s_max_neurons;
 static PyObject *__pyx_n_s_max_prob;
 static PyObject *__pyx_n_s_merge;
 static PyObject *__pyx_n_s_merge_factor;
-static PyObject *__pyx_n_s_min;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_neuro_column;
 static PyObject *__pyx_n_s_neuron_id;
 static PyObject *__pyx_n_s_new;
 static PyObject *__pyx_n_s_norm_max;
 static PyObject *__pyx_n_s_norm_min;
-static PyObject *__pyx_n_s_normalise_max;
-static PyObject *__pyx_n_s_normalise_min;
 static PyObject *__pyx_n_s_numeric;
+static PyObject *__pyx_n_s_numeric_max;
+static PyObject *__pyx_n_s_numeric_min;
+static PyObject *__pyx_n_s_numric_min;
 static PyObject *__pyx_n_s_pickle;
 static PyObject *__pyx_n_s_prob;
 static PyObject *__pyx_n_s_pyx_PickleError;
@@ -1679,7 +1680,7 @@ static PyObject *__pyx_n_s_upsert;
 static PyObject *__pyx_n_s_upsert_sdr;
 static PyObject *__pyx_n_s_use_setstate;
 static int __pyx_pf_3src_12neuro_column_11NeuroColumn___init__(struct __pyx_obj_3src_12neuro_column_NeuroColumn *__pyx_v_self, PyObject *__pyx_v_neuro_column); /* proto */
-static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_2upsert(struct __pyx_obj_3src_12neuro_column_NeuroColumn *__pyx_v_self, PyObject *__pyx_v_edge_type, PyObject *__pyx_v_source_type, PyObject *__pyx_v_source_uid, PyObject *__pyx_v_target_type, PyObject *__pyx_v_target_uid, int __pyx_v_neuron_id, double __pyx_v_prob, PyObject *__pyx_v_numeric, PyObject *__pyx_v_normalise_min, PyObject *__pyx_v_normalise_max); /* proto */
+static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_2upsert(struct __pyx_obj_3src_12neuro_column_NeuroColumn *__pyx_v_self, PyObject *__pyx_v_edge_type, PyObject *__pyx_v_source_type, PyObject *__pyx_v_source_uid, PyObject *__pyx_v_target_type, PyObject *__pyx_v_target_uid, int __pyx_v_neuron_id, double __pyx_v_prob, PyObject *__pyx_v_numeric, PyObject *__pyx_v_numeric_min, PyObject *__pyx_v_numeric_max); /* proto */
 static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_4upsert_sdr(struct __pyx_obj_3src_12neuro_column_NeuroColumn *__pyx_v_self, PyObject *__pyx_v_sdr, int __pyx_v_neuron_id); /* proto */
 static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_6stack(struct __pyx_obj_3src_12neuro_column_NeuroColumn *__pyx_v_self, PyObject *__pyx_v_sdrs, int __pyx_v_max_neurons); /* proto */
 static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_8calc_distance(struct __pyx_obj_3src_12neuro_column_NeuroColumn *__pyx_v_self, PyObject *__pyx_v_neuro_column, PyObject *__pyx_v_filter_types); /* proto */
@@ -2118,28 +2119,28 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
  *                neuron_id: cython.int,
  *                prob: cython.double,
  *                numeric: float = None,             # <<<<<<<<<<<<<<
- *                normalise_min: float = None,
- *                normalise_max: float = None):
+ *                numeric_min: float = None,
+ *                numeric_max: float = None):
  */
   PyObject *__pyx_v_numeric = ((PyObject *)Py_None);
 
   /* "src/neuro_column.py":78
  *                prob: cython.double,
  *                numeric: float = None,
- *                normalise_min: float = None,             # <<<<<<<<<<<<<<
- *                normalise_max: float = None):
+ *                numeric_min: float = None,             # <<<<<<<<<<<<<<
+ *                numeric_max: float = None):
  *         """
  */
-  PyObject *__pyx_v_normalise_min = ((PyObject *)Py_None);
+  PyObject *__pyx_v_numeric_min = ((PyObject *)Py_None);
 
   /* "src/neuro_column.py":79
  *                numeric: float = None,
- *                normalise_min: float = None,
- *                normalise_max: float = None):             # <<<<<<<<<<<<<<
+ *                numeric_min: float = None,
+ *                numeric_max: float = None):             # <<<<<<<<<<<<<<
  *         """
  *         method to insert an edge into the SDR
  */
-  PyObject *__pyx_v_normalise_max = ((PyObject *)Py_None);
+  PyObject *__pyx_v_numeric_max = ((PyObject *)Py_None);
   PyObject *__pyx_v_edge_key = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -2162,9 +2163,9 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
     if (__pyx_optional_args->__pyx_n > 0) {
       __pyx_v_numeric = __pyx_optional_args->numeric;
       if (__pyx_optional_args->__pyx_n > 1) {
-        __pyx_v_normalise_min = __pyx_optional_args->normalise_min;
+        __pyx_v_numeric_min = __pyx_optional_args->numeric_min;
         if (__pyx_optional_args->__pyx_n > 2) {
-          __pyx_v_normalise_max = __pyx_optional_args->normalise_max;
+          __pyx_v_numeric_max = __pyx_optional_args->numeric_max;
         }
       }
     }
@@ -2209,7 +2210,7 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
         }
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_5)) {
-          PyObject *__pyx_temp[11] = {__pyx_t_6, __pyx_v_edge_type, __pyx_v_source_type, __pyx_v_source_uid, __pyx_v_target_type, __pyx_v_target_uid, __pyx_t_3, __pyx_t_4, __pyx_v_numeric, __pyx_v_normalise_min, __pyx_v_normalise_max};
+          PyObject *__pyx_temp[11] = {__pyx_t_6, __pyx_v_edge_type, __pyx_v_source_type, __pyx_v_source_uid, __pyx_v_target_type, __pyx_v_target_uid, __pyx_t_3, __pyx_t_4, __pyx_v_numeric, __pyx_v_numeric_min, __pyx_v_numeric_max};
           __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 10+__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
           __Pyx_GOTREF(__pyx_t_2);
@@ -2219,7 +2220,7 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
         #endif
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-          PyObject *__pyx_temp[11] = {__pyx_t_6, __pyx_v_edge_type, __pyx_v_source_type, __pyx_v_source_uid, __pyx_v_target_type, __pyx_v_target_uid, __pyx_t_3, __pyx_t_4, __pyx_v_numeric, __pyx_v_normalise_min, __pyx_v_normalise_max};
+          PyObject *__pyx_temp[11] = {__pyx_t_6, __pyx_v_edge_type, __pyx_v_source_type, __pyx_v_source_uid, __pyx_v_target_type, __pyx_v_target_uid, __pyx_t_3, __pyx_t_4, __pyx_v_numeric, __pyx_v_numeric_min, __pyx_v_numeric_max};
           __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 10+__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
           __Pyx_GOTREF(__pyx_t_2);
@@ -2255,12 +2256,12 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
           __Pyx_INCREF(__pyx_v_numeric);
           __Pyx_GIVEREF(__pyx_v_numeric);
           PyTuple_SET_ITEM(__pyx_t_8, 7+__pyx_t_7, __pyx_v_numeric);
-          __Pyx_INCREF(__pyx_v_normalise_min);
-          __Pyx_GIVEREF(__pyx_v_normalise_min);
-          PyTuple_SET_ITEM(__pyx_t_8, 8+__pyx_t_7, __pyx_v_normalise_min);
-          __Pyx_INCREF(__pyx_v_normalise_max);
-          __Pyx_GIVEREF(__pyx_v_normalise_max);
-          PyTuple_SET_ITEM(__pyx_t_8, 9+__pyx_t_7, __pyx_v_normalise_max);
+          __Pyx_INCREF(__pyx_v_numeric_min);
+          __Pyx_GIVEREF(__pyx_v_numeric_min);
+          PyTuple_SET_ITEM(__pyx_t_8, 8+__pyx_t_7, __pyx_v_numeric_min);
+          __Pyx_INCREF(__pyx_v_numeric_max);
+          __Pyx_GIVEREF(__pyx_v_numeric_max);
+          PyTuple_SET_ITEM(__pyx_t_8, 9+__pyx_t_7, __pyx_v_numeric_max);
           __pyx_t_3 = 0;
           __pyx_t_4 = 0;
           __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
@@ -2531,18 +2532,18 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
     /* "src/neuro_column.py":117
  *             # normalise numeric if min and max provided
  *             #
- *             if normalise_min is not None and normalise_min is not None:             # <<<<<<<<<<<<<<
- *                 self.edges[edge_key]['numeric'] = (numeric - normalise_min) / (normalise_max - normalise_min)
- *                 self.edges[edge_key]['norm_min'] = normalise_min
+ *             if numeric_min is not None and numeric_min is not None:             # <<<<<<<<<<<<<<
+ *                 self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)
+ *                 self.edges[edge_key]['numeric_min'] = numeric_min
  */
-    __pyx_t_10 = (__pyx_v_normalise_min != Py_None);
+    __pyx_t_10 = (__pyx_v_numeric_min != Py_None);
     __pyx_t_11 = (__pyx_t_10 != 0);
     if (__pyx_t_11) {
     } else {
       __pyx_t_9 = __pyx_t_11;
       goto __pyx_L6_bool_binop_done;
     }
-    __pyx_t_11 = (__pyx_v_normalise_min != Py_None);
+    __pyx_t_11 = (__pyx_v_numeric_min != Py_None);
     __pyx_t_10 = (__pyx_t_11 != 0);
     __pyx_t_9 = __pyx_t_10;
     __pyx_L6_bool_binop_done:;
@@ -2550,14 +2551,14 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
 
       /* "src/neuro_column.py":118
  *             #
- *             if normalise_min is not None and normalise_min is not None:
- *                 self.edges[edge_key]['numeric'] = (numeric - normalise_min) / (normalise_max - normalise_min)             # <<<<<<<<<<<<<<
- *                 self.edges[edge_key]['norm_min'] = normalise_min
- *                 self.edges[edge_key]['norm_max'] = normalise_max
+ *             if numeric_min is not None and numeric_min is not None:
+ *                 self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)             # <<<<<<<<<<<<<<
+ *                 self.edges[edge_key]['numeric_min'] = numeric_min
+ *                 self.edges[edge_key]['numeric_max'] = numeric_max
  */
-      __pyx_t_1 = PyNumber_Subtract(__pyx_v_numeric, __pyx_v_normalise_min); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 118, __pyx_L1_error)
+      __pyx_t_1 = PyNumber_Subtract(__pyx_v_numeric, __pyx_v_numeric_min); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 118, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = PyNumber_Subtract(__pyx_v_normalise_max, __pyx_v_normalise_min); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 118, __pyx_L1_error)
+      __pyx_t_2 = PyNumber_Subtract(__pyx_v_numeric_max, __pyx_v_numeric_min); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 118, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_4 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 118, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
@@ -2574,10 +2575,10 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
       /* "src/neuro_column.py":119
- *             if normalise_min is not None and normalise_min is not None:
- *                 self.edges[edge_key]['numeric'] = (numeric - normalise_min) / (normalise_max - normalise_min)
- *                 self.edges[edge_key]['norm_min'] = normalise_min             # <<<<<<<<<<<<<<
- *                 self.edges[edge_key]['norm_max'] = normalise_max
+ *             if numeric_min is not None and numeric_min is not None:
+ *                 self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)
+ *                 self.edges[edge_key]['numeric_min'] = numeric_min             # <<<<<<<<<<<<<<
+ *                 self.edges[edge_key]['numeric_max'] = numeric_max
  *             else:
  */
       if (unlikely(__pyx_v_self->edges == Py_None)) {
@@ -2586,13 +2587,13 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
       }
       __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 119, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      if (unlikely(PyObject_SetItem(__pyx_t_4, __pyx_n_s_norm_min, __pyx_v_normalise_min) < 0)) __PYX_ERR(0, 119, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(__pyx_t_4, __pyx_n_s_numeric_min, __pyx_v_numeric_min) < 0)) __PYX_ERR(0, 119, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
       /* "src/neuro_column.py":120
- *                 self.edges[edge_key]['numeric'] = (numeric - normalise_min) / (normalise_max - normalise_min)
- *                 self.edges[edge_key]['norm_min'] = normalise_min
- *                 self.edges[edge_key]['norm_max'] = normalise_max             # <<<<<<<<<<<<<<
+ *                 self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)
+ *                 self.edges[edge_key]['numeric_min'] = numeric_min
+ *                 self.edges[edge_key]['numeric_max'] = numeric_max             # <<<<<<<<<<<<<<
  *             else:
  *                 self.edges[edge_key]['numeric'] = numeric
  */
@@ -2602,21 +2603,21 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
       }
       __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 120, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      if (unlikely(PyObject_SetItem(__pyx_t_4, __pyx_n_s_norm_max, __pyx_v_normalise_max) < 0)) __PYX_ERR(0, 120, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(__pyx_t_4, __pyx_n_s_numeric_max, __pyx_v_numeric_max) < 0)) __PYX_ERR(0, 120, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
       /* "src/neuro_column.py":117
  *             # normalise numeric if min and max provided
  *             #
- *             if normalise_min is not None and normalise_min is not None:             # <<<<<<<<<<<<<<
- *                 self.edges[edge_key]['numeric'] = (numeric - normalise_min) / (normalise_max - normalise_min)
- *                 self.edges[edge_key]['norm_min'] = normalise_min
+ *             if numeric_min is not None and numeric_min is not None:             # <<<<<<<<<<<<<<
+ *                 self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)
+ *                 self.edges[edge_key]['numeric_min'] = numeric_min
  */
       goto __pyx_L5;
     }
 
     /* "src/neuro_column.py":122
- *                 self.edges[edge_key]['norm_max'] = normalise_max
+ *                 self.edges[edge_key]['numeric_max'] = numeric_max
  *             else:
  *                 self.edges[edge_key]['numeric'] = numeric             # <<<<<<<<<<<<<<
  * 
@@ -2673,7 +2674,7 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
 
 /* Python wrapper */
 static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_3upsert(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_3src_12neuro_column_11NeuroColumn_2upsert[] = "\n        method to insert an edge into the SDR\n\n        :param edge_type: the type of edge\n        :param source_type: the type of the source node\n        :param source_uid: the unique name of the source node\n        :param target_type: the type of the target node\n        :param target_uid: the name of the target node\n        :param neuron_id: number between 0 and max number of neurons on a mini-column\n        :param prob: the prob of the edge connection\n        :param numeric: the numeric numeric of the edge\n        :param normalise_min: the minimum that parameter numeric can be\n        :param normalise_max: the maximum that [arameter numeric can be\n        :return: None\n        ";
+static char __pyx_doc_3src_12neuro_column_11NeuroColumn_2upsert[] = "\n        method to insert an edge into the SDR\n\n        :param edge_type: the type of edge\n        :param source_type: the type of the source node\n        :param source_uid: the unique name of the source node\n        :param target_type: the type of the target node\n        :param target_uid: the name of the target node\n        :param neuron_id: number between 0 and max number of neurons on a mini-column\n        :param prob: the prob of the edge connection\n        :param numeric: the numeric numeric of the edge\n        :param numeric_min: the minimum that parameter numeric can be\n        :param numeric_max: the maximum that [arameter numeric can be\n        :return: None\n        ";
 static PyMethodDef __pyx_mdef_3src_12neuro_column_11NeuroColumn_3upsert = {"upsert", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_12neuro_column_11NeuroColumn_3upsert, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_12neuro_column_11NeuroColumn_2upsert};
 static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_3upsert(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_edge_type = 0;
@@ -2684,8 +2685,8 @@ static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_3upsert(PyObject *__
   int __pyx_v_neuron_id;
   double __pyx_v_prob;
   PyObject *__pyx_v_numeric = 0;
-  PyObject *__pyx_v_normalise_min = 0;
-  PyObject *__pyx_v_normalise_max = 0;
+  PyObject *__pyx_v_numeric_min = 0;
+  PyObject *__pyx_v_numeric_max = 0;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -2693,31 +2694,31 @@ static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_3upsert(PyObject *__
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("upsert (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_edge_type,&__pyx_n_s_source_type,&__pyx_n_s_source_uid,&__pyx_n_s_target_type,&__pyx_n_s_target_uid,&__pyx_n_s_neuron_id,&__pyx_n_s_prob,&__pyx_n_s_numeric,&__pyx_n_s_normalise_min,&__pyx_n_s_normalise_max,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_edge_type,&__pyx_n_s_source_type,&__pyx_n_s_source_uid,&__pyx_n_s_target_type,&__pyx_n_s_target_uid,&__pyx_n_s_neuron_id,&__pyx_n_s_prob,&__pyx_n_s_numeric,&__pyx_n_s_numeric_min,&__pyx_n_s_numeric_max,0};
     PyObject* values[10] = {0,0,0,0,0,0,0,0,0,0};
 
     /* "src/neuro_column.py":77
  *                neuron_id: cython.int,
  *                prob: cython.double,
  *                numeric: float = None,             # <<<<<<<<<<<<<<
- *                normalise_min: float = None,
- *                normalise_max: float = None):
+ *                numeric_min: float = None,
+ *                numeric_max: float = None):
  */
     values[7] = ((PyObject *)Py_None);
 
     /* "src/neuro_column.py":78
  *                prob: cython.double,
  *                numeric: float = None,
- *                normalise_min: float = None,             # <<<<<<<<<<<<<<
- *                normalise_max: float = None):
+ *                numeric_min: float = None,             # <<<<<<<<<<<<<<
+ *                numeric_max: float = None):
  *         """
  */
     values[8] = ((PyObject *)Py_None);
 
     /* "src/neuro_column.py":79
  *                numeric: float = None,
- *                normalise_min: float = None,
- *                normalise_max: float = None):             # <<<<<<<<<<<<<<
+ *                numeric_min: float = None,
+ *                numeric_max: float = None):             # <<<<<<<<<<<<<<
  *         """
  *         method to insert an edge into the SDR
  */
@@ -2799,13 +2800,13 @@ static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_3upsert(PyObject *__
         CYTHON_FALLTHROUGH;
         case  8:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_normalise_min);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_numeric_min);
           if (value) { values[8] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  9:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_normalise_max);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_numeric_max);
           if (value) { values[9] = value; kw_args--; }
         }
       }
@@ -2839,8 +2840,8 @@ static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_3upsert(PyObject *__
     __pyx_v_neuron_id = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_neuron_id == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 75, __pyx_L3_error)
     __pyx_v_prob = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_prob == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 76, __pyx_L3_error)
     __pyx_v_numeric = values[7];
-    __pyx_v_normalise_min = values[8];
-    __pyx_v_normalise_max = values[9];
+    __pyx_v_numeric_min = values[8];
+    __pyx_v_numeric_max = values[9];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -2855,7 +2856,7 @@ static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_3upsert(PyObject *__
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_source_uid), (&PyString_Type), 1, "source_uid", 1))) __PYX_ERR(0, 72, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_target_type), (&PyString_Type), 1, "target_type", 1))) __PYX_ERR(0, 73, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_target_uid), (&PyString_Type), 1, "target_uid", 1))) __PYX_ERR(0, 74, __pyx_L1_error)
-  __pyx_r = __pyx_pf_3src_12neuro_column_11NeuroColumn_2upsert(((struct __pyx_obj_3src_12neuro_column_NeuroColumn *)__pyx_v_self), __pyx_v_edge_type, __pyx_v_source_type, __pyx_v_source_uid, __pyx_v_target_type, __pyx_v_target_uid, __pyx_v_neuron_id, __pyx_v_prob, __pyx_v_numeric, __pyx_v_normalise_min, __pyx_v_normalise_max);
+  __pyx_r = __pyx_pf_3src_12neuro_column_11NeuroColumn_2upsert(((struct __pyx_obj_3src_12neuro_column_NeuroColumn *)__pyx_v_self), __pyx_v_edge_type, __pyx_v_source_type, __pyx_v_source_uid, __pyx_v_target_type, __pyx_v_target_uid, __pyx_v_neuron_id, __pyx_v_prob, __pyx_v_numeric, __pyx_v_numeric_min, __pyx_v_numeric_max);
 
   /* "src/neuro_column.py":69
  * 
@@ -2874,7 +2875,7 @@ static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_3upsert(PyObject *__
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_2upsert(struct __pyx_obj_3src_12neuro_column_NeuroColumn *__pyx_v_self, PyObject *__pyx_v_edge_type, PyObject *__pyx_v_source_type, PyObject *__pyx_v_source_uid, PyObject *__pyx_v_target_type, PyObject *__pyx_v_target_uid, int __pyx_v_neuron_id, double __pyx_v_prob, PyObject *__pyx_v_numeric, PyObject *__pyx_v_normalise_min, PyObject *__pyx_v_normalise_max) {
+static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_2upsert(struct __pyx_obj_3src_12neuro_column_NeuroColumn *__pyx_v_self, PyObject *__pyx_v_edge_type, PyObject *__pyx_v_source_type, PyObject *__pyx_v_source_uid, PyObject *__pyx_v_target_type, PyObject *__pyx_v_target_uid, int __pyx_v_neuron_id, double __pyx_v_prob, PyObject *__pyx_v_numeric, PyObject *__pyx_v_numeric_min, PyObject *__pyx_v_numeric_max) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -2886,8 +2887,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_2upsert(struct __pyx
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 3;
   __pyx_t_2.numeric = __pyx_v_numeric;
-  __pyx_t_2.normalise_min = __pyx_v_normalise_min;
-  __pyx_t_2.normalise_max = __pyx_v_normalise_max;
+  __pyx_t_2.numeric_min = __pyx_v_numeric_min;
+  __pyx_t_2.numeric_max = __pyx_v_numeric_max;
   __pyx_t_1 = __pyx_vtabptr_3src_12neuro_column_NeuroColumn->upsert(__pyx_v_self, __pyx_v_edge_type, __pyx_v_source_type, __pyx_v_source_uid, __pyx_v_target_type, __pyx_v_target_uid, __pyx_v_neuron_id, __pyx_v_prob, 1, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
@@ -2997,13 +2998,6 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_4upsert_sdr(struct _
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
   PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
-  PyObject *__pyx_t_10 = NULL;
-  double __pyx_t_11;
-  PyObject *__pyx_t_12 = NULL;
-  PyObject *__pyx_t_13 = NULL;
-  struct __pyx_opt_args_3src_12neuro_column_11NeuroColumn_upsert __pyx_t_14;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -3065,12 +3059,17 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_4upsert_sdr(struct _
  *                         source_type=sdr[sdr_key]['source_type'],
  *                         source_uid=sdr[sdr_key]['source_uid'],
  */
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 135, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_upsert); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 135, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_Dict_GetItem(__pyx_t_4, __pyx_n_s_edge_type); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 135, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyDict_NewPresized(10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 135, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_5))||((__pyx_t_5) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_5)->tp_name), 0))) __PYX_ERR(0, 135, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_6, __pyx_n_s_edge_type); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_edge_type, __pyx_t_7) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
     /* "src/neuro_column.py":136
  *         for sdr_key in sdr:
@@ -3079,12 +3078,13 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_4upsert_sdr(struct _
  *                         source_uid=sdr[sdr_key]['source_uid'],
  *                         target_type=sdr[sdr_key]['target_type'],
  */
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 136, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_4, __pyx_n_s_source_type); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 136, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 136, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_source_type); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 136, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_6))||((__pyx_t_6) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_6)->tp_name), 0))) __PYX_ERR(0, 136, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_source_type, __pyx_t_6) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
     /* "src/neuro_column.py":137
  *             self.upsert(edge_type=sdr[sdr_key]['edge_type'],
@@ -3093,12 +3093,13 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_4upsert_sdr(struct _
  *                         target_type=sdr[sdr_key]['target_type'],
  *                         target_uid=sdr[sdr_key]['target_uid'],
  */
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 137, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_4, __pyx_n_s_source_uid); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_6, __pyx_n_s_source_uid); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 137, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_7)->tp_name), 0))) __PYX_ERR(0, 137, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_source_uid, __pyx_t_7) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
     /* "src/neuro_column.py":138
  *                         source_type=sdr[sdr_key]['source_type'],
@@ -3107,12 +3108,13 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_4upsert_sdr(struct _
  *                         target_uid=sdr[sdr_key]['target_uid'],
  *                         neuron_id=neuron_id,
  */
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 138, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_4, __pyx_n_s_target_type); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 138, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_8))||((__pyx_t_8) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_8)->tp_name), 0))) __PYX_ERR(0, 138, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 138, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_target_type); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 138, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_target_type, __pyx_t_6) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
     /* "src/neuro_column.py":139
  *                         source_uid=sdr[sdr_key]['source_uid'],
@@ -3121,66 +3123,85 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_4upsert_sdr(struct _
  *                         neuron_id=neuron_id,
  *                         prob=sdr[sdr_key]['prob'],
  */
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 139, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_4, __pyx_n_s_target_uid); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 139, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_9);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_9))||((__pyx_t_9) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_9)->tp_name), 0))) __PYX_ERR(0, 139, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 139, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_6, __pyx_n_s_target_uid); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 139, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_target_uid, __pyx_t_7) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+    /* "src/neuro_column.py":140
+ *                         target_type=sdr[sdr_key]['target_type'],
+ *                         target_uid=sdr[sdr_key]['target_uid'],
+ *                         neuron_id=neuron_id,             # <<<<<<<<<<<<<<
+ *                         prob=sdr[sdr_key]['prob'],
+ *                         numeric=sdr[sdr_key]['numeric'],
+ */
+    __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_neuron_id); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 140, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_neuron_id, __pyx_t_7) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
     /* "src/neuro_column.py":141
  *                         target_uid=sdr[sdr_key]['target_uid'],
  *                         neuron_id=neuron_id,
  *                         prob=sdr[sdr_key]['prob'],             # <<<<<<<<<<<<<<
  *                         numeric=sdr[sdr_key]['numeric'],
- *                         normalise_min=sdr[sdr_key]['min'],
+ *                         numric_min=sdr[sdr_key]['numeric_min'],
  */
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 141, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_t_4, __pyx_n_s_prob); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 141, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_10); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 141, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 141, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_prob); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 141, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_prob, __pyx_t_6) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
     /* "src/neuro_column.py":142
  *                         neuron_id=neuron_id,
  *                         prob=sdr[sdr_key]['prob'],
  *                         numeric=sdr[sdr_key]['numeric'],             # <<<<<<<<<<<<<<
- *                         normalise_min=sdr[sdr_key]['min'],
- *                         normalise_max=sdr[sdr_key]['max']
+ *                         numric_min=sdr[sdr_key]['numeric_min'],
+ *                         numeric_max=sdr[sdr_key]['numeric_max']
  */
-    __pyx_t_10 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 142, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_numeric); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 142, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 142, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_6, __pyx_n_s_numeric); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 142, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_numeric, __pyx_t_7) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
     /* "src/neuro_column.py":143
  *                         prob=sdr[sdr_key]['prob'],
  *                         numeric=sdr[sdr_key]['numeric'],
- *                         normalise_min=sdr[sdr_key]['min'],             # <<<<<<<<<<<<<<
- *                         normalise_max=sdr[sdr_key]['max']
+ *                         numric_min=sdr[sdr_key]['numeric_min'],             # <<<<<<<<<<<<<<
+ *                         numeric_max=sdr[sdr_key]['numeric_max']
  *                         )
  */
-    __pyx_t_10 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 143, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_12 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_min); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 143, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_12);
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_numric_min, __pyx_t_6) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
     /* "src/neuro_column.py":144
  *                         numeric=sdr[sdr_key]['numeric'],
- *                         normalise_min=sdr[sdr_key]['min'],
- *                         normalise_max=sdr[sdr_key]['max']             # <<<<<<<<<<<<<<
+ *                         numric_min=sdr[sdr_key]['numeric_min'],
+ *                         numeric_max=sdr[sdr_key]['numeric_max']             # <<<<<<<<<<<<<<
  *                         )
  * 
  */
-    __pyx_t_10 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 144, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_max); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 144, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_13);
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_sdr, __pyx_v_sdr_key); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 144, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_6, __pyx_n_s_numeric_max); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 144, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_numeric_max, __pyx_t_7) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
     /* "src/neuro_column.py":135
  * 
@@ -3189,21 +3210,11 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_4upsert_sdr(struct _
  *                         source_type=sdr[sdr_key]['source_type'],
  *                         source_uid=sdr[sdr_key]['source_uid'],
  */
-    __pyx_t_14.__pyx_n = 3;
-    __pyx_t_14.numeric = __pyx_t_4;
-    __pyx_t_14.normalise_min = __pyx_t_12;
-    __pyx_t_14.normalise_max = __pyx_t_13;
-    __pyx_t_10 = ((struct __pyx_vtabstruct_3src_12neuro_column_NeuroColumn *)__pyx_v_self->__pyx_vtab)->upsert(__pyx_v_self, ((PyObject*)__pyx_t_5), ((PyObject*)__pyx_t_6), ((PyObject*)__pyx_t_7), ((PyObject*)__pyx_t_8), ((PyObject*)__pyx_t_9), __pyx_v_neuron_id, __pyx_t_11, 0, &__pyx_t_14); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 135, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 135, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-    __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
     /* "src/neuro_column.py":134
  *         sdr_key: SDRKeyType
@@ -3232,11 +3243,6 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_4upsert_sdr(struct _
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
-  __Pyx_XDECREF(__pyx_t_10);
-  __Pyx_XDECREF(__pyx_t_12);
-  __Pyx_XDECREF(__pyx_t_13);
   __Pyx_AddTraceback("src.neuro_column.NeuroColumn.upsert_sdr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -3518,7 +3524,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_6stack(struct __pyx_
  *                             neuron_id=neuron_id,
  *                             prob=sdrs[idx][sdr_key]['prob'],             # <<<<<<<<<<<<<<
  *                             numeric=sdrs[idx][sdr_key]['numeric'],
- *                             normalise_min=sdrs[idx][sdr_key]['min'],
+ *                             numeric_min=sdrs[idx][sdr_key]['numeric_min'],
  */
       __pyx_t_12 = __Pyx_GetItemInt(__pyx_v_sdrs, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 174, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
@@ -3535,8 +3541,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_6stack(struct __pyx_
  *                             neuron_id=neuron_id,
  *                             prob=sdrs[idx][sdr_key]['prob'],
  *                             numeric=sdrs[idx][sdr_key]['numeric'],             # <<<<<<<<<<<<<<
- *                             normalise_min=sdrs[idx][sdr_key]['min'],
- *                             normalise_max=sdrs[idx][sdr_key]['max']
+ *                             numeric_min=sdrs[idx][sdr_key]['numeric_min'],
+ *                             numeric_max=sdrs[idx][sdr_key]['numeric_max']
  */
       __pyx_t_12 = __Pyx_GetItemInt(__pyx_v_sdrs, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 175, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
@@ -3550,8 +3556,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_6stack(struct __pyx_
       /* "src/neuro_column.py":176
  *                             prob=sdrs[idx][sdr_key]['prob'],
  *                             numeric=sdrs[idx][sdr_key]['numeric'],
- *                             normalise_min=sdrs[idx][sdr_key]['min'],             # <<<<<<<<<<<<<<
- *                             normalise_max=sdrs[idx][sdr_key]['max']
+ *                             numeric_min=sdrs[idx][sdr_key]['numeric_min'],             # <<<<<<<<<<<<<<
+ *                             numeric_max=sdrs[idx][sdr_key]['numeric_max']
  *                             )
  */
       __pyx_t_13 = __Pyx_GetItemInt(__pyx_v_sdrs, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 176, __pyx_L1_error)
@@ -3559,14 +3565,14 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_6stack(struct __pyx_
       __pyx_t_15 = __Pyx_PyObject_GetItem(__pyx_t_13, __pyx_v_sdr_key); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 176, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-      __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_t_15, __pyx_n_s_min); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 176, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_t_15, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 176, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
 
       /* "src/neuro_column.py":177
  *                             numeric=sdrs[idx][sdr_key]['numeric'],
- *                             normalise_min=sdrs[idx][sdr_key]['min'],
- *                             normalise_max=sdrs[idx][sdr_key]['max']             # <<<<<<<<<<<<<<
+ *                             numeric_min=sdrs[idx][sdr_key]['numeric_min'],
+ *                             numeric_max=sdrs[idx][sdr_key]['numeric_max']             # <<<<<<<<<<<<<<
  *                             )
  * 
  */
@@ -3575,7 +3581,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_6stack(struct __pyx_
       __pyx_t_16 = __Pyx_PyObject_GetItem(__pyx_t_15, __pyx_v_sdr_key); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 177, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-      __pyx_t_15 = __Pyx_PyObject_Dict_GetItem(__pyx_t_16, __pyx_n_s_max); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 177, __pyx_L1_error)
+      __pyx_t_15 = __Pyx_PyObject_Dict_GetItem(__pyx_t_16, __pyx_n_s_numeric_max); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 177, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
@@ -3588,8 +3594,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_6stack(struct __pyx_
  */
       __pyx_t_17.__pyx_n = 3;
       __pyx_t_17.numeric = __pyx_t_12;
-      __pyx_t_17.normalise_min = __pyx_t_13;
-      __pyx_t_17.normalise_max = __pyx_t_15;
+      __pyx_t_17.numeric_min = __pyx_t_13;
+      __pyx_t_17.numeric_max = __pyx_t_15;
       __pyx_t_16 = ((struct __pyx_vtabstruct_3src_12neuro_column_NeuroColumn *)__pyx_v_self->__pyx_vtab)->upsert(__pyx_v_self, ((PyObject*)__pyx_t_4), ((PyObject*)__pyx_t_8), ((PyObject*)__pyx_t_9), ((PyObject*)__pyx_t_10), ((PyObject*)__pyx_t_11), __pyx_v_neuron_id, __pyx_t_14, 0, &__pyx_t_17); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 168, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -4015,7 +4021,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_8calc_distance(struc
  *         #
  *         for edge_key in edges_to_process:             # <<<<<<<<<<<<<<
  * 
- *             # edge_key in both SDRs
+ *             # edge_key in both NeuroColumns
  */
   __pyx_t_10 = 0;
   __pyx_t_3 = __Pyx_set_iterator(__pyx_v_edges_to_process, 0, (&__pyx_t_4), (&__pyx_t_11)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 206, __pyx_L1_error)
@@ -4032,7 +4038,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_8calc_distance(struc
     __pyx_t_3 = 0;
 
     /* "src/neuro_column.py":210
- *             # edge_key in both SDRs
+ *             # edge_key in both NeuroColumns
  *             #
  *             if edge_key in self.edges and edge_key in neuro_column.edges:             # <<<<<<<<<<<<<<
  *                 sum_min += min(neuro_column.edges[edge_key]['prob'], self.edges[edge_key]['prob'])
@@ -4303,7 +4309,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_8calc_distance(struc
  *                     sum_max += max(neuro_column.edges[edge_key]['numeric'], self.edges[edge_key]['numeric'])
  *                     contributions.append({'edge': edge_key, 'numeric': abs(neuro_column.edges[edge_key]['numeric'] - self.edges[edge_key]['numeric'])})             # <<<<<<<<<<<<<<
  * 
- *             # edge key only in this SDR
+ *             # edge key only in this NeuroColumn
  */
         __pyx_t_9 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
@@ -4347,7 +4353,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_8calc_distance(struc
       }
 
       /* "src/neuro_column.py":210
- *             # edge_key in both SDRs
+ *             # edge_key in both NeuroColumns
  *             #
  *             if edge_key in self.edges and edge_key in neuro_column.edges:             # <<<<<<<<<<<<<<
  *                 sum_min += min(neuro_column.edges[edge_key]['prob'], self.edges[edge_key]['prob'])
@@ -4357,7 +4363,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_8calc_distance(struc
     }
 
     /* "src/neuro_column.py":222
- *             # edge key only in this SDR
+ *             # edge key only in this NeuroColumn
  *             #
  *             elif edge_key in self.edges:             # <<<<<<<<<<<<<<
  *                 sum_max += self.edges[edge_key]['prob']
@@ -4470,7 +4476,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_8calc_distance(struc
  *                     sum_max += self.edges[edge_key]['numeric']
  *                     contributions.append({'edge': edge_key, 'numeric': self.edges[edge_key]['numeric']})             # <<<<<<<<<<<<<<
  * 
- *             # edge_key in the SDR to compare to
+ *             # edge_key in the NeuroColumn to compare to
  */
         __pyx_t_9 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
@@ -4499,7 +4505,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_8calc_distance(struc
       }
 
       /* "src/neuro_column.py":222
- *             # edge key only in this SDR
+ *             # edge key only in this NeuroColumn
  *             #
  *             elif edge_key in self.edges:             # <<<<<<<<<<<<<<
  *                 sum_max += self.edges[edge_key]['prob']
@@ -5419,7 +5425,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
  *                     #
  *                     if 'numeric' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
  */
         __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 305, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
@@ -5435,8 +5441,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
  *                     #
  *                     if 'numeric' in neuro_column.edges[edge_key]:
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']             # <<<<<<<<<<<<<<
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
  */
           __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 306, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
@@ -5459,16 +5465,16 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
           /* "src/neuro_column.py":307
  *                     if 'numeric' in neuro_column.edges[edge_key]:
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  */
           __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 307, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __pyx_t_13 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 307, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          __pyx_t_10 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_min, __pyx_t_13, Py_EQ)); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 307, __pyx_L1_error)
+          __pyx_t_10 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_min, __pyx_t_13, Py_EQ)); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 307, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           __pyx_t_11 = (__pyx_t_10 != 0);
           if (__pyx_t_11) {
@@ -5481,7 +5487,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
           __pyx_t_14 = __Pyx_PyObject_GetItem(__pyx_t_13, __pyx_v_edge_key); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 307, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_max, __pyx_t_14, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 307, __pyx_L1_error)
+          __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_max, __pyx_t_14, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 307, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           __pyx_t_10 = (__pyx_t_11 != 0);
           __pyx_t_9 = __pyx_t_10;
@@ -5490,9 +5496,9 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
 
             /* "src/neuro_column.py":308
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']             # <<<<<<<<<<<<<<
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']             # <<<<<<<<<<<<<<
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  *                 elif is_bmu:
  */
             __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 308, __pyx_L1_error)
@@ -5500,7 +5506,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
             __pyx_t_13 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 308, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_13);
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-            __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_t_13, __pyx_n_s_norm_min); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 308, __pyx_L1_error)
+            __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_t_13, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 308, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
             if (unlikely(__pyx_v_self->edges == Py_None)) {
@@ -5509,14 +5515,14 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
             }
             __pyx_t_13 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 308, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_13);
-            if (unlikely(PyObject_SetItem(__pyx_t_13, __pyx_n_s_norm_min, __pyx_t_14) < 0)) __PYX_ERR(0, 308, __pyx_L1_error)
+            if (unlikely(PyObject_SetItem(__pyx_t_13, __pyx_n_s_numeric_min, __pyx_t_14) < 0)) __PYX_ERR(0, 308, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
             /* "src/neuro_column.py":309
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']             # <<<<<<<<<<<<<<
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']             # <<<<<<<<<<<<<<
  *                 elif is_bmu:
  * 
  */
@@ -5525,7 +5531,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
             __pyx_t_13 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 309, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_13);
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-            __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_t_13, __pyx_n_s_norm_max); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 309, __pyx_L1_error)
+            __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_t_13, __pyx_n_s_numeric_max); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 309, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
             if (unlikely(__pyx_v_self->edges == Py_None)) {
@@ -5534,16 +5540,16 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
             }
             __pyx_t_13 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 309, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_13);
-            if (unlikely(PyObject_SetItem(__pyx_t_13, __pyx_n_s_norm_max, __pyx_t_14) < 0)) __PYX_ERR(0, 309, __pyx_L1_error)
+            if (unlikely(PyObject_SetItem(__pyx_t_13, __pyx_n_s_numeric_max, __pyx_t_14) < 0)) __PYX_ERR(0, 309, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
             /* "src/neuro_column.py":307
  *                     if 'numeric' in neuro_column.edges[edge_key]:
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  */
           }
 
@@ -5552,7 +5558,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
  *                     #
  *                     if 'numeric' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
  */
         }
 
@@ -5567,8 +5573,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
       }
 
       /* "src/neuro_column.py":310
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  *                 elif is_bmu:             # <<<<<<<<<<<<<<
  * 
  *                     self.edges[edge_key] = {'edge_type': neuro_column.edges[edge_key]['edge_type'],
@@ -5723,7 +5729,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
  *                     #
  *                     if 'numeric' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
  */
         __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 322, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
@@ -5739,8 +5745,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
  *                     #
  *                     if 'numeric' in neuro_column.edges[edge_key]:
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']             # <<<<<<<<<<<<<<
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
  */
           __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 323, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
@@ -5763,16 +5769,16 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
           /* "src/neuro_column.py":324
  *                     if 'numeric' in neuro_column.edges[edge_key]:
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  */
           __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 324, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           __pyx_t_14 = __Pyx_PyObject_GetItem(__pyx_t_13, __pyx_v_edge_key); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 324, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          __pyx_t_9 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_min, __pyx_t_14, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 324, __pyx_L1_error)
+          __pyx_t_9 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_min, __pyx_t_14, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 324, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           __pyx_t_11 = (__pyx_t_9 != 0);
           if (__pyx_t_11) {
@@ -5785,7 +5791,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
           __pyx_t_13 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 324, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_max, __pyx_t_13, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 324, __pyx_L1_error)
+          __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_max, __pyx_t_13, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 324, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           __pyx_t_9 = (__pyx_t_11 != 0);
           __pyx_t_10 = __pyx_t_9;
@@ -5794,9 +5800,9 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
 
             /* "src/neuro_column.py":325
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']             # <<<<<<<<<<<<<<
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']             # <<<<<<<<<<<<<<
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  * 
  */
             __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 325, __pyx_L1_error)
@@ -5804,7 +5810,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
             __pyx_t_14 = __Pyx_PyObject_GetItem(__pyx_t_13, __pyx_v_edge_key); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 325, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-            __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_t_14, __pyx_n_s_norm_min); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 325, __pyx_L1_error)
+            __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_t_14, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 325, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_13);
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
             if (unlikely(__pyx_v_self->edges == Py_None)) {
@@ -5813,14 +5819,14 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
             }
             __pyx_t_14 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 325, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
-            if (unlikely(PyObject_SetItem(__pyx_t_14, __pyx_n_s_norm_min, __pyx_t_13) < 0)) __PYX_ERR(0, 325, __pyx_L1_error)
+            if (unlikely(PyObject_SetItem(__pyx_t_14, __pyx_n_s_numeric_min, __pyx_t_13) < 0)) __PYX_ERR(0, 325, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
             /* "src/neuro_column.py":326
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']             # <<<<<<<<<<<<<<
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']             # <<<<<<<<<<<<<<
  * 
  *     def merge(self, neuro_column, merge_factor: cython.double) -> None:
  */
@@ -5829,7 +5835,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
             __pyx_t_14 = __Pyx_PyObject_GetItem(__pyx_t_13, __pyx_v_edge_key); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 326, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-            __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_t_14, __pyx_n_s_norm_max); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 326, __pyx_L1_error)
+            __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_t_14, __pyx_n_s_numeric_max); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 326, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_13);
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
             if (unlikely(__pyx_v_self->edges == Py_None)) {
@@ -5838,16 +5844,16 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
             }
             __pyx_t_14 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 326, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
-            if (unlikely(PyObject_SetItem(__pyx_t_14, __pyx_n_s_norm_max, __pyx_t_13) < 0)) __PYX_ERR(0, 326, __pyx_L1_error)
+            if (unlikely(PyObject_SetItem(__pyx_t_14, __pyx_n_s_numeric_max, __pyx_t_13) < 0)) __PYX_ERR(0, 326, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
             /* "src/neuro_column.py":324
  *                     if 'numeric' in neuro_column.edges[edge_key]:
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  */
           }
 
@@ -5856,13 +5862,13 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
  *                     #
  *                     if 'numeric' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
  *                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
- *                         if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
+ *                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
  */
         }
 
         /* "src/neuro_column.py":310
- *                             self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  *                 elif is_bmu:             # <<<<<<<<<<<<<<
  * 
  *                     self.edges[edge_key] = {'edge_type': neuro_column.edges[edge_key]['edge_type'],
@@ -5904,7 +5910,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_10learn(struct __pyx
 }
 
 /* "src/neuro_column.py":328
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  * 
  *     def merge(self, neuro_column, merge_factor: cython.double) -> None:             # <<<<<<<<<<<<<<
  *         """
@@ -6394,7 +6400,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
  * 
  *                 if 'numeric' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
  *                     self.edges[edge_key]['numeric'] = (neuro_column.edges[edge_key]['numeric'] * merge_factor)
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
  */
       __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 365, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
@@ -6410,8 +6416,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
  * 
  *                 if 'numeric' in neuro_column.edges[edge_key]:
  *                     self.edges[edge_key]['numeric'] = (neuro_column.edges[edge_key]['numeric'] * merge_factor)             # <<<<<<<<<<<<<<
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                         self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                         self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
  */
         __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 366, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
@@ -6440,16 +6446,16 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
         /* "src/neuro_column.py":367
  *                 if 'numeric' in neuro_column.edges[edge_key]:
  *                     self.edges[edge_key]['numeric'] = (neuro_column.edges[edge_key]['numeric'] * merge_factor)
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                         self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                         self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
+ *                         self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                         self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  */
         __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 367, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
         __pyx_t_13 = __Pyx_PyObject_GetItem(__pyx_t_12, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 367, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __pyx_t_9 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_min, __pyx_t_13, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 367, __pyx_L1_error)
+        __pyx_t_9 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_min, __pyx_t_13, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 367, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         __pyx_t_10 = (__pyx_t_9 != 0);
         if (__pyx_t_10) {
@@ -6462,7 +6468,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
         __pyx_t_12 = __Pyx_PyObject_GetItem(__pyx_t_13, __pyx_v_edge_key); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 367, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __pyx_t_10 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_max, __pyx_t_12, Py_EQ)); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 367, __pyx_L1_error)
+        __pyx_t_10 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_max, __pyx_t_12, Py_EQ)); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 367, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __pyx_t_9 = (__pyx_t_10 != 0);
         __pyx_t_8 = __pyx_t_9;
@@ -6471,9 +6477,9 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
 
           /* "src/neuro_column.py":368
  *                     self.edges[edge_key]['numeric'] = (neuro_column.edges[edge_key]['numeric'] * merge_factor)
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                         self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']             # <<<<<<<<<<<<<<
- *                         self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                         self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']             # <<<<<<<<<<<<<<
+ *                         self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  * 
  */
           __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 368, __pyx_L1_error)
@@ -6481,7 +6487,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
           __pyx_t_13 = __Pyx_PyObject_GetItem(__pyx_t_12, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 368, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-          __pyx_t_12 = __Pyx_PyObject_Dict_GetItem(__pyx_t_13, __pyx_n_s_norm_min); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 368, __pyx_L1_error)
+          __pyx_t_12 = __Pyx_PyObject_Dict_GetItem(__pyx_t_13, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 368, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_12);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           if (unlikely(__pyx_v_self->edges == Py_None)) {
@@ -6490,14 +6496,14 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
           }
           __pyx_t_13 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 368, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
-          if (unlikely(PyObject_SetItem(__pyx_t_13, __pyx_n_s_norm_min, __pyx_t_12) < 0)) __PYX_ERR(0, 368, __pyx_L1_error)
+          if (unlikely(PyObject_SetItem(__pyx_t_13, __pyx_n_s_numeric_min, __pyx_t_12) < 0)) __PYX_ERR(0, 368, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
           /* "src/neuro_column.py":369
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                         self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                         self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']             # <<<<<<<<<<<<<<
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                         self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                         self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']             # <<<<<<<<<<<<<<
  * 
  *     def randomize(self, neuro_column, edges_to_randomise: set = None) -> None:
  */
@@ -6506,7 +6512,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
           __pyx_t_13 = __Pyx_PyObject_GetItem(__pyx_t_12, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 369, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-          __pyx_t_12 = __Pyx_PyObject_Dict_GetItem(__pyx_t_13, __pyx_n_s_norm_max); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 369, __pyx_L1_error)
+          __pyx_t_12 = __Pyx_PyObject_Dict_GetItem(__pyx_t_13, __pyx_n_s_numeric_max); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 369, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_12);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           if (unlikely(__pyx_v_self->edges == Py_None)) {
@@ -6515,16 +6521,16 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
           }
           __pyx_t_13 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 369, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
-          if (unlikely(PyObject_SetItem(__pyx_t_13, __pyx_n_s_norm_max, __pyx_t_12) < 0)) __PYX_ERR(0, 369, __pyx_L1_error)
+          if (unlikely(PyObject_SetItem(__pyx_t_13, __pyx_n_s_numeric_max, __pyx_t_12) < 0)) __PYX_ERR(0, 369, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
           /* "src/neuro_column.py":367
  *                 if 'numeric' in neuro_column.edges[edge_key]:
  *                     self.edges[edge_key]['numeric'] = (neuro_column.edges[edge_key]['numeric'] * merge_factor)
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                         self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
- *                         self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
+ *                         self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+ *                         self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  */
         }
 
@@ -6533,7 +6539,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
  * 
  *                 if 'numeric' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
  *                     self.edges[edge_key]['numeric'] = (neuro_column.edges[edge_key]['numeric'] * merge_factor)
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
  */
       }
 
@@ -6550,7 +6556,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "src/neuro_column.py":328
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  * 
  *     def merge(self, neuro_column, merge_factor: cython.double) -> None:             # <<<<<<<<<<<<<<
  *         """
@@ -6579,7 +6585,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_12merge(struct __pyx
 }
 
 /* "src/neuro_column.py":371
- *                         self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                         self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  * 
  *     def randomize(self, neuro_column, edges_to_randomise: set = None) -> None:             # <<<<<<<<<<<<<<
  *         """
@@ -6664,8 +6670,10 @@ static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_15randomize(PyObject
 static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct __pyx_obj_3src_12neuro_column_NeuroColumn *__pyx_v_self, PyObject *__pyx_v_neuro_column, PyObject *__pyx_v_edges_to_randomise) {
   PyObject *__pyx_v_edge_key = 0;
   PyObject *__pyx_v_rnd_numeric = NULL;
-  PyObject *__pyx_v_norm_min = NULL;
-  PyObject *__pyx_v_norm_max = NULL;
+  CYTHON_UNUSED PyObject *__pyx_v_norm_min = NULL;
+  CYTHON_UNUSED PyObject *__pyx_v_norm_max = NULL;
+  PyObject *__pyx_v_numeric_min = NULL;
+  PyObject *__pyx_v_numeric_max = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6825,16 +6833,16 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
         /* "src/neuro_column.py":396
  *                     # use the normalisation boundaries to calc a random number - which will be normalised when upserted...
  *                     #
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                         rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['norm_max'] - neuro_column.edges[edge_key]['norm_min'])) + neuro_column.edges[edge_key]['norm_min']
- *                         norm_min = neuro_column.edges[edge_key]['norm_min']
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
+ *                         rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['numeric_max'] - neuro_column.edges[edge_key]['numeric_min'])) + neuro_column.edges[edge_key]['numeric_min']
+ *                         numeric_min = neuro_column.edges[edge_key]['numeric_min']
  */
         __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 396, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_8, __pyx_v_edge_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 396, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __pyx_t_5 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_min, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 396, __pyx_L1_error)
+        __pyx_t_5 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_min, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 396, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __pyx_t_7 = (__pyx_t_5 != 0);
         if (__pyx_t_7) {
@@ -6847,7 +6855,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
         __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_v_edge_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 396, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_7 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_max, __pyx_t_8, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 396, __pyx_L1_error)
+        __pyx_t_7 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_max, __pyx_t_8, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 396, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __pyx_t_5 = (__pyx_t_7 != 0);
         __pyx_t_6 = __pyx_t_5;
@@ -6856,10 +6864,10 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
 
           /* "src/neuro_column.py":397
  *                     #
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                         rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['norm_max'] - neuro_column.edges[edge_key]['norm_min'])) + neuro_column.edges[edge_key]['norm_min']             # <<<<<<<<<<<<<<
- *                         norm_min = neuro_column.edges[edge_key]['norm_min']
- *                         norm_max = neuro_column.edges[edge_key]['norm_max']
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                         rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['numeric_max'] - neuro_column.edges[edge_key]['numeric_min'])) + neuro_column.edges[edge_key]['numeric_min']             # <<<<<<<<<<<<<<
+ *                         numeric_min = neuro_column.edges[edge_key]['numeric_min']
+ *                         numeric_max = neuro_column.edges[edge_key]['numeric_max']
  */
           __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 397, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
@@ -6886,7 +6894,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
           __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_9, __pyx_v_edge_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 397, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-          __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_norm_max); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 397, __pyx_L1_error)
+          __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_numeric_max); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 397, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 397, __pyx_L1_error)
@@ -6894,7 +6902,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
           __pyx_t_10 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_v_edge_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 397, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_norm_min); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 397, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 397, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           __pyx_t_10 = PyNumber_Subtract(__pyx_t_9, __pyx_t_1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 397, __pyx_L1_error)
@@ -6910,7 +6918,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
           __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_10, __pyx_v_edge_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 397, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_norm_min); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 397, __pyx_L1_error)
+          __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 397, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           __pyx_t_8 = PyNumber_Add(__pyx_t_1, __pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 397, __pyx_L1_error)
@@ -6921,10 +6929,10 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
           __pyx_t_8 = 0;
 
           /* "src/neuro_column.py":398
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
- *                         rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['norm_max'] - neuro_column.edges[edge_key]['norm_min'])) + neuro_column.edges[edge_key]['norm_min']
- *                         norm_min = neuro_column.edges[edge_key]['norm_min']             # <<<<<<<<<<<<<<
- *                         norm_max = neuro_column.edges[edge_key]['norm_max']
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+ *                         rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['numeric_max'] - neuro_column.edges[edge_key]['numeric_min'])) + neuro_column.edges[edge_key]['numeric_min']
+ *                         numeric_min = neuro_column.edges[edge_key]['numeric_min']             # <<<<<<<<<<<<<<
+ *                         numeric_max = neuro_column.edges[edge_key]['numeric_max']
  *                     else:
  */
           __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_edges); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 398, __pyx_L1_error)
@@ -6932,16 +6940,16 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
           __pyx_t_10 = __Pyx_PyObject_GetItem(__pyx_t_8, __pyx_v_edge_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 398, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_norm_min); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 398, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 398, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __Pyx_DECREF_SET(__pyx_v_norm_min, __pyx_t_8);
+          __Pyx_XDECREF_SET(__pyx_v_numeric_min, __pyx_t_8);
           __pyx_t_8 = 0;
 
           /* "src/neuro_column.py":399
- *                         rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['norm_max'] - neuro_column.edges[edge_key]['norm_min'])) + neuro_column.edges[edge_key]['norm_min']
- *                         norm_min = neuro_column.edges[edge_key]['norm_min']
- *                         norm_max = neuro_column.edges[edge_key]['norm_max']             # <<<<<<<<<<<<<<
+ *                         rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['numeric_max'] - neuro_column.edges[edge_key]['numeric_min'])) + neuro_column.edges[edge_key]['numeric_min']
+ *                         numeric_min = neuro_column.edges[edge_key]['numeric_min']
+ *                         numeric_max = neuro_column.edges[edge_key]['numeric_max']             # <<<<<<<<<<<<<<
  *                     else:
  *                         rnd_numeric = random.random()
  */
@@ -6950,24 +6958,24 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
           __pyx_t_10 = __Pyx_PyObject_GetItem(__pyx_t_8, __pyx_v_edge_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 399, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_norm_max); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 399, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_numeric_max); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 399, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __Pyx_DECREF_SET(__pyx_v_norm_max, __pyx_t_8);
+          __Pyx_XDECREF_SET(__pyx_v_numeric_max, __pyx_t_8);
           __pyx_t_8 = 0;
 
           /* "src/neuro_column.py":396
  *                     # use the normalisation boundaries to calc a random number - which will be normalised when upserted...
  *                     #
- *                     if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                         rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['norm_max'] - neuro_column.edges[edge_key]['norm_min'])) + neuro_column.edges[edge_key]['norm_min']
- *                         norm_min = neuro_column.edges[edge_key]['norm_min']
+ *                     if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:             # <<<<<<<<<<<<<<
+ *                         rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['numeric_max'] - neuro_column.edges[edge_key]['numeric_min'])) + neuro_column.edges[edge_key]['numeric_min']
+ *                         numeric_min = neuro_column.edges[edge_key]['numeric_min']
  */
           goto __pyx_L9;
         }
 
         /* "src/neuro_column.py":401
- *                         norm_max = neuro_column.edges[edge_key]['norm_max']
+ *                         numeric_max = neuro_column.edges[edge_key]['numeric_max']
  *                     else:
  *                         rnd_numeric = random.random()             # <<<<<<<<<<<<<<
  * 
@@ -7116,7 +7124,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
  *                             #
  *                             prob=random.random(),             # <<<<<<<<<<<<<<
  *                             numeric=rnd_numeric,
- *                             normalise_min=norm_min,
+ *                             numeric_min=numeric_min,
  */
       __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_n_s_random); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 412, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
@@ -7141,6 +7149,24 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
       __pyx_t_16 = __pyx_PyFloat_AsDouble(__pyx_t_12); if (unlikely((__pyx_t_16 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 412, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
+      /* "src/neuro_column.py":414
+ *                             prob=random.random(),
+ *                             numeric=rnd_numeric,
+ *                             numeric_min=numeric_min,             # <<<<<<<<<<<<<<
+ *                             numeric_max=numeric_max
+ *                             )
+ */
+      if (unlikely(!__pyx_v_numeric_min)) { __Pyx_RaiseUnboundLocalError("numeric_min"); __PYX_ERR(0, 414, __pyx_L1_error) }
+
+      /* "src/neuro_column.py":415
+ *                             numeric=rnd_numeric,
+ *                             numeric_min=numeric_min,
+ *                             numeric_max=numeric_max             # <<<<<<<<<<<<<<
+ *                             )
+ * 
+ */
+      if (unlikely(!__pyx_v_numeric_max)) { __Pyx_RaiseUnboundLocalError("numeric_max"); __PYX_ERR(0, 415, __pyx_L1_error) }
+
       /* "src/neuro_column.py":403
  *                         rnd_numeric = random.random()
  * 
@@ -7150,8 +7176,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
  */
       __pyx_t_17.__pyx_n = 3;
       __pyx_t_17.numeric = __pyx_v_rnd_numeric;
-      __pyx_t_17.normalise_min = __pyx_v_norm_min;
-      __pyx_t_17.normalise_max = __pyx_v_norm_max;
+      __pyx_t_17.numeric_min = __pyx_v_numeric_min;
+      __pyx_t_17.numeric_max = __pyx_v_numeric_max;
       __pyx_t_12 = ((struct __pyx_vtabstruct_3src_12neuro_column_NeuroColumn *)__pyx_v_self->__pyx_vtab)->upsert(__pyx_v_self, ((PyObject*)__pyx_t_8), ((PyObject*)__pyx_t_1), ((PyObject*)__pyx_t_10), ((PyObject*)__pyx_t_9), ((PyObject*)__pyx_t_11), __pyx_t_14, __pyx_t_16, 0, &__pyx_t_17); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 403, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -7181,7 +7207,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "src/neuro_column.py":371
- *                         self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                         self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  * 
  *     def randomize(self, neuro_column, edges_to_randomise: set = None) -> None:             # <<<<<<<<<<<<<<
  *         """
@@ -7208,6 +7234,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
   __Pyx_XDECREF(__pyx_v_rnd_numeric);
   __Pyx_XDECREF(__pyx_v_norm_min);
   __Pyx_XDECREF(__pyx_v_norm_max);
+  __Pyx_XDECREF(__pyx_v_numeric_min);
+  __Pyx_XDECREF(__pyx_v_numeric_max);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
@@ -7223,7 +7251,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_14randomize(struct _
 
 /* Python wrapper */
 static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_17get_edge_by_max_probability(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_3src_12neuro_column_11NeuroColumn_16get_edge_by_max_probability[] = "\n        method to return the edge with the maximum prob\n        :return: Dictionary with keys: 'edge_type', 'source_type', 'source_uid', 'target_type', 'target_uid', 'neuron_id', 'prob', Optional['numeric', 'min', 'max']\n\n        ";
+static char __pyx_doc_3src_12neuro_column_11NeuroColumn_16get_edge_by_max_probability[] = "\n        method to return the edge with the maximum prob\n        :return: Dictionary with keys: 'edge_type', 'source_type', 'source_uid', 'target_type', 'target_uid', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max']\n\n        ";
 static PyMethodDef __pyx_mdef_3src_12neuro_column_11NeuroColumn_17get_edge_by_max_probability = {"get_edge_by_max_probability", (PyCFunction)__pyx_pw_3src_12neuro_column_11NeuroColumn_17get_edge_by_max_probability, METH_NOARGS, __pyx_doc_3src_12neuro_column_11NeuroColumn_16get_edge_by_max_probability};
 static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_17get_edge_by_max_probability(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
@@ -7536,8 +7564,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_18__str__(struct __p
  *         for edge_key in self.edges:
  * 
  *             if 'numeric' in self.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                 if 'norm_min' in self.edges[edge_key]:
- *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['norm_min'] - self.edges[edge_key]['norm_max'])) + self.edges[edge_key]['norm_min']
+ *                 if 'numeric_min' in self.edges[edge_key]:
+ *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['numeric_min'] - self.edges[edge_key]['numeric_max'])) + self.edges[edge_key]['numeric_min']
  */
     if (unlikely(__pyx_v_self->edges == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -7553,8 +7581,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_18__str__(struct __p
       /* "src/neuro_column.py":455
  * 
  *             if 'numeric' in self.edges[edge_key]:
- *                 if 'norm_min' in self.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['norm_min'] - self.edges[edge_key]['norm_max'])) + self.edges[edge_key]['norm_min']
+ *                 if 'numeric_min' in self.edges[edge_key]:             # <<<<<<<<<<<<<<
+ *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['numeric_min'] - self.edges[edge_key]['numeric_max'])) + self.edges[edge_key]['numeric_min']
  *                 else:
  */
       if (unlikely(__pyx_v_self->edges == Py_None)) {
@@ -7563,15 +7591,15 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_18__str__(struct __p
       }
       __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 455, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_8 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_min, __pyx_t_5, Py_EQ)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 455, __pyx_L1_error)
+      __pyx_t_8 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_min, __pyx_t_5, Py_EQ)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 455, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_7 = (__pyx_t_8 != 0);
       if (__pyx_t_7) {
 
         /* "src/neuro_column.py":456
  *             if 'numeric' in self.edges[edge_key]:
- *                 if 'norm_min' in self.edges[edge_key]:
- *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['norm_min'] - self.edges[edge_key]['norm_max'])) + self.edges[edge_key]['norm_min']             # <<<<<<<<<<<<<<
+ *                 if 'numeric_min' in self.edges[edge_key]:
+ *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['numeric_min'] - self.edges[edge_key]['numeric_max'])) + self.edges[edge_key]['numeric_min']             # <<<<<<<<<<<<<<
  *                 else:
  *                     numeric = self.edges[edge_key]['numeric']
  */
@@ -7590,7 +7618,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_18__str__(struct __p
         }
         __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 456, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_norm_min); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 456, __pyx_L1_error)
+        __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 456, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         if (unlikely(__pyx_v_self->edges == Py_None)) {
@@ -7599,7 +7627,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_18__str__(struct __p
         }
         __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 456, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_11 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_norm_max); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 456, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_numeric_max); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 456, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_11);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __pyx_t_5 = PyNumber_Subtract(__pyx_t_10, __pyx_t_11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 456, __pyx_L1_error)
@@ -7616,7 +7644,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_18__str__(struct __p
         }
         __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_self->edges, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 456, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_norm_min); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 456, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 456, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __pyx_t_5 = PyNumber_Add(__pyx_t_11, __pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 456, __pyx_L1_error)
@@ -7629,15 +7657,15 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_18__str__(struct __p
         /* "src/neuro_column.py":455
  * 
  *             if 'numeric' in self.edges[edge_key]:
- *                 if 'norm_min' in self.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['norm_min'] - self.edges[edge_key]['norm_max'])) + self.edges[edge_key]['norm_min']
+ *                 if 'numeric_min' in self.edges[edge_key]:             # <<<<<<<<<<<<<<
+ *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['numeric_min'] - self.edges[edge_key]['numeric_max'])) + self.edges[edge_key]['numeric_min']
  *                 else:
  */
         goto __pyx_L6;
       }
 
       /* "src/neuro_column.py":458
- *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['norm_min'] - self.edges[edge_key]['norm_max'])) + self.edges[edge_key]['norm_min']
+ *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['numeric_min'] - self.edges[edge_key]['numeric_max'])) + self.edges[edge_key]['numeric_min']
  *                 else:
  *                     numeric = self.edges[edge_key]['numeric']             # <<<<<<<<<<<<<<
  *             else:
@@ -7662,8 +7690,8 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_18__str__(struct __p
  *         for edge_key in self.edges:
  * 
  *             if 'numeric' in self.edges[edge_key]:             # <<<<<<<<<<<<<<
- *                 if 'norm_min' in self.edges[edge_key]:
- *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['norm_min'] - self.edges[edge_key]['norm_max'])) + self.edges[edge_key]['norm_min']
+ *                 if 'numeric_min' in self.edges[edge_key]:
+ *                     numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['numeric_min'] - self.edges[edge_key]['numeric_max'])) + self.edges[edge_key]['numeric_min']
  */
       goto __pyx_L5;
     }
@@ -8218,7 +8246,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_24__getitem__(struct
 
 /* Python wrapper */
 static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_27decode(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_3src_12neuro_column_11NeuroColumn_26decode[] = "\n        method to return a dictionary representation of the NeuroColumn. Any normalised numeric will be denormalised\n        :return: dictionary of dictionaries with outer dict keyed by edge_key, inner dictionary with keys:\n\n                    'edge_type', 'source_type', 'source_name', 'target_type', 'target_name', 'neuron_id', 'prob', Optional['numeric', 'min', 'max']keyed by each edge\n        ";
+static char __pyx_doc_3src_12neuro_column_11NeuroColumn_26decode[] = "\n        method to return a dictionary representation of the NeuroColumn. Any normalised numeric will be denormalised\n        :return: dictionary of dictionaries with outer dict keyed by edge_key, inner dictionary with keys:\n\n                    'edge_type', 'source_type', 'source_name', 'target_type', 'target_name', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max'] keyed by each edge\n        ";
 static PyMethodDef __pyx_mdef_3src_12neuro_column_11NeuroColumn_27decode = {"decode", (PyCFunction)__pyx_pw_3src_12neuro_column_11NeuroColumn_27decode, METH_NOARGS, __pyx_doc_3src_12neuro_column_11NeuroColumn_26decode};
 static PyObject *__pyx_pw_3src_12neuro_column_11NeuroColumn_27decode(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
@@ -8257,7 +8285,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_26decode(struct __py
   __Pyx_RefNannySetupContext("decode", 0);
 
   /* "src/neuro_column.py":501
- *                     'edge_type', 'source_type', 'source_name', 'target_type', 'target_name', 'neuron_id', 'prob', Optional['numeric', 'min', 'max']keyed by each edge
+ *                     'edge_type', 'source_type', 'source_name', 'target_type', 'target_name', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max'] keyed by each edge
  *         """
  *         neuro_column: FeatureMapType = {}             # <<<<<<<<<<<<<<
  *         edge_key: EdgeKeyType
@@ -8377,13 +8405,13 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_26decode(struct __py
     /* "src/neuro_column.py":510
  *             # denormalise numeric if required
  *             #
- *             if 'norm_min' in neuro_column[edge_key] and 'norm_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:             # <<<<<<<<<<<<<<
- *                 neuro_column[edge_key]['numeric'] = (neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['norm_max'] - neuro_column[edge_key]['norm_min'])) + neuro_column[edge_key]['norm_min']
- *         return neuro_column
+ *             if 'numeric_min' in neuro_column[edge_key] and 'numeric_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:             # <<<<<<<<<<<<<<
+ *                 neuro_column[edge_key]['numeric'] = ((neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['numeric_max'] - neuro_column[edge_key]['numeric_min'])) +
+ *                                                      neuro_column[edge_key]['numeric_min'])
  */
     __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_neuro_column, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 510, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_13 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_min, __pyx_t_5, Py_EQ)); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 510, __pyx_L1_error)
+    __pyx_t_13 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_min, __pyx_t_5, Py_EQ)); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 510, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_14 = (__pyx_t_13 != 0);
     if (__pyx_t_14) {
@@ -8393,7 +8421,7 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_26decode(struct __py
     }
     __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_neuro_column, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 510, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_14 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_norm_max, __pyx_t_5, Py_EQ)); if (unlikely(__pyx_t_14 < 0)) __PYX_ERR(0, 510, __pyx_L1_error)
+    __pyx_t_14 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_numeric_max, __pyx_t_5, Py_EQ)); if (unlikely(__pyx_t_14 < 0)) __PYX_ERR(0, 510, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_13 = (__pyx_t_14 != 0);
     if (__pyx_t_13) {
@@ -8412,8 +8440,9 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_26decode(struct __py
 
       /* "src/neuro_column.py":511
  *             #
- *             if 'norm_min' in neuro_column[edge_key] and 'norm_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:
- *                 neuro_column[edge_key]['numeric'] = (neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['norm_max'] - neuro_column[edge_key]['norm_min'])) + neuro_column[edge_key]['norm_min']             # <<<<<<<<<<<<<<
+ *             if 'numeric_min' in neuro_column[edge_key] and 'numeric_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:
+ *                 neuro_column[edge_key]['numeric'] = ((neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['numeric_max'] - neuro_column[edge_key]['numeric_min'])) +             # <<<<<<<<<<<<<<
+ *                                                      neuro_column[edge_key]['numeric_min'])
  *         return neuro_column
  */
       __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_neuro_column, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 511, __pyx_L1_error)
@@ -8423,12 +8452,12 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_26decode(struct __py
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_neuro_column, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 511, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_11 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_norm_max); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 511, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_numeric_max); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 511, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_neuro_column, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 511, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_norm_min); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 511, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 511, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_5 = PyNumber_Subtract(__pyx_t_11, __pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 511, __pyx_L1_error)
@@ -8439,11 +8468,26 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_26decode(struct __py
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_neuro_column, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 511, __pyx_L1_error)
+
+      /* "src/neuro_column.py":512
+ *             if 'numeric_min' in neuro_column[edge_key] and 'numeric_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:
+ *                 neuro_column[edge_key]['numeric'] = ((neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['numeric_max'] - neuro_column[edge_key]['numeric_min'])) +
+ *                                                      neuro_column[edge_key]['numeric_min'])             # <<<<<<<<<<<<<<
+ *         return neuro_column
+ */
+      __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_neuro_column, __pyx_v_edge_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_norm_min); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 511, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_numeric_min); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+      /* "src/neuro_column.py":511
+ *             #
+ *             if 'numeric_min' in neuro_column[edge_key] and 'numeric_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:
+ *                 neuro_column[edge_key]['numeric'] = ((neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['numeric_max'] - neuro_column[edge_key]['numeric_min'])) +             # <<<<<<<<<<<<<<
+ *                                                      neuro_column[edge_key]['numeric_min'])
+ *         return neuro_column
+ */
       __pyx_t_5 = PyNumber_Add(__pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 511, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -8457,17 +8501,17 @@ static PyObject *__pyx_pf_3src_12neuro_column_11NeuroColumn_26decode(struct __py
       /* "src/neuro_column.py":510
  *             # denormalise numeric if required
  *             #
- *             if 'norm_min' in neuro_column[edge_key] and 'norm_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:             # <<<<<<<<<<<<<<
- *                 neuro_column[edge_key]['numeric'] = (neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['norm_max'] - neuro_column[edge_key]['norm_min'])) + neuro_column[edge_key]['norm_min']
- *         return neuro_column
+ *             if 'numeric_min' in neuro_column[edge_key] and 'numeric_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:             # <<<<<<<<<<<<<<
+ *                 neuro_column[edge_key]['numeric'] = ((neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['numeric_max'] - neuro_column[edge_key]['numeric_min'])) +
+ *                                                      neuro_column[edge_key]['numeric_min'])
  */
     }
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/neuro_column.py":512
- *             if 'norm_min' in neuro_column[edge_key] and 'norm_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:
- *                 neuro_column[edge_key]['numeric'] = (neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['norm_max'] - neuro_column[edge_key]['norm_min'])) + neuro_column[edge_key]['norm_min']
+  /* "src/neuro_column.py":513
+ *                 neuro_column[edge_key]['numeric'] = ((neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['numeric_max'] - neuro_column[edge_key]['numeric_min'])) +
+ *                                                      neuro_column[edge_key]['numeric_min'])
  *         return neuro_column             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
@@ -9695,22 +9739,21 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_learn, __pyx_k_learn, sizeof(__pyx_k_learn), 0, 0, 1, 1},
   {&__pyx_n_s_learn_rate, __pyx_k_learn_rate, sizeof(__pyx_k_learn_rate), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
-  {&__pyx_n_s_max, __pyx_k_max, sizeof(__pyx_k_max), 0, 0, 1, 1},
   {&__pyx_n_s_max_edge_key, __pyx_k_max_edge_key, sizeof(__pyx_k_max_edge_key), 0, 0, 1, 1},
   {&__pyx_n_s_max_neurons, __pyx_k_max_neurons, sizeof(__pyx_k_max_neurons), 0, 0, 1, 1},
   {&__pyx_n_s_max_prob, __pyx_k_max_prob, sizeof(__pyx_k_max_prob), 0, 0, 1, 1},
   {&__pyx_n_s_merge, __pyx_k_merge, sizeof(__pyx_k_merge), 0, 0, 1, 1},
   {&__pyx_n_s_merge_factor, __pyx_k_merge_factor, sizeof(__pyx_k_merge_factor), 0, 0, 1, 1},
-  {&__pyx_n_s_min, __pyx_k_min, sizeof(__pyx_k_min), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_neuro_column, __pyx_k_neuro_column, sizeof(__pyx_k_neuro_column), 0, 0, 1, 1},
   {&__pyx_n_s_neuron_id, __pyx_k_neuron_id, sizeof(__pyx_k_neuron_id), 0, 0, 1, 1},
   {&__pyx_n_s_new, __pyx_k_new, sizeof(__pyx_k_new), 0, 0, 1, 1},
   {&__pyx_n_s_norm_max, __pyx_k_norm_max, sizeof(__pyx_k_norm_max), 0, 0, 1, 1},
   {&__pyx_n_s_norm_min, __pyx_k_norm_min, sizeof(__pyx_k_norm_min), 0, 0, 1, 1},
-  {&__pyx_n_s_normalise_max, __pyx_k_normalise_max, sizeof(__pyx_k_normalise_max), 0, 0, 1, 1},
-  {&__pyx_n_s_normalise_min, __pyx_k_normalise_min, sizeof(__pyx_k_normalise_min), 0, 0, 1, 1},
   {&__pyx_n_s_numeric, __pyx_k_numeric, sizeof(__pyx_k_numeric), 0, 0, 1, 1},
+  {&__pyx_n_s_numeric_max, __pyx_k_numeric_max, sizeof(__pyx_k_numeric_max), 0, 0, 1, 1},
+  {&__pyx_n_s_numeric_min, __pyx_k_numeric_min, sizeof(__pyx_k_numeric_min), 0, 0, 1, 1},
+  {&__pyx_n_s_numric_min, __pyx_k_numric_min, sizeof(__pyx_k_numric_min), 0, 0, 1, 1},
   {&__pyx_n_s_pickle, __pyx_k_pickle, sizeof(__pyx_k_pickle), 0, 0, 1, 1},
   {&__pyx_n_s_prob, __pyx_k_prob, sizeof(__pyx_k_prob), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_PickleError, __pyx_k_pyx_PickleError, sizeof(__pyx_k_pyx_PickleError), 0, 0, 1, 1},
@@ -9774,7 +9817,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *                edge_type: str,
  *                source_type: str,
  */
-  __pyx_tuple__3 = PyTuple_Pack(11, __pyx_n_s_self, __pyx_n_s_edge_type, __pyx_n_s_source_type, __pyx_n_s_source_uid, __pyx_n_s_target_type, __pyx_n_s_target_uid, __pyx_n_s_neuron_id, __pyx_n_s_prob, __pyx_n_s_numeric, __pyx_n_s_normalise_min, __pyx_n_s_normalise_max); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(11, __pyx_n_s_self, __pyx_n_s_edge_type, __pyx_n_s_source_type, __pyx_n_s_source_uid, __pyx_n_s_target_type, __pyx_n_s_target_uid, __pyx_n_s_neuron_id, __pyx_n_s_prob, __pyx_n_s_numeric, __pyx_n_s_numeric_min, __pyx_n_s_numeric_max); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 69, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
   __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(11, 0, 11, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neuro_column_py, __pyx_n_s_upsert, 69, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 69, __pyx_L1_error)
@@ -9828,7 +9871,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_codeobj__12 = (PyObject*)__Pyx_PyCode_New(5, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__11, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neuro_column_py, __pyx_n_s_learn, 249, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__12)) __PYX_ERR(0, 249, __pyx_L1_error)
 
   /* "src/neuro_column.py":328
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  * 
  *     def merge(self, neuro_column, merge_factor: cython.double) -> None:             # <<<<<<<<<<<<<<
  *         """
@@ -9840,16 +9883,16 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neuro_column_py, __pyx_n_s_merge, 328, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 328, __pyx_L1_error)
 
   /* "src/neuro_column.py":371
- *                         self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                         self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  * 
  *     def randomize(self, neuro_column, edges_to_randomise: set = None) -> None:             # <<<<<<<<<<<<<<
  *         """
  *         method to randomise this SDR based on the example SDR
  */
-  __pyx_tuple__15 = PyTuple_Pack(7, __pyx_n_s_self, __pyx_n_s_neuro_column, __pyx_n_s_edges_to_randomise, __pyx_n_s_edge_key, __pyx_n_s_rnd_numeric, __pyx_n_s_norm_min, __pyx_n_s_norm_max); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 371, __pyx_L1_error)
+  __pyx_tuple__15 = PyTuple_Pack(9, __pyx_n_s_self, __pyx_n_s_neuro_column, __pyx_n_s_edges_to_randomise, __pyx_n_s_edge_key, __pyx_n_s_rnd_numeric, __pyx_n_s_norm_min, __pyx_n_s_norm_max, __pyx_n_s_numeric_min, __pyx_n_s_numeric_max); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 371, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__15);
   __Pyx_GIVEREF(__pyx_tuple__15);
-  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(3, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neuro_column_py, __pyx_n_s_randomize, 371, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 371, __pyx_L1_error)
+  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(3, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neuro_column_py, __pyx_n_s_randomize, 371, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 371, __pyx_L1_error)
 
   /* "src/neuro_column.py":418
  *                             )
@@ -10516,8 +10559,8 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_neuron_id, __pyx_n_u_int) < 0) __PYX_ERR(0, 69, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_prob, __pyx_n_u_double) < 0) __PYX_ERR(0, 69, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_numeric, __pyx_n_u_float) < 0) __PYX_ERR(0, 69, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_normalise_min, __pyx_n_u_float) < 0) __PYX_ERR(0, 69, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_normalise_max, __pyx_n_u_float) < 0) __PYX_ERR(0, 69, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_numeric_min, __pyx_n_u_float) < 0) __PYX_ERR(0, 69, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_numeric_max, __pyx_n_u_float) < 0) __PYX_ERR(0, 69, __pyx_L1_error)
   __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_3src_12neuro_column_11NeuroColumn_3upsert, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuroColumn_upsert, NULL, __pyx_n_s_src_neuro_column, __pyx_d, ((PyObject *)__pyx_codeobj__4)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_3, __pyx_t_2);
@@ -10660,7 +10703,7 @@ if (!__Pyx_RefNanny) {
   PyType_Modified(__pyx_ptype_3src_12neuro_column_NeuroColumn);
 
   /* "src/neuro_column.py":328
- *                             self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  * 
  *     def merge(self, neuro_column, merge_factor: cython.double) -> None:             # <<<<<<<<<<<<<<
  *         """
@@ -10679,7 +10722,7 @@ if (!__Pyx_RefNanny) {
   PyType_Modified(__pyx_ptype_3src_12neuro_column_NeuroColumn);
 
   /* "src/neuro_column.py":371
- *                         self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+ *                         self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
  * 
  *     def randomize(self, neuro_column, edges_to_randomise: set = None) -> None:             # <<<<<<<<<<<<<<
  *         """
@@ -12010,6 +12053,11 @@ static CYTHON_INLINE PyObject *__Pyx__GetModuleGlobalName(PyObject *name)
     PyErr_Clear();
 #endif
     return __Pyx_GetBuiltinName(name);
+}
+
+/* None */
+static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname) {
+    PyErr_Format(PyExc_UnboundLocalError, "local variable '%s' referenced before assignment", varname);
 }
 
 /* PyErrExceptionMatches */
