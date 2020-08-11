@@ -276,7 +276,11 @@ class AMFGraph(nx.MultiDiGraph):
                 edge = key[0]
                 target = key[1]
 
-                prob = node_attr[key]['prob']
+                if 'prob' in node_attr[key]:
+                    prob = node_attr[key]['prob']
+                else:
+                    prob = 1.0
+
                 if 'numeric' in node_attr[key]:
                     numeric = node_attr[key]['numeric']
                 else:
@@ -314,7 +318,7 @@ class AMFGraph(nx.MultiDiGraph):
 
     def update_node(self, node: Node_Type,
                     upsert_attr: Optional[dict] = None,
-                    expire_attr: Optional[dict] = None,
+                    expire_attr: Optional[set] = None,
                     edge_prop: Optional[dict] = None,
                     timestamp: Optional[float] = None):
         """
@@ -338,7 +342,11 @@ class AMFGraph(nx.MultiDiGraph):
                 edge = key[0]
                 target = key[1]
 
-                prob = upsert_attr[key]['prob']
+                if 'prob' in upsert_attr[key]:
+                    prob = upsert_attr[key]['prob']
+                else:
+                    prob = None
+
                 if 'numeric' in upsert_attr[key]:
                     numeric = upsert_attr[key]['numeric']
                 else:
@@ -356,7 +364,7 @@ class AMFGraph(nx.MultiDiGraph):
 
                 if edge_prop is not None:
                     self.update_edge(source=node, target=target, edge=edge,
-                                     prob=prob, numeric=prob, numeric_min=numeric_min, numeric_max=numeric_max,
+                                     prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
                                      timestamp=timestamp, **edge_prop)
                 else:
                     self.update_edge(source=node, target=target, edge=edge,
@@ -869,11 +877,15 @@ if __name__ == '__main__':
     # edge_to attribute_key = (<RELATIONSHIP>, <ATTRIBUTE_NODE_ID>)
     # edge properties = either <WEIGHT> or (<WEIGHT>, <VALUE>, <MIN_VALUE>, <MAX_VALUE>)
     #
-    node_attr = {('has_client', ('client', 'abc ltd')): 1.0,
-                 ('has_platform', ('platform', 'electronic')): 0.1,
-                 ('has_product', ('product', 'swap')): 1.0,
-                 ('has_nominal', ('nominal', 'swap_nominal')): (1.0, 800000000, 0, 1000000000)
+    node_attr = {('has_client', ('client', 'abc ltd')): {'prob': 1.0},  # probability of edge is 1.0
+                 ('has_platform', ('platform', 'electronic')): {'prob': 1.0},  # probability of edge is 1.0
+                 ('has_product', ('product', 'swap')): {'prob': 1.0},  # probability of edge is 1.0
+
+                 # here we set a probability of edge to 1.0, we also associate numeric value 800mio, minimum value of 0, max value of 1 bio to the edge
+                 #
+                 ('has_nominal', ('nominal', 'swap_nominal')): {'prob': 1.0, 'numeric': 800000000, 'numeric_min': 0, 'numeric_max': 1000000000}
                  }
+
 
     # one can specify extra properties for every edge created
     #
@@ -890,3 +902,24 @@ if __name__ == '__main__':
     # and you can plot the resulting graph
     #
     g.plot(dimension=3)
+
+    # define a dictionary of the attributes to be inserted/ updated
+    #
+    upsert_attr = {('has_nominal', ('nominal', 'swap_nominal')): {'numeric': 5000000}}
+
+    # define a set of 'attribute relationships" to be expired
+    #
+    expire_attr = {('has_interest', ('interest', 'banking'), 0)}
+
+    edge_properties = {'update_id': 321}
+
+    g.update_node(node=node_id, upsert_attr=upsert_attr, expire_attr=expire_attr, edge_prop=edge_properties, timestamp=None)
+
+    print(g)
+
+    #  plot the graph filtering on expired_timestamp is None
+    #
+    g.plot(dimension=3, edge_filter_func=lambda x: x[1] is None)
+
+
+
