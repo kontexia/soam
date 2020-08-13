@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 from typing import Optional, Dict
-from dask.distributed import Client, Variable, Lock, ActorFuture, Future, TimeoutError
+from dask.distributed import Client, Variable, Lock, ActorFuture, Future, TimeoutError, Pub, Sub
 from src.kv_cache import KVGraphCache, KVCacheValueType
 
 
@@ -45,6 +45,12 @@ class DistributedCache:
             result = cache.set_kv(store_name=store_name, key=key, value=value)
             if persist:
                 cache.persist(store_name=store_name)
+
+        # publish key that has changed
+        #
+        pub = Pub(store_name)
+        pub.put({'action': 'set', 'key': key})
+
         return result
 
     def del_kv(self, store_name: str, key: Optional[str] = None, persist=True) -> Future:
@@ -61,6 +67,12 @@ class DistributedCache:
             result = cache.del_kv(store_name=store_name, key=key, delete_from_db=persist)
             if persist:
                 cache.persist(store_name=store_name)
+
+        # publish key that has changed
+        #
+        pub = Pub(store_name)
+        pub.put({'action': 'delete', 'key': key})
+
         return result
 
     def get_kv(self, store_name: str, key: Optional[str] = None) -> KVCacheValueType:
@@ -86,3 +98,13 @@ class DistributedCache:
         with Lock('{}'.format(store_name)):
             result = cache.restore(store_name=store_name, include_history=include_history)
         return result
+
+    def subscribe(self, store_name, timeout=None):
+        """
+        method to subscribe to any changes to a particular store. Will wait for messages for that store or return after specified timeout
+        :param store_name: the storename to listen to
+        :param timeout: the timeout to wait for messages
+        :return: the message which will be a dict with keys: {'action': set or delete, 'key': the key that changed}
+        """
+        sub = Sub(store_name)
+        return sub.get(timeout=timeout)
