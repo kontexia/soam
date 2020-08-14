@@ -10,7 +10,7 @@ KVCacheValueType = Union[float, int, list, dict, set, str, AMFGraph, None]
 
 
 class KVGraphCache:
-    def __init__(self, config: Optional[Dict[str, str]] = None) -> None:
+    def __init__(self, config: Optional[Dict[str, Union[str, int]]] = None) -> None:
         """
         class implements a simple n in memory key value cache that can save and restore to a database
         :param config: database keys:\n
@@ -31,6 +31,8 @@ class KVGraphCache:
             self._config['default_node_type_edge'] = 'instance_of'
         if 'named_query_collection' not in self._config:
             self._config['named_query_collection'] = 'named_query'
+        if 'db_update_batch' not in self._config:
+            self._config['db_update_batch'] = 50
 
         self._store: Dict[str, Dict[str, Any]] = {}
         """ nested dictionary , outer dict keyed on store_names and inner dict implements key value pair """
@@ -191,19 +193,29 @@ class KVGraphCache:
 
                 # upsert doc
                 #
-                self._db.insert_many_documents(collection_name=collection_name,
+                self._db.update_many_documents(collection_name=collection_name,
                                                documents=docs_to_insert[doc_key],
-                                               parameters={'overwrite': True})
+                                               parameters={'merge': True}
+                                               )
 
             for collection_name in docs_for_name_queries:
                 for graph_key in docs_for_name_queries[collection_name]:
-                    self._db.execute_query('update_sub_graphs', parameters={'collection': {'value': collection_name,
-                                                                                           'type': 'collection'},
-                                                                            'filter_keys': {'value': list(docs_for_name_queries[collection_name][graph_key]),
-                                                                                            'type': 'attribute'},
-                                                                            'sub_graph': {'value': '{}_{}'.format(store, graph_key),
-                                                                                          'type': 'attribute'}
-                                                                            })
+
+                    # run update_sub_graphs with batches of keys just in case graphs very large
+                    #
+                    id_list = list(docs_for_name_queries[collection_name][graph_key])
+
+                    try:
+                        for idx in range(0, len(id_list), self._config['db_update_batch']):
+                            self._db.execute_query('update_sub_graphs', parameters={'collection': {'value': collection_name,
+                                                                                                   'type': 'collection'},
+                                                                                    'filter_keys': {'value': id_list[idx: idx + self._config['db_update_batch']],
+                                                                                                    'type': 'attribute'},
+                                                                                    'sub_graph': {'value': '{}_{}'.format(store, graph_key),
+                                                                                                  'type': 'attribute'}
+                                                                                    })
+                    except Exception as e:
+                        print('exception thrown', e)
 
             # delete required records
             #

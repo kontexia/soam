@@ -47,7 +47,7 @@ class SDR:
         """
         method to access the sdr edge attributes
         :param sdr_key: the edge to return
-        :return: the edge attributes {source_type: , source_uid:, target_type: , target_uid:, prob:, numeric:, min:, max:}
+        :return: the edge attributes {source_type: , source_uid:, target_type: , target_uid:, prob:, numeric:, numeric_min:, numeric_max:}
         """
         return self.sdr[sdr_key]
 
@@ -57,8 +57,8 @@ class SDR:
                  target_node: SDRNodeType,
                  probability: float = 1.0,
                  numeric: Optional[float] = None,
-                 norm_min: Optional[float] = None,
-                 norm_max: Optional[float] = None) -> None:
+                 numeric_min: Optional[float] = None,
+                 numeric_max: Optional[float] = None) -> None:
         """
         method to set the sdr attributes
 
@@ -67,8 +67,8 @@ class SDR:
         :param target_node: tuple of (target_type, target uid)
         :param probability: probability of the edge
         :param numeric: numeric value associated with edge
-        :param norm_min: the min numeric can be
-        :param norm_max: the max numeric can be
+        :param numeric_min: the min numeric can be
+        :param numeric_max: the max numeric can be
         :return: None
         """
         sdr_key = '{}:{}:{}:{}:{}'.format(source_node[0], source_node[1], edge, target_node[0], target_node[1])
@@ -77,8 +77,8 @@ class SDR:
                              'edge_type': edge,
                              'prob': probability,
                              'numeric': numeric,
-                             'min': norm_min,
-                             'max': norm_max
+                             'numeric_min': numeric_min,
+                             'numeric_max': numeric_max
                              }
 
     def update(self, sdr) -> None:

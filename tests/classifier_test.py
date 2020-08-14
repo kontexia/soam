@@ -235,10 +235,10 @@ def test():
     raw_data_graph = AMFGraph()
     for record in raw_data:
         node_id = ('colour_interest', str(record['record_id']))
-        node_attr = {('has_rgb', ('rgb', 'r')): (1.0, record['r'], 0, 255),
-                     ('has_rgb', ('rgb', 'g')): (1.0, record['g'], 0, 255),
-                     ('has_rgb', ('rgb', 'b')): (1.0, record['b'], 0, 255),
-                     ('has_label', ('colour', record['COLOUR'])): 1.0,
+        node_attr = {('has_rgb', ('rgb', 'r')): {'prob': 1.0, 'numeric': record['r'], 'numeric_min': 0, 'numeric_max': 255},
+                     ('has_rgb', ('rgb', 'g')): {'prob': 1.0, 'numeric': record['g'], 'numeric_min': 0, 'numeric_max': 255},
+                     ('has_rgb', ('rgb', 'b')): {'prob': 1.0, 'numeric': record['b'], 'numeric_min': 0, 'numeric_max': 255},
+                     ('has_label', ('colour', record['COLOUR'])): {'prob': 1.0},
                      }
         raw_data_graph.set_node(node=node_id, node_attr=node_attr)
 

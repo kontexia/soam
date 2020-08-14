@@ -1,5 +1,5 @@
 from src.database_manager import DatabaseManager
-from arango import ArangoClient
+from arango import ArangoClient, DocumentUpdateError
 import json
 
 
@@ -387,7 +387,27 @@ class ArangoDBDatabaseManager(DatabaseManager):
 
     def update_many_documents(self, collection_name, documents, parameters=None):
         self.test_database_connection()
-        self.database[collection_name].update_many(documents)
+        try:
+            params = {'return_new': False,
+                      'sync': None,
+                      'silent': False,
+                      'merge': False,
+                      'return_old': False}
+
+            if parameters is not None:
+                params.update(parameters)
+
+            results = self.database[collection_name].update_many(documents, **params)
+            docs_to_insert = []
+            for idx in range(len(results)):
+                if isinstance(results[idx], DocumentUpdateError):
+                    docs_to_insert.append(documents[idx])
+            if len(docs_to_insert) > 0:
+                self.insert_many_documents(collection_name=collection_name, documents=docs_to_insert)
+        except Exception as e:
+            print("! ! ! ! ! ! ! ! ! !")
+            print("ArangoDBDatabaseManager.update_many_documents raised an Exception: " + str(e))
+            print("! ! ! ! ! ! ! ! ! !")
 
     def insert_document(self, collection_name, document, parameters=None):
         self.test_database_connection()

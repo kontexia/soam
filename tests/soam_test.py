@@ -1,47 +1,51 @@
 from src.neuro_column import SDR
 from src.kv_cache import KVGraphCache
+from src.distributed_cache import DistributedCache
 from src.amgraph import AMFGraph
-
+import json
 
 def test_cache():
+
+    file_name = '../data/example_colours.json'
+    with open(file_name, 'r') as fp:
+        raw_data = json.load(fp)
+
+    print('raw data record:', raw_data[:1])
+
+    raw_data_graph = AMFGraph()
+
+    for record in raw_data:
+        # each record represents an interest in colour so create a 'colour_interest' node
+        #
+        node_id = ('colour_interest', str(record['record_id']))
+
+        # each colour_interest node has four attribute nodes
+        #
+        node_attr = {('has_rgb', ('rgb', 'r')): {'prob': 1.0, 'numeric': record['r'], 'numeric_min': 0, 'numeric_max': 1.0},
+                     ('has_rgb', ('rgb', 'g')): {'prob': 1.0, 'numeric': record['g'], 'numeric_min': 0, 'numeric_max': 1.0},
+                     ('has_rgb', ('rgb', 'b')): {'prob': 1.0, 'numeric': record['b'], 'numeric_min': 0, 'numeric_max': 1.0},
+                     ('has_label', ('colour', record['COLOUR'])): {'prob': 1.0},
+                     }
+        raw_data_graph.set_node(node=node_id, node_attr=node_attr)
+
     config = {'db_name': 'AMF',
               'db_username': 'stephen',
               'db_password': 'kontexia.io',
               'db_system': 'arango_db',
               'db_config_file_path': '~/kontexia/dev/amf/soam/databases_configuration.json',
-              'db_queries_file_path': '~/kontexia/dev/amf/soam/database_queries.json', }
+              'db_queries_file_path': '~/kontexia/dev/amf/soam/database_queries.json',
+              'scheduler_address': 'localhost:8786'}
 
     cache = KVGraphCache(config=config)
+    #cache = DistributedCache(config=config)
 
-    cache.set_kv('simple_store', key='my_key_1', value={'name': 'stephen', 'age': 21})
-
-    cache.persist()
-
-
-    new_cache = KVGraphCache(config=config)
-
-    new_cache.restore(store_name='simple_store')
-
-    my_graph = AMFGraph()
-
-    node_attr = {('has_interest', ('interest', 'banking'), 0): 0.5,
-                 ('has_interest', ('interest', 'real_estate'), 0): 0.5,
-                 ('has_classification', ('classification', 'low_touch'), 0): 123.0
-                 }
-
-    node_properties = {'id': 123}
-
-    edge_properties = {'update_id': 123}
-
-    my_graph.set_node(node=('client', 'a1'), node_attr=node_attr, node_prop=node_properties, edge_prop=edge_properties, timestamp=None)
-
-    print(my_graph)
-
-    cache.set_kv(store_name='graph_store', key='graph_1', value=my_graph)
+    cache.set_kv('interest_graphs', key='raw_colour_interest', value=raw_data_graph)
 
     cache.persist()
 
-    new_cache.restore(store_name='graph_store', key='graph_1')
+    #new_cache = KVGraphCache(config=config)
+
+    #new_cache.restore(store_name='interest_graphs')
 
     print('finished')
 
@@ -53,5 +57,5 @@ def test_sdr():
 if __name__ == '__main__':
 
     test_cache()
-    test_sdr()
+
     print('finished')
