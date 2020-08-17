@@ -6,6 +6,7 @@ from src.sdr import SDR
 from src.neuro_column import NeuroColumn
 
 from src.neural_fabric import NeuralFabric
+from src.amgraph import AMFGraph
 from typing import Union, List, Dict
 
 
@@ -236,7 +237,7 @@ class AMFabric:
 
         return result
 
-    def decode_fabric(self, bmu_only: bool = False, community_sdr: bool = False) -> dict:
+    def decode_fabric(self, all_details: bool = False, only_updated: bool=False, community_sdr: bool = False) -> dict:
         """
         method extracts the neural fabric into a dict structure whilst decoding each SDR
 
@@ -244,25 +245,33 @@ class AMFabric:
         :param community_sdr: If True will include the community SDR learnt for each neuron column
         :return: dictionary keyed by neuron column coordinates containing all the attributes
         """
-        fabric = {}
-        for coord_key in self.fabric.neurons:
-            if not bmu_only or self.fabric.neurons[coord_key]['n_bmu'] > 0:
-                fabric[coord_key] = {n_attr: self.fabric.neurons[coord_key][n_attr] for n_attr in self.fabric.neurons[coord_key] if n_attr not in ['neuro_column', 'community_nc']}
-                fabric[coord_key]['neuro_column'] = self.fabric.neurons[coord_key]['neuro_column'].decode()
-                if community_sdr:
-                    fabric[coord_key]['community_nc'] = self.fabric.neurons[coord_key]['community_nc'].decode()
+        fabric = self.fabric.decode(all_details=all_details,
+                                    community_sdr=community_sdr,
+                                    only_updated=only_updated)
         return fabric
 
     def get_anomalies(self) -> dict:
         """
         method returns a copy of the fabric anomalies, keyed the str(ref_id)
-        :return: dict of tuples with structure (bmu_coord, distance, anomaly threshold, por dict)
+        :return: dict of dict with structure {'bmu_coord':, 'distance':, 'threshold':, 'por':}
         """
         return deepcopy(self.fabric.anomaly)
 
     def get_motifs(self) -> dict:
         """
         method returns a copy of the fabric morifs, keyed the str(ref_id)
-        :return: dict of tuples with structure (bmu_coord, distance, motif threshold, por dict)
+        :return: dict of dict with structure {'bmu_coord':, 'distance':, 'threshold':, 'por':}
         """
         return deepcopy(self.fabric.motif)
+
+    def get_persist_graph(self, only_updated=True):
+
+        fabric = self.fabric.decode(all_details=True,
+                                    community_sdr=True,
+                                    only_updated=only_updated)
+
+        pg = AMFGraph()
+
+        amfabric_node = ('AMFabric', self.uid)
+        amfabric_attr = {('has_neuro_column', ('neuro_column', '{}:{}'.format(self.uid, coord))): {'prob': 1.0} for coord in fabric['neuro_columns']}
+        

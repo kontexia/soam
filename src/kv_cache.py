@@ -12,7 +12,7 @@ KVCacheValueType = Union[float, int, list, dict, set, str, AMFGraph, None]
 class KVGraphCache:
     def __init__(self, config: Optional[Dict[str, Union[str, int]]] = None) -> None:
         """
-        class implements a simple n in memory key value cache that can save and restore to a database
+        class implements a simple in memory key value cache that can save and restore to a database
         :param config: database keys:\n
                                 db_username,
                                 db_system,
@@ -79,7 +79,6 @@ class KVGraphCache:
             docs_for_name_queries = {}
 
             if store in self._store:
-
                 # the named query collection for this store
                 #
                 store_named_query = '{}_{}'.format(store, self._config['named_query_collection'])
@@ -98,7 +97,6 @@ class KVGraphCache:
 
                             # get the nodes and edges from the AMFGraph to persist
                             #
-                            # nodes_to_persist, edges_to_persist, edges_to_delete = self._store[store][named_query]['value'].get_data_to_persist(persist_all_override=persist_all_override)
                             nodes_to_persist, edges_to_persist = self._store[store][named_query]['value'].get_data_to_persist(persist_all_override=persist_all_override)
 
                             for node_type in nodes_to_persist:
@@ -151,7 +149,7 @@ class KVGraphCache:
                             #
                             docs_to_insert[doc_key].append({'_key': key, '_value': self._store[store][key]['value']})
 
-                        # reset these flags to indicate persistance state
+                        # reset these flags to indicate persistence state
                         #
                         self._store[store][key]['persisted'] = True
                         self._store[store][key]['updated'] = False
@@ -364,17 +362,26 @@ class KVGraphCache:
         :return: None
         """
 
-        data_packet = {'value': value,      # the data
-                       'persisted': False,  # indicates if this has been persisted to the database before
-                       'updated': True      # indicates if it's been updated and needs persisting
-                       }
-
         if store_name not in self._store:
-            self._store[store_name] = {key: data_packet}
+            self._store[store_name] = {key: {'value': value,  # the data
+                                             'persisted': False,  # indicates if this has been persisted to the database before
+                                             'updated': True  # indicates if it's been updated and needs persisting
+                                             }
+                                       }
+            stored = True
+        elif key not in self._store[store_name]:
+            self._store[store_name][key] = {'value': value,  # the data
+                                            'persisted': False,  # indicates if this has been persisted to the database before
+                                            'updated': True  # indicates if it's been updated and needs persisting
+                                            }
+            stored = True
         else:
-            self._store[store_name][key] = data_packet
+            self._store[store_name][key]['value'] = value
+            self._store[store_name][key]['persisted'] = False
+            self._store[store_name][key]['updated'] = True
+            stored = True
 
-        return True
+        return stored
 
     def del_kv(self, store_name: str, key: Optional[str] = None, delete_from_db: bool = True) -> bool:
         """
@@ -383,9 +390,9 @@ class KVGraphCache:
         :param store_name: the store name
         :param key: the key to delete
         :param delete_from_db: If true the data will also be deleted from the database
-        :return: None
+        :return: True if deleted successfully else False
         """
-
+        deleted = False
         if store_name in self._store:
 
             # need to keep track of all keys deleted for this store
@@ -397,19 +404,21 @@ class KVGraphCache:
                 if delete_from_db:
                     self._kv_to_delete[store_name].add(*self._store[store_name].keys())
                 del self._store[store_name]
-
+                deleted = True
             elif key in self._store[store_name]:
                 if delete_from_db:
                     self._kv_to_delete[store_name].add(key)
                 del self._store[store_name][key]
-        return True
+                deleted = True
+
+        return deleted
 
     def get_kv(self, store_name: str, key: Optional[str] = None) -> KVCacheValueType:
         """
         method to retrieve a stored value
         :param store_name: the store name
         :param key: the key within the store
-        :return: KVCacheValueType - the value stored
+        :return: KVCacheValueType - either the whole store, the value of the specified key or None if store / key do not exist
         """
         result = None
         if store_name in self._store:
