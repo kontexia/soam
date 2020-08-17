@@ -258,11 +258,11 @@ class NeuralFabric:
                 #
                 if distance <= self.motif_threshold:
 
-                    self.motif[ref_id] = (bmu_coord_key, distance, self.motif_threshold, por)
+                    self.motif[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.motif_threshold, 'por': por, 'updated': True}
                     motif = True
 
                 if distance >= self.anomaly_threshold:
-                    self.anomaly[ref_id] = (bmu_coord_key, distance, self.anomaly_threshold, por)
+                    self.anomaly[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.anomaly_threshold, 'por': por, 'updated': True}
                     anomaly = True
 
             self.mp_window.append(distance)
@@ -302,10 +302,13 @@ class NeuralFabric:
         self.neurons[bmu_coord_key]['last_bmu'] = self.mapped
         self.neurons[bmu_coord_key]['sum_distance'] = distance
         self.neurons[bmu_coord_key]['mean_distance'] = self.neurons[bmu_coord_key]['sum_distance'] / self.neurons[bmu_coord_key]['n_bmu']
+        self.neurons[bmu_coord_key]['updated'] = True
 
         for nn_key in self.neurons[bmu_coord_key]['nn']:
             self.neurons[nn_key]['n_nn'] += 1
             self.neurons[nn_key]['last_nn'] = self.mapped
+            self.neurons[nn_key]['updated'] = True
+
 
     @cython.ccall
     def learn(self, neuro_column: NeuroColumn, bmu_coord: str, coords: list, learn_rates: list, hebbian_edges: set = None):
@@ -381,6 +384,8 @@ class NeuralFabric:
 
             self.neurons[coord_key]['community_nc'].learn(neuro_column=bmu_coord_nc, learn_rate=learn_rate)
 
+            self.neurons[coord_key]['updated'] = True
+
             curr_community_edge = self.neurons[coord_key]['community_nc'].get_edge_by_max_probability()
             if curr_community_edge is not None:
 
@@ -426,3 +431,52 @@ class NeuralFabric:
             merged_column.merge(neuro_column=self.neurons[coord_key]['neuro_column'], merge_factor=merge_factor)
         return merged_column
 
+    def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, community_sdr: bool = False) -> dict:
+
+        if all_details:
+            fabric = {'mp_window': self.mp_window,
+                      'anomaly': {ref_id: {attr: self.anomaly[ref_id]
+                                           for attr in self.anomaly[ref_id]
+                                           if attr != 'updated'}
+                                  for ref_id in self.anomaly
+                                  if not only_updated or self.anomaly['updated']},
+                      'motif': {ref_id: {attr: self.motif[ref_id]
+                                         for attr in self.motif[ref_id]
+                                         if attr != 'updated'}
+                                for ref_id in self.motif
+                                if only_updated or self.motif['updated']},
+                      'anomaly_threshold': self.anomaly_threshold,
+                      'motif_threshold': self.motif_threshold,
+                      'mapped': self.mapped,
+                      'sum_distance': self.sum_distance,
+                      'mean_distance': self.mean_distance,
+                      'structure': self.structure,
+                      'neuro_columns': {}
+                      }
+
+            if only_updated:
+                for ref_id in fabric['anomaly']:
+                    self.anomaly[ref_id]['updated'] = False
+                for ref_id in fabric['motif']:
+                    self.motif[ref_id]['updated'] = False
+
+        else:
+            fabric = {'neuro_columns': {}}
+
+        if coords is None:
+            coords_to_decode = self.neurons.keys()
+        else:
+            coords_to_decode = coords
+
+        for coord_key in coords_to_decode:
+            if only_updated:
+                self.neurons[coord_key]['updated'] = False
+
+            fabric['neuro_columns'][coord_key] = {n_attr: self.neurons[coord_key][n_attr]
+                                                  for n_attr in self.neurons[coord_key]
+                                                  if n_attr not in ['neuro_column', 'community_nc', 'updated']}
+            fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)
+            if community_sdr:
+                fabric['neuro_columns'][coord_key]['community_nc'] = self.neurons[coord_key]['community_nc'].decode(only_updated)
+
+        return fabric
