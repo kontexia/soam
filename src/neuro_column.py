@@ -68,6 +68,7 @@ class NeuroColumn:
     @cython.ccall
     def upsert(self,
                edge_type: str,
+               edge_uid: str,
                source_type: str,
                source_uid: str,
                target_type: str,
@@ -81,6 +82,7 @@ class NeuroColumn:
         method to insert an edge into the SDR
 
         :param edge_type: the type of edge
+        :param edge_uid: the unique name of the edge
         :param source_type: the type of the source node
         :param source_uid: the unique name of the source node
         :param target_type: the type of the target node
@@ -95,7 +97,7 @@ class NeuroColumn:
 
         # the edge key needs to be unique
         #
-        edge_key: EdgeKeyType = '{}:{}:{}:{}:{}:{}'.format(source_type, source_uid, edge_type, neuron_id, target_type, target_uid)
+        edge_key: EdgeKeyType = '{}:{}:{}:{}:{}:{}:{}'.format(source_type, source_uid, edge_type, edge_uid, neuron_id, target_type, target_uid)
 
         if edge_key not in self.edges:
             self.edges[edge_key] = {}
@@ -103,6 +105,7 @@ class NeuroColumn:
         self.edges[edge_key]['source_type'] = source_type
         self.edges[edge_key]['source_uid'] = source_uid
         self.edges[edge_key]['edge_type'] = edge_type
+        self.edges[edge_key]['edge_uid'] = edge_uid
         self.edges[edge_key]['neuron_id'] = neuron_id
         self.edges[edge_key]['target_type'] = target_type
         self.edges[edge_key]['target_uid'] = target_uid
@@ -136,6 +139,7 @@ class NeuroColumn:
 
         for sdr_key in sdr:
             self.upsert(edge_type=sdr[sdr_key]['edge_type'],
+                        edge_uid=sdr[sdr_key]['edge_uid'],
                         source_type=sdr[sdr_key]['source_type'],
                         source_uid=sdr[sdr_key]['source_uid'],
                         target_type=sdr[sdr_key]['target_type'],
@@ -169,6 +173,7 @@ class NeuroColumn:
 
             for sdr_key in sdrs[idx]:
                 self.upsert(edge_type=sdrs[idx][sdr_key]['edge_type'],
+                            edge_uid=sdrs[idx][sdr_key]['edge_uid'],
                             source_type=sdrs[idx][sdr_key]['source_type'],
                             source_uid=sdrs[idx][sdr_key]['source_uid'],
                             target_type=sdrs[idx][sdr_key]['target_type'],
@@ -305,6 +310,7 @@ class NeuroColumn:
                 if hebbian_edges is None or neuro_column.edges[edge_key]['edge_type'] in hebbian_edges:
 
                     self.edges[edge_key] = {'edge_type': neuro_column.edges[edge_key]['edge_type'],
+                                            'edge_uid': neuro_column.edges[edge_key]['edge_uid'],
                                             'source_type': neuro_column.edges[edge_key]['source_type'],
                                             'source_uid': neuro_column.edges[edge_key]['source_uid'],
                                             'target_type': neuro_column.edges[edge_key]['target_type'],
@@ -323,6 +329,7 @@ class NeuroColumn:
                 elif is_bmu:
 
                     self.edges[edge_key] = {'edge_type': neuro_column.edges[edge_key]['edge_type'],
+                                            'edge_uid': neuro_column.edges[edge_key]['edge_uid'],
                                             'source_type': neuro_column.edges[edge_key]['source_type'],
                                             'source_uid': neuro_column.edges[edge_key]['source_uid'],
                                             'target_type': neuro_column.edges[edge_key]['target_type'],
@@ -371,6 +378,7 @@ class NeuroColumn:
             #
             elif edge_key in neuro_column.edges:
                 self.edges[edge_key] = {'edge_type': neuro_column.edges[edge_key]['edge_type'],
+                                        'edge_uid': neuro_column.edges[edge_key]['edge_uid'],
                                         'source_type': neuro_column.edges[edge_key]['source_type'],
                                         'source_uid': neuro_column.edges[edge_key]['source_uid'],
                                         'target_type': neuro_column.edges[edge_key]['target_type'],
@@ -418,6 +426,7 @@ class NeuroColumn:
                         rnd_numeric = random.random()
 
                 self.upsert(edge_type=neuro_column.edges[edge_key]['edge_type'],
+                            edge_uid=neuro_column.edges[edge_key]['edge_uid'],
                             source_type=neuro_column.edges[edge_key]['source_type'],
                             source_uid=neuro_column.edges[edge_key]['source_uid'],
                             target_type=neuro_column.edges[edge_key]['target_type'],
@@ -435,7 +444,7 @@ class NeuroColumn:
     def get_edge_by_max_probability(self) -> Optional[Dict[EdgeFeatureKeyType, EdgeFeatureType]]:
         """
         method to return the edge with the maximum prob
-        :return: Dictionary with keys: 'edge_type', 'source_type', 'source_uid', 'target_type', 'target_uid', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max']
+        :return: Dictionary with keys: 'edge_type', 'edge_uid', 'source_type', 'source_uid', 'target_type', 'target_uid', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max']
 
         """
 
@@ -475,11 +484,12 @@ class NeuroColumn:
                     numeric = self.edges[edge_key]['numeric']
             else:
                 numeric = None
-            txt = '{}Sce: {}:{}\nEdge: {}:{}\nTrg: {}:{}\nProb: {}\n'.format(txt,
-                                                                             self.edges[edge_key]['source_type'], self.edges[edge_key]['source_uid'],
-                                                                             self.edges[edge_key]['edge_type'], self.edges[edge_key]['neuron_id'],
-                                                                             self.edges[edge_key]['target_type'], self.edges[edge_key]['target_uid'],
-                                                                             self.edges[edge_key]['prob'])
+            txt = '{}Sce: {}:{}\nEdge: {}:{}:{}\nTrg: {}:{}\nProb: {}\n'.format(txt,
+                                                                                self.edges[edge_key]['source_type'], self.edges[edge_key]['source_uid'],
+                                                                                self.edges[edge_key]['edge_type'], self.edges[edge_key]['edge_uid'],
+                                                                                self.edges[edge_key]['neuron_id'],
+                                                                                self.edges[edge_key]['target_type'], self.edges[edge_key]['target_uid'],
+                                                                                self.edges[edge_key]['prob'])
             if numeric is not None:
                 txt = '{}Numeric: {}\n'.format(txt, numeric)
 
@@ -515,7 +525,7 @@ class NeuroColumn:
 
         :param only_updated: Set to true to return on updated edges
         :return: dictionary of dictionaries with outer dict keyed by edge_key, inner dictionary with keys:\n
-                    'edge_type', 'source_type', 'source_name', 'target_type', 'target_name', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max'] keyed by each edge
+                    'edge_type', 'edge_uid', 'source_type', 'source_name', 'target_type', 'target_name', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max'] keyed by each edge
         """
         neuro_column: FeatureMapType = {}
         edge_key: EdgeKeyType

@@ -9,11 +9,11 @@ from copy import deepcopy
 SDRNodeType = Tuple[str, str]
 """ SDRNodeType is a tuple of strings (node_type and node_uid) """
 
-SDREdgeType = str
-""" SDREdgeType is a string edge_type """
+SDREdgeType = Tuple[str, Optional[str]]
+""" SDREdgeType is a tuple (edge_type edge_uid) """
 
 SDRKeyType = str
-""" SDRKeyType is a tuple of (source_node, edge_type, target_node) """
+""" SDRKeyType is a string representation of (source_node, edge_type, target_node) """
 
 SDRValueType = Dict[str, Union[str, float, None]]
 """ SDRValueType is a dictionary: {prob: float, numeric: float} """
@@ -47,7 +47,7 @@ class SDR:
         """
         method to access the sdr edge attributes
         :param sdr_key: the edge to return
-        :return: the edge attributes {source_type: , source_uid:, target_type: , target_uid:, prob:, numeric:, numeric_min:, numeric_max:}
+        :return: the edge attributes {source_type:, source_uid:, target_type: , target_uid:, edge_type:, edge_uid:, prob:, numeric:, numeric_min:, numeric_max:}
         """
         return self.sdr[sdr_key]
 
@@ -71,10 +71,10 @@ class SDR:
         :param numeric_max: the max numeric can be
         :return: None
         """
-        sdr_key = '{}:{}:{}:{}:{}'.format(source_node[0], source_node[1], edge, target_node[0], target_node[1])
+        sdr_key = '{}:{}:{}:{}:{}:{}'.format(source_node[0], source_node[1], edge[0], edge[1], target_node[0], target_node[1])
         self.sdr[sdr_key] = {'source_type': source_node[0], 'source_uid': source_node[1],
                              'target_type': target_node[0], 'target_uid': target_node[1],
-                             'edge_type': edge,
+                             'edge_type': edge[0], 'edge_uid': edge[1],
                              'prob': probability,
                              'numeric': numeric,
                              'numeric_min': numeric_min,

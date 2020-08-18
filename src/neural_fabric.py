@@ -376,7 +376,7 @@ class NeuralFabric:
             # create an sdr to represent the bmu coordinates
             #
             source_neuron = '{}:{}'.format(self.uid, coord_key)
-            bmu_coord_nc.upsert(edge_type='in_community',
+            bmu_coord_nc.upsert(edge_type='in_community', edge_uid='',
                                 source_type='neuron', source_uid=source_neuron,
                                 target_type='neuron', target_uid=bmu_neuron,
                                 neuron_id=0,
