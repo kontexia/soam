@@ -439,12 +439,12 @@ class NeuralFabric:
                                            for attr in self.anomaly[ref_id]
                                            if attr != 'updated'}
                                   for ref_id in self.anomaly
-                                  if not only_updated or self.anomaly['updated']},
+                                  if not only_updated or self.anomaly[ref_id]['updated']},
                       'motif': {ref_id: {attr: self.motif[ref_id]
                                          for attr in self.motif[ref_id]
                                          if attr != 'updated'}
                                 for ref_id in self.motif
-                                if only_updated or self.motif['updated']},
+                                if only_updated or self.motif[ref_id]['updated']},
                       'anomaly_threshold': self.anomaly_threshold,
                       'motif_threshold': self.motif_threshold,
                       'mapped': self.mapped,
@@ -469,14 +469,18 @@ class NeuralFabric:
             coords_to_decode = coords
 
         for coord_key in coords_to_decode:
-            if only_updated:
-                self.neurons[coord_key]['updated'] = False
+            if not only_updated or self.neurons[coord_key]['updated']:
+                if only_updated:
+                    self.neurons[coord_key]['updated'] = False
 
-            fabric['neuro_columns'][coord_key] = {n_attr: self.neurons[coord_key][n_attr]
-                                                  for n_attr in self.neurons[coord_key]
-                                                  if n_attr not in ['neuro_column', 'community_nc', 'updated']}
-            fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)
-            if community_sdr:
-                fabric['neuro_columns'][coord_key]['community_nc'] = self.neurons[coord_key]['community_nc'].decode(only_updated)
+                # convert sets to lists
+                #
+                fabric['neuro_columns'][coord_key] = {n_attr: self.neurons[coord_key][n_attr] if not isinstance(self.neurons[coord_key][n_attr], set) else list(self.neurons[coord_key][n_attr])
+                                                      for n_attr in self.neurons[coord_key]
+                                                      if n_attr not in ['neuro_column', 'community_nc', 'updated']}
+
+                fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)
+                if community_sdr:
+                    fabric['neuro_columns'][coord_key]['community_nc'] = self.neurons[coord_key]['community_nc'].decode(only_updated)
 
         return fabric
