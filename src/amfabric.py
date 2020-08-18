@@ -40,6 +40,12 @@ class AMFabric:
         self.fabric = NeuralFabric(uid=uid, max_short_term_memory=self.stm_size, mp_threshold=mp_threshold, structure=structure)
         """ the fabric of neuro-columns """
 
+        self.non_hebbian_edge_types = set()
+        """ the edge_types that are not to be learned using a hebbian rule """
+
+        self.pg = None
+        """ the current persist graph """
+
     def train(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',)) -> dict:
         """
         method trains the neural network with one NeuroColumn
@@ -84,9 +90,11 @@ class AMFabric:
         # work out the edge_types for hebbian learning
         #
         if non_hebbian_edges is not None:
+            self.non_hebbian_edge_types.update(non_hebbian_edges)
+
             hebbian_edges = {neuro_column[edge_key]['edge_type']
                              for edge_key in neuro_column
-                             if neuro_column[edge_key]['edge_type'] not in non_hebbian_edges}
+                             if neuro_column[edge_key]['edge_type'] not in self.non_hebbian_edge_types}
         else:
             hebbian_edges = None
 
@@ -270,8 +278,65 @@ class AMFabric:
                                     community_sdr=True,
                                     only_updated=only_updated)
 
-        pg = AMFGraph()
+        if self.pg is None:
+            self.pg = AMFGraph()
 
         amfabric_node = ('AMFabric', self.uid)
-        amfabric_attr = {('has_neuro_column', ('neuro_column', '{}:{}'.format(self.uid, coord))): {'prob': 1.0} for coord in fabric['neuro_columns']}
-        
+        if amfabric_node not in self.pg:
+            self.pg.set_node(node=amfabric_node)
+
+        # update the statistics for the fabric with self referencing edge has_stats
+        #
+        edge_properties = {attr: fabric[attr] for attr in fabric if attr not in ['neuro_columns']}
+        self.pg.update_edge(source=amfabric_node, target=amfabric_node, edge='has_stats', **edge_properties)
+
+        # update the edges to each neuro_column
+        #
+        for coord in fabric['neuro_columns']:
+            column_node = ('NeuroColumn', '{}:{}'.format(self.uid, coord))
+
+            # connect fabric to neuro_column with has_neuro_column
+            #
+            edge_properties = {attr: fabric['neuro_columns'][coord][attr] for attr in fabric['neuro_columns'][coord] if attr not in ['neuro_column']}
+            self.pg.update_edge(source=amfabric_node, target=column_node, edge='has_neuro_column', **edge_properties)
+
+            added_generalised_node = False
+            for edge in fabric['neuro_columns'][coord]['neuro_column']:
+
+                # the name of the edge has to be qualified by the fabric neuro_column
+                #
+                edge_type = '{}__{}_{}_{}'.format(fabric['neuro_columns'][coord]['neuro_column'][edge]['edge_type'],
+                                                  self.uid,
+                                                  fabric['neuro_columns'][coord]['coord'][0],
+                                                  fabric['neuro_columns'][coord]['coord'][1])
+
+                source_node = (fabric['neuro_columns'][coord]['neuro_column'][edge]['source_type'], fabric['neuro_columns'][coord]['neuro_column'][edge]['source_uid'])
+                target_node = (fabric['neuro_columns'][coord]['neuro_column'][edge]['target_type'], fabric['neuro_columns'][coord]['neuro_column'][edge]['target_uid'])
+                if 'prob' in fabric['neuro_columns'][coord]['neuro_column'][edge]:
+                    prob = fabric['neuro_columns'][coord]['neuro_column'][edge]['prob']
+                else:
+                    prob = None
+
+                if 'numeric' in fabric['neuro_columns'][coord]['neuro_column'][edge]:
+                    numeric = fabric['neuro_columns'][coord]['neuro_column'][edge]['numeric']
+                    numeric_min = fabric['neuro_columns'][coord]['neuro_column'][edge]['numeric_min']
+                    numeric_max = fabric['neuro_columns'][coord]['neuro_column'][edge]['numeric_max']
+                else:
+                    numeric = None
+                    numeric_min = None
+                    numeric_max = None
+
+                self.pg.update_edge(source=source_node, target=target_node, edge=edge_type,
+                                    prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
+                                    _generalised_edge=fabric['neuro_columns'][coord]['neuro_column'][edge]['edge_type'],
+                                    _neuro_column=coord,
+                                    _amfabric=self.uid)
+
+                # connect neuro_column to the the generalised node
+                #
+                if not added_generalised_node and fabric['neuro_columns'][coord]['neuro_column'][edge]['edge_type'] == 'generalise':
+                    added_generalised_node = True
+                    self.pg.update_edge(source=column_node, target=target_node, edge=edge_type,
+                                        prob=1.0)
+        return self.pg
+
