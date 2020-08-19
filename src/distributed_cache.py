@@ -7,7 +7,7 @@ from src.kv_cache import KVGraphCache, KVCacheValueType
 
 
 class DistributedCache:
-    def __init__(self, config: Optional[Dict[str, Union[str, bool]]]):
+    def __init__(self, config: Optional[Dict[str, Union[str, bool]]], dask_client=None):
         """
         Class that implements a simple distributed key value cache that takes care of persisting and restoring to database
         :param config: keys required:\n
@@ -21,7 +21,10 @@ class DistributedCache:
         """
 
         self.config = config
-        self.client = Client(config['scheduler_address'])
+        if dask_client is None:
+            self.client = Client(config['scheduler_address'])
+        else:
+            self.client = dask_client
 
     @staticmethod
     def lock_store(store_name: str) -> Lock:
