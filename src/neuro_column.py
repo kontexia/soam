@@ -33,9 +33,9 @@ class NeuroColumn:
     # help cython declare the instance variables
     #
     edges = cython.declare(dict, visibility='public')
-    max_neurons = cython.declare(cython.int, visibility='public')
+    prune_threshold = cython.declare(cython.double, visibility='public')
 
-    def __init__(self, neuro_column=None) -> None:
+    def __init__(self, neuro_column=None, prune_threshold: cython.double = 0.00001) -> None:
         """
         class to implement Spare Data Representation of the features of a sub_graph
 
@@ -45,8 +45,8 @@ class NeuroColumn:
         self.edges: FeatureMapType = {}
         """ a dictionary of the edge features"""
 
-        self.max_neurons = 0
-        """ the maximum number of Neurons in NeuroColumn"""
+        self.prune_threshold = prune_threshold
+        """ the threshold below with an edge probability is assumed to be zero and will be deleted """
 
         # help Cython Static Type
         #
@@ -60,10 +60,6 @@ class NeuroColumn:
             self.edges = {edge_key: {edge_feature_key: neuro_column.edges[edge_key][edge_feature_key]
                                      for edge_feature_key in neuro_column.edges[edge_key]}
                           for edge_key in neuro_column.edges}
-
-            # copy over the maximum sequence
-            #
-            self.max_neurons = neuro_column.max_neurons
 
     @cython.ccall
     def upsert(self,
@@ -147,7 +143,7 @@ class NeuroColumn:
                         neuron_id=neuron_id,
                         prob=sdr[sdr_key]['prob'],
                         numeric=sdr[sdr_key]['numeric'],
-                        numric_min=sdr[sdr_key]['numeric_min'],
+                        numeric_min=sdr[sdr_key]['numeric_min'],
                         numeric_max=sdr[sdr_key]['numeric_max']
                         )
 
@@ -268,12 +264,14 @@ class NeuroColumn:
         # help cython static type
         #
         edge_key: EdgeKeyType
-        edge_to_process: Set[EdgeKeyType]
+        edges_to_process: Set[EdgeKeyType]
+        edges_to_delete: Set[EdgeKeyType]
 
         # filter edge_keys as required
         #
         edges_to_process = set(self.edges.keys()) | set(neuro_column.edges.keys())
 
+        edges_to_delete = set()
         for edge_key in edges_to_process:
 
             # edge_key in both self and neuro_column
@@ -345,6 +343,16 @@ class NeuroColumn:
                         if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
                             self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
                             self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
+
+            # add edge to delete list if small enough
+            #
+            if edge_key in self.edges and self.edges[edge_key]['prob'] < self.prune_threshold:
+                edges_to_delete.add(edge_key)
+
+        # delete any edges with close to zero probability
+        #
+        for edge_key in edges_to_delete:
+            del self.edges[edge_key]
 
     def merge(self, neuro_column, merge_factor: cython.double) -> None:
         """
