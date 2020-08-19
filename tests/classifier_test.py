@@ -3,6 +3,8 @@
 
 import time
 import random
+
+from dask.distributed import Client, LocalCluster
 import plotly.graph_objects as go
 
 from src.amgraph import AMFGraph
@@ -227,6 +229,13 @@ def print_neurons_raw_data(raw_data, fabric, title, neuron_ids=None, max_neurons
 
 
 def test():
+
+    # create local Dask cluster
+    #
+    dask_cluster = LocalCluster(n_workers=4)
+    dask_client = Client(dask_cluster)
+
+
     start_time = time.time()
 
     file_name = '../data/example_colours.json'
@@ -251,7 +260,8 @@ def test():
     amf = AMFabric(uid='colours',
                    short_term_memory=short_term_memory,
                    mp_threshold=6,
-                   structure='star')
+                   structure='star',
+                   prune_threshold=0.001)
 
     por_results = []
 
@@ -315,13 +325,21 @@ def test():
               'db_system': os.getenv("DB_SYSTEM"),
               'db_config_file_path': os.getenv("DB_CONFIG_PATH"),
               'db_queries_file_path': os.getenv("DB_QUERIES_PATH"),
-              'scheduler_address': os.getenv("DASK_SCHEDULER")}
+              'scheduler_address': dask_cluster.scheduler_address}
 
     dc = DistributedCache(config=config)
     dc.set_kv(store_name='amfabrics', key='colour_fabric', value=pg, persist=True)
 
+    dc.restore(store_name='amfabrics')
+
+    pg_2 = dc.get_kv(store_name='amfabrics', key='colour_fabric').result()
+
+    amf.set_persist_graph(pg=pg_2)
+
     print('finished')
 
+    # shutdown the dask cluster
+    dask_client.shutdown()
 
 if __name__ == '__main__':
     test()
