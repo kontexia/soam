@@ -464,5 +464,5 @@ class AMFabric:
                                    structure=self.structure,
                                    prune_threshold=self.prune_threshold)
 
-        self.fabric.restore(fabric=fabric)
+        self.fabric.restore(fabric)
 
