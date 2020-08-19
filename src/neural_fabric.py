@@ -24,11 +24,18 @@ class NeuralFabric:
     sum_distance = cython.declare(cython.double, visibility='public')
     mean_distance = cython.declare(cython.double, visibility='public')
     structure = cython.declare(str, visibility='public')
+    prune_threshold = cython.declare(cython.double, visibility='public')
 
-    def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.int = 5, structure: str = 'star'):
+    def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.int = 5, structure: str = 'star', prune_threshold: float = 0.00001):
         """
         class to represent the columns of neurons in the associative memory fabric.
-        Each column is keyed by an x, y coordinate pair key and consists of an sdr
+        Each column is keyed by an x, y coordinate pair key and consists of an collection of sdrs
+
+        :param uid: str unique name foe this area of the fabric
+        :param max_short_term_memory: the maximum number of neurons in a column of neurons
+        :param mp_threshold: the matrix profile window multiplier
+        :param structure: str - 'star' structure each column has 4 neighbours  or 'square' structure where each column has 8 neighbours
+        :param prune_threshold: float - threshold below which learnt edges are assumed to have zero probability and removed
         """
 
         self.uid = uid
@@ -68,7 +75,10 @@ class NeuralFabric:
         """ the mean of the BMU distances to mapped data so far """
 
         self.structure = structure
-        """ a string representing the fabric layout structure - 'star' a central neuron with 4 neighbours, 'box' consists of a central neuron with 8 neighbours """
+        """ a string representing the fabric layout structure - 'star' a central neuron with 4 neighbours, 'square' consists of a central neuron with 8 neighbours """
+
+        self.prune_threshold = prune_threshold
+        """ the threshold below with an edge probability is assumed to be zero and will be deleted """
 
     def seed_fabric(self, example_neuro_column: NeuroColumn, coords: set, hebbian_edges: set):
         """
@@ -77,6 +87,8 @@ class NeuralFabric:
 
         :param example_neuro_column: The example NeuroColumn
         :param coords: set of coordinate tuples to seed
+        :param hebbian_edges: set of edge_type that will be hebbian learnt
+
         :return: None
         """
 
@@ -99,7 +111,7 @@ class NeuralFabric:
 
             # the randomly created sdr
             #
-            neuro_column = NeuroColumn()
+            neuro_column = NeuroColumn(prune_threshold=self.prune_threshold)
             neuro_column.randomize(example_neuro_column, edges_to_randomise=hebbian_edges)
 
             # key to identify the coordinates of this column of neurons
@@ -116,7 +128,7 @@ class NeuralFabric:
                                        'last_nn': 0,
                                        'sum_distance': 0.0,
                                        'mean_distance': 0.0,
-                                       'community_nc': NeuroColumn(),
+                                       'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
                                        'community_label': None,
                                        'updated': False,
                                        'nn': {}
@@ -258,11 +270,11 @@ class NeuralFabric:
                 #
                 if distance <= self.motif_threshold:
 
-                    self.motif[ref_id] = (bmu_coord_key, distance, self.motif_threshold, por)
+                    self.motif[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.motif_threshold, 'por': por, 'updated': True}
                     motif = True
 
                 if distance >= self.anomaly_threshold:
-                    self.anomaly[ref_id] = (bmu_coord_key, distance, self.anomaly_threshold, por)
+                    self.anomaly[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.anomaly_threshold, 'por': por, 'updated': True}
                     anomaly = True
 
             self.mp_window.append(distance)
@@ -302,10 +314,13 @@ class NeuralFabric:
         self.neurons[bmu_coord_key]['last_bmu'] = self.mapped
         self.neurons[bmu_coord_key]['sum_distance'] = distance
         self.neurons[bmu_coord_key]['mean_distance'] = self.neurons[bmu_coord_key]['sum_distance'] / self.neurons[bmu_coord_key]['n_bmu']
+        self.neurons[bmu_coord_key]['updated'] = True
 
         for nn_key in self.neurons[bmu_coord_key]['nn']:
             self.neurons[nn_key]['n_nn'] += 1
             self.neurons[nn_key]['last_nn'] = self.mapped
+            self.neurons[nn_key]['updated'] = True
+
 
     @cython.ccall
     def learn(self, neuro_column: NeuroColumn, bmu_coord: str, coords: list, learn_rates: list, hebbian_edges: set = None):
@@ -373,13 +388,15 @@ class NeuralFabric:
             # create an sdr to represent the bmu coordinates
             #
             source_neuron = '{}:{}'.format(self.uid, coord_key)
-            bmu_coord_nc.upsert(edge_type='in_community',
+            bmu_coord_nc.upsert(edge_type='in_community', edge_uid='',
                                 source_type='neuron', source_uid=source_neuron,
                                 target_type='neuron', target_uid=bmu_neuron,
                                 neuron_id=0,
                                 prob=1.0)
 
             self.neurons[coord_key]['community_nc'].learn(neuro_column=bmu_coord_nc, learn_rate=learn_rate)
+
+            self.neurons[coord_key]['updated'] = True
 
             curr_community_edge = self.neurons[coord_key]['community_nc'].get_edge_by_max_probability()
             if curr_community_edge is not None:
@@ -425,4 +442,111 @@ class NeuralFabric:
 
             merged_column.merge(neuro_column=self.neurons[coord_key]['neuro_column'], merge_factor=merge_factor)
         return merged_column
+
+    def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, community_sdr: bool = False) -> dict:
+        """
+        method to decode the entire fabric
+
+        :param coords: set of neuro_column coords to decode. if None then all will be decoded
+        :param all_details: If true then all fabric properties will be included else if False just the NeuroColumns
+        :param only_updated: If Tue only the changed data willbe included else if False then all data
+        :param community_sdr: If True then the community sdr is included
+        :return: dictionary representation of the fabric properties
+        """
+
+        if all_details:
+            fabric = {'mp_window': self.mp_window,
+                      'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]
+                                           for attr in self.anomaly[ref_id]
+                                           if attr != 'updated'}
+                                  for ref_id in self.anomaly
+                                  if not only_updated or self.anomaly[ref_id]['updated']},
+                      'motif': {ref_id: {attr: self.motif[ref_id][attr]
+                                         for attr in self.motif[ref_id]
+                                         if attr != 'updated'}
+                                for ref_id in self.motif
+                                if only_updated or self.motif[ref_id]['updated']},
+                      'anomaly_threshold': self.anomaly_threshold,
+                      'motif_threshold': self.motif_threshold,
+                      'mapped': self.mapped,
+                      'sum_distance': self.sum_distance,
+                      'mean_distance': self.mean_distance,
+                      'structure': self.structure,
+                      'neuro_columns': {}
+                      }
+
+            if only_updated:
+                for ref_id in fabric['anomaly']:
+                    self.anomaly[ref_id]['updated'] = False
+                for ref_id in fabric['motif']:
+                    self.motif[ref_id]['updated'] = False
+
+        else:
+            fabric = {'neuro_columns': {}}
+
+        if coords is None:
+            coords_to_decode = self.neurons.keys()
+        else:
+            coords_to_decode = coords
+
+        for coord_key in coords_to_decode:
+            if not only_updated or self.neurons[coord_key]['updated']:
+                if only_updated:
+                    self.neurons[coord_key]['updated'] = False
+
+                # convert sets to lists
+                #
+                fabric['neuro_columns'][coord_key] = {n_attr: (list(self.neurons[coord_key][n_attr])
+                                                               if isinstance(self.neurons[coord_key][n_attr], set)
+                                                               else self.neurons[coord_key][n_attr])
+                                                      for n_attr in self.neurons[coord_key]
+                                                      if n_attr not in ['neuro_column', 'community_nc', 'updated']}
+
+                fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)
+                if community_sdr:
+                    fabric['neuro_columns'][coord_key]['community_nc'] = self.neurons[coord_key]['community_nc'].decode(only_updated)
+
+        return fabric
+
+    def restore(self, fabric: dict) -> None:
+        """
+        method to restore all the properties of the fabric from a dictionary representation
+
+        :param fabric: the dictionary representation
+        :return: None
+        """
+        self.mp_window = fabric['mp_window']
+        self.anomaly = fabric['anomaly']
+        self.anomaly_threshold = fabric['anomaly_threshold']
+
+        self.motif = fabric['motif']
+        self.motif_threshold = fabric['motif_threshold']
+        self.mapped = fabric['mapped']
+        self.sum_distance = fabric['sum_distance']
+        self.mean_distance = fabric['mean_distance']
+        self.structure = fabric['structure']
+
+        for coord_key in fabric['neuro_columns']:
+            self.neurons[coord_key] = {'neuro_column': NeuroColumn(prune_threshold=self.prune_threshold),
+                                       'coord': fabric['neuro_columns'][coord_key]['coord'],
+                                       'n_bmu': fabric['neuro_columns'][coord_key]['n_bmu'],
+                                       'n_nn': fabric['neuro_columns'][coord_key]['n_nn'],
+                                       'last_bmu': fabric['neuro_columns'][coord_key]['last_bmu'],
+                                       'last_nn': fabric['neuro_columns'][coord_key]['last_nn'],
+                                       'sum_distance': fabric['neuro_columns'][coord_key]['sum_distance'],
+                                       'mean_distance': fabric['neuro_columns'][coord_key]['mean_distance'],
+                                       'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
+                                       'community_label': fabric['neuro_columns'][coord_key]['community_label'],
+                                       'updated': False,
+                                       'nn': fabric['neuro_columns'][coord_key]['nn']
+                                       }
+
+            # init each neuro_column
+            #
+            for neuron_id in fabric['neuro_columns'][coord_key]['neuro_column']:
+                self.neurons[coord_key]['neuro_column'].upsert_sdr(sdr=fabric['neuro_columns'][coord_key]['neuro_column'][neuron_id], neuron_id=neuron_id)
+
+            # init the community neuro_column
+            #
+            self.neurons[coord_key]['community_nc'].upsert_sdr(sdr=fabric['neuro_columns'][coord_key]['community_nc'], neuron_id=0)
 

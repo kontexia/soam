@@ -3,12 +3,17 @@
 
 import time
 import random
+
+from dask.distributed import Client, LocalCluster
 import plotly.graph_objects as go
 
 from src.amgraph import AMFGraph
 from src.amfabric import AMFabric
+from src.distributed_cache import DistributedCache
 
 import json
+from dotenv import load_dotenv
+import os
 
 import pprint as pp
 
@@ -75,28 +80,28 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
     if coords is not None:
         coords_to_processes = coords
     else:
-        coords_to_processes = list(fabric.keys())
+        coords_to_processes = list(fabric['neuro_columns'].keys())
 
-    for coord_id in fabric.keys():
+    for coord_id in fabric['neuro_columns'].keys():
 
-        if fabric[coord_id]['n_bmu'] > 0:
+        if fabric['neuro_columns'][coord_id]['n_bmu'] > 0:
             nos_winners += 1
-            sum_distance += fabric[coord_id]['mean_distance']
-            sum_mapped += fabric[coord_id]['n_bmu']
+            sum_distance += fabric['neuro_columns'][coord_id]['mean_distance']
+            sum_mapped += fabric['neuro_columns'][coord_id]['n_bmu']
 
         for neuron_id in neurons_to_plot:
-            if 'colour_interest:*:{}:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'r') in fabric[coord_id]['neuro_column']:
+            if 'colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'r') in fabric['neuro_columns'][coord_id]['neuro_column']:
 
-                if neuron_id == neurons_to_plot[0] and fabric[coord_id]['n_bmu'] + fabric[coord_id]['n_nn'] > 0:
-                    sizes.append(20 + fabric[coord_id]['n_bmu'])
+                if neuron_id == neurons_to_plot[0] and fabric['neuro_columns'][coord_id]['n_bmu'] + fabric['neuro_columns'][coord_id]['n_nn'] > 0:
+                    sizes.append(20 + fabric['neuro_columns'][coord_id]['n_bmu'])
                 else:
                     sizes.append(15)
 
                 labels.append(coord_id + '_' + str(neuron_id))
-                nc = fabric[coord_id]['neuro_column']
+                nc = fabric['neuro_columns'][coord_id]['neuro_column']
 
-                x = fabric[coord_id]['coord'][0]
-                y = fabric[coord_id]['coord'][1]
+                x = fabric['neuro_columns'][coord_id]['coord'][0]
+                y = fabric['neuro_columns'][coord_id]['coord'][1]
                 z = max(neurons_to_plot) - neuron_id
 
                 x_node.append(x)
@@ -104,9 +109,9 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
                 z_node.append(z)
 
                 if coord_id in coords_to_processes:
-                    r = round(nc['colour_interest:*:{}:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'r')]['numeric'])
-                    g = round(nc['colour_interest:*:{}:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'g')]['numeric'])
-                    b = round(nc['colour_interest:*:{}:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'b')]['numeric'])
+                    r = round(nc['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'r')]['numeric'])
+                    g = round(nc['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'g')]['numeric'])
+                    b = round(nc['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'b')]['numeric'])
                     opacity = 1.0
                 else:
                     r = 255
@@ -133,9 +138,9 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
                     z_edge.append(nn_z)
                     z_edge.append(None)
 
-                for nn_id in fabric[coord_id]['nn']:
-                    nn_x = fabric[nn_id]['coord'][0]
-                    nn_y = fabric[nn_id]['coord'][1]
+                for nn_id in fabric['neuro_columns'][coord_id]['nn']:
+                    nn_x = fabric['neuro_columns'][nn_id]['coord'][0]
+                    nn_y = fabric['neuro_columns'][nn_id]['coord'][1]
 
                     pair = (min((x, y, neuron_id), (nn_x, nn_y, neuron_id)), max((x, y, neuron_id), (nn_x, nn_y, neuron_id)))
 
@@ -168,7 +173,7 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
     fig = go.Figure(data=[neuron_scatter, amf_edge_scatter])
     fig.update_layout(width=1000, height=1000, title=dict(text=title),
                       scene=dict(xaxis_title='X Coord', yaxis_title='Y Coord', zaxis_title='Sequence'))
-    print('Nos Mini Columns', len(fabric), 'Now Winners:', nos_winners, 'Mean Distance:', mean_distance, 'Mean n_BMU:', mean_mapped)
+    print('Nos Mini Columns', len(fabric['neuro_columns']), 'Now Winners:', nos_winners, 'Mean Distance:', mean_distance, 'Mean n_BMU:', mean_mapped)
     fig.show()
 
 
@@ -197,21 +202,21 @@ def print_neurons_raw_data(raw_data, fabric, title, neuron_ids=None, max_neurons
     else:
         neurons = neuron_ids
 
-    for coord in fabric:
+    for coord in fabric['neuro_columns']:
         for neuron_id in neurons:
-            if fabric[coord]['n_bmu'] + fabric[coord]['n_nn'] > 0 and neuron_id == neurons[-1]:
+            if fabric['neuro_columns'][coord]['n_bmu'] + fabric['neuro_columns'][coord]['n_nn'] > 0 and neuron_id == neurons[-1]:
                 neuron_label.append(str(coord))
-                if fabric[coord]['n_bmu'] > 0:
-                    neuron_size.append(fabric[coord]['n_bmu'] + 20)
+                if fabric['neuro_columns'][coord]['n_bmu'] > 0:
+                    neuron_size.append(fabric['neuro_columns'][coord]['n_bmu'] + 20)
                 else:
-                    neuron_size.append(fabric[coord]['n_nn'] + 10)
+                    neuron_size.append(fabric['neuro_columns'][coord]['n_nn'] + 10)
             else:
                 neuron_label.append(None)
                 neuron_size.append(10)
 
-            neuron_x.append(fabric[coord]['neuro_column']['colour_interest:*:{}:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'r')]['numeric'])
-            neuron_y.append(fabric[coord]['neuro_column']['colour_interest:*:{}:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'g')]['numeric'])
-            neuron_z.append(fabric[coord]['neuro_column']['colour_interest:*:{}:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'b')]['numeric'])
+            neuron_x.append(fabric['neuro_columns'][coord]['neuro_column']['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'r')]['numeric'])
+            neuron_y.append(fabric['neuro_columns'][coord]['neuro_column']['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'g')]['numeric'])
+            neuron_z.append(fabric['neuro_columns'][coord]['neuro_column']['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'b')]['numeric'])
             neuron_colour.append('rgb({},{},{})'.format(neuron_x[-1], neuron_y[-1], neuron_z[-1]))
 
     neuron_scatter = go.Scatter3d(x=neuron_x, y=neuron_y, z=neuron_z, text=neuron_label, mode='markers+text', marker=dict(size=neuron_size, color=neuron_colour, opacity=0.7))
@@ -224,6 +229,13 @@ def print_neurons_raw_data(raw_data, fabric, title, neuron_ids=None, max_neurons
 
 
 def test():
+
+    # create local Dask cluster
+    #
+    dask_cluster = LocalCluster(n_workers=4)
+    dask_client = Client(dask_cluster)
+
+
     start_time = time.time()
 
     file_name = '../data/example_colours.json'
@@ -235,10 +247,10 @@ def test():
     raw_data_graph = AMFGraph()
     for record in raw_data:
         node_id = ('colour_interest', str(record['record_id']))
-        node_attr = {('has_rgb', ('rgb', 'r')): (1.0, record['r'], 0, 255),
-                     ('has_rgb', ('rgb', 'g')): (1.0, record['g'], 0, 255),
-                     ('has_rgb', ('rgb', 'b')): (1.0, record['b'], 0, 255),
-                     ('has_label', ('colour', record['COLOUR'])): 1.0,
+        node_attr = {(('has_rgb', None), ('rgb', 'r')): {'prob': 1.0, 'numeric': record['r'], 'numeric_min': 0, 'numeric_max': 255},
+                     (('has_rgb', None), ('rgb', 'g')): {'prob': 1.0, 'numeric': record['g'], 'numeric_min': 0, 'numeric_max': 255},
+                     (('has_rgb', None), ('rgb', 'b')): {'prob': 1.0, 'numeric': record['b'], 'numeric_min': 0, 'numeric_max': 255},
+                     (('has_label', None), ('colour', record['COLOUR'])): {'prob': 1.0},
                      }
         raw_data_graph.set_node(node=node_id, node_attr=node_attr)
 
@@ -248,14 +260,15 @@ def test():
     amf = AMFabric(uid='colours',
                    short_term_memory=short_term_memory,
                    mp_threshold=6,
-                   structure='star')
+                   structure='star',
+                   prune_threshold=0.001)
 
     por_results = []
 
     s_1 = time.time()
     for rec_id in range(len(raw_data)):
         sdr = raw_data_graph.get_node_sdr(node=('colour_interest', str(rec_id)), nos_hops=2,
-                                          generalised_node_name='*', target_node_edge='generalise')
+                                          generalised_node_name='*', target_node_edge=('generalise', None))
         por = amf.train(sdr=sdr, ref_id=rec_id)
         por_results.append(por)
     e_1 = time.time()
@@ -279,7 +292,7 @@ def test():
     nos_context = 0
     for rec_id in range(start_idx, end_idx):
         context_colour_sequence.append(raw_data[rec_id]['COLOUR'])
-        sdr = raw_data_graph.get_node_sdr(node=('colour_interest', str(rec_id)), nos_hops=2, exclude_edges={'has_rgb'})
+        sdr = raw_data_graph.get_node_sdr(node=('colour_interest', str(rec_id)), nos_hops=2, exclude_edges={('has_rgb', None)})
 
         if nos_context < short_term_memory - 1:
 
@@ -303,6 +316,30 @@ def test():
     end_time = time.time()
     print(end_time - start_time)
 
+    pg = amf.get_persist_graph()
+
+    load_dotenv()
+    config = {'db_name': os.getenv("DB_NAME"),
+              'db_username': os.getenv("DB_USERNAME"),
+              'db_password': os.getenv("DB_PASSWORD"),
+              'db_system': os.getenv("DB_SYSTEM"),
+              'db_config_file_path': os.getenv("DB_CONFIG_PATH"),
+              'db_queries_file_path': os.getenv("DB_QUERIES_PATH"),
+              'scheduler_address': dask_cluster.scheduler_address}
+
+    dc = DistributedCache(config=config)
+    dc.set_kv(store_name='amfabrics', key='colour_fabric', value=pg, persist=True)
+
+    dc.restore(store_name='amfabrics')
+
+    pg_2 = dc.get_kv(store_name='amfabrics', key='colour_fabric').result()
+
+    amf.set_persist_graph(pg=pg_2)
+
+    print('finished')
+
+    # shutdown the dask cluster
+    dask_client.shutdown()
 
 if __name__ == '__main__':
     test()

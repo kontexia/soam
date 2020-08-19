@@ -27,7 +27,9 @@ EDGE_EXPIRY = 1
 
 Node_Type_Type = str
 Node_Uid_Type = str
-Edge_Type = str
+Edge_Type_Type = str
+Edge_Uid_Type = Optional[str]
+Edge_Type = Tuple[Edge_Type_Type, Edge_Uid_Type]
 Node_Type = Tuple[Node_Type_Type, Node_Uid_Type]
 
 
@@ -44,7 +46,8 @@ class AMFGraph(nx.MultiDiGraph):
     def set_edge(self, source: Node_Type, target: Node_Type, edge: Edge_Type,
                  prob: float = 1.0,
                  numeric: Optional[float] = None,
-                 norm_min: Optional[float] = None, norm_max: Optional[float] = None,
+                 numeric_min: Optional[float] = None,
+                 numeric_max: Optional[float] = None,
                  timestamp: Optional[float] = None,
                  **properties) -> None:
         """
@@ -55,8 +58,8 @@ class AMFGraph(nx.MultiDiGraph):
         :param edge: the edge type
         :param prob: the probability of this edge
         :param numeric: a real value associated with this edge
-        :param norm_min: the minimum that numeric can be
-        :param norm_max: the maximum that numeric can be
+        :param numeric_min: the minimum that numeric can be
+        :param numeric_max: the maximum that numeric can be
         :param timestamp: posix timestamp that defines when this edge is created - if None then current system time is used
         :param properties: provide named properties to add to the edge
         :return: None
@@ -93,8 +96,8 @@ class AMFGraph(nx.MultiDiGraph):
                            '_updated': True,             # flag indicating if it has been updated since last saved or restored
                            '_prob': prob,
                            '_numeric': numeric,
-                           '_norm_min': norm_min,
-                           '_norm_max': norm_max
+                           '_numeric_min': numeric_min,
+                           '_numeric_max': numeric_max
                            }
 
         # allow properties to override settings
@@ -103,22 +106,22 @@ class AMFGraph(nx.MultiDiGraph):
         self.add_edge(source, target, key=edge_key, **edge_properties)
 
     def update_edge(self, source: Node_Type, target: Node_Type, edge: Edge_Type,
-                    prob: float = 1.0,
+                    prob: Optional[float] = None,
                     numeric: Optional[float] = None,
-                    norm_min: Optional[float] = None, norm_max: Optional[float] = None,
+                    numeric_min: Optional[float] = None, numeric_max: Optional[float] = None,
                     timestamp: Optional[float] = None,
                     **properties) -> None:
         """
         performs an audited update of an edge - any existing edge is first expired by setting the expired timestamp and then a new edge version is created with the new data
 
-        :param source: tuple defining the source node type and uid i.e. (<node_type>, <node_uid>)
-        :param target: tuple defining the target node type and uid i.e. (<node_type>, <node_uid>)
-        :param edge: the edge type
-        :param prob: <float> the probability of this edge
-        :param numeric: <float> a real value associated with this edge
-        :param norm_min: <float> the minimum that parameter value can be
-        :param norm_max: <float> the maximum that parameter value can be
-        :param timestamp: posix timestamp that defines when this edge is updated - if None then current system time is used
+        :param source: tuple - the source node type and uid i.e. (node_type, node_uid)
+        :param target: tuple - the target node type and uid i.e. (node_type, node_uid)
+        :param edge: tuple - the edge type and uid i.e. (edge_type, edge_uid)
+        :param prob: float - the probability of this edge
+        :param numeric: float - a real value associated with this edge
+        :param numeric_min: float - the minimum that numeric can be
+        :param numeric_max: float - the maximum that numeric can be
+        :param timestamp: float - posix timestamp that defines when this edge is updated - if None then current system time is used
         :param properties: provide named properties to add to the edge
         :return: None
         """
@@ -146,10 +149,24 @@ class AMFGraph(nx.MultiDiGraph):
             expired_edge_key = (edge, ts)
             self.add_edge(source, target, key=expired_edge_key, **prev_properties)
 
+            # get the previous settings for key properties
+            #
+            if prob is None:
+                prob = prev_properties['_prob']
+
+            if numeric is None:
+                numeric = prev_properties['_numeric']
+
+            if numeric_min is None:
+                numeric_min = prev_properties['_numeric_min']
+
+            if numeric_max is None:
+                numeric_max = prev_properties['_numeric_max']
+
         # overwrite existing edge
         #
         self.set_edge(source=source, target=target, edge=edge,
-                      prob=prob, numeric=numeric, norm_min=norm_min, norm_max=norm_max,
+                      prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
                       timestamp=ts, **properties)
 
     def expire_edge(self, source: Node_Type, target: Node_Type, edge: Edge_Type,
@@ -158,10 +175,10 @@ class AMFGraph(nx.MultiDiGraph):
         """
         'expire' an edge by performing a the equivalent of a soft delete
 
-        :param source: tuple defining the source node type and uid i.e. (node_type, node_uid)
-        :param target: tuple defining the target node type and uid i.e. (node_type, node_uid)
-        :param edge: the edge type
-        :param timestamp: posix timestamp that defines when this edge is expired - if None then current system time is used
+        :param source: tuple - the source node type and uid i.e. (node_type, node_uid)
+        :param target: tuple - the target node type and uid i.e. (node_type, node_uid)
+        :param edge: tuple - the edge type and uid i.e. (edge_type, edge_uid)
+        :param timestamp: float - posix timestamp that defines when this edge is expired - if None then current system time is used
         :param properties: provide named properties to add to the edge
         :return: None
         """
@@ -215,8 +232,11 @@ class AMFGraph(nx.MultiDiGraph):
 
         :param node: tuple defining the node type and uid i.e. (node_type, node_uid)
         :param node_attr: a dictionary of attributes to create for this node.
-                            key must have format: (edge uid,  (target_node_type, target_node_uid))
-                            value must be either the probability or a tuple of (probability, numeric, norm_min, norm_max)
+                            key must have format: ((edge_type, edge_uid),  (target_node_type, target_node_uid))
+                            value is a dict {'prob': edge probability,
+                                            'numeric': a numeric value for edge,
+                                            'numeric_min': the minimum value for numeric,
+                                            'numeric_max': the maximum value for numeric}
         :param node_prop: a dictionary of immutable properties to add to the node
         :param edge_prop: a dictionary of immutable properties to add to every edge created
         :param timestamp: posix timestamp that defines when this node is created - if None then current system time is used
@@ -244,9 +264,9 @@ class AMFGraph(nx.MultiDiGraph):
             #
             target = ('expression', stemmer_func(node[1]))
             if edge_prop is not None:
-                self.set_edge(source=node, target=target, edge='has_stem', timestamp=timestamp, **edge_prop)
+                self.set_edge(source=node, target=target, edge=('has_stem', None), timestamp=timestamp, **edge_prop)
             else:
-                self.set_edge(source=node, target=target, edge='has_stem', timestamp=timestamp)
+                self.set_edge(source=node, target=target, edge=('has_stem', None), timestamp=timestamp)
 
         # create edges to node attributes if required
         #
@@ -257,26 +277,34 @@ class AMFGraph(nx.MultiDiGraph):
                 #
                 edge = key[0]
                 target = key[1]
-                numeric = None
-                norm_min = None
-                norm_max = None
 
-                if isinstance(node_attr[key], tuple):
-                    prob = node_attr[key][0]
-                    numeric = node_attr[key][1]
-                    if len(node_attr[key]) == 4:
-                        norm_min = node_attr[key][2]
-                        norm_max = node_attr[key][3]
+                if 'prob' in node_attr[key]:
+                    prob = node_attr[key]['prob']
                 else:
-                    prob = node_attr[key]
+                    prob = 1.0
+
+                if 'numeric' in node_attr[key]:
+                    numeric = node_attr[key]['numeric']
+                else:
+                    numeric = None
+
+                if 'numeric_min' in node_attr[key]:
+                    numeric_min = node_attr[key]['numeric_min']
+                else:
+                    numeric_min = None
+
+                if 'numeric_max' in node_attr[key]:
+                    numeric_max = node_attr[key]['numeric_max']
+                else:
+                    numeric_max = None
 
                 if edge_prop is not None:
                     self.set_edge(source=node, target=target, edge=edge,
-                                  prob=prob, numeric=numeric, norm_min=norm_min, norm_max=norm_max,
+                                  prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
                                   timestamp=ts, **edge_prop)
                 else:
                     self.set_edge(source=node, target=target, edge=edge,
-                                  prob=prob, numeric=numeric, norm_min=norm_min, norm_max=norm_max,
+                                  prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
                                   timestamp=ts)
 
                 if stemmer_func is not None:
@@ -286,13 +314,13 @@ class AMFGraph(nx.MultiDiGraph):
                     # add an edge to the stem node
                     #
                     if edge_prop is not None:
-                        self.set_edge(source=source, target=target, edge='has_stem', prob=1.0, timestamp=ts, **edge_prop)
+                        self.set_edge(source=source, target=target, edge=('has_stem', None), prob=1.0, timestamp=ts, **edge_prop)
                     else:
-                        self.set_edge(source=source, target=target, edge='has_stem', prob=1.0, timestamp=ts)
+                        self.set_edge(source=source, target=target, edge=('has_stem', None), prob=1.0, timestamp=ts)
 
     def update_node(self, node: Node_Type,
                     upsert_attr: Optional[dict] = None,
-                    expire_attr: Optional[dict] = None,
+                    expire_attr: Optional[set] = None,
                     edge_prop: Optional[dict] = None,
                     timestamp: Optional[float] = None):
         """
@@ -300,8 +328,11 @@ class AMFGraph(nx.MultiDiGraph):
 
         :param node: tuple defining the node type and uid i.e. (node_type>, <node_uid)
         :param upsert_attr: a dictionary of attributes to update for this node.
-                            key must have format: (edge uid,  (target_node_type, target_node_uid))
-                            value must be either the probability of the relationship or a tuple of (probability, numeric, norm_min, norm_max)
+                            key must have format: ((edge_type, edge_uid),  (target_node_type, target_node_uid))
+                            value is a dict {'prob': edge probability,
+                                            'numeric': a numeric value for edge,
+                                            'numeric_min': the minimum value for numeric,
+                                            'numeric_max': the maximum value for numeric}
         :param expire_attr: a set of the attributes to expire
         :param edge_prop: a dictionary of properties to add to every edge created
         :param timestamp: posix timestamp that defines when this node is created - if None then current system time is used
@@ -312,26 +343,34 @@ class AMFGraph(nx.MultiDiGraph):
             for key in upsert_attr:
                 edge = key[0]
                 target = key[1]
-                numeric = None,
-                norm_min = None
-                norm_max = None
 
-                if isinstance(upsert_attr[key], tuple):
-                    prob = upsert_attr[key][0]
-                    numeric = upsert_attr[key][1]
-                    if len(upsert_attr[key]) == 4:
-                        norm_min = upsert_attr[key][2]
-                        norm_max = upsert_attr[key][3]
+                if 'prob' in upsert_attr[key]:
+                    prob = upsert_attr[key]['prob']
                 else:
-                    prob = upsert_attr[key]
+                    prob = None
+
+                if 'numeric' in upsert_attr[key]:
+                    numeric = upsert_attr[key]['numeric']
+                else:
+                    numeric = None
+
+                if 'numeric_min' in upsert_attr[key]:
+                    numeric_min = upsert_attr[key]['numeric_min']
+                else:
+                    numeric_min = None
+
+                if 'numeric_max' in upsert_attr[key]:
+                    numeric_max = upsert_attr[key]['numeric_max']
+                else:
+                    numeric_max = None
 
                 if edge_prop is not None:
                     self.update_edge(source=node, target=target, edge=edge,
-                                     prob=prob, numeric=prob, norm_min=norm_min, norm_max=norm_max,
+                                     prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
                                      timestamp=timestamp, **edge_prop)
                 else:
                     self.update_edge(source=node, target=target, edge=edge,
-                                     prob=prob, numeric=numeric, norm_min=norm_min, norm_max=norm_max,
+                                     prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
                                      timestamp=timestamp)
 
         if expire_attr is not None:
@@ -374,23 +413,24 @@ class AMFGraph(nx.MultiDiGraph):
 
             if persist_all_override or edge_prop['_updated']:
 
-                # assume edge_key is tuple (EDGE_TYPE, EDGE_EXPIRY)
+                # edges_to_persist will be keyed by edge_type
                 #
-                if edge_key[EDGE_TYPE] not in edges_to_persist:
-                    edges_to_persist[edge_key[EDGE_TYPE]] = []
+                if edge_key[EDGE_TYPE][0] not in edges_to_persist:
+                    edges_to_persist[edge_key[EDGE_TYPE][0]] = []
 
-                edges_to_persist[edge_key[EDGE_TYPE]].append({'_key': '{}:{}:{}:{}:{}:{}'.format(source[0], str(source[1]).replace('\'', '').replace('(', '').replace(')', '').replace(' ', '_'),
-                                                                                                 edge_key[EDGE_TYPE], edge_key[EDGE_EXPIRY],
-                                                                                                 target[0], str(target[1]).replace('\'', '').replace('(', '').replace(')', '').replace(' ', '_')),
-                                                              '_from': '{}/{}'.format(source[0], str(source[1]).replace('\'', '').replace('(', '').replace(')', '').replace(' ', '_')),
-                                                              '_to': '{}/{}'.format(target[0], str(target[1]).replace('\'', '').replace('(', '').replace(')', '').replace(' ', '_')),
-                                                              '_source_type': source[0],
-                                                              '_source_uid': source[1],
-                                                              '_target_type': target[0],
-                                                              '_target_uid': target[1],
-                                                              '_edge': edge_key[EDGE_TYPE],
-                                                              '_expired_ts': edge_key[EDGE_EXPIRY],
-                                                              **{prop: edge_prop[prop] for prop in edge_prop if prop != '_updated'}})
+                edges_to_persist[edge_key[EDGE_TYPE][0]].append({'_key': '{}:{}:{}:{}:{}:{}:{}'.format(source[0], str(source[1]).replace('\'', '').replace('(', '').replace(')', '').replace(' ', '_'),
+                                                                                                       edge_key[EDGE_TYPE][0], edge_key[EDGE_TYPE][1], edge_key[EDGE_EXPIRY],
+                                                                                                       target[0], str(target[1]).replace('\'', '').replace('(', '').replace(')', '').replace(' ', '_')),
+                                                                 '_from': '{}/{}'.format(source[0], str(source[1]).replace('\'', '').replace('(', '').replace(')', '').replace(' ', '_')),
+                                                                 '_to': '{}/{}'.format(target[0], str(target[1]).replace('\'', '').replace('(', '').replace(')', '').replace(' ', '_')),
+                                                                 '_source_type': source[0],
+                                                                 '_source_uid': source[1],
+                                                                 '_target_type': target[0],
+                                                                 '_target_uid': target[1],
+                                                                 '_edge_type': edge_key[EDGE_TYPE][0],
+                                                                 '_edge_uid': edge_key[EDGE_TYPE][1],
+                                                                 '_expired_ts': edge_key[EDGE_EXPIRY],
+                                                                 **{prop: edge_prop[prop] for prop in edge_prop if prop != '_updated'}})
                 edge_prop['_updated'] = False
 
         return nodes_to_persist, edges_to_persist
@@ -399,9 +439,9 @@ class AMFGraph(nx.MultiDiGraph):
         for edge in edges:
             edge_prop = {prop: edge[prop]
                          for prop in edge
-                         if prop not in ['_id', '_key', '_rev', '_from', '_to', '_source_uid', '_target_uid', '_source_type', '_target_type', '_edge', '_expired_ts']}
+                         if prop not in ['_id', '_key', '_rev', '_from', '_to', '_source_uid', '_target_uid', '_source_type', '_target_type', '_edge_type', '_edge_uid', '_expired_ts']}
             self.add_edge((edge['_source_type'], edge['_source_uid']), (edge['_target_type'], edge['_target_uid']),
-                          key=(edge['_edge'], edge['_expired_ts']),
+                          key=((edge['_edge_type'], edge['_edge_uid']), edge['_expired_ts']),
                           _updated=False, **edge_prop)
 
     def restore_nodes(self, nodes):
@@ -431,14 +471,13 @@ class AMFGraph(nx.MultiDiGraph):
                                 {'$edge': {<expression>}}           expression to be applied to the edges
 
                                 {'$uid' : {<expression>}}           expression to be applied to the uid of either the source, target or edge
-                                {'$type' : {<expression>}}          expression to be applied to the type of either the source or target
-                                {'$probability' : {<expression>}}   expression to be applied to the probability attribute of an edge
-                                {'$numeric' : {<expression>}}       expression to be applied to the numeric value attribute of an edge
-                                {'$norm_min' : {<expression>}}      expression to be applied to the normalised min value attribute of an edge
-                                {'$norm_max' : {<expression>}}      expression to be applied to the normalised max value attribute of an edge
-                                {'$created_ts' : {<expression>}}    expression to be applied to the created timestamp attribute of an edge or node
-                                {'$expired_ts' : {<expression>}}    expression to be applied to the expired timestamp attribute of an edge
-
+                                {'$type' : {<expression>}}          expression to be applied to the type of either the source, target or edge
+                                {'$probability' : {<expression>}}   expression to be applied to the probability property of an edge
+                                {'$numeric' : {<expression>}}       expression to be applied to the numeric value property of an edge
+                                {'$numeric_min' : {<expression>}}   expression to be applied to the min numeric property of an edge
+                                {'$numeric_max' : {<expression>}}   expression to be applied to the max numeric property of an edge
+                                {'$created_ts' : {<expression>}}    expression to be applied to the created timestamp property of an edge or node
+                                {'$expired_ts' : {<expression>}}    expression to be applied to the expired timestamp property of an edge
                                 {'$eq': value}                      property equal to <value>
                                 {'$ne': value}                      property not equal to <value>
                                 {'$lt': value}                      property less than <value>
@@ -483,14 +522,10 @@ class AMFGraph(nx.MultiDiGraph):
                     # if item_to_check[0] is a tuple then return second entry
                     #
                     if isinstance(item_to_check[0], tuple):
-                        # if len is 2 then must be a node and uid is in 2nd slot
+                        # uid is in 2nd slot
                         #
-                        if len(item_to_check[0]) == 2:
-                            value = item_to_check[0][1]
-                        else:
-                            # else must be an edge and uid id in 1st slot
-                            #
-                            value = item_to_check[0][0]
+                        value = item_to_check[0][1]
+
                     else:
                         value = item_to_check[0]
                 elif key == '$type':
@@ -507,14 +542,14 @@ class AMFGraph(nx.MultiDiGraph):
                         value = item_to_check[1]['_numeric']
                     else:
                         break
-                elif key == '$norm_min':
-                    if '_norm_min' in item_to_check[1]:
-                        value = item_to_check[1]['_norm_min']
+                elif key == '$numeric_min':
+                    if '_numeric_min' in item_to_check[1]:
+                        value = item_to_check[1]['_numeric_min']
                     else:
                         break
-                elif key == '$norm_max':
-                    if '_norm_max' in item_to_check[1]:
-                        value = item_to_check[1]['_norm_max']
+                elif key == '$numeric_max':
+                    if '_numeric_max' in item_to_check[1]:
+                        value = item_to_check[1]['_numeric_max']
                     else:
                         break
                 elif key == '$created_ts':
@@ -582,16 +617,13 @@ class AMFGraph(nx.MultiDiGraph):
                 {'$edge': {<expression>}}           expression to be applied to the edges
 
                 {'$uid' : {<expression>}}           expression to be applied to the uid of either the source, target or edge
-                {'$type' : {<expression>}}          expression to be applied to the type of either the source or target
-
-                {'$probability' : {<expression>}}   expression to be applied to the probability attribute of an edge
-                {'$numeric' : {<expression>}}       expression to be applied to the numeric value attribute of an edge
-                {'$norm_min' : {<expression>}}      expression to be applied to the normalised min value attribute of an edge
-                {'$norm_max' : {<expression>}}      expression to be applied to the normalised max value attribute of an edge
-
-                {'$created_ts' : {<expression>}}    expression to be applied to the created timestamp attribute of an edge or node
-                {'$expired_ts' : {<expression>}}    expression to be applied to the expired timestamp attribute of an edge
-
+                {'$type' : {<expression>}}          expression to be applied to the type of either the source, target or edge
+                {'$probability' : {<expression>}}   expression to be applied to the probability property of an edge
+                {'$numeric' : {<expression>}}       expression to be applied to the numeric value property of an edge
+                {'$numeric_min' : {<expression>}}      expression to be applied to the min numeric property of an edge
+                {'$numeric_max' : {<expression>}}      expression to be applied to the max numeric property of an edge
+                {'$created_ts' : {<expression>}}    expression to be applied to the created timestamp property of an edge or node
+                {'$expired_ts' : {<expression>}}    expression to be applied to the expired timestamp property of an edge
                 {'$eq': value}                      property equal to <value>
                 {'$ne': value}                      property not equal to <value>
                 {'$lt': value}                      property less than <value>
@@ -633,16 +665,16 @@ class AMFGraph(nx.MultiDiGraph):
                     edge_max = None
                     if '_numeric' in self[node][target][edge]:
                         edge_numeric = self[node][target][edge]['_numeric']
-                    if '_norm_min' in self[node][target][edge]:
-                        edge_min = self[node][target][edge]['_norm_min']
-                    if '_norm_max' in self[node][target][edge]:
-                        edge_max = self[node][target][edge]['_norm_max']
+                    if '_numeric_min' in self[node][target][edge]:
+                        edge_min = self[node][target][edge]['_numeric_min']
+                    if '_numeric_max' in self[node][target][edge]:
+                        edge_max = self[node][target][edge]['_numeric_max']
 
                     if generalised_node_name is not None:
                         src = (node[0], generalised_node_name)
                     else:
                         src = node
-                    sdr.set_item(source_node=src, edge=edge[EDGE_TYPE], target_node=target, probability=edge_prob, numeric=edge_numeric, norm_min=edge_min, norm_max=edge_max)
+                    sdr.set_item(source_node=src, edge=edge[EDGE_TYPE], target_node=target, probability=edge_prob, numeric=edge_numeric, numeric_min=edge_min, numeric_max=edge_max)
 
                     if nos_hops - 1 > 0 and target not in exclude_nodes:
                         sdr.update(self._get_attr_sdr(node=target, nos_hops=nos_hops - 1, exclude_nodes={target, *exclude_nodes}, exclude_edges=exclude_edges))
@@ -651,7 +683,7 @@ class AMFGraph(nx.MultiDiGraph):
     def get_node_sdr(self, node: Node_Type,
                      nos_hops: int = 1,
                      exclude_edges: Set[Edge_Type] = None,
-                     target_node_edge: str = None,
+                     target_node_edge: Optional[Edge_Type] = None,
                      generalised_node_name: str = '*') -> SDR:
         """
         method that returns an SDR of a sub graph connected to node
@@ -670,7 +702,7 @@ class AMFGraph(nx.MultiDiGraph):
             # add the generalised edge to the target node if required
             #
             if target_node_edge is not None:
-                sdr.set_item(source_node=(node[0], generalised_node_name), edge=target_node_edge, target_node=node, probability=1.0, numeric=None, norm_min=None, norm_max=None)
+                sdr.set_item(source_node=(node[0], generalised_node_name), edge=target_node_edge, target_node=node, probability=1.0, numeric=None, numeric_min=None, numeric_max=None)
 
             # get any attributes
             #
@@ -709,7 +741,7 @@ class AMFGraph(nx.MultiDiGraph):
 
     def plot(self, dimension=2, weight_field='_prob', node_filter_func=None, edge_filter_func=None):
 
-        # get the xyz coordinates using the spring force algorthm
+        # get the xyz coordinates using the spring force algorithm
         #
         coords = nx.spring_layout(self, dim=dimension, weight=weight_field)
 
@@ -779,9 +811,10 @@ class AMFGraph(nx.MultiDiGraph):
                                 numeric = self[node][target][edge]['_numeric']
                             else:
                                 numeric = None
-                            h_txt = 'Src: {} : {} Trg: {} : {}<br>Prob: {}<br>Numeric: {}'.format(node[0], node[1],
-                                                                                                  target[0], target[1],
-                                                                                                  self[node][target][edge]['_prob'], numeric)
+                            h_txt = 'Src: {} : {} Edge: {} : {} Trg: {} : {}<br>Prob: {}<br>Numeric: {}'.format(node[0], node[1],
+                                                                                                                edge[0], edge[1],
+                                                                                                                target[0], target[1],
+                                                                                                                self[node][target][edge]['_prob'], numeric)
                 else:
                     edge_x.append(coords[node][0])
                     edge_x.append(coords[target][0])
@@ -798,9 +831,10 @@ class AMFGraph(nx.MultiDiGraph):
                             numeric = self[node][target][edge]['_numeric']
                         else:
                             numeric = None
-                        h_txt = 'Src: {} : {} Trg: {} : {}<br>Prob: {}<br>Numeric: {}'.format(node[0], node[1],
-                                                                                              target[0], target[1],
-                                                                                              self[node][target][edge]['_prob'], numeric)
+                        h_txt = 'Src: {} : {} Edge: {} : {} Trg: {} : {}<br>Prob: {}<br>Numeric: {}'.format(node[0], node[1],
+                                                                                                            edge[0], edge[1],
+                                                                                                            target[0], target[1],
+                                                                                                            self[node][target][edge]['_prob'], numeric)
                 edge_labels.extend(['', h_txt, None])
 
         if dimension == 2:
@@ -844,10 +878,13 @@ if __name__ == '__main__':
     # edge_to attribute_key = (<RELATIONSHIP>, <ATTRIBUTE_NODE_ID>)
     # edge properties = either <WEIGHT> or (<WEIGHT>, <VALUE>, <MIN_VALUE>, <MAX_VALUE>)
     #
-    node_attr = {('has_client', ('client', 'abc ltd')): 1.0,
-                 ('has_platform', ('platform', 'electronic')): 0.1,
-                 ('has_product', ('product', 'swap')): 1.0,
-                 ('has_nominal', ('nominal', 'swap_nominal')): (1.0, 800000000, 0, 1000000000)
+    node_attr = {(('has_client', None), ('client', 'abc ltd')): {'prob': 1.0},  # probability of edge is 1.0
+                 (('has_platform', None), ('platform', 'electronic')): {'prob': 1.0},  # probability of edge is 1.0
+                 (('has_product', None), ('product', 'swap')): {'prob': 1.0},  # probability of edge is 1.0
+
+                 # here we set a probability of edge to 1.0, we also associate numeric value 800mio, minimum value of 0, max value of 1 bio to the edge
+                 #
+                 (('has_nominal', None), ('nominal', 'swap_nominal')): {'prob': 1.0, 'numeric': 800000000, 'numeric_min': 0, 'numeric_max': 1000000000}
                  }
 
     # one can specify extra properties for every edge created
@@ -865,3 +902,24 @@ if __name__ == '__main__':
     # and you can plot the resulting graph
     #
     g.plot(dimension=3)
+
+    # define a dictionary of the attributes to be inserted/ updated
+    #
+    upsert_attr = {(('has_nominal', None), ('nominal', 'swap_nominal')): {'numeric': 5000000}}
+
+    # define a set of 'attribute relationships" to be expired
+    #
+    expire_attr = {(('has_interest', None), ('interest', 'banking'), 0)}
+
+    edge_properties = {'update_id': 321}
+
+    g.update_node(node=node_id, upsert_attr=upsert_attr, expire_attr=expire_attr, edge_prop=edge_properties, timestamp=None)
+
+    print(g)
+
+    #  plot the graph filtering on expired_timestamp is None
+    #
+    g.plot(dimension=3, edge_filter_func=lambda x: x[1] is None)
+
+
+

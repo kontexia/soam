@@ -33,9 +33,9 @@ class NeuroColumn:
     # help cython declare the instance variables
     #
     edges = cython.declare(dict, visibility='public')
-    max_neurons = cython.declare(cython.int, visibility='public')
+    prune_threshold = cython.declare(cython.double, visibility='public')
 
-    def __init__(self, neuro_column=None) -> None:
+    def __init__(self, neuro_column=None, prune_threshold: cython.double = 0.00001) -> None:
         """
         class to implement Spare Data Representation of the features of a sub_graph
 
@@ -45,8 +45,8 @@ class NeuroColumn:
         self.edges: FeatureMapType = {}
         """ a dictionary of the edge features"""
 
-        self.max_neurons = 0
-        """ the maximum number of Neurons in NeuroColumn"""
+        self.prune_threshold = prune_threshold
+        """ the threshold below with an edge probability is assumed to be zero and will be deleted """
 
         # help Cython Static Type
         #
@@ -61,13 +61,10 @@ class NeuroColumn:
                                      for edge_feature_key in neuro_column.edges[edge_key]}
                           for edge_key in neuro_column.edges}
 
-            # copy over the maximum sequence
-            #
-            self.max_neurons = neuro_column.max_neurons
-
     @cython.ccall
     def upsert(self,
                edge_type: str,
+               edge_uid: str,
                source_type: str,
                source_uid: str,
                target_type: str,
@@ -75,12 +72,13 @@ class NeuroColumn:
                neuron_id: cython.int,
                prob: cython.double,
                numeric: float = None,
-               normalise_min: float = None,
-               normalise_max: float = None):
+               numeric_min: float = None,
+               numeric_max: float = None):
         """
         method to insert an edge into the SDR
 
         :param edge_type: the type of edge
+        :param edge_uid: the unique name of the edge
         :param source_type: the type of the source node
         :param source_uid: the unique name of the source node
         :param target_type: the type of the target node
@@ -88,14 +86,14 @@ class NeuroColumn:
         :param neuron_id: number between 0 and max number of neurons on a mini-column
         :param prob: the prob of the edge connection
         :param numeric: the numeric numeric of the edge
-        :param normalise_min: the minimum that parameter numeric can be
-        :param normalise_max: the maximum that [arameter numeric can be
+        :param numeric_min: the minimum that parameter numeric can be
+        :param numeric_max: the maximum that [arameter numeric can be
         :return: None
         """
 
         # the edge key needs to be unique
         #
-        edge_key: EdgeKeyType = '{}:{}:{}:{}:{}:{}'.format(source_type, source_uid, edge_type, neuron_id, target_type, target_uid)
+        edge_key: EdgeKeyType = '{}:{}:{}:{}:{}:{}:{}'.format(source_type, source_uid, edge_type, edge_uid, neuron_id, target_type, target_uid)
 
         if edge_key not in self.edges:
             self.edges[edge_key] = {}
@@ -103,10 +101,14 @@ class NeuroColumn:
         self.edges[edge_key]['source_type'] = source_type
         self.edges[edge_key]['source_uid'] = source_uid
         self.edges[edge_key]['edge_type'] = edge_type
+        self.edges[edge_key]['edge_uid'] = edge_uid
         self.edges[edge_key]['neuron_id'] = neuron_id
         self.edges[edge_key]['target_type'] = target_type
         self.edges[edge_key]['target_uid'] = target_uid
         self.edges[edge_key]['prob'] = prob
+        # flag to indicate this edge has been changed
+        #
+        self.edges[edge_key]['updated'] = True
 
         # add numeric if specified
         #
@@ -114,10 +116,10 @@ class NeuroColumn:
 
             # normalise numeric if min and max provided
             #
-            if normalise_min is not None and normalise_min is not None:
-                self.edges[edge_key]['numeric'] = (numeric - normalise_min) / (normalise_max - normalise_min)
-                self.edges[edge_key]['norm_min'] = normalise_min
-                self.edges[edge_key]['norm_max'] = normalise_max
+            if numeric_min is not None and numeric_min is not None:
+                self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)
+                self.edges[edge_key]['numeric_min'] = numeric_min
+                self.edges[edge_key]['numeric_max'] = numeric_max
             else:
                 self.edges[edge_key]['numeric'] = numeric
 
@@ -133,6 +135,7 @@ class NeuroColumn:
 
         for sdr_key in sdr:
             self.upsert(edge_type=sdr[sdr_key]['edge_type'],
+                        edge_uid=sdr[sdr_key]['edge_uid'],
                         source_type=sdr[sdr_key]['source_type'],
                         source_uid=sdr[sdr_key]['source_uid'],
                         target_type=sdr[sdr_key]['target_type'],
@@ -140,8 +143,8 @@ class NeuroColumn:
                         neuron_id=neuron_id,
                         prob=sdr[sdr_key]['prob'],
                         numeric=sdr[sdr_key]['numeric'],
-                        normalise_min=sdr[sdr_key]['min'],
-                        normalise_max=sdr[sdr_key]['max']
+                        numeric_min=sdr[sdr_key]['numeric_min'],
+                        numeric_max=sdr[sdr_key]['numeric_max']
                         )
 
     def stack(self, sdrs: List[SDR], max_neurons: cython.int) -> None:
@@ -166,6 +169,7 @@ class NeuroColumn:
 
             for sdr_key in sdrs[idx]:
                 self.upsert(edge_type=sdrs[idx][sdr_key]['edge_type'],
+                            edge_uid=sdrs[idx][sdr_key]['edge_uid'],
                             source_type=sdrs[idx][sdr_key]['source_type'],
                             source_uid=sdrs[idx][sdr_key]['source_uid'],
                             target_type=sdrs[idx][sdr_key]['target_type'],
@@ -173,8 +177,8 @@ class NeuroColumn:
                             neuron_id=neuron_id,
                             prob=sdrs[idx][sdr_key]['prob'],
                             numeric=sdrs[idx][sdr_key]['numeric'],
-                            normalise_min=sdrs[idx][sdr_key]['min'],
-                            normalise_max=sdrs[idx][sdr_key]['max']
+                            numeric_min=sdrs[idx][sdr_key]['numeric_min'],
+                            numeric_max=sdrs[idx][sdr_key]['numeric_max']
                             )
 
     def calc_distance(self, neuro_column, filter_types: Optional[FilterType] = None) -> Tuple[float, List[ContributionType]]:
@@ -205,7 +209,7 @@ class NeuroColumn:
         #
         for edge_key in edges_to_process:
 
-            # edge_key in both SDRs
+            # edge_key in both NeuroColumns
             #
             if edge_key in self.edges and edge_key in neuro_column.edges:
                 sum_min += min(neuro_column.edges[edge_key]['prob'], self.edges[edge_key]['prob'])
@@ -217,7 +221,7 @@ class NeuroColumn:
                     sum_max += max(neuro_column.edges[edge_key]['numeric'], self.edges[edge_key]['numeric'])
                     contributions.append({'edge': edge_key, 'numeric': abs(neuro_column.edges[edge_key]['numeric'] - self.edges[edge_key]['numeric'])})
 
-            # edge key only in this SDR
+            # edge key only in this NeuroColumn
             #
             elif edge_key in self.edges:
                 sum_max += self.edges[edge_key]['prob']
@@ -227,7 +231,7 @@ class NeuroColumn:
                     sum_max += self.edges[edge_key]['numeric']
                     contributions.append({'edge': edge_key, 'numeric': self.edges[edge_key]['numeric']})
 
-            # edge_key in the SDR to compare to
+            # edge_key in the NeuroColumn to compare to
             #
             else:
                 sum_max += neuro_column.edges[edge_key]['prob']
@@ -260,18 +264,25 @@ class NeuroColumn:
         # help cython static type
         #
         edge_key: EdgeKeyType
-        edge_to_process: Set[EdgeKeyType]
+        edges_to_process: Set[EdgeKeyType]
+        edges_to_delete: Set[EdgeKeyType]
 
         # filter edge_keys as required
         #
         edges_to_process = set(self.edges.keys()) | set(neuro_column.edges.keys())
 
+        edges_to_delete = set()
         for edge_key in edges_to_process:
 
             # edge_key in both self and neuro_column
             #
             if edge_key in self.edges and edge_key in neuro_column.edges:
                 if hebbian_edges is None or self.edges[edge_key]['edge_type'] in hebbian_edges:
+
+                    # this edge has been updated
+                    #
+                    self.edges[edge_key]['updated'] = True
+
                     # learn new prob and numeric
                     #
                     self.edges[edge_key]['prob'] += (neuro_column.edges[edge_key]['prob'] - self.edges[edge_key]['prob']) * learn_rate
@@ -283,6 +294,10 @@ class NeuroColumn:
             elif edge_key in self.edges:
 
                 if hebbian_edges is None or self.edges[edge_key]['edge_type'] in hebbian_edges:
+                    # this edge has been updated
+                    #
+                    self.edges[edge_key]['updated'] = True
+
                     # learn to forget prob
                     #
                     self.edges[edge_key]['prob'] *= (1.0 - learn_rate)
@@ -293,37 +308,51 @@ class NeuroColumn:
                 if hebbian_edges is None or neuro_column.edges[edge_key]['edge_type'] in hebbian_edges:
 
                     self.edges[edge_key] = {'edge_type': neuro_column.edges[edge_key]['edge_type'],
+                                            'edge_uid': neuro_column.edges[edge_key]['edge_uid'],
                                             'source_type': neuro_column.edges[edge_key]['source_type'],
                                             'source_uid': neuro_column.edges[edge_key]['source_uid'],
                                             'target_type': neuro_column.edges[edge_key]['target_type'],
                                             'target_uid': neuro_column.edges[edge_key]['target_uid'],
                                             'neuron_id': neuro_column.edges[edge_key]['neuron_id'],
-                                            'prob': neuro_column.edges[edge_key]['prob'] * learn_rate}
+                                            'prob': neuro_column.edges[edge_key]['prob'] * learn_rate,
+                                            'updated': True}
 
                     # if numeric exists then just copy as it is a new edge in self
                     #
                     if 'numeric' in neuro_column.edges[edge_key]:
                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
-                        if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
-                            self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
-                            self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+                        if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+                            self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+                            self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
                 elif is_bmu:
 
                     self.edges[edge_key] = {'edge_type': neuro_column.edges[edge_key]['edge_type'],
+                                            'edge_uid': neuro_column.edges[edge_key]['edge_uid'],
                                             'source_type': neuro_column.edges[edge_key]['source_type'],
                                             'source_uid': neuro_column.edges[edge_key]['source_uid'],
                                             'target_type': neuro_column.edges[edge_key]['target_type'],
                                             'target_uid': neuro_column.edges[edge_key]['target_uid'],
                                             'neuron_id': neuro_column.edges[edge_key]['neuron_id'],
-                                            'prob': neuro_column.edges[edge_key]['prob']}
+                                            'prob': neuro_column.edges[edge_key]['prob'],
+                                            'updated': True}
 
                     # if numeric exists then just copy as it is a new edge in self
                     #
                     if 'numeric' in neuro_column.edges[edge_key]:
                         self.edges[edge_key]['numeric'] = neuro_column.edges[edge_key]['numeric']
-                        if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
-                            self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
-                            self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+                        if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+                            self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+                            self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
+
+            # add edge to delete list if small enough
+            #
+            if edge_key in self.edges and self.edges[edge_key]['prob'] < self.prune_threshold:
+                edges_to_delete.add(edge_key)
+
+        # delete any edges with close to zero probability
+        #
+        for edge_key in edges_to_delete:
+            del self.edges[edge_key]
 
     def merge(self, neuro_column, merge_factor: cython.double) -> None:
         """
@@ -347,6 +376,8 @@ class NeuroColumn:
             # edge_key in both SDRs
             if edge_key in self.edges and edge_key in neuro_column.edges:
 
+                self.edges[edge_key]['updated'] = True
+
                 self.edges[edge_key]['prob'] += (neuro_column.edges[edge_key]['prob'] * merge_factor)
                 if 'numeric' in self.edges[edge_key] and 'numeric' in neuro_column.edges[edge_key]:
                     self.edges[edge_key]['numeric'] += (neuro_column.edges[edge_key]['numeric'] * merge_factor)
@@ -355,18 +386,20 @@ class NeuroColumn:
             #
             elif edge_key in neuro_column.edges:
                 self.edges[edge_key] = {'edge_type': neuro_column.edges[edge_key]['edge_type'],
+                                        'edge_uid': neuro_column.edges[edge_key]['edge_uid'],
                                         'source_type': neuro_column.edges[edge_key]['source_type'],
                                         'source_uid': neuro_column.edges[edge_key]['source_uid'],
                                         'target_type': neuro_column.edges[edge_key]['target_type'],
                                         'target_uid': neuro_column.edges[edge_key]['target_uid'],
                                         'neuron_id': neuro_column.edges[edge_key]['neuron_id'],
-                                        'prob': neuro_column.edges[edge_key]['prob'] * merge_factor}
+                                        'prob': neuro_column.edges[edge_key]['prob'] * merge_factor,
+                                        'updated': True}
 
                 if 'numeric' in neuro_column.edges[edge_key]:
                     self.edges[edge_key]['numeric'] = (neuro_column.edges[edge_key]['numeric'] * merge_factor)
-                    if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
-                        self.edges[edge_key]['norm_min'] = neuro_column.edges[edge_key]['norm_min']
-                        self.edges[edge_key]['norm_max'] = neuro_column.edges[edge_key]['norm_max']
+                    if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+                        self.edges[edge_key]['numeric_min'] = neuro_column.edges[edge_key]['numeric_min']
+                        self.edges[edge_key]['numeric_max'] = neuro_column.edges[edge_key]['numeric_max']
 
     def randomize(self, neuro_column, edges_to_randomise: set = None) -> None:
         """
@@ -384,8 +417,8 @@ class NeuroColumn:
             if edges_to_randomise is None or neuro_column.edges[edge_key]['edge_type'] in edges_to_randomise:
 
                 rnd_numeric = None
-                norm_min = None
-                norm_max = None
+                numeric_min = None
+                numeric_max = None
 
                 # calculate a random numeric if required
                 #
@@ -393,14 +426,15 @@ class NeuroColumn:
 
                     # use the normalisation boundaries to calc a random number - which will be normalised when upserted...
                     #
-                    if 'norm_min' in neuro_column.edges[edge_key] and 'norm_max' in neuro_column.edges[edge_key]:
-                        rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['norm_max'] - neuro_column.edges[edge_key]['norm_min'])) + neuro_column.edges[edge_key]['norm_min']
-                        norm_min = neuro_column.edges[edge_key]['norm_min']
-                        norm_max = neuro_column.edges[edge_key]['norm_max']
+                    if 'numeric_min' in neuro_column.edges[edge_key] and 'numeric_max' in neuro_column.edges[edge_key]:
+                        rnd_numeric = (random.random() * (neuro_column.edges[edge_key]['numeric_max'] - neuro_column.edges[edge_key]['numeric_min'])) + neuro_column.edges[edge_key]['numeric_min']
+                        numeric_min = neuro_column.edges[edge_key]['numeric_min']
+                        numeric_max = neuro_column.edges[edge_key]['numeric_max']
                     else:
                         rnd_numeric = random.random()
 
                 self.upsert(edge_type=neuro_column.edges[edge_key]['edge_type'],
+                            edge_uid=neuro_column.edges[edge_key]['edge_uid'],
                             source_type=neuro_column.edges[edge_key]['source_type'],
                             source_uid=neuro_column.edges[edge_key]['source_uid'],
                             target_type=neuro_column.edges[edge_key]['target_type'],
@@ -411,14 +445,14 @@ class NeuroColumn:
                             #
                             prob=random.random(),
                             numeric=rnd_numeric,
-                            normalise_min=norm_min,
-                            normalise_max=norm_max
+                            numeric_min=numeric_min,
+                            numeric_max=numeric_max
                             )
 
     def get_edge_by_max_probability(self) -> Optional[Dict[EdgeFeatureKeyType, EdgeFeatureType]]:
         """
         method to return the edge with the maximum prob
-        :return: Dictionary with keys: 'edge_type', 'source_type', 'source_uid', 'target_type', 'target_uid', 'neuron_id', 'prob', Optional['numeric', 'min', 'max']
+        :return: Dictionary with keys: 'edge_type', 'edge_uid', 'source_type', 'source_uid', 'target_type', 'target_uid', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max']
 
         """
 
@@ -452,17 +486,18 @@ class NeuroColumn:
         for edge_key in self.edges:
 
             if 'numeric' in self.edges[edge_key]:
-                if 'norm_min' in self.edges[edge_key]:
-                    numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['norm_min'] - self.edges[edge_key]['norm_max'])) + self.edges[edge_key]['norm_min']
+                if 'numeric_min' in self.edges[edge_key]:
+                    numeric = (self.edges[edge_key]['numeric'] * (self.edges[edge_key]['numeric_min'] - self.edges[edge_key]['numeric_max'])) + self.edges[edge_key]['numeric_min']
                 else:
                     numeric = self.edges[edge_key]['numeric']
             else:
                 numeric = None
-            txt = '{}Sce: {}:{}\nEdge: {}:{}\nTrg: {}:{}\nProb: {}\n'.format(txt,
-                                                                             self.edges[edge_key]['source_type'], self.edges[edge_key]['source_uid'],
-                                                                             self.edges[edge_key]['edge_type'], self.edges[edge_key]['neuron_id'],
-                                                                             self.edges[edge_key]['target_type'], self.edges[edge_key]['target_uid'],
-                                                                             self.edges[edge_key]['prob'])
+            txt = '{}Sce: {}:{}\nEdge: {}:{}:{}\nTrg: {}:{}\nProb: {}\n'.format(txt,
+                                                                                self.edges[edge_key]['source_type'], self.edges[edge_key]['source_uid'],
+                                                                                self.edges[edge_key]['edge_type'], self.edges[edge_key]['edge_uid'],
+                                                                                self.edges[edge_key]['neuron_id'],
+                                                                                self.edges[edge_key]['target_type'], self.edges[edge_key]['target_uid'],
+                                                                                self.edges[edge_key]['prob'])
             if numeric is not None:
                 txt = '{}Numeric: {}\n'.format(txt, numeric)
 
@@ -492,21 +527,34 @@ class NeuroColumn:
         """
         return self.edges[edge_key]
 
-    def decode(self) -> FeatureMapType:
+    def decode(self, only_updated: bool = False) -> FeatureMapType:
         """
         method to return a dictionary representation of the NeuroColumn. Any normalised numeric will be denormalised
+
+        :param only_updated: Set to true to return on updated edges
         :return: dictionary of dictionaries with outer dict keyed by edge_key, inner dictionary with keys:\n
-                    'edge_type', 'source_type', 'source_name', 'target_type', 'target_name', 'neuron_id', 'prob', Optional['numeric', 'min', 'max']keyed by each edge
+                    'edge_type', 'edge_uid', 'source_type', 'source_name', 'target_type', 'target_name', 'neuron_id', 'prob', Optional['numeric', 'numeric_min', 'numeric_max'] keyed by each edge
         """
         neuro_column: FeatureMapType = {}
         edge_key: EdgeKeyType
         feature_key: EdgeFeatureKeyType
 
         for edge_key in self.edges:
-            neuro_column[edge_key] = {feature_key: self.edges[edge_key][feature_key] for feature_key in self.edges[edge_key]}
+            if not only_updated or self.edges[edge_key]['updated']:
 
-            # denormalise numeric if required
-            #
-            if 'norm_min' in neuro_column[edge_key] and 'norm_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:
-                neuro_column[edge_key]['numeric'] = (neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['norm_max'] - neuro_column[edge_key]['norm_min'])) + neuro_column[edge_key]['norm_min']
+                neuro_column[edge_key] = {feature_key: self.edges[edge_key][feature_key]
+                                          for feature_key in self.edges[edge_key]
+                                          if feature_key != 'updated'}
+
+                # denormalise numeric if required
+                #
+                if 'numeric_min' in neuro_column[edge_key] and 'numeric_max' in neuro_column[edge_key] and 'numeric' in neuro_column[edge_key]:
+                    neuro_column[edge_key]['numeric'] = ((neuro_column[edge_key]['numeric'] * (neuro_column[edge_key]['numeric_max'] - neuro_column[edge_key]['numeric_min'])) +
+                                                         neuro_column[edge_key]['numeric_min'])
+
+                # reset the update flag if True
+                #
+                if only_updated:
+                    self.edges[edge_key]['updated'] = False
+
         return neuro_column
