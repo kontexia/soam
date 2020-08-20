@@ -165,6 +165,7 @@ class NeuralFabric:
 
         :param example_neuro_column: the sdr to randomly initialise from
         :param coord_key: str - the coord to grow from
+        :param hebbian_edges: set - set of edge_types that are hebbian learnt and needed to randomly initialise new neuro_columns
         :return: None
         """
         # declare variable types to help cython
@@ -209,7 +210,7 @@ class NeuralFabric:
         #
         self.seed_fabric(example_neuro_column=example_neuro_column, coords=coords_to_add, hebbian_edges=hebbian_edges)
 
-    def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> tuple:
+    def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> dict:
         """
         method to calculate the distance of sdr to every neuron on the fabric
 
@@ -246,7 +247,7 @@ class NeuralFabric:
         if ref_id is not None:
             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_por[bmu_coord_key], ref_id=ref_id)
 
-        return bmu_coord_key, bmu_dist, anomaly, motif, fabric_dist, fabric_por
+        return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist, 'fabric_por': fabric_por}
 
     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: list, ref_id: str) -> tuple:
         """
