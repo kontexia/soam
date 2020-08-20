@@ -51,7 +51,7 @@ def print_anomalies(amf, por_results):
     sp_anomaly_threshold_scatter = go.Scatter(name='anomaly threshold', x=[idx for idx in range(len(sp_anomaly_threshold))], y=sp_anomaly_threshold, mode='lines', line=dict(width=1.0, color='red'))
 
     fig = go.Figure(data=[sp_mp_scatter, sp_anomaly_scatter, sp_motif_scatter, sp_motif_threshold_scatter, sp_anomaly_threshold_scatter])
-    fig.update_layout(scene=dict(xaxis_title='REF ID', yaxis_title='Similarity'),width=1400, height=900,
+    fig.update_layout(scene=dict(xaxis_title='REF ID', yaxis_title='Similarity'), width=1400, height=900,
                       title=dict(text='AMFabric Pooler Anomalies & Motifs'))
     fig.show()
 
@@ -340,6 +340,7 @@ def test():
 
     # shutdown the dask cluster
     dask_client.shutdown()
+
 
 if __name__ == '__main__':
     test()
