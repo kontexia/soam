@@ -58,15 +58,15 @@ class AMFabric:
         self.pg = None
         """ the current persist graph """
 
-    def train(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',)) -> dict:
+    def search_for_bmu(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',)) -> dict:
         """
-        method trains the neural network with one NeuroColumn
+        method finds the bmu neuro_column that must be trained and detects if an anomaly or motif has occurred
 
         :param sdr: sparse data representation of a graph to learn
         :param ref_id: a reference id
         :param non_hebbian_edges: a tuple of edge types identifying edges that will not be learnt using a hebbian rule and not used in the
                                 search for the Best Matching Unit
-        :return: dict - the Path Of Reasoning
+        :return: dict - por
         """
         # ref ids have to be converted to strings
         #
@@ -119,25 +119,47 @@ class AMFabric:
         #
         search_results = self.fabric.distance_to_fabric(neuro_column=neuro_column, ref_id=str_ref_id, bmu_search_filters=hebbian_edges)
 
+        # update the the por
+        #
+        por['bmu'] = search_results['bmu_coord']
+        por['bmu_distance'] = search_results['bmu_distance']
+        por['anomaly'] = search_results['anomaly']
+        por['motif'] = search_results['motif']
+        por['distance_por'] = search_results['fabric_por']
+        por['fabric_distance'] = search_results['fabric_distance']
+
+        return por
+
+    def learn(self, search_por: dict) -> dict:
+
+        # prepare the temporal sequence of data by stacking all SDRs in the short_term_memory
+        #
+        neuro_column = NeuroColumn()
+        neuro_column.stack(self.short_term_memory, max_neurons=len(self.short_term_memory))
+
+        hebbian_edges = {neuro_column[edge_key]['edge_type']
+                         for edge_key in neuro_column
+                         if neuro_column[edge_key]['edge_type'] not in self.non_hebbian_edge_types}
+
         # assume search_results tuple contains
         # bmu coordinates
         #
-        bmu_coord_key = search_results[0]
+        bmu_coord_key = search_por['bmu']
 
         # bmu distance
         #
-        bmu_distance = search_results[1]
+        bmu_distance = search_por['bmu_distance']
 
         # if the bmu distance exceeded the anomaly threshold
         #
-        anomaly = search_results[2]
+        anomaly = search_por['anomaly']
 
         # the distance to all columns
         #
-        fabric_dist = search_results[4]
+        fabric_dist = search_por['fabric_distance']
 
         # if this is an anomaly then want to find the neuron column that is currently on the edge of the fabric
-        # any column on the edge cannot have been a BMU as each column kkeps track the last time it was the BMU
+        # any column on the edge cannot have been a BMU as each column keeps track the last time it was the BMU
         # by calculating (mapped - last_bmu) edge columns will have a large number
         # sorting in descending order of (1-distance) * (mapped - last_bmu) will present the closest edge columns
         #
@@ -154,9 +176,12 @@ class AMFabric:
         # grow the mini column neighbours if required - note any edge columns will always require new neighbours
         # if selected as the bmu
         #
+        existing_coords = set(self.fabric.neurons.keys())
+        new_coords = set()
         if ((self.fabric.structure == 'star' and len(self.fabric.neurons[bmu_coord_key]['nn']) < 4) or
             (self.fabric.structure == 'box' and len(self.fabric.neurons[bmu_coord_key]['nn']) < 8)):
             self.fabric.grow(example_neuro_column=neuro_column, coord_key=bmu_coord_key, hebbian_edges=hebbian_edges)
+            new_coords = set(self.fabric.neurons.keys()) - existing_coords
 
         # update the bmu and its neighbours stats
         #
@@ -180,15 +205,39 @@ class AMFabric:
         #
         self.fabric.community_update(bmu_coord_key=bmu_coord_key, learn_rate=(1 - bmu_distance))
 
-        # update the the por
-        #
-        por['bmu'] = bmu_coord_key
-        por['bmu_distance'] = bmu_distance
-        por['anomaly'] = anomaly
-        por['motif'] = search_results[3]
-        por['distance_por'] = search_results[5]
+        learn_por = {'updated_bmu': bmu_coord_key,
+                     'updated_bmu_learn_rate': bmu_distance,
+                     'updated_nn': [nn for nn in coords_to_update if nn != bmu_coord_key],
+                     'updated_nn_learn_rate': [learn_rates[idx]
+                                               for idx in range(len(coords_to_update))
+                                               if coords_to_update[idx] != bmu_coord_key],
+                     'coords_grown': new_coords
+                     }
 
-        return por
+        return learn_por
+
+    def train(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',)) -> dict:
+        """
+        method trains the neural network with one NeuroColumn
+
+        :param sdr: sparse data representation of a graph to learn
+        :param ref_id: a reference id
+        :param non_hebbian_edges: a tuple of edge types identifying edges that will not be learnt using a hebbian rule and not used in the
+                                search for the Best Matching Unit
+        :return: dict - the Path Of Reasoning
+        """
+        # search for the bmu and calculate anomalies/ motifs
+        #
+        search_por = self.search_for_bmu(sdr=sdr, ref_id=ref_id, non_hebbian_edges=non_hebbian_edges)
+
+        # learn the current short term memory given the search_por results
+        #
+        learn_por = self.learn(search_por=search_por)
+
+        # combine pors
+        #
+        search_por.update(learn_por)
+        return search_por
 
     def query(self, sdr, top_n: int = 1) -> Dict[str, Union[List[str], NeuroColumn]]:
         """
@@ -222,9 +271,7 @@ class AMFabric:
                   'neuro_column': None}
 
         if top_n == 1:
-            # assume search_results[0] is the bmu coordinates
-            #
-            bmu_coord_key = search_results[0]
+            bmu_coord_key = search_results['bmu_coord']
             result['coords'].append(bmu_coord_key)
 
             # decode the bmu sdr
@@ -234,7 +281,7 @@ class AMFabric:
 
             # create a list of distances and neuron coords, sort in assending order of distance and then pick out the first top_n
             #
-            distances = [(coord_key, search_results[4][coord_key]['distance']) for coord_key in search_results[4]]
+            distances = [(coord_key, search_results['fabric_distance'][coord_key]['distance']) for coord_key in search_results['fabric_distance']]
             distances.sort(key=lambda x: x[1])
             merge_factors = []
             coords_to_merge = []
