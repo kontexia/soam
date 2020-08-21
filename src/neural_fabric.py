@@ -130,7 +130,7 @@ class NeuralFabric:
                                        'mean_distance': 0.0,
                                        'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
                                        'community_label': None,
-                                       'updated': False,
+                                       'updated': True,     # set ot True so that it will be decoded at least once
                                        'nn': {}
                                        }
 
@@ -472,7 +472,6 @@ class NeuralFabric:
                       'mapped': self.mapped,
                       'sum_distance': self.sum_distance,
                       'mean_distance': self.mean_distance,
-                      'structure': self.structure,
                       'neuro_columns': {}
                       }
 
@@ -525,7 +524,6 @@ class NeuralFabric:
         self.mapped = fabric['mapped']
         self.sum_distance = fabric['sum_distance']
         self.mean_distance = fabric['mean_distance']
-        self.structure = fabric['structure']
 
         for coord_key in fabric['neuro_columns']:
             self.neurons[coord_key] = {'neuro_column': NeuroColumn(prune_threshold=self.prune_threshold),
