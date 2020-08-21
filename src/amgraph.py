@@ -253,8 +253,11 @@ class AMFGraph(nx.MultiDiGraph):
 
         # create the node if it doesnt already exist
         #
-        if node_prop is not None:
-            self.add_node(node, _created_ts=ts, _updated=True, **node_prop)
+        if node not in self:
+            if node_prop is not None:
+                self.add_node(node, _created_ts=ts, _updated=True, **node_prop)
+            else:
+                self.add_node(node, _created_ts=ts, _updated=True)
 
         # create the stemmed version of the node if required
         #
