@@ -7,7 +7,7 @@ from src.neuro_column import NeuroColumn
 
 from src.neural_fabric import NeuralFabric
 from src.amgraph import AMFGraph
-from typing import Union, List, Dict
+from typing import Union, List, Dict, Optional
 
 
 class AMFabric:
@@ -54,9 +54,6 @@ class AMFabric:
 
         self.non_hebbian_edge_types = set()
         """ the edge_types that are not to be learned using a hebbian rule """
-
-        self.pg = None
-        """ the current persist graph """
 
     def search_for_bmu(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',)) -> dict:
         """
@@ -131,6 +128,11 @@ class AMFabric:
         return por
 
     def learn(self, search_por: dict) -> dict:
+        """
+        method that learns the current short term memory taking into account the bmu suggested in search_por
+        :param search_por: the por resulting from a previous call to search_for_bmu
+        :return: learn_por
+        """
 
         # prepare the temporal sequence of data by stacking all SDRs in the short_term_memory
         #
@@ -218,7 +220,7 @@ class AMFabric:
 
     def train(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',)) -> dict:
         """
-        method trains the neural network with one NeuroColumn
+        method trains the neural network with one sdr
 
         :param sdr: sparse data representation of a graph to learn
         :param ref_id: a reference id
@@ -304,11 +306,12 @@ class AMFabric:
 
         return result
 
-    def decode_fabric(self, all_details: bool = False, only_updated: bool=False, community_sdr: bool = False) -> dict:
+    def decode_fabric(self, all_details: bool = False, only_updated: bool = False, community_sdr: bool = False) -> dict:
         """
         method extracts the neural fabric into a dict structure whilst decoding each SDR
 
-        :param bmu_only: if True will only return neurons that have been a BMU
+        :param all_details: if True will include all details of the fabric
+        :param only_updated: if True will include only include data updated since the last call of this method
         :param community_sdr: If True will include the community SDR learnt for each neuron column
         :return: dictionary keyed by neuron column coordinates containing all the attributes
         """
@@ -331,46 +334,99 @@ class AMFabric:
         """
         return deepcopy(self.fabric.motif)
 
-    def get_persist_graph(self, only_updated=True):
+    def get_persist_graph(self, pg_to_update: Optional[AMFGraph] = None, only_updated: bool = True):
         """
         method to return a graph representation (persistence graph) of the fabric
+        :param pg_to_update: If provided this amfgraph will be updated
         :param only_updated: If True only the changed data is included
         :return: the persistence graph
         """
 
+        # we will either update existing or create a new graph
+        #
+        if pg_to_update is None:
+            pg = AMFGraph()
+        else:
+            pg = pg_to_update
+
+        # get a copy of the fabric data
+        #
         fabric = self.fabric.decode(all_details=True,
                                     community_sdr=True,
                                     only_updated=only_updated)
 
-        if self.pg is None:
-            self.pg = AMFGraph()
-
-        amfabric_node = ('AMFabric', self.uid)
-        if amfabric_node not in self.pg:
-            self.pg.set_node(node=amfabric_node)
-
-        # update the statistics for the fabric with self referencing edge has_stats
+        # the node id of this amfabric
         #
-        edge_properties = {attr: fabric[attr] for attr in fabric if attr not in ['neuro_columns']}
-        self.pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('has_stats', None), **edge_properties)
+        amfabric_node = ('AMFabric', self.uid)
 
+        # make sure node representing this part of the fabric is in graph
+        #
+        if amfabric_node not in pg:
+            pg.set_node(node=amfabric_node)
+
+            # add edge to represent the setup data
+            #
+            edge_properties = {'stm_size': self.stm_size,
+                               'mp_threshold': self.mp_threshold,
+                               'structure': self.structure,
+                               'prune_threshold': self.prune_threshold}
+
+            pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('has_setup', None), **edge_properties)
+
+        # we will store some of the fabric stats in a single self referencing edge between the AMFabric node
+        # if this edge is already in the graph then update with changes
+        #
+        if amfabric_node in pg[amfabric_node] and (('has_stats', None), None) in pg[amfabric_node][amfabric_node]:
+            # copy existing properties of edge
+            #
+            edge_properties = deepcopy(pg[amfabric_node][amfabric_node][(('has_stats', None), None)])
+
+            # update the properties as required
+            #
+            for attr in fabric:
+
+                # if anomaly or motif attributes then only update entries as required
+                #
+                if attr in ['anomaly', 'motif']:
+                    for ref_id in fabric[attr]:
+                        edge_properties[attr][ref_id] = fabric[attr][ref_id]
+
+                # this edge will not include neuro_column data
+                #
+                elif attr != 'neuro_columns':
+                    edge_properties[attr] = fabric[attr]
+        else:
+            # edge does not exist so create the properties as required
+            #
+            edge_properties = {attr: fabric[attr] for attr in fabric if attr not in ['neuro_columns']}
+        pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('has_stats', None), **edge_properties)
+
+        # add edge to represent the short term memory data and associated properties
+        #
         edge_properties = {'short_term_memory': [deepcopy(sdr.sdr) for sdr in self.short_term_memory]}
-        self.pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('has_short_term_memory', None), **edge_properties)
+        pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('has_short_term_memory', None), **edge_properties)
 
+        # add edge to represent the hebbian edge types seen so far
+        #
         edge_properties = {'non_hebbian_edge_types': list(self.non_hebbian_edge_types)}
-        self.pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('has_non_hebbian_edge_types', None), **edge_properties)
+        pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('has_non_hebbian_edge_types', None), **edge_properties)
 
         # update the edges to each neuro_column
         #
         for coord in fabric['neuro_columns']:
-            column_node = ('NeuroColumn', '{}:{}'.format(self.uid, coord))
+            nc_node = ('NeuroColumn', '{}:{}'.format(self.uid, coord))
 
-            # connect fabric to neuro_column with has_neuro_column
+            edge_properties = {}
+            if nc_node in pg[amfabric_node] and (('has_neuro_column', None), None) in pg[amfabric_node][nc_node]:
+                edge_properties = deepcopy(pg[amfabric_node][nc_node][(('has_neuro_column', None), None)])
+
+            # upsert the changed properties
             #
-            edge_properties = {attr: fabric['neuro_columns'][coord][attr]
-                               for attr in fabric['neuro_columns'][coord]
-                               if attr not in ['neuro_column']}
-            self.pg.update_edge(source=amfabric_node, target=column_node, edge=('has_neuro_column', None), **edge_properties)
+            edge_properties.update({attr: fabric['neuro_columns'][coord][attr]
+                                    for attr in fabric['neuro_columns'][coord]
+                                    if attr not in ['neuro_column']})
+
+            pg.update_edge(source=amfabric_node, target=nc_node, edge=('has_neuro_column', None), **edge_properties)
 
             added_generalised_node = False
             for edge in fabric['neuro_columns'][coord]['neuro_column']:
@@ -400,21 +456,21 @@ class AMFabric:
 
                 edge_key = (fabric['neuro_columns'][coord]['neuro_column'][edge]['edge_type'], edge_uid)
 
-                self.pg.update_edge(source=source_node, target=target_node, edge=edge_key,
-                                    prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
-                                    _generalised_edge_uid=fabric['neuro_columns'][coord]['neuro_column'][edge]['edge_uid'],
-                                    _neuro_column=coord,
-                                    _coord=fabric['neuro_columns'][coord]['coord'],
-                                    _amfabric=self.uid,
-                                    _neuron_id=fabric['neuro_columns'][coord]['neuro_column'][edge]['neuron_id'])
+                pg.update_edge(source=source_node, target=target_node, edge=edge_key,
+                               prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
+                               _generalised_edge_uid=fabric['neuro_columns'][coord]['neuro_column'][edge]['edge_uid'],
+                               _neuro_column=coord,
+                               _coord=fabric['neuro_columns'][coord]['coord'],
+                               _amfabric=self.uid,
+                               _neuron_id=fabric['neuro_columns'][coord]['neuro_column'][edge]['neuron_id'])
 
                 # connect neuro_column to the the generalised node
                 #
                 if not added_generalised_node and fabric['neuro_columns'][coord]['neuro_column'][edge]['edge_type'] == 'generalise':
                     added_generalised_node = True
-                    self.pg.update_edge(source=column_node, target=target_node, edge=('has_generalised', None),
-                                        prob=1.0)
-        return self.pg
+                    pg.update_edge(source=nc_node, target=target_node, edge=('has_generalised', None),
+                                   prob=1.0)
+        return pg
 
     def set_persist_graph(self, pg: AMFGraph) -> None:
         """
@@ -423,10 +479,19 @@ class AMFabric:
         :param pg: the persistence graph
         :return: None
         """
-        self.pg = pg
 
+        # restore basic setup properties
+        #
+        has_setup = pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('has_setup', None), None)]
+        self.stm_size = has_setup['stm_size']
+        self.mp_threshold = has_setup['mp_threshold']
+        self.structure = has_setup['structure']
+        self.prune_threshold = has_setup['prune_threshold']
+
+        # restore short term memory
+        #
         self.short_term_memory = []
-        has_stm = self.pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('has_short_term_memory', None), None)]
+        has_stm = pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('has_short_term_memory', None), None)]
         for stm_sdr in has_stm['short_term_memory']:
             sdr = SDR()
             for edge_key in stm_sdr:
@@ -440,21 +505,27 @@ class AMFabric:
                              )
             self.short_term_memory.append(sdr)
 
-        has_non_hebbian_edge_types = self.pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('has_non_hebbian_edge_types', None), None)]
+        # non hebbian edge types seen so far
+        #
+        has_non_hebbian_edge_types = pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('has_non_hebbian_edge_types', None), None)]
         self.non_hebbian_edge_types = set(has_non_hebbian_edge_types['non_hebbian_edge_types'])
 
-        has_stats = self.pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('has_stats', None), None)]
+        # fabric stats
+        #
+        has_stats = pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('has_stats', None), None)]
         fabric = {attr: deepcopy(has_stats[attr]) for attr in has_stats if attr[0] != '_'}
 
+        # now neuro_columns
+        #
         fabric['neuro_columns'] = {}
 
-        for target in self.pg[('AMFabric', self.uid)]:
+        for target in pg[('AMFabric', self.uid)]:
             if target != ('AMFabric', self.uid):
-                for edge in self.pg[('AMFabric', self.uid)][target]:
-                    coord = tuple(self.pg[('AMFabric', self.uid)][target][edge]['coord'])
+                for edge in pg[('AMFabric', self.uid)][target]:
+                    coord = tuple(pg[('AMFabric', self.uid)][target][edge]['coord'])
 
-                    fabric['neuro_columns'][coord] = {attr: self.pg[('AMFabric', self.uid)][target][edge][attr]
-                                                      for attr in self.pg[('AMFabric', self.uid)][target][edge]
+                    fabric['neuro_columns'][coord] = {attr: pg[('AMFabric', self.uid)][target][edge][attr]
+                                                      for attr in pg[('AMFabric', self.uid)][target][edge]
                                                       if attr[0] != '_' and attr not in ['community_nc']}
 
                     # correct types from lists to sets or tuples
@@ -469,26 +540,26 @@ class AMFabric:
                     # fill out community sdr
                     #
                     fabric['neuro_columns'][coord]['community_nc'] = SDR()
-                    for community_edge_key in self.pg[('AMFabric', self.uid)][target][edge]['community_nc']:
-                        source_node = (self.pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['source_type'],
-                                       self.pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['source_uid'])
-                        target_node = (self.pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['target_type'],
-                                       self.pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['target_uid'])
-                        community_edge = (self.pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['edge_type'],
-                                          self.pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['edge_uid'])
+                    for community_edge_key in pg[('AMFabric', self.uid)][target][edge]['community_nc']:
+                        source_node = (pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['source_type'],
+                                       pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['source_uid'])
+                        target_node = (pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['target_type'],
+                                       pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['target_uid'])
+                        community_edge = (pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['edge_type'],
+                                          pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['edge_uid'])
 
-                        prob = self.pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['prob']
+                        prob = pg[('AMFabric', self.uid)][target][edge]['community_nc'][community_edge_key]['prob']
 
                         fabric['neuro_columns'][coord]['community_nc'].set_item(source_node=source_node,
                                                                                 target_node=target_node,
                                                                                 edge=community_edge, probability=prob)
         # loop fills out neuro_columns as stacks of sdrs
         #
-        for source in self.pg:
+        for source in pg:
             if source[0] not in ['AMFabric', 'NeuroColumn']:
-                for target in self.pg[source]:
-                    for edge in self.pg[source][target]:
-                        edge_attr = self.pg[source][target][edge]
+                for target in pg[source]:
+                    for edge in pg[source][target]:
+                        edge_attr = pg[source][target][edge]
                         coord = tuple(edge_attr['_coord'])
 
                         # add sdr for this neuron_id if required
@@ -505,11 +576,13 @@ class AMFabric:
                                                                                                          numeric_max=edge_attr['_numeric_max'],
                                                                                                          )
 
+        # create NeuralFabric
         self.fabric = NeuralFabric(uid=self.uid,
                                    max_short_term_memory=self.stm_size,
                                    mp_threshold=self.mp_threshold,
                                    structure=self.structure,
                                    prune_threshold=self.prune_threshold)
 
+        # and restore
+        #
         self.fabric.restore(fabric)
-
