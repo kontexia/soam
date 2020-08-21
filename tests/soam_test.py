@@ -3,6 +3,7 @@ from src.kv_cache import KVGraphCache
 from src.distributed_cache import DistributedCache
 from src.amgraph import AMFGraph
 import json
+from src.amfabric import AMFabric
 
 def test_cache():
 
@@ -49,6 +50,37 @@ def test_cache():
 
     print('finished')
 
+def test_amfabric():
+
+    amf = AMFabric(uid='colours',
+                   short_term_memory=2,
+                   mp_threshold=6,
+                   structure='star',
+                   prune_threshold=0.001)
+
+    sdr_1 = SDR()
+    sdr_1.set_item(source_node=('client', 'x'), edge=('has', 'y'), target_node=('nominal_amount', 'nominal'),probability=1.0,numeric=100, numeric_min=0, numeric_max=200)
+
+    search_por = amf.search_for_bmu(sdr=sdr_1, ref_id=1, non_hebbian_edges=None)
+
+    learn_por = amf.learn(search_por=search_por)
+
+    pg = amf.get_persist_graph()
+
+
+    sdr_2 = SDR()
+    sdr_2.set_item(source_node=('client', 'x'), edge=('has', 'y'), target_node=('nominal_amount', 'nominal'), probability=1.0, numeric=150, numeric_min=0, numeric_max=200)
+
+
+    search_por = amf.search_for_bmu(sdr=sdr_1, ref_id=1, non_hebbian_edges=None)
+
+    learn_por = amf.learn(search_por=search_por)
+
+    pg = amf.get_persist_graph(pg_to_update=pg)
+    print('finished')
+
+
+
 
 def test_sdr():
     sdr = SDR()
@@ -56,6 +88,7 @@ def test_sdr():
 
 if __name__ == '__main__':
 
-    test_cache()
+    test_amfabric()
+    #test_cache()
 
     print('finished')
