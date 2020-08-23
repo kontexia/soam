@@ -220,6 +220,11 @@ class NeuroColumn:
                     sum_min += min(neuro_column.edges[edge_key]['numeric'], self.edges[edge_key]['numeric'])
                     sum_max += max(neuro_column.edges[edge_key]['numeric'], self.edges[edge_key]['numeric'])
                     contributions.append({'edge': edge_key, 'numeric': abs(neuro_column.edges[edge_key]['numeric'] - self.edges[edge_key]['numeric'])})
+                else:
+                    # if no numeric then add place holder to remove numeric bias
+                    #
+                    sum_min += 1.0
+                    sum_max += 1.0
 
             # edge key only in this NeuroColumn
             #
@@ -230,6 +235,11 @@ class NeuroColumn:
                 if 'numeric' in self.edges[edge_key]:
                     sum_max += self.edges[edge_key]['numeric']
                     contributions.append({'edge': edge_key, 'numeric': self.edges[edge_key]['numeric']})
+                else:
+                    # if no numeric then add place holder to remove numeric bias
+                    #
+                    sum_min += 1.0
+                    sum_max += 1.0
 
             # edge_key in the NeuroColumn to compare to
             #
@@ -240,6 +250,11 @@ class NeuroColumn:
                 if 'numeric' in neuro_column.edges[edge_key]:
                     sum_max += neuro_column.edges[edge_key]['numeric']
                     contributions.append({'edge': edge_key, 'numeric': neuro_column.edges[edge_key]['numeric']})
+                else:
+                    # if no numeric then add place holder to remove numeric bias
+                    #
+                    sum_min += 1.0
+                    sum_max += 1.0
 
         distance = 1.0
         if sum_max > 0:
