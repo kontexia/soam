@@ -402,7 +402,8 @@ class KVGraphCache:
 
             if key is None:
                 if delete_from_db:
-                    self._kv_to_delete[store_name].add(*self._store[store_name].keys())
+                    if len(self._store[store_name]) > 0:
+                        self._kv_to_delete[store_name].add(*self._store[store_name].keys())
                 del self._store[store_name]
                 deleted = True
             elif key in self._store[store_name]:
