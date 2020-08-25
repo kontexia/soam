@@ -25,7 +25,10 @@ class SDR:
         self.sdr: dict = {}
 
         if sdr is not None:
-            self.sdr = deepcopy(sdr.sdr)
+            if isinstance(sdr, SDR):
+                self.sdr = deepcopy(sdr.sdr)
+            elif isinstance(sdr, dict):
+                self.sdr = deepcopy(sdr)
 
     def __contains__(self, sdr_key: SDRKeyType) -> bool:
         """
@@ -74,7 +77,8 @@ class SDR:
         sdr_key = '{}:{}:{}:{}:{}:{}'.format(source_node[0], source_node[1], edge[0], edge[1], target_node[0], target_node[1])
         self.sdr[sdr_key] = {'source_type': source_node[0], 'source_uid': source_node[1],
                              'target_type': target_node[0], 'target_uid': target_node[1],
-                             'edge_type': edge[0], 'edge_uid': edge[1],
+                             'edge_type': edge[0],
+                             'edge_uid': edge[1],
                              'prob': probability,
                              'numeric': numeric,
                              'numeric_min': numeric_min,
@@ -88,3 +92,11 @@ class SDR:
         :return: None
         """
         self.sdr.update(sdr.sdr)
+
+    def get_dict(self) -> dict:
+        """
+        method to return a dict representation
+
+        :return: dict of dicts: {edge_key: {'source_type' , 'source_uid' , 'edge_type' , 'edge_uid' , 'target_type' , 'target_uid', 'prob', 'numeric', 'numeric_min', 'numeric_max'}
+        """
+        return deepcopy(self.sdr)
