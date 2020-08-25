@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 from typing import Optional, Dict, Callable, Union
-from dask.distributed import Client, Pub, Sub
+from dask.distributed import Client, Pub, Sub, TimeoutError
 from src.distributed_cache import DistributedCache
 import time
 
@@ -38,6 +38,11 @@ class PubSub:
         self.cache = DistributedCache(config=config)
         """ a distributed cache to store messages and metadata """
 
+        self.cache.create_distributed_store(store_name='subscribers', restore=False)
+        self.cache.create_distributed_store(store_name='topics', restore=True)
+        self.cache.create_distributed_store(store_name='published', restore=False)
+        self.cache.create_distributed_store(store_name='subscribed', restore=False)
+
         self.subscriptions = {}
         """ in memory cache of Dask subscription objects keyed by topic"""
 
@@ -51,11 +56,11 @@ class PubSub:
         """
         for topic in self.subscriptions.keys():
             with self.cache.lock_key(store_name='subscribers', key=topic):
-                subscribers = self.cache.get_kv(store_name='subscribers', key=topic, restore=False).result()
+                subscribers = self.cache.get_kv(store_name='subscribers', key=topic, lock_cache=False).result()
                 if subscribers is not None:
                     if self.uid in subscribers:
                         subscribers.remove(self.uid)
-                    self.cache.set_kv(store_name='subscribers', key=topic, value=subscribers, persist=False)
+                    self.cache.set_kv(store_name='subscribers', key=topic, value=subscribers, persist=False, lock_cache=False)
 
     def subscribe(self, topic: str, callback: Callable[[dict], None]) -> None:
         """
@@ -72,12 +77,12 @@ class PubSub:
             # add myself to the list of current subscribers
             #
             with self.cache.lock_key(store_name='subscribers', key=topic):
-                subscribers = self.cache.get_kv(store_name='subscribers', key=topic, restore=False).result()
+                subscribers = self.cache.get_kv(store_name='subscribers', key=topic, lock_cache=False).result()
                 if subscribers is None:
                     subscribers = [self.uid]
                 else:
                     subscribers.append(self.uid)
-                self.cache.set_kv(store_name='subscribers', key=topic, value=subscribers, persist=False)
+                self.cache.set_kv(store_name='subscribers', key=topic, value=subscribers, persist=False, lock_cache=False)
 
     def unsubscribe(self, topic: str) -> None:
         """
@@ -90,11 +95,11 @@ class PubSub:
             # need to remove myself from the list of subscribers
             #
             with self.cache.lock_key(store_name='subscribers', key=topic):
-                subscribers = self.cache.get_kv(store_name='subscribers', key=topic, restore=False).result()
+                subscribers = self.cache.get_kv(store_name='subscribers', key=topic, lock_cache=False).result()
                 if subscribers is not None:
                     if self.uid in subscribers:
                         subscribers.remove(self.uid)
-                    self.cache.set_kv(store_name='subscribers', key=topic, value=subscribers, persist=False)
+                    self.cache.set_kv(store_name='subscribers', key=topic, value=subscribers, persist=False, lock_cache=False)
 
             # finally remove my sub object
             #
@@ -115,12 +120,12 @@ class PubSub:
         # grab the next message id for this topic
         #
         with self.cache.lock_key(store_name='topics', key=topic):
-            topic_id = self.cache.get_kv(store_name='topics', key=topic, restore=True).result()
+            topic_id = self.cache.get_kv(store_name='topics', key=topic, lock_cache=False).result()
             if topic_id is None:
                 topic_id = 0
             else:
                 topic_id += 1
-            self.cache.set_kv(store_name='topics', key=topic, value=topic_id, persist=True)
+            self.cache.set_kv(store_name='topics', key=topic, value=topic_id, persist=True, lock_cache=False)
 
         # wrap the message with metadata
         #
@@ -133,7 +138,7 @@ class PubSub:
         # see if there are subscribers
         #
         with self.cache.lock_key(store_name='subscribers', key=topic):
-            subscribers = self.cache.get_kv(store_name='subscribers', key=topic, restore=False).result()
+            subscribers = self.cache.get_kv(store_name='subscribers', key=topic, lock_cache=False).result()
 
         if subscribers is not None and len(subscribers) > 0:
             # clear any back log in cache
@@ -143,14 +148,14 @@ class PubSub:
                 self.publications[topic]['pub'].put(msg)
 
                 with self.cache.lock_key(store_name='published', key=topic):
-                    self.cache.set_kv(store_name='published', key='{}:{}'.format(msg['topic'], msg['msg_id']), value=msg)
+                    self.cache.set_kv(store_name='published', key='{}:{}'.format(msg['topic'], msg['msg_id']), value=msg, lock_cache=False)
 
             # then publish this message
             #
             self.publications[topic]['pub'].put(data_packet)
             published_key = '{}:{}'.format(data_packet['topic'], data_packet['msg_id'])
             with self.cache.lock_key(store_name='published', key=published_key):
-                self.cache.set_kv(store_name='published', key=published_key, value=data_packet)
+                self.cache.set_kv(store_name='published', key=published_key, value=data_packet, lock_cache=False)
             published = True
         else:
             # no subscribers so cache
@@ -177,9 +182,9 @@ class PubSub:
                     processed_key = '{}:{}:{}'.format(msg['topic'], msg['msg_id'], self.uid)
                     msg['subscriber'] = self.uid
                     msg['topic_msg_id'] = '{}:{}'.format(msg['topic'], msg['msg_id'])
-                    self.cache.set_kv(store_name='subscribed', key=processed_key, value=msg)
+                    self.cache.set_kv(store_name='subscribed', key=processed_key, value=msg, lock_cache=True)
                     nos_processed += 1
-                except Exception as e:
+                except TimeoutError:
                     time.sleep(0.1)
             if timeout is not None and time.time() - start_end > timeout:
                 break
