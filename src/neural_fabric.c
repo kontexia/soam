@@ -821,7 +821,7 @@ static const char *__pyx_f[] = {
 struct __pyx_obj_3src_13neural_fabric_NeuralFabric;
 struct __pyx_opt_args_3src_13neural_fabric_12NeuralFabric_learn;
 
-/* "src/neural_fabric.py":311
+/* "src/neural_fabric.py":326
  * 
  *     @cython.ccall
  *     def learn(self, neuro_column: NeuroColumn, bmu_coord: str, coords: list, learn_rates: list, hebbian_edges: set = None):             # <<<<<<<<<<<<<<
@@ -856,6 +856,7 @@ struct __pyx_obj_3src_13neural_fabric_NeuralFabric {
   double sum_distance;
   double mean_distance;
   PyObject *structure;
+  double prune_threshold;
 };
 
 
@@ -1257,6 +1258,36 @@ static CYTHON_INLINE int __Pyx_ListComp_Append(PyObject* list, PyObject* x) {
 #define __Pyx_ListComp_Append(L,x) PyList_Append(L,x)
 #endif
 
+/* py_dict_keys.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyDict_Keys(PyObject* d);
+
+/* CallUnboundCMethod0.proto */
+static PyObject* __Pyx__CallUnboundCMethod0(__Pyx_CachedCFunction* cfunc, PyObject* self);
+#if CYTHON_COMPILING_IN_CPYTHON
+#define __Pyx_CallUnboundCMethod0(cfunc, self)\
+    (likely((cfunc)->func) ?\
+        (likely((cfunc)->flag == METH_NOARGS) ?  (*((cfunc)->func))(self, NULL) :\
+         (PY_VERSION_HEX >= 0x030600B1 && likely((cfunc)->flag == METH_FASTCALL) ?\
+            (PY_VERSION_HEX >= 0x030700A0 ?\
+                (*(__Pyx_PyCFunctionFast)(void*)(PyCFunction)(cfunc)->func)(self, &__pyx_empty_tuple, 0) :\
+                (*(__Pyx_PyCFunctionFastWithKeywords)(void*)(PyCFunction)(cfunc)->func)(self, &__pyx_empty_tuple, 0, NULL)) :\
+          (PY_VERSION_HEX >= 0x030700A0 && (cfunc)->flag == (METH_FASTCALL | METH_KEYWORDS) ?\
+            (*(__Pyx_PyCFunctionFastWithKeywords)(void*)(PyCFunction)(cfunc)->func)(self, &__pyx_empty_tuple, 0, NULL) :\
+            (likely((cfunc)->flag == (METH_VARARGS | METH_KEYWORDS)) ?  ((*(PyCFunctionWithKeywords)(void*)(PyCFunction)(cfunc)->func)(self, __pyx_empty_tuple, NULL)) :\
+               ((cfunc)->flag == METH_VARARGS ?  (*((cfunc)->func))(self, __pyx_empty_tuple) :\
+               __Pyx__CallUnboundCMethod0(cfunc, self)))))) :\
+        __Pyx__CallUnboundCMethod0(cfunc, self))
+#else
+#define __Pyx_CallUnboundCMethod0(cfunc, self)  __Pyx__CallUnboundCMethod0(cfunc, self)
+#endif
+
+/* ObjectGetItem.proto */
+#if CYTHON_USE_TYPE_SLOTS
+static CYTHON_INLINE PyObject *__Pyx_PyObject_GetItem(PyObject *obj, PyObject* key);
+#else
+#define __Pyx_PyObject_GetItem(obj, key)  PyObject_GetItem(obj, key)
+#endif
+
 /* PyErrExceptionMatches.proto */
 #if CYTHON_FAST_THREAD_STATE
 #define __Pyx_PyErr_ExceptionMatches(err) __Pyx_PyErr_ExceptionMatchesInState(__pyx_tstate, err)
@@ -1483,6 +1514,7 @@ static PyObject *__pyx_builtin_sum;
 static const char __pyx_k_[] = "{}:{}";
 static const char __pyx_k_x[] = "x";
 static const char __pyx_k_y[] = "y";
+static const char __pyx_k__3[] = "";
 static const char __pyx_k_nn[] = "nn";
 static const char __pyx_k_add[] = "add";
 static const char __pyx_k_idx[] = "idx";
@@ -1491,12 +1523,15 @@ static const char __pyx_k_min[] = "min";
 static const char __pyx_k_new[] = "__new__";
 static const char __pyx_k_pop[] = "pop";
 static const char __pyx_k_por[] = "por";
+static const char __pyx_k_sdr[] = "sdr";
 static const char __pyx_k_set[] = "set";
 static const char __pyx_k_str[] = "str";
 static const char __pyx_k_sum[] = "sum";
 static const char __pyx_k_uid[] = "uid";
+static const char __pyx_k_attr[] = "attr";
 static const char __pyx_k_dict[] = "__dict__";
 static const char __pyx_k_grow[] = "grow";
+static const char __pyx_k_keys[] = "keys";
 static const char __pyx_k_list[] = "list";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_n_nn[] = "n_nn";
@@ -1515,11 +1550,16 @@ static const char __pyx_k_range[] = "range";
 static const char __pyx_k_state[] = "state";
 static const char __pyx_k_tuple[] = "tuple";
 static const char __pyx_k_coords[] = "coords";
-static const char __pyx_k_dict_2[] = "_dict";
+static const char __pyx_k_decode[] = "decode";
+static const char __pyx_k_dict_2[] = "dict";
+static const char __pyx_k_dict_3[] = "_dict";
 static const char __pyx_k_double[] = "double";
+static const char __pyx_k_fabric[] = "fabric";
 static const char __pyx_k_format[] = "format";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_is_bmu[] = "is_bmu";
+static const char __pyx_k_mapped[] = "mapped";
+static const char __pyx_k_n_attr[] = "n_attr";
 static const char __pyx_k_neuron[] = "neuron";
 static const char __pyx_k_pickle[] = "pickle";
 static const char __pyx_k_reduce[] = "__reduce__";
@@ -1530,10 +1570,12 @@ static const char __pyx_k_update[] = "update";
 static const char __pyx_k_upsert[] = "upsert";
 static const char __pyx_k_anomaly[] = "anomaly";
 static const char __pyx_k_last_nn[] = "last_nn";
+static const char __pyx_k_restore[] = "restore";
 static const char __pyx_k_updated[] = "updated";
 static const char __pyx_k_Optional[] = "Optional";
 static const char __pyx_k_bmu_dist[] = "bmu_dist";
 static const char __pyx_k_distance[] = "distance";
+static const char __pyx_k_edge_uid[] = "edge_uid";
 static const char __pyx_k_getstate[] = "__getstate__";
 static const char __pyx_k_last_bmu[] = "last_bmu";
 static const char __pyx_k_pyx_type[] = "__pyx_type";
@@ -1541,25 +1583,29 @@ static const char __pyx_k_setstate[] = "__setstate__";
 static const char __pyx_k_bmu_coord[] = "bmu_coord";
 static const char __pyx_k_coord_key[] = "coord_key";
 static const char __pyx_k_edge_type[] = "edge_type";
+static const char __pyx_k_mp_window[] = "mp_window";
 static const char __pyx_k_neuron_id[] = "neuron_id";
 static const char __pyx_k_pyx_state[] = "__pyx_state";
 static const char __pyx_k_randomize[] = "randomize";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
 static const char __pyx_k_structure[] = "structure";
-static const char __pyx_k_fabric_por[] = "fabric_por";
+static const char __pyx_k_threshold[] = "threshold";
 static const char __pyx_k_learn_rate[] = "learn_rate";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_source_uid[] = "source_uid";
 static const char __pyx_k_target_uid[] = "target_uid";
+static const char __pyx_k_upsert_sdr[] = "upsert_sdr";
 static const char __pyx_k_NeuroColumn[] = "NeuroColumn";
 static const char __pyx_k_PickleError[] = "PickleError";
+static const char __pyx_k_all_details[] = "all_details";
 static const char __pyx_k_fabric_dist[] = "fabric_dist";
 static const char __pyx_k_learn_rates[] = "learn_rates";
 static const char __pyx_k_seed_fabric[] = "seed_fabric";
 static const char __pyx_k_source_type[] = "source_type";
 static const char __pyx_k_target_type[] = "target_type";
 static const char __pyx_k_NeuralFabric[] = "NeuralFabric";
+static const char __pyx_k_bmu_distance[] = "bmu_distance";
 static const char __pyx_k_community_nc[] = "community_nc";
 static const char __pyx_k_filter_types[] = "filter_types";
 static const char __pyx_k_in_community[] = "in_community";
@@ -1567,33 +1613,44 @@ static const char __pyx_k_merge_factor[] = "merge_factor";
 static const char __pyx_k_mp_threshold[] = "mp_threshold";
 static const char __pyx_k_neuro_column[] = "neuro_column";
 static const char __pyx_k_nn_coord_key[] = "nn_coord_key";
+static const char __pyx_k_only_updated[] = "only_updated";
 static const char __pyx_k_pyx_checksum[] = "__pyx_checksum";
 static const char __pyx_k_stringsource[] = "stringsource";
 static const char __pyx_k_sum_distance[] = "sum_distance";
 static const char __pyx_k_use_setstate[] = "use_setstate";
 static const char __pyx_k_bmu_coord_key[] = "bmu_coord_key";
 static const char __pyx_k_calc_distance[] = "calc_distance";
+static const char __pyx_k_community_sdr[] = "community_sdr";
 static const char __pyx_k_coords_to_add[] = "coords_to_add";
 static const char __pyx_k_hebbian_edges[] = "hebbian_edges";
 static const char __pyx_k_mean_distance[] = "mean_distance";
 static const char __pyx_k_merge_factors[] = "merge_factors";
 static const char __pyx_k_merge_neurons[] = "merge_neurons";
 static const char __pyx_k_merged_column[] = "merged_column";
+static const char __pyx_k_neuro_columns[] = "neuro_columns";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
+static const char __pyx_k_reset_updated[] = "reset_updated";
 static const char __pyx_k_community_label[] = "community_label";
+static const char __pyx_k_fabric_distance[] = "fabric_distance";
+static const char __pyx_k_motif_threshold[] = "motif_threshold";
+static const char __pyx_k_prune_threshold[] = "prune_threshold";
 static const char __pyx_k_pyx_PickleError[] = "__pyx_PickleError";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
 static const char __pyx_k_community_update[] = "community_update";
+static const char __pyx_k_coords_to_decode[] = "coords_to_decode";
 static const char __pyx_k_src_neuro_column[] = "src.neuro_column";
 static const char __pyx_k_update_bmu_stats[] = "update_bmu_stats";
 static const char __pyx_k_NeuralFabric_grow[] = "NeuralFabric.grow";
+static const char __pyx_k_anomaly_threshold[] = "anomaly_threshold";
 static const char __pyx_k_src_neural_fabric[] = "src.neural_fabric";
 static const char __pyx_k_NeuralFabric_learn[] = "NeuralFabric.learn";
 static const char __pyx_k_bmu_search_filters[] = "bmu_search_filters";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_distance_to_fabric[] = "distance_to_fabric";
 static const char __pyx_k_edges_to_randomise[] = "edges_to_randomise";
+static const char __pyx_k_NeuralFabric_decode[] = "NeuralFabric.decode";
 static const char __pyx_k_total_merge_factors[] = "total_merge_factors";
+static const char __pyx_k_NeuralFabric_restore[] = "NeuralFabric.restore";
 static const char __pyx_k_coord_keys_in_fabric[] = "coord_keys_in_fabric";
 static const char __pyx_k_detect_anomaly_motif[] = "detect_anomaly_motif";
 static const char __pyx_k_example_neuro_column[] = "example_neuro_column";
@@ -1608,51 +1665,64 @@ static const char __pyx_k_NeuralFabric_community_update[] = "NeuralFabric.commun
 static const char __pyx_k_NeuralFabric_update_bmu_stats[] = "NeuralFabric.update_bmu_stats";
 static const char __pyx_k_NeuralFabric___setstate_cython[] = "NeuralFabric.__setstate_cython__";
 static const char __pyx_k_NeuralFabric_distance_to_fabric[] = "NeuralFabric.distance_to_fabric";
-static const char __pyx_k_Incompatible_checksums_s_vs_0xd0[] = "Incompatible checksums (%s vs 0xd0d8d46 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, structure, sum_distance, uid))";
+static const char __pyx_k_Incompatible_checksums_s_vs_0x5a[] = "Incompatible checksums (%s vs 0x5a7da47 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, prune_threshold, structure, sum_distance, uid))";
 static const char __pyx_k_NeuralFabric_detect_anomaly_moti[] = "NeuralFabric.detect_anomaly_motif";
 static PyObject *__pyx_kp_s_;
-static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xd0;
+static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x5a;
 static PyObject *__pyx_n_s_NeuralFabric;
 static PyObject *__pyx_n_s_NeuralFabric___reduce_cython;
 static PyObject *__pyx_n_s_NeuralFabric___setstate_cython;
 static PyObject *__pyx_n_s_NeuralFabric_community_update;
+static PyObject *__pyx_n_s_NeuralFabric_decode;
 static PyObject *__pyx_n_s_NeuralFabric_detect_anomaly_moti;
 static PyObject *__pyx_n_s_NeuralFabric_distance_to_fabric;
 static PyObject *__pyx_n_s_NeuralFabric_grow;
 static PyObject *__pyx_n_s_NeuralFabric_learn;
 static PyObject *__pyx_n_s_NeuralFabric_merge_neurons;
+static PyObject *__pyx_n_s_NeuralFabric_restore;
 static PyObject *__pyx_n_s_NeuralFabric_seed_fabric;
 static PyObject *__pyx_n_s_NeuralFabric_update_bmu_stats;
 static PyObject *__pyx_n_s_NeuroColumn;
 static PyObject *__pyx_n_s_Optional;
 static PyObject *__pyx_n_s_PickleError;
+static PyObject *__pyx_kp_s__3;
 static PyObject *__pyx_n_s_add;
+static PyObject *__pyx_n_s_all_details;
 static PyObject *__pyx_n_s_anomaly;
+static PyObject *__pyx_n_s_anomaly_threshold;
+static PyObject *__pyx_n_s_attr;
 static PyObject *__pyx_n_s_bmu_coord;
 static PyObject *__pyx_n_s_bmu_coord_key;
 static PyObject *__pyx_n_s_bmu_dist;
+static PyObject *__pyx_n_s_bmu_distance;
 static PyObject *__pyx_n_s_bmu_search_filters;
 static PyObject *__pyx_n_s_calc_distance;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_community_label;
 static PyObject *__pyx_n_s_community_nc;
+static PyObject *__pyx_n_s_community_sdr;
 static PyObject *__pyx_n_s_community_update;
 static PyObject *__pyx_n_s_coord;
 static PyObject *__pyx_n_s_coord_key;
 static PyObject *__pyx_n_s_coord_keys_in_fabric;
 static PyObject *__pyx_n_s_coords;
 static PyObject *__pyx_n_s_coords_to_add;
+static PyObject *__pyx_n_s_coords_to_decode;
+static PyObject *__pyx_n_s_decode;
 static PyObject *__pyx_n_s_detect_anomaly_motif;
 static PyObject *__pyx_n_s_dict;
-static PyObject *__pyx_n_s_dict_2;
+static PyObject *__pyx_n_u_dict_2;
+static PyObject *__pyx_n_s_dict_3;
 static PyObject *__pyx_n_s_distance;
 static PyObject *__pyx_n_s_distance_to_fabric;
 static PyObject *__pyx_n_u_double;
 static PyObject *__pyx_n_s_edge_type;
+static PyObject *__pyx_n_s_edge_uid;
 static PyObject *__pyx_n_s_edges_to_randomise;
 static PyObject *__pyx_n_s_example_neuro_column;
+static PyObject *__pyx_n_s_fabric;
 static PyObject *__pyx_n_s_fabric_dist;
-static PyObject *__pyx_n_s_fabric_por;
+static PyObject *__pyx_n_s_fabric_distance;
 static PyObject *__pyx_n_s_filter_types;
 static PyObject *__pyx_n_u_float;
 static PyObject *__pyx_n_s_format;
@@ -1664,6 +1734,7 @@ static PyObject *__pyx_n_s_idx;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_in_community;
 static PyObject *__pyx_n_s_is_bmu;
+static PyObject *__pyx_n_s_keys;
 static PyObject *__pyx_n_s_last_bmu;
 static PyObject *__pyx_n_s_last_nn;
 static PyObject *__pyx_n_s_learn;
@@ -1671,6 +1742,7 @@ static PyObject *__pyx_n_s_learn_rate;
 static PyObject *__pyx_n_s_learn_rates;
 static PyObject *__pyx_n_u_list;
 static PyObject *__pyx_n_s_main;
+static PyObject *__pyx_n_s_mapped;
 static PyObject *__pyx_n_s_max;
 static PyObject *__pyx_n_s_max_short_term_memory;
 static PyObject *__pyx_n_s_mean_distance;
@@ -1681,20 +1753,26 @@ static PyObject *__pyx_n_s_merge_neurons;
 static PyObject *__pyx_n_s_merged_column;
 static PyObject *__pyx_n_s_min;
 static PyObject *__pyx_n_s_motif;
+static PyObject *__pyx_n_s_motif_threshold;
 static PyObject *__pyx_n_s_mp_threshold;
+static PyObject *__pyx_n_s_mp_window;
+static PyObject *__pyx_n_s_n_attr;
 static PyObject *__pyx_n_s_n_bmu;
 static PyObject *__pyx_n_s_n_nn;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_neuro_column;
+static PyObject *__pyx_n_s_neuro_columns;
 static PyObject *__pyx_n_s_neuron;
 static PyObject *__pyx_n_s_neuron_id;
 static PyObject *__pyx_n_s_new;
 static PyObject *__pyx_n_s_nn;
 static PyObject *__pyx_n_s_nn_coord_key;
+static PyObject *__pyx_n_s_only_updated;
 static PyObject *__pyx_n_s_pickle;
 static PyObject *__pyx_n_s_pop;
 static PyObject *__pyx_n_s_por;
 static PyObject *__pyx_n_s_prob;
+static PyObject *__pyx_n_s_prune_threshold;
 static PyObject *__pyx_n_s_pyx_PickleError;
 static PyObject *__pyx_n_s_pyx_checksum;
 static PyObject *__pyx_n_s_pyx_result;
@@ -1708,7 +1786,10 @@ static PyObject *__pyx_n_s_reduce;
 static PyObject *__pyx_n_s_reduce_cython;
 static PyObject *__pyx_n_s_reduce_ex;
 static PyObject *__pyx_n_s_ref_id;
+static PyObject *__pyx_n_s_reset_updated;
+static PyObject *__pyx_n_s_restore;
 static PyObject *__pyx_n_s_return;
+static PyObject *__pyx_n_s_sdr;
 static PyObject *__pyx_n_s_seed_fabric;
 static PyObject *__pyx_n_s_self;
 static PyObject *__pyx_n_u_set;
@@ -1729,6 +1810,7 @@ static PyObject *__pyx_n_s_sum_distance;
 static PyObject *__pyx_n_s_target_type;
 static PyObject *__pyx_n_s_target_uid;
 static PyObject *__pyx_n_s_test;
+static PyObject *__pyx_n_s_threshold;
 static PyObject *__pyx_n_s_total_merge_factors;
 static PyObject *__pyx_n_u_tuple;
 static PyObject *__pyx_n_s_typing;
@@ -1737,10 +1819,11 @@ static PyObject *__pyx_n_s_update;
 static PyObject *__pyx_n_s_update_bmu_stats;
 static PyObject *__pyx_n_s_updated;
 static PyObject *__pyx_n_s_upsert;
+static PyObject *__pyx_n_s_upsert_sdr;
 static PyObject *__pyx_n_s_use_setstate;
 static PyObject *__pyx_n_s_x;
 static PyObject *__pyx_n_s_y;
-static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_uid, int __pyx_v_max_short_term_memory, int __pyx_v_mp_threshold, PyObject *__pyx_v_structure); /* proto */
+static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_uid, int __pyx_v_max_short_term_memory, int __pyx_v_mp_threshold, PyObject *__pyx_v_structure, double __pyx_v_prune_threshold); /* proto */
 static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_example_neuro_column, PyObject *__pyx_v_coords, PyObject *__pyx_v_hebbian_edges); /* proto */
 static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_example_neuro_column, PyObject *__pyx_v_coord_key, PyObject *__pyx_v_hebbian_edges); /* proto */
 static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabric(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_neuro_column, PyObject *__pyx_v_ref_id, PyObject *__pyx_v_bmu_search_filters); /* proto */
@@ -1749,6 +1832,8 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_10update_bmu_stats
 static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_12learn(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_neuro_column, PyObject *__pyx_v_bmu_coord, PyObject *__pyx_v_coords, PyObject *__pyx_v_learn_rates, PyObject *__pyx_v_hebbian_edges); /* proto */
 static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_14community_update(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_bmu_coord_key, double __pyx_v_learn_rate); /* proto */
 static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_coords, PyObject *__pyx_v_merge_factors); /* proto */
+static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18decode(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_coords, PyObject *__pyx_v_all_details, PyObject *__pyx_v_only_updated, PyObject *__pyx_v_reset_updated, PyObject *__pyx_v_community_sdr); /* proto */
+static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_20restore(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_fabric); /* proto */
 static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_3uid___get__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self); /* proto */
 static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_3uid_2__set__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_3uid_4__del__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self); /* proto */
@@ -1781,52 +1866,59 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_13mean_distance_2__set__
 static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_9structure___get__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self); /* proto */
 static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_9structure_2__set__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_9structure_4__del__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_20__setstate_cython__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_15prune_threshold___get__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self); /* proto */
+static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_15prune_threshold_2__set__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_22__reduce_cython__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_24__setstate_cython__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_3src_13neural_fabric___pyx_unpickle_NeuralFabric(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_tp_new_3src_13neural_fabric_NeuralFabric(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static __Pyx_CachedCFunction __pyx_umethod_PyDict_Type_keys = {0, &__pyx_n_s_keys, 0, 0, 0};
 static __Pyx_CachedCFunction __pyx_umethod_PySet_Type_update = {0, &__pyx_n_s_update, 0, 0, 0};
 static PyObject *__pyx_float_0_0;
 static PyObject *__pyx_float_1_0;
 static PyObject *__pyx_int_0;
 static PyObject *__pyx_int_1;
-static PyObject *__pyx_int_218991942;
+static PyObject *__pyx_int_94886471;
 static PyObject *__pyx_tuple__2;
-static PyObject *__pyx_tuple__3;
-static PyObject *__pyx_tuple__5;
-static PyObject *__pyx_tuple__7;
-static PyObject *__pyx_tuple__9;
-static PyObject *__pyx_tuple__11;
-static PyObject *__pyx_tuple__13;
-static PyObject *__pyx_tuple__15;
-static PyObject *__pyx_tuple__17;
-static PyObject *__pyx_tuple__19;
-static PyObject *__pyx_tuple__21;
-static PyObject *__pyx_tuple__23;
-static PyObject *__pyx_codeobj__4;
-static PyObject *__pyx_codeobj__6;
-static PyObject *__pyx_codeobj__8;
-static PyObject *__pyx_codeobj__10;
-static PyObject *__pyx_codeobj__12;
-static PyObject *__pyx_codeobj__14;
-static PyObject *__pyx_codeobj__16;
-static PyObject *__pyx_codeobj__18;
-static PyObject *__pyx_codeobj__20;
-static PyObject *__pyx_codeobj__22;
-static PyObject *__pyx_codeobj__24;
+static PyObject *__pyx_tuple__4;
+static PyObject *__pyx_tuple__6;
+static PyObject *__pyx_tuple__8;
+static PyObject *__pyx_tuple__10;
+static PyObject *__pyx_tuple__12;
+static PyObject *__pyx_tuple__14;
+static PyObject *__pyx_tuple__16;
+static PyObject *__pyx_tuple__18;
+static PyObject *__pyx_tuple__20;
+static PyObject *__pyx_tuple__22;
+static PyObject *__pyx_tuple__24;
+static PyObject *__pyx_tuple__26;
+static PyObject *__pyx_tuple__28;
+static PyObject *__pyx_codeobj__5;
+static PyObject *__pyx_codeobj__7;
+static PyObject *__pyx_codeobj__9;
+static PyObject *__pyx_codeobj__11;
+static PyObject *__pyx_codeobj__13;
+static PyObject *__pyx_codeobj__15;
+static PyObject *__pyx_codeobj__17;
+static PyObject *__pyx_codeobj__19;
+static PyObject *__pyx_codeobj__21;
+static PyObject *__pyx_codeobj__23;
+static PyObject *__pyx_codeobj__25;
+static PyObject *__pyx_codeobj__27;
+static PyObject *__pyx_codeobj__29;
 /* Late includes */
 
-/* "src/neural_fabric.py":28
- *     structure = cython.declare(str, visibility='public')
+/* "src/neural_fabric.py":29
+ *     prune_threshold = cython.declare(cython.double, visibility='public')
  * 
- *     def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.int = 5, structure: str = 'star'):             # <<<<<<<<<<<<<<
+ *     def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.int = 5, structure: str = 'star', prune_threshold: float = 0.00001):             # <<<<<<<<<<<<<<
  *         """
  *         class to represent the columns of neurons in the associative memory fabric.
  */
 
 /* Python wrapper */
 static int __pyx_pw_3src_13neural_fabric_12NeuralFabric_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_3src_13neural_fabric_12NeuralFabric___init__[] = "\n        class to represent the columns of neurons in the associative memory fabric.\n        Each column is keyed by an x, y coordinate pair key and consists of an sdr\n        ";
+static char __pyx_doc_3src_13neural_fabric_12NeuralFabric___init__[] = "\n        class to represent the columns of neurons in the associative memory fabric.\n        Each column is keyed by an x, y coordinate pair key and consists of an collection of sdrs\n\n        :param uid: str unique name foe this area of the fabric\n        :param max_short_term_memory: the maximum number of neurons in a column of neurons\n        :param mp_threshold: the matrix profile window multiplier\n        :param structure: str - 'star' structure each column has 4 neighbours  or 'square' structure where each column has 8 neighbours\n        :param prune_threshold: float - threshold below which learnt edges are assumed to have zero probability and removed\n        ";
 #if CYTHON_COMPILING_IN_CPYTHON
 struct wrapperbase __pyx_wrapperbase_3src_13neural_fabric_12NeuralFabric___init__;
 #endif
@@ -1835,6 +1927,7 @@ static int __pyx_pw_3src_13neural_fabric_12NeuralFabric_1__init__(PyObject *__py
   int __pyx_v_max_short_term_memory;
   int __pyx_v_mp_threshold;
   PyObject *__pyx_v_structure = 0;
+  double __pyx_v_prune_threshold;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -1842,13 +1935,15 @@ static int __pyx_pw_3src_13neural_fabric_12NeuralFabric_1__init__(PyObject *__py
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_uid,&__pyx_n_s_max_short_term_memory,&__pyx_n_s_mp_threshold,&__pyx_n_s_structure,0};
-    PyObject* values[4] = {0,0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_uid,&__pyx_n_s_max_short_term_memory,&__pyx_n_s_mp_threshold,&__pyx_n_s_structure,&__pyx_n_s_prune_threshold,0};
+    PyObject* values[5] = {0,0,0,0,0};
     values[3] = ((PyObject*)__pyx_n_s_star);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         CYTHON_FALLTHROUGH;
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
@@ -1883,12 +1978,20 @@ static int __pyx_pw_3src_13neural_fabric_12NeuralFabric_1__init__(PyObject *__py
           PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_structure);
           if (value) { values[3] = value; kw_args--; }
         }
+        CYTHON_FALLTHROUGH;
+        case  4:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_prune_threshold);
+          if (value) { values[4] = value; kw_args--; }
+        }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 28, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 29, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         CYTHON_FALLTHROUGH;
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
@@ -1902,28 +2005,33 @@ static int __pyx_pw_3src_13neural_fabric_12NeuralFabric_1__init__(PyObject *__py
     }
     __pyx_v_uid = ((PyObject*)values[0]);
     if (values[1]) {
-      __pyx_v_max_short_term_memory = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_max_short_term_memory == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L3_error)
+      __pyx_v_max_short_term_memory = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_max_short_term_memory == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L3_error)
     } else {
       __pyx_v_max_short_term_memory = ((int)1);
     }
     if (values[2]) {
-      __pyx_v_mp_threshold = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_mp_threshold == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L3_error)
+      __pyx_v_mp_threshold = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_mp_threshold == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L3_error)
     } else {
       __pyx_v_mp_threshold = ((int)5);
     }
     __pyx_v_structure = ((PyObject*)values[3]);
+    if (values[4]) {
+      __pyx_v_prune_threshold = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_prune_threshold == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L3_error)
+    } else {
+      __pyx_v_prune_threshold = ((double)0.00001);
+    }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 28, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 29, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_uid), (&PyString_Type), 1, "uid", 1))) __PYX_ERR(0, 28, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_structure), (&PyString_Type), 1, "structure", 1))) __PYX_ERR(0, 28, __pyx_L1_error)
-  __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_uid, __pyx_v_max_short_term_memory, __pyx_v_mp_threshold, __pyx_v_structure);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_uid), (&PyString_Type), 1, "uid", 1))) __PYX_ERR(0, 29, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_structure), (&PyString_Type), 1, "structure", 1))) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_uid, __pyx_v_max_short_term_memory, __pyx_v_mp_threshold, __pyx_v_structure, __pyx_v_prune_threshold);
 
   /* function exit code */
   goto __pyx_L0;
@@ -1934,7 +2042,7 @@ static int __pyx_pw_3src_13neural_fabric_12NeuralFabric_1__init__(PyObject *__py
   return __pyx_r;
 }
 
-static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_uid, int __pyx_v_max_short_term_memory, int __pyx_v_mp_threshold, PyObject *__pyx_v_structure) {
+static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_uid, int __pyx_v_max_short_term_memory, int __pyx_v_mp_threshold, PyObject *__pyx_v_structure, double __pyx_v_prune_threshold) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1943,7 +2051,7 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "src/neural_fabric.py":34
+  /* "src/neural_fabric.py":41
  *         """
  * 
  *         self.uid = uid             # <<<<<<<<<<<<<<
@@ -1956,14 +2064,14 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
   __Pyx_DECREF(__pyx_v_self->uid);
   __pyx_v_self->uid = __pyx_v_uid;
 
-  /* "src/neural_fabric.py":37
+  /* "src/neural_fabric.py":44
  *         """ unique name for this area of the fabric """
  * 
  *         self.neurons = {}             # <<<<<<<<<<<<<<
  *         """ the NeuroColumns keyed by coordinates"""
  * 
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v_self->neurons);
@@ -1971,7 +2079,7 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
   __pyx_v_self->neurons = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":40
+  /* "src/neural_fabric.py":47
  *         """ the NeuroColumns keyed by coordinates"""
  * 
  *         self.max_stm = max_short_term_memory             # <<<<<<<<<<<<<<
@@ -1980,7 +2088,7 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
  */
   __pyx_v_self->max_stm = __pyx_v_max_short_term_memory;
 
-  /* "src/neural_fabric.py":43
+  /* "src/neural_fabric.py":50
  *         """ the maximum short term memory allowed """
  * 
  *         self.mp_window_size = mp_threshold * self.max_stm             # <<<<<<<<<<<<<<
@@ -1989,14 +2097,14 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
  */
   __pyx_v_self->mp_window_size = (__pyx_v_mp_threshold * __pyx_v_self->max_stm);
 
-  /* "src/neural_fabric.py":46
+  /* "src/neural_fabric.py":53
  *         """ the size of the window used to determine motifs and anomalies """
  * 
  *         self.mp_window = []             # <<<<<<<<<<<<<<
  *         """ window of last mp_window_size distances to the BMU """
  * 
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v_self->mp_window);
@@ -2004,14 +2112,14 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
   __pyx_v_self->mp_window = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":49
+  /* "src/neural_fabric.py":56
  *         """ window of last mp_window_size distances to the BMU """
  * 
  *         self.anomaly = {}             # <<<<<<<<<<<<<<
  *         """ the anomalies detected so far, keyed by red_id """
  * 
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v_self->anomaly);
@@ -2019,14 +2127,14 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
   __pyx_v_self->anomaly = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":52
+  /* "src/neural_fabric.py":59
  *         """ the anomalies detected so far, keyed by red_id """
  * 
  *         self.motif = {}             # <<<<<<<<<<<<<<
  *         """ the motifs detected so far, keyed by ref_id"""
  * 
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v_self->motif);
@@ -2034,7 +2142,7 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
   __pyx_v_self->motif = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":55
+  /* "src/neural_fabric.py":62
  *         """ the motifs detected so far, keyed by ref_id"""
  * 
  *         self.anomaly_threshold = 0.0             # <<<<<<<<<<<<<<
@@ -2043,7 +2151,7 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
  */
   __pyx_v_self->anomaly_threshold = 0.0;
 
-  /* "src/neural_fabric.py":58
+  /* "src/neural_fabric.py":65
  *         """ the current distance threshold above which an anomaly is detected """
  * 
  *         self.motif_threshold = 1.0             # <<<<<<<<<<<<<<
@@ -2052,7 +2160,7 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
  */
   __pyx_v_self->motif_threshold = 1.0;
 
-  /* "src/neural_fabric.py":61
+  /* "src/neural_fabric.py":68
  *         """ the current distance threshold below which a motif is detected """
  * 
  *         self.mapped = 0             # <<<<<<<<<<<<<<
@@ -2061,7 +2169,7 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
  */
   __pyx_v_self->mapped = 0;
 
-  /* "src/neural_fabric.py":64
+  /* "src/neural_fabric.py":71
  *         """ the number of times data has been mapped to this fabric"""
  * 
  *         self.sum_distance = 0.0             # <<<<<<<<<<<<<<
@@ -2070,7 +2178,7 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
  */
   __pyx_v_self->sum_distance = 0.0;
 
-  /* "src/neural_fabric.py":67
+  /* "src/neural_fabric.py":74
  *         """ the sum of the BMU distances to mapped data so far """
  * 
  *         self.mean_distance = 0.0             # <<<<<<<<<<<<<<
@@ -2079,11 +2187,11 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
  */
   __pyx_v_self->mean_distance = 0.0;
 
-  /* "src/neural_fabric.py":70
+  /* "src/neural_fabric.py":77
  *         """ the mean of the BMU distances to mapped data so far """
  * 
  *         self.structure = structure             # <<<<<<<<<<<<<<
- *         """ a string representing the fabric layout structure - 'star' a central neuron with 4 neighbours, 'box' consists of a central neuron with 8 neighbours """
+ *         """ a string representing the fabric layout structure - 'star' a central neuron with 4 neighbours, 'square' consists of a central neuron with 8 neighbours """
  * 
  */
   __Pyx_INCREF(__pyx_v_structure);
@@ -2092,10 +2200,19 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
   __Pyx_DECREF(__pyx_v_self->structure);
   __pyx_v_self->structure = __pyx_v_structure;
 
-  /* "src/neural_fabric.py":28
- *     structure = cython.declare(str, visibility='public')
+  /* "src/neural_fabric.py":80
+ *         """ a string representing the fabric layout structure - 'star' a central neuron with 4 neighbours, 'square' consists of a central neuron with 8 neighbours """
  * 
- *     def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.int = 5, structure: str = 'star'):             # <<<<<<<<<<<<<<
+ *         self.prune_threshold = prune_threshold             # <<<<<<<<<<<<<<
+ *         """ the threshold below with an edge probability is assumed to be zero and will be deleted """
+ * 
+ */
+  __pyx_v_self->prune_threshold = __pyx_v_prune_threshold;
+
+  /* "src/neural_fabric.py":29
+ *     prune_threshold = cython.declare(cython.double, visibility='public')
+ * 
+ *     def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.int = 5, structure: str = 'star', prune_threshold: float = 0.00001):             # <<<<<<<<<<<<<<
  *         """
  *         class to represent the columns of neurons in the associative memory fabric.
  */
@@ -2112,8 +2229,8 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "src/neural_fabric.py":73
- *         """ a string representing the fabric layout structure - 'star' a central neuron with 4 neighbours, 'box' consists of a central neuron with 8 neighbours """
+/* "src/neural_fabric.py":83
+ *         """ the threshold below with an edge probability is assumed to be zero and will be deleted """
  * 
  *     def seed_fabric(self, example_neuro_column: NeuroColumn, coords: set, hebbian_edges: set):             # <<<<<<<<<<<<<<
  *         """
@@ -2122,7 +2239,7 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric___init__(struct __pyx_ob
 
 /* Python wrapper */
 static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_3seed_fabric(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_3src_13neural_fabric_12NeuralFabric_2seed_fabric[] = "\n        method to initialise the fabric with randomised sdrs whose edges and values depend on\n        the example NeuroColumn given\n\n        :param example_neuro_column: The example NeuroColumn\n        :param coords: set of coordinate tuples to seed\n        :return: None\n        ";
+static char __pyx_doc_3src_13neural_fabric_12NeuralFabric_2seed_fabric[] = "\n        method to initialise the fabric with randomised sdrs whose edges and values depend on\n        the example NeuroColumn given\n\n        :param example_neuro_column: The example NeuroColumn\n        :param coords: set of coordinate tuples to seed\n        :param hebbian_edges: set of edge_type that will be hebbian learnt\n\n        :return: None\n        ";
 static PyMethodDef __pyx_mdef_3src_13neural_fabric_12NeuralFabric_3seed_fabric = {"seed_fabric", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_13neural_fabric_12NeuralFabric_3seed_fabric, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_13neural_fabric_12NeuralFabric_2seed_fabric};
 static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_3seed_fabric(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_example_neuro_column = 0;
@@ -2159,17 +2276,17 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_3seed_fabric(PyObj
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_coords)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("seed_fabric", 1, 3, 3, 1); __PYX_ERR(0, 73, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("seed_fabric", 1, 3, 3, 1); __PYX_ERR(0, 83, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_hebbian_edges)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("seed_fabric", 1, 3, 3, 2); __PYX_ERR(0, 73, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("seed_fabric", 1, 3, 3, 2); __PYX_ERR(0, 83, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "seed_fabric") < 0)) __PYX_ERR(0, 73, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "seed_fabric") < 0)) __PYX_ERR(0, 83, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -2184,14 +2301,14 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_3seed_fabric(PyObj
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("seed_fabric", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 73, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("seed_fabric", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 83, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.seed_fabric", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_coords), (&PySet_Type), 1, "coords", 1))) __PYX_ERR(0, 73, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_hebbian_edges), (&PySet_Type), 1, "hebbian_edges", 1))) __PYX_ERR(0, 73, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_coords), (&PySet_Type), 1, "coords", 1))) __PYX_ERR(0, 83, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_hebbian_edges), (&PySet_Type), 1, "hebbian_edges", 1))) __PYX_ERR(0, 83, __pyx_L1_error)
   __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_example_neuro_column, __pyx_v_coords, __pyx_v_hebbian_edges);
 
   /* function exit code */
@@ -2241,7 +2358,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("seed_fabric", 0);
 
-  /* "src/neural_fabric.py":95
+  /* "src/neural_fabric.py":107
  *         # get a set of the coord keys that will be in the fabric
  *         #
  *         coord_keys_in_fabric = {'{}:{}'.format(coord[0], coord[1]) for coord in coords}             # <<<<<<<<<<<<<<
@@ -2249,10 +2366,10 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  * 
  */
   { /* enter inner scope */
-    __pyx_t_1 = PySet_New(NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 95, __pyx_L5_error)
+    __pyx_t_1 = PySet_New(NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L5_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_3 = 0;
-    __pyx_t_6 = __Pyx_set_iterator(__pyx_v_coords, 1, (&__pyx_t_4), (&__pyx_t_5)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 95, __pyx_L5_error)
+    __pyx_t_6 = __Pyx_set_iterator(__pyx_v_coords, 1, (&__pyx_t_4), (&__pyx_t_5)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 107, __pyx_L5_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_2);
     __pyx_t_2 = __pyx_t_6;
@@ -2260,24 +2377,24 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
     while (1) {
       __pyx_t_7 = __Pyx_set_iter_next(__pyx_t_2, __pyx_t_4, &__pyx_t_3, &__pyx_t_6, __pyx_t_5);
       if (unlikely(__pyx_t_7 == 0)) break;
-      if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(0, 95, __pyx_L5_error)
+      if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(0, 107, __pyx_L5_error)
       __Pyx_GOTREF(__pyx_t_6);
-      if (!(likely(PyTuple_CheckExact(__pyx_t_6))||((__pyx_t_6) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_6)->tp_name), 0))) __PYX_ERR(0, 95, __pyx_L5_error)
+      if (!(likely(PyTuple_CheckExact(__pyx_t_6))||((__pyx_t_6) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_6)->tp_name), 0))) __PYX_ERR(0, 107, __pyx_L5_error)
       __Pyx_XDECREF_SET(__pyx_7genexpr__pyx_v_coord, ((PyObject*)__pyx_t_6));
       __pyx_t_6 = 0;
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 95, __pyx_L5_error)
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 107, __pyx_L5_error)
       __Pyx_GOTREF(__pyx_t_8);
       if (unlikely(__pyx_7genexpr__pyx_v_coord == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 95, __pyx_L5_error)
+        __PYX_ERR(0, 107, __pyx_L5_error)
       }
-      __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_7genexpr__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 95, __pyx_L5_error)
+      __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_7genexpr__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 107, __pyx_L5_error)
       __Pyx_GOTREF(__pyx_t_9);
       if (unlikely(__pyx_7genexpr__pyx_v_coord == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 95, __pyx_L5_error)
+        __PYX_ERR(0, 107, __pyx_L5_error)
       }
-      __pyx_t_10 = __Pyx_GetItemInt_Tuple(__pyx_7genexpr__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 95, __pyx_L5_error)
+      __pyx_t_10 = __Pyx_GetItemInt_Tuple(__pyx_7genexpr__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 107, __pyx_L5_error)
       __Pyx_GOTREF(__pyx_t_10);
       __pyx_t_11 = NULL;
       __pyx_t_7 = 0;
@@ -2294,7 +2411,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_8)) {
         PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_t_9, __pyx_t_10};
-        __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 95, __pyx_L5_error)
+        __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 107, __pyx_L5_error)
         __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -2304,7 +2421,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
         PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_t_9, __pyx_t_10};
-        __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 95, __pyx_L5_error)
+        __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 107, __pyx_L5_error)
         __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -2312,7 +2429,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
       } else
       #endif
       {
-        __pyx_t_12 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 95, __pyx_L5_error)
+        __pyx_t_12 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 107, __pyx_L5_error)
         __Pyx_GOTREF(__pyx_t_12);
         if (__pyx_t_11) {
           __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_11); __pyx_t_11 = NULL;
@@ -2323,12 +2440,12 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
         PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_7, __pyx_t_10);
         __pyx_t_9 = 0;
         __pyx_t_10 = 0;
-        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_12, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 95, __pyx_L5_error)
+        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_12, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 107, __pyx_L5_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       }
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(PySet_Add(__pyx_t_1, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 95, __pyx_L5_error)
+      if (unlikely(PySet_Add(__pyx_t_1, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 107, __pyx_L5_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -2342,7 +2459,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
   __pyx_v_coord_keys_in_fabric = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":96
+  /* "src/neural_fabric.py":108
  *         #
  *         coord_keys_in_fabric = {'{}:{}'.format(coord[0], coord[1]) for coord in coords}
  *         coord_keys_in_fabric.update({coord_key for coord_key in self.neurons})             # <<<<<<<<<<<<<<
@@ -2350,14 +2467,14 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  *         for coord in coords:
  */
   { /* enter inner scope */
-    __pyx_t_1 = PySet_New(NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 96, __pyx_L11_error)
+    __pyx_t_1 = PySet_New(NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L11_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_4 = 0;
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
-      __PYX_ERR(0, 96, __pyx_L11_error)
+      __PYX_ERR(0, 108, __pyx_L11_error)
     }
-    __pyx_t_6 = __Pyx_dict_iterator(__pyx_v_self->neurons, 1, ((PyObject *)NULL), (&__pyx_t_3), (&__pyx_t_5)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 96, __pyx_L11_error)
+    __pyx_t_6 = __Pyx_dict_iterator(__pyx_v_self->neurons, 1, ((PyObject *)NULL), (&__pyx_t_3), (&__pyx_t_5)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 108, __pyx_L11_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_2);
     __pyx_t_2 = __pyx_t_6;
@@ -2365,12 +2482,12 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
     while (1) {
       __pyx_t_7 = __Pyx_dict_iter_next(__pyx_t_2, __pyx_t_3, &__pyx_t_4, &__pyx_t_6, NULL, NULL, __pyx_t_5);
       if (unlikely(__pyx_t_7 == 0)) break;
-      if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(0, 96, __pyx_L11_error)
+      if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(0, 108, __pyx_L11_error)
       __Pyx_GOTREF(__pyx_t_6);
-      if (!(likely(PyString_CheckExact(__pyx_t_6))||((__pyx_t_6) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_6)->tp_name), 0))) __PYX_ERR(0, 96, __pyx_L11_error)
+      if (!(likely(PyString_CheckExact(__pyx_t_6))||((__pyx_t_6) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_6)->tp_name), 0))) __PYX_ERR(0, 108, __pyx_L11_error)
       __Pyx_XDECREF_SET(__pyx_8genexpr1__pyx_v_coord_key, ((PyObject*)__pyx_t_6));
       __pyx_t_6 = 0;
-      if (unlikely(PySet_Add(__pyx_t_1, (PyObject*)__pyx_8genexpr1__pyx_v_coord_key))) __PYX_ERR(0, 96, __pyx_L11_error)
+      if (unlikely(PySet_Add(__pyx_t_1, (PyObject*)__pyx_8genexpr1__pyx_v_coord_key))) __PYX_ERR(0, 108, __pyx_L11_error)
     }
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_XDECREF(__pyx_8genexpr1__pyx_v_coord_key); __pyx_8genexpr1__pyx_v_coord_key = 0;
@@ -2380,12 +2497,12 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
     goto __pyx_L1_error;
     __pyx_L14_exit_scope:;
   } /* exit inner scope */
-  __pyx_t_2 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_coord_keys_in_fabric, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 96, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_coord_keys_in_fabric, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "src/neural_fabric.py":98
+  /* "src/neural_fabric.py":110
  *         coord_keys_in_fabric.update({coord_key for coord_key in self.neurons})
  * 
  *         for coord in coords:             # <<<<<<<<<<<<<<
@@ -2393,7 +2510,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  *             # the randomly created sdr
  */
   __pyx_t_3 = 0;
-  __pyx_t_1 = __Pyx_set_iterator(__pyx_v_coords, 1, (&__pyx_t_4), (&__pyx_t_5)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_set_iterator(__pyx_v_coords, 1, (&__pyx_t_4), (&__pyx_t_5)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __pyx_t_2 = __pyx_t_1;
@@ -2401,221 +2518,211 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
   while (1) {
     __pyx_t_7 = __Pyx_set_iter_next(__pyx_t_2, __pyx_t_4, &__pyx_t_3, &__pyx_t_1, __pyx_t_5);
     if (unlikely(__pyx_t_7 == 0)) break;
-    if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(0, 98, __pyx_L1_error)
+    if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(0, 110, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 98, __pyx_L1_error)
+    if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 110, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_coord, ((PyObject*)__pyx_t_1));
     __pyx_t_1 = 0;
 
-    /* "src/neural_fabric.py":102
+    /* "src/neural_fabric.py":114
  *             # the randomly created sdr
  *             #
- *             neuro_column = NeuroColumn()             # <<<<<<<<<<<<<<
+ *             neuro_column = NeuroColumn(prune_threshold=self.prune_threshold)             # <<<<<<<<<<<<<<
  *             neuro_column.randomize(example_neuro_column, edges_to_randomise=hebbian_edges)
  * 
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 102, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_8 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-      __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_6);
-      if (likely(__pyx_t_8)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-        __Pyx_INCREF(__pyx_t_8);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_6, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
-    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 102, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 114, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 114, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_8 = PyFloat_FromDouble(__pyx_v_self->prune_threshold); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 114, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_prune_threshold, __pyx_t_8) < 0) __PYX_ERR(0, 114, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_empty_tuple, __pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 114, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_XDECREF_SET(__pyx_v_neuro_column, __pyx_t_1);
-    __pyx_t_1 = 0;
+    __Pyx_XDECREF_SET(__pyx_v_neuro_column, __pyx_t_8);
+    __pyx_t_8 = 0;
 
-    /* "src/neural_fabric.py":103
+    /* "src/neural_fabric.py":115
  *             #
- *             neuro_column = NeuroColumn()
+ *             neuro_column = NeuroColumn(prune_threshold=self.prune_threshold)
  *             neuro_column.randomize(example_neuro_column, edges_to_randomise=hebbian_edges)             # <<<<<<<<<<<<<<
  * 
  *             # key to identify the coordinates of this column of neurons
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_randomize); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 103, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 103, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_neuro_column, __pyx_n_s_randomize); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 115, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 115, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_INCREF(__pyx_v_example_neuro_column);
     __Pyx_GIVEREF(__pyx_v_example_neuro_column);
     PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_example_neuro_column);
-    __pyx_t_8 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 103, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_edges_to_randomise, __pyx_v_hebbian_edges) < 0) __PYX_ERR(0, 103, __pyx_L1_error)
-    __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_6, __pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 103, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_edges_to_randomise, __pyx_v_hebbian_edges) < 0) __PYX_ERR(0, 115, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 115, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-    /* "src/neural_fabric.py":107
+    /* "src/neural_fabric.py":119
  *             # key to identify the coordinates of this column of neurons
  *             #
  *             coord_key = '{}:{}'.format(coord[0], coord[1])             # <<<<<<<<<<<<<<
  * 
  *             # add a new column of neurons
  */
-    __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 107, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
     if (unlikely(__pyx_v_coord == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 107, __pyx_L1_error)
+      __PYX_ERR(0, 119, __pyx_L1_error)
     }
-    __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 107, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 119, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     if (unlikely(__pyx_v_coord == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 107, __pyx_L1_error)
+      __PYX_ERR(0, 119, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_10 = NULL;
     __pyx_t_7 = 0;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-      __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_8);
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+      __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_1);
       if (likely(__pyx_t_10)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
         __Pyx_INCREF(__pyx_t_10);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_8, function);
+        __Pyx_DECREF_SET(__pyx_t_1, function);
         __pyx_t_7 = 1;
       }
     }
     #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(__pyx_t_8)) {
-      PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_t_6, __pyx_t_1};
-      __pyx_t_12 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 107, __pyx_L1_error)
+    if (PyFunction_Check(__pyx_t_1)) {
+      PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_t_6, __pyx_t_8};
+      __pyx_t_12 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 119, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     } else
     #endif
     #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
-      PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_t_6, __pyx_t_1};
-      __pyx_t_12 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 107, __pyx_L1_error)
+    if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
+      PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_t_6, __pyx_t_8};
+      __pyx_t_12 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 119, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     } else
     #endif
     {
-      __pyx_t_9 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 107, __pyx_L1_error)
+      __pyx_t_9 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 119, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       if (__pyx_t_10) {
         __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_10); __pyx_t_10 = NULL;
       }
       __Pyx_GIVEREF(__pyx_t_6);
       PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_7, __pyx_t_6);
-      __Pyx_GIVEREF(__pyx_t_1);
-      PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_7, __pyx_t_1);
+      __Pyx_GIVEREF(__pyx_t_8);
+      PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_7, __pyx_t_8);
       __pyx_t_6 = 0;
-      __pyx_t_1 = 0;
-      __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_9, NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 107, __pyx_L1_error)
+      __pyx_t_8 = 0;
+      __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_9, NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 119, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     }
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_12))||((__pyx_t_12) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_12)->tp_name), 0))) __PYX_ERR(0, 107, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (!(likely(PyString_CheckExact(__pyx_t_12))||((__pyx_t_12) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_12)->tp_name), 0))) __PYX_ERR(0, 119, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_coord_key, ((PyObject*)__pyx_t_12));
     __pyx_t_12 = 0;
 
-    /* "src/neural_fabric.py":111
+    /* "src/neural_fabric.py":123
  *             # add a new column of neurons
  *             #
  *             self.neurons[coord_key] = {'neuro_column': neuro_column,             # <<<<<<<<<<<<<<
  *                                        'coord': coord,
  *                                        'n_bmu': 0,
  */
-    __pyx_t_12 = __Pyx_PyDict_NewPresized(12); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 111, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyDict_NewPresized(12); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_neuro_column, __pyx_v_neuro_column) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_neuro_column, __pyx_v_neuro_column) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
 
-    /* "src/neural_fabric.py":112
+    /* "src/neural_fabric.py":124
  *             #
  *             self.neurons[coord_key] = {'neuro_column': neuro_column,
  *                                        'coord': coord,             # <<<<<<<<<<<<<<
  *                                        'n_bmu': 0,
  *                                        'n_nn': 0,
  */
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_coord, __pyx_v_coord) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_n_bmu, __pyx_int_0) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_n_nn, __pyx_int_0) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_last_bmu, __pyx_int_0) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_last_nn, __pyx_int_0) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_sum_distance, __pyx_float_0_0) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_mean_distance, __pyx_float_0_0) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_coord, __pyx_v_coord) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_n_bmu, __pyx_int_0) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_n_nn, __pyx_int_0) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_last_bmu, __pyx_int_0) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_last_nn, __pyx_int_0) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_sum_distance, __pyx_float_0_0) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_mean_distance, __pyx_float_0_0) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
 
-    /* "src/neural_fabric.py":119
+    /* "src/neural_fabric.py":131
  *                                        'sum_distance': 0.0,
  *                                        'mean_distance': 0.0,
- *                                        'community_nc': NeuroColumn(),             # <<<<<<<<<<<<<<
+ *                                        'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),             # <<<<<<<<<<<<<<
  *                                        'community_label': None,
- *                                        'updated': False,
+ *                                        'updated': True,     # set ot True so that it will be decoded at least once
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_9 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 131, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_1 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_9))) {
-      __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_9);
-      if (likely(__pyx_t_1)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
-        __Pyx_INCREF(__pyx_t_1);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_9, function);
-      }
-    }
-    __pyx_t_8 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_9);
-    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_8 = PyFloat_FromDouble(__pyx_v_self->prune_threshold); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 131, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
+    if (PyDict_SetItem(__pyx_t_9, __pyx_n_s_prune_threshold, __pyx_t_8) < 0) __PYX_ERR(0, 131, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_empty_tuple, __pyx_t_9); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 131, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_community_nc, __pyx_t_8) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_community_nc, __pyx_t_8) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "src/neural_fabric.py":120
+    /* "src/neural_fabric.py":132
  *                                        'mean_distance': 0.0,
- *                                        'community_nc': NeuroColumn(),
+ *                                        'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
  *                                        'community_label': None,             # <<<<<<<<<<<<<<
- *                                        'updated': False,
+ *                                        'updated': True,     # set ot True so that it will be decoded at least once
  *                                        'nn': {}
  */
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_community_label, Py_None) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_community_label, Py_None) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
 
-    /* "src/neural_fabric.py":121
- *                                        'community_nc': NeuroColumn(),
+    /* "src/neural_fabric.py":133
+ *                                        'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
  *                                        'community_label': None,
- *                                        'updated': False,             # <<<<<<<<<<<<<<
+ *                                        'updated': True,     # set ot True so that it will be decoded at least once             # <<<<<<<<<<<<<<
  *                                        'nn': {}
  *                                        }
  */
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_updated, Py_False) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_updated, Py_True) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
 
-    /* "src/neural_fabric.py":122
+    /* "src/neural_fabric.py":134
  *                                        'community_label': None,
- *                                        'updated': False,
+ *                                        'updated': True,     # set ot True so that it will be decoded at least once
  *                                        'nn': {}             # <<<<<<<<<<<<<<
  *                                        }
  * 
  */
-    __pyx_t_8 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 134, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_nn, __pyx_t_8) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_nn, __pyx_t_8) < 0) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "src/neural_fabric.py":111
+    /* "src/neural_fabric.py":123
  *             # add a new column of neurons
  *             #
  *             self.neurons[coord_key] = {'neuro_column': neuro_column,             # <<<<<<<<<<<<<<
@@ -2624,23 +2731,23 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  */
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 111, __pyx_L1_error)
+      __PYX_ERR(0, 123, __pyx_L1_error)
     }
-    if (unlikely(PyDict_SetItem(__pyx_v_self->neurons, __pyx_v_coord_key, __pyx_t_12) < 0)) __PYX_ERR(0, 111, __pyx_L1_error)
+    if (unlikely(PyDict_SetItem(__pyx_v_self->neurons, __pyx_v_coord_key, __pyx_t_12) < 0)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-    /* "src/neural_fabric.py":127
+    /* "src/neural_fabric.py":139
  *             # connect coord to neighbours either with a star or box configuration
  *             #
  *             if self.structure == 'star':             # <<<<<<<<<<<<<<
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)
  *                                                  for x in range(-1, 2)
  */
-    __pyx_t_13 = (__Pyx_PyString_Equals(__pyx_v_self->structure, __pyx_n_s_star, Py_EQ)); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 127, __pyx_L1_error)
+    __pyx_t_13 = (__Pyx_PyString_Equals(__pyx_v_self->structure, __pyx_n_s_star, Py_EQ)); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 139, __pyx_L1_error)
     __pyx_t_14 = (__pyx_t_13 != 0);
     if (__pyx_t_14) {
 
-      /* "src/neural_fabric.py":128
+      /* "src/neural_fabric.py":140
  *             #
  *             if self.structure == 'star':
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)             # <<<<<<<<<<<<<<
@@ -2648,10 +2755,10 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  *                                                  for y in range(-1, 2)
  */
       { /* enter inner scope */
-        __pyx_t_12 = PySet_New(NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 128, __pyx_L1_error)
+        __pyx_t_12 = PySet_New(NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 140, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
 
-        /* "src/neural_fabric.py":129
+        /* "src/neural_fabric.py":141
  *             if self.structure == 'star':
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)
  *                                                  for x in range(-1, 2)             # <<<<<<<<<<<<<<
@@ -2661,7 +2768,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
         for (__pyx_t_7 = -1; __pyx_t_7 < 2; __pyx_t_7+=1) {
           __pyx_8genexpr2__pyx_v_x = __pyx_t_7;
 
-          /* "src/neural_fabric.py":130
+          /* "src/neural_fabric.py":142
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)
  *                                                  for x in range(-1, 2)
  *                                                  for y in range(-1, 2)             # <<<<<<<<<<<<<<
@@ -2671,7 +2778,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
           for (__pyx_t_15 = -1; __pyx_t_15 < 2; __pyx_t_15+=1) {
             __pyx_8genexpr2__pyx_v_y = __pyx_t_15;
 
-            /* "src/neural_fabric.py":131
+            /* "src/neural_fabric.py":143
  *                                                  for x in range(-1, 2)
  *                                                  for y in range(-1, 2)
  *                                                  if (((x == 0 and y != 0) or (y == 0 and x != 0)) and             # <<<<<<<<<<<<<<
@@ -2703,36 +2810,36 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
             }
             __pyx_L24_next_and:;
 
-            /* "src/neural_fabric.py":132
+            /* "src/neural_fabric.py":144
  *                                                  for y in range(-1, 2)
  *                                                  if (((x == 0 and y != 0) or (y == 0 and x != 0)) and
  *                                                      '{}:{}'.format(coord[0] + x, coord[1] + y) in coord_keys_in_fabric)}             # <<<<<<<<<<<<<<
  *             else:
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)
  */
-            __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 132, __pyx_L1_error)
+            __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 144, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_9);
             if (unlikely(__pyx_v_coord == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 132, __pyx_L1_error)
+              __PYX_ERR(0, 144, __pyx_L1_error)
             }
-            __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 144, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_8genexpr2__pyx_v_x); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 132, __pyx_L1_error)
+            __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_8genexpr2__pyx_v_x); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 144, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_6);
-            __pyx_t_10 = PyNumber_Add(__pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 132, __pyx_L1_error)
+            __pyx_t_10 = PyNumber_Add(__pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 144, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_10);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
             if (unlikely(__pyx_v_coord == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 132, __pyx_L1_error)
+              __PYX_ERR(0, 144, __pyx_L1_error)
             }
-            __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 132, __pyx_L1_error)
+            __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 144, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_6);
-            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_8genexpr2__pyx_v_y); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_8genexpr2__pyx_v_y); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 144, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_11 = PyNumber_Add(__pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 132, __pyx_L1_error)
+            __pyx_t_11 = PyNumber_Add(__pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 144, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_11);
             __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -2751,7 +2858,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
             #if CYTHON_FAST_PYCALL
             if (PyFunction_Check(__pyx_t_9)) {
               PyObject *__pyx_temp[3] = {__pyx_t_1, __pyx_t_10, __pyx_t_11};
-              __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 132, __pyx_L1_error)
+              __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 144, __pyx_L1_error)
               __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
               __Pyx_GOTREF(__pyx_t_8);
               __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -2761,7 +2868,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
             #if CYTHON_FAST_PYCCALL
             if (__Pyx_PyFastCFunction_Check(__pyx_t_9)) {
               PyObject *__pyx_temp[3] = {__pyx_t_1, __pyx_t_10, __pyx_t_11};
-              __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 132, __pyx_L1_error)
+              __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 144, __pyx_L1_error)
               __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
               __Pyx_GOTREF(__pyx_t_8);
               __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -2769,7 +2876,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
             } else
             #endif
             {
-              __pyx_t_6 = PyTuple_New(2+__pyx_t_16); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 132, __pyx_L1_error)
+              __pyx_t_6 = PyTuple_New(2+__pyx_t_16); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 144, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_6);
               if (__pyx_t_1) {
                 __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_1); __pyx_t_1 = NULL;
@@ -2780,18 +2887,18 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
               PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_16, __pyx_t_11);
               __pyx_t_10 = 0;
               __pyx_t_11 = 0;
-              __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_6, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 132, __pyx_L1_error)
+              __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_6, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 144, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_8);
               __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
             }
             __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-            __pyx_t_13 = (__Pyx_PySet_ContainsTF(__pyx_t_8, __pyx_v_coord_keys_in_fabric, Py_EQ)); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 132, __pyx_L1_error)
+            __pyx_t_13 = (__Pyx_PySet_ContainsTF(__pyx_t_8, __pyx_v_coord_keys_in_fabric, Py_EQ)); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 144, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
             __pyx_t_17 = (__pyx_t_13 != 0);
             __pyx_t_14 = __pyx_t_17;
             __pyx_L23_bool_binop_done:;
 
-            /* "src/neural_fabric.py":131
+            /* "src/neural_fabric.py":143
  *                                                  for x in range(-1, 2)
  *                                                  for y in range(-1, 2)
  *                                                  if (((x == 0 and y != 0) or (y == 0 and x != 0)) and             # <<<<<<<<<<<<<<
@@ -2800,36 +2907,36 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  */
             if (__pyx_t_14) {
 
-              /* "src/neural_fabric.py":128
+              /* "src/neural_fabric.py":140
  *             #
  *             if self.structure == 'star':
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)             # <<<<<<<<<<<<<<
  *                                                  for x in range(-1, 2)
  *                                                  for y in range(-1, 2)
  */
-              __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 128, __pyx_L1_error)
+              __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 140, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_9);
               if (unlikely(__pyx_v_coord == Py_None)) {
                 PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-                __PYX_ERR(0, 128, __pyx_L1_error)
+                __PYX_ERR(0, 140, __pyx_L1_error)
               }
-              __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 128, __pyx_L1_error)
+              __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 140, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_6);
-              __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_8genexpr2__pyx_v_x); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 128, __pyx_L1_error)
+              __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_8genexpr2__pyx_v_x); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 140, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_11);
-              __pyx_t_10 = PyNumber_Add(__pyx_t_6, __pyx_t_11); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 128, __pyx_L1_error)
+              __pyx_t_10 = PyNumber_Add(__pyx_t_6, __pyx_t_11); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 140, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_10);
               __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
               __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
               if (unlikely(__pyx_v_coord == Py_None)) {
                 PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-                __PYX_ERR(0, 128, __pyx_L1_error)
+                __PYX_ERR(0, 140, __pyx_L1_error)
               }
-              __pyx_t_11 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 128, __pyx_L1_error)
+              __pyx_t_11 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 140, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_11);
-              __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_8genexpr2__pyx_v_y); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 128, __pyx_L1_error)
+              __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_8genexpr2__pyx_v_y); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 140, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_6);
-              __pyx_t_1 = PyNumber_Add(__pyx_t_11, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
+              __pyx_t_1 = PyNumber_Add(__pyx_t_11, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 140, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
               __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -2848,7 +2955,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
               #if CYTHON_FAST_PYCALL
               if (PyFunction_Check(__pyx_t_9)) {
                 PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_t_10, __pyx_t_1};
-                __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 128, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 140, __pyx_L1_error)
                 __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
                 __Pyx_GOTREF(__pyx_t_8);
                 __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -2858,7 +2965,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
               #if CYTHON_FAST_PYCCALL
               if (__Pyx_PyFastCFunction_Check(__pyx_t_9)) {
                 PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_t_10, __pyx_t_1};
-                __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 128, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 140, __pyx_L1_error)
                 __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
                 __Pyx_GOTREF(__pyx_t_8);
                 __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -2866,7 +2973,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
               } else
               #endif
               {
-                __pyx_t_11 = PyTuple_New(2+__pyx_t_16); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 128, __pyx_L1_error)
+                __pyx_t_11 = PyTuple_New(2+__pyx_t_16); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 140, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_11);
                 if (__pyx_t_6) {
                   __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -2877,15 +2984,15 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
                 PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_16, __pyx_t_1);
                 __pyx_t_10 = 0;
                 __pyx_t_1 = 0;
-                __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_11, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 128, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_11, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 140, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_8);
                 __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
               }
               __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-              if (unlikely(PySet_Add(__pyx_t_12, (PyObject*)__pyx_t_8))) __PYX_ERR(0, 128, __pyx_L1_error)
+              if (unlikely(PySet_Add(__pyx_t_12, (PyObject*)__pyx_t_8))) __PYX_ERR(0, 140, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-              /* "src/neural_fabric.py":131
+              /* "src/neural_fabric.py":143
  *                                                  for x in range(-1, 2)
  *                                                  for y in range(-1, 2)
  *                                                  if (((x == 0 and y != 0) or (y == 0 and x != 0)) and             # <<<<<<<<<<<<<<
@@ -2897,7 +3004,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
         }
       } /* exit inner scope */
 
-      /* "src/neural_fabric.py":128
+      /* "src/neural_fabric.py":140
  *             #
  *             if self.structure == 'star':
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)             # <<<<<<<<<<<<<<
@@ -2906,15 +3013,15 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  */
       if (unlikely(__pyx_v_self->neurons == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 128, __pyx_L1_error)
+        __PYX_ERR(0, 140, __pyx_L1_error)
       }
-      __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 128, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 140, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      if (unlikely(PyObject_SetItem(__pyx_t_8, __pyx_n_s_nn, __pyx_t_12) < 0)) __PYX_ERR(0, 128, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(__pyx_t_8, __pyx_n_s_nn, __pyx_t_12) < 0)) __PYX_ERR(0, 140, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-      /* "src/neural_fabric.py":127
+      /* "src/neural_fabric.py":139
  *             # connect coord to neighbours either with a star or box configuration
  *             #
  *             if self.structure == 'star':             # <<<<<<<<<<<<<<
@@ -2924,7 +3031,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
       goto __pyx_L17;
     }
 
-    /* "src/neural_fabric.py":134
+    /* "src/neural_fabric.py":146
  *                                                      '{}:{}'.format(coord[0] + x, coord[1] + y) in coord_keys_in_fabric)}
  *             else:
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)             # <<<<<<<<<<<<<<
@@ -2933,10 +3040,10 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  */
     /*else*/ {
       { /* enter inner scope */
-        __pyx_t_12 = PySet_New(NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 134, __pyx_L1_error)
+        __pyx_t_12 = PySet_New(NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 146, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
 
-        /* "src/neural_fabric.py":135
+        /* "src/neural_fabric.py":147
  *             else:
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)
  *                                                  for x in range(-1, 2)             # <<<<<<<<<<<<<<
@@ -2946,7 +3053,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
         for (__pyx_t_7 = -1; __pyx_t_7 < 2; __pyx_t_7+=1) {
           __pyx_8genexpr3__pyx_v_x = __pyx_t_7;
 
-          /* "src/neural_fabric.py":136
+          /* "src/neural_fabric.py":148
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)
  *                                                  for x in range(-1, 2)
  *                                                  for y in range(-1, 2)             # <<<<<<<<<<<<<<
@@ -2956,7 +3063,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
           for (__pyx_t_15 = -1; __pyx_t_15 < 2; __pyx_t_15+=1) {
             __pyx_8genexpr3__pyx_v_y = __pyx_t_15;
 
-            /* "src/neural_fabric.py":137
+            /* "src/neural_fabric.py":149
  *                                                  for x in range(-1, 2)
  *                                                  for y in range(-1, 2)
  *                                                  if ((coord[0] + x, coord[1] + y) != coord and             # <<<<<<<<<<<<<<
@@ -2965,29 +3072,29 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  */
             if (unlikely(__pyx_v_coord == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 137, __pyx_L1_error)
+              __PYX_ERR(0, 149, __pyx_L1_error)
             }
-            __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 137, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 149, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_x); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 137, __pyx_L1_error)
+            __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_x); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 149, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_9);
-            __pyx_t_11 = PyNumber_Add(__pyx_t_8, __pyx_t_9); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 137, __pyx_L1_error)
+            __pyx_t_11 = PyNumber_Add(__pyx_t_8, __pyx_t_9); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 149, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_11);
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
             if (unlikely(__pyx_v_coord == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 137, __pyx_L1_error)
+              __PYX_ERR(0, 149, __pyx_L1_error)
             }
-            __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 137, __pyx_L1_error)
+            __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 149, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_9);
-            __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_y); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 137, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_y); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 149, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_1 = PyNumber_Add(__pyx_t_9, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 137, __pyx_L1_error)
+            __pyx_t_1 = PyNumber_Add(__pyx_t_9, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 149, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 137, __pyx_L1_error)
+            __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 149, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
             __Pyx_GIVEREF(__pyx_t_11);
             PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_11);
@@ -2995,9 +3102,9 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
             PyTuple_SET_ITEM(__pyx_t_8, 1, __pyx_t_1);
             __pyx_t_11 = 0;
             __pyx_t_1 = 0;
-            __pyx_t_1 = PyObject_RichCompare(__pyx_t_8, __pyx_v_coord, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 137, __pyx_L1_error)
+            __pyx_t_1 = PyObject_RichCompare(__pyx_t_8, __pyx_v_coord, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 149, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_17 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_17 < 0)) __PYX_ERR(0, 137, __pyx_L1_error)
+            __pyx_t_17 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_17 < 0)) __PYX_ERR(0, 149, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_17) {
             } else {
@@ -3005,36 +3112,36 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
               goto __pyx_L33_bool_binop_done;
             }
 
-            /* "src/neural_fabric.py":138
+            /* "src/neural_fabric.py":150
  *                                                  for y in range(-1, 2)
  *                                                  if ((coord[0] + x, coord[1] + y) != coord and
  *                                                      '{}:{}'.format(coord[0] + x, coord[1] + y) in coord_keys_in_fabric)}             # <<<<<<<<<<<<<<
  * 
  *         # connect neighbours to coord
  */
-            __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 138, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 150, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
             if (unlikely(__pyx_v_coord == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 138, __pyx_L1_error)
+              __PYX_ERR(0, 150, __pyx_L1_error)
             }
-            __pyx_t_11 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 138, __pyx_L1_error)
+            __pyx_t_11 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 150, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_11);
-            __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_x); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 138, __pyx_L1_error)
+            __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_x); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 150, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_9);
-            __pyx_t_10 = PyNumber_Add(__pyx_t_11, __pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 138, __pyx_L1_error)
+            __pyx_t_10 = PyNumber_Add(__pyx_t_11, __pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 150, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_10);
             __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
             if (unlikely(__pyx_v_coord == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 138, __pyx_L1_error)
+              __PYX_ERR(0, 150, __pyx_L1_error)
             }
-            __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 138, __pyx_L1_error)
+            __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 150, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_9);
-            __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_y); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 138, __pyx_L1_error)
+            __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_y); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 150, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_11);
-            __pyx_t_6 = PyNumber_Add(__pyx_t_9, __pyx_t_11); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 138, __pyx_L1_error)
+            __pyx_t_6 = PyNumber_Add(__pyx_t_9, __pyx_t_11); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 150, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_6);
             __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
             __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -3053,7 +3160,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
             #if CYTHON_FAST_PYCALL
             if (PyFunction_Check(__pyx_t_8)) {
               PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_t_10, __pyx_t_6};
-              __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 150, __pyx_L1_error)
               __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -3063,7 +3170,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
             #if CYTHON_FAST_PYCCALL
             if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
               PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_t_10, __pyx_t_6};
-              __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 150, __pyx_L1_error)
               __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -3071,7 +3178,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
             } else
             #endif
             {
-              __pyx_t_9 = PyTuple_New(2+__pyx_t_16); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 138, __pyx_L1_error)
+              __pyx_t_9 = PyTuple_New(2+__pyx_t_16); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 150, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_9);
               if (__pyx_t_11) {
                 __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_11); __pyx_t_11 = NULL;
@@ -3082,18 +3189,18 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
               PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_16, __pyx_t_6);
               __pyx_t_10 = 0;
               __pyx_t_6 = 0;
-              __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 150, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
             }
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_17 = (__Pyx_PySet_ContainsTF(__pyx_t_1, __pyx_v_coord_keys_in_fabric, Py_EQ)); if (unlikely(__pyx_t_17 < 0)) __PYX_ERR(0, 138, __pyx_L1_error)
+            __pyx_t_17 = (__Pyx_PySet_ContainsTF(__pyx_t_1, __pyx_v_coord_keys_in_fabric, Py_EQ)); if (unlikely(__pyx_t_17 < 0)) __PYX_ERR(0, 150, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __pyx_t_13 = (__pyx_t_17 != 0);
             __pyx_t_14 = __pyx_t_13;
             __pyx_L33_bool_binop_done:;
 
-            /* "src/neural_fabric.py":137
+            /* "src/neural_fabric.py":149
  *                                                  for x in range(-1, 2)
  *                                                  for y in range(-1, 2)
  *                                                  if ((coord[0] + x, coord[1] + y) != coord and             # <<<<<<<<<<<<<<
@@ -3102,36 +3209,36 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  */
             if (__pyx_t_14) {
 
-              /* "src/neural_fabric.py":134
+              /* "src/neural_fabric.py":146
  *                                                      '{}:{}'.format(coord[0] + x, coord[1] + y) in coord_keys_in_fabric)}
  *             else:
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)             # <<<<<<<<<<<<<<
  *                                                  for x in range(-1, 2)
  *                                                  for y in range(-1, 2)
  */
-              __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 134, __pyx_L1_error)
+              __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 146, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_8);
               if (unlikely(__pyx_v_coord == Py_None)) {
                 PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-                __PYX_ERR(0, 134, __pyx_L1_error)
+                __PYX_ERR(0, 146, __pyx_L1_error)
               }
-              __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 134, __pyx_L1_error)
+              __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 146, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_9);
-              __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_x); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 134, __pyx_L1_error)
+              __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_x); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 146, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_6);
-              __pyx_t_10 = PyNumber_Add(__pyx_t_9, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 134, __pyx_L1_error)
+              __pyx_t_10 = PyNumber_Add(__pyx_t_9, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 146, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_10);
               __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
               __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
               if (unlikely(__pyx_v_coord == Py_None)) {
                 PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-                __PYX_ERR(0, 134, __pyx_L1_error)
+                __PYX_ERR(0, 146, __pyx_L1_error)
               }
-              __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 134, __pyx_L1_error)
+              __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 146, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_6);
-              __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_y); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 134, __pyx_L1_error)
+              __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_8genexpr3__pyx_v_y); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 146, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_9);
-              __pyx_t_11 = PyNumber_Add(__pyx_t_6, __pyx_t_9); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 134, __pyx_L1_error)
+              __pyx_t_11 = PyNumber_Add(__pyx_t_6, __pyx_t_9); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 146, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_11);
               __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
               __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -3150,7 +3257,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
               #if CYTHON_FAST_PYCALL
               if (PyFunction_Check(__pyx_t_8)) {
                 PyObject *__pyx_temp[3] = {__pyx_t_9, __pyx_t_10, __pyx_t_11};
-                __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
+                __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
                 __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
                 __Pyx_GOTREF(__pyx_t_1);
                 __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -3160,7 +3267,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
               #if CYTHON_FAST_PYCCALL
               if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
                 PyObject *__pyx_temp[3] = {__pyx_t_9, __pyx_t_10, __pyx_t_11};
-                __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
+                __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_16, 2+__pyx_t_16); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
                 __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
                 __Pyx_GOTREF(__pyx_t_1);
                 __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -3168,7 +3275,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
               } else
               #endif
               {
-                __pyx_t_6 = PyTuple_New(2+__pyx_t_16); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 134, __pyx_L1_error)
+                __pyx_t_6 = PyTuple_New(2+__pyx_t_16); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 146, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_6);
                 if (__pyx_t_9) {
                   __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_9); __pyx_t_9 = NULL;
@@ -3179,15 +3286,15 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
                 PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_16, __pyx_t_11);
                 __pyx_t_10 = 0;
                 __pyx_t_11 = 0;
-                __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
+                __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
                 __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
               }
               __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-              if (unlikely(PySet_Add(__pyx_t_12, (PyObject*)__pyx_t_1))) __PYX_ERR(0, 134, __pyx_L1_error)
+              if (unlikely(PySet_Add(__pyx_t_12, (PyObject*)__pyx_t_1))) __PYX_ERR(0, 146, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-              /* "src/neural_fabric.py":137
+              /* "src/neural_fabric.py":149
  *                                                  for x in range(-1, 2)
  *                                                  for y in range(-1, 2)
  *                                                  if ((coord[0] + x, coord[1] + y) != coord and             # <<<<<<<<<<<<<<
@@ -3199,7 +3306,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
         }
       } /* exit inner scope */
 
-      /* "src/neural_fabric.py":134
+      /* "src/neural_fabric.py":146
  *                                                      '{}:{}'.format(coord[0] + x, coord[1] + y) in coord_keys_in_fabric)}
  *             else:
  *                 self.neurons[coord_key]['nn'] = {'{}:{}'.format(coord[0] + x, coord[1] + y)             # <<<<<<<<<<<<<<
@@ -3208,11 +3315,11 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  */
       if (unlikely(__pyx_v_self->neurons == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 134, __pyx_L1_error)
+        __PYX_ERR(0, 146, __pyx_L1_error)
       }
-      __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_n_s_nn, __pyx_t_12) < 0)) __PYX_ERR(0, 134, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_n_s_nn, __pyx_t_12) < 0)) __PYX_ERR(0, 146, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
     }
@@ -3220,7 +3327,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "src/neural_fabric.py":142
+  /* "src/neural_fabric.py":154
  *         # connect neighbours to coord
  *         #
  *         for coord in coords:             # <<<<<<<<<<<<<<
@@ -3228,7 +3335,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  * 
  */
   __pyx_t_4 = 0;
-  __pyx_t_12 = __Pyx_set_iterator(__pyx_v_coords, 1, (&__pyx_t_3), (&__pyx_t_5)); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 142, __pyx_L1_error)
+  __pyx_t_12 = __Pyx_set_iterator(__pyx_v_coords, 1, (&__pyx_t_3), (&__pyx_t_5)); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 154, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_12);
   __Pyx_XDECREF(__pyx_t_2);
   __pyx_t_2 = __pyx_t_12;
@@ -3236,32 +3343,32 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
   while (1) {
     __pyx_t_7 = __Pyx_set_iter_next(__pyx_t_2, __pyx_t_3, &__pyx_t_4, &__pyx_t_12, __pyx_t_5);
     if (unlikely(__pyx_t_7 == 0)) break;
-    if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(0, 142, __pyx_L1_error)
+    if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(0, 154, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
-    if (!(likely(PyTuple_CheckExact(__pyx_t_12))||((__pyx_t_12) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_12)->tp_name), 0))) __PYX_ERR(0, 142, __pyx_L1_error)
+    if (!(likely(PyTuple_CheckExact(__pyx_t_12))||((__pyx_t_12) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_12)->tp_name), 0))) __PYX_ERR(0, 154, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_coord, ((PyObject*)__pyx_t_12));
     __pyx_t_12 = 0;
 
-    /* "src/neural_fabric.py":143
+    /* "src/neural_fabric.py":155
  *         #
  *         for coord in coords:
  *             coord_key = '{}:{}'.format(coord[0], coord[1])             # <<<<<<<<<<<<<<
  * 
  *             # now connect the neighbours to this new column
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (unlikely(__pyx_v_coord == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 143, __pyx_L1_error)
+      __PYX_ERR(0, 155, __pyx_L1_error)
     }
-    __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     if (unlikely(__pyx_v_coord == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 143, __pyx_L1_error)
+      __PYX_ERR(0, 155, __pyx_L1_error)
     }
-    __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_11 = NULL;
     __pyx_t_7 = 0;
@@ -3278,7 +3385,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_1)) {
       PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_t_8, __pyx_t_6};
-      __pyx_t_12 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 143, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 155, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -3288,7 +3395,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
       PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_t_8, __pyx_t_6};
-      __pyx_t_12 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 143, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 155, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -3296,7 +3403,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
     } else
     #endif
     {
-      __pyx_t_10 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 143, __pyx_L1_error)
+      __pyx_t_10 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 155, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       if (__pyx_t_11) {
         __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_11); __pyx_t_11 = NULL;
@@ -3307,16 +3414,16 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
       PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_7, __pyx_t_6);
       __pyx_t_8 = 0;
       __pyx_t_6 = 0;
-      __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_10, NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 143, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_10, NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 155, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_12))||((__pyx_t_12) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_12)->tp_name), 0))) __PYX_ERR(0, 143, __pyx_L1_error)
+    if (!(likely(PyString_CheckExact(__pyx_t_12))||((__pyx_t_12) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_12)->tp_name), 0))) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_coord_key, ((PyObject*)__pyx_t_12));
     __pyx_t_12 = 0;
 
-    /* "src/neural_fabric.py":147
+    /* "src/neural_fabric.py":159
  *             # now connect the neighbours to this new column
  *             #
  *             for nn_coord_key in self.neurons[coord_key]['nn']:             # <<<<<<<<<<<<<<
@@ -3325,20 +3432,20 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  */
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 147, __pyx_L1_error)
+      __PYX_ERR(0, 159, __pyx_L1_error)
     }
-    __pyx_t_12 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 147, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
-    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_12, __pyx_n_s_nn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_12, __pyx_n_s_nn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
     if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
       __pyx_t_12 = __pyx_t_1; __Pyx_INCREF(__pyx_t_12); __pyx_t_18 = 0;
       __pyx_t_19 = NULL;
     } else {
-      __pyx_t_18 = -1; __pyx_t_12 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 147, __pyx_L1_error)
+      __pyx_t_18 = -1; __pyx_t_12 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 159, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
-      __pyx_t_19 = Py_TYPE(__pyx_t_12)->tp_iternext; if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 147, __pyx_L1_error)
+      __pyx_t_19 = Py_TYPE(__pyx_t_12)->tp_iternext; if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 159, __pyx_L1_error)
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     for (;;) {
@@ -3346,17 +3453,17 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
         if (likely(PyList_CheckExact(__pyx_t_12))) {
           if (__pyx_t_18 >= PyList_GET_SIZE(__pyx_t_12)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_12, __pyx_t_18); __Pyx_INCREF(__pyx_t_1); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 147, __pyx_L1_error)
+          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_12, __pyx_t_18); __Pyx_INCREF(__pyx_t_1); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 159, __pyx_L1_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_12, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_12, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         } else {
           if (__pyx_t_18 >= PyTuple_GET_SIZE(__pyx_t_12)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_12, __pyx_t_18); __Pyx_INCREF(__pyx_t_1); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 147, __pyx_L1_error)
+          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_12, __pyx_t_18); __Pyx_INCREF(__pyx_t_1); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 159, __pyx_L1_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_12, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_12, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         }
@@ -3366,17 +3473,17 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 147, __pyx_L1_error)
+            else __PYX_ERR(0, 159, __pyx_L1_error)
           }
           break;
         }
         __Pyx_GOTREF(__pyx_t_1);
       }
-      if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 147, __pyx_L1_error)
+      if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 159, __pyx_L1_error)
       __Pyx_XDECREF_SET(__pyx_v_nn_coord_key, ((PyObject*)__pyx_t_1));
       __pyx_t_1 = 0;
 
-      /* "src/neural_fabric.py":148
+      /* "src/neural_fabric.py":160
  *             #
  *             for nn_coord_key in self.neurons[coord_key]['nn']:
  *                 self.neurons[nn_coord_key]['nn'].add(coord_key)             # <<<<<<<<<<<<<<
@@ -3385,14 +3492,14 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
  */
       if (unlikely(__pyx_v_self->neurons == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 148, __pyx_L1_error)
+        __PYX_ERR(0, 160, __pyx_L1_error)
       }
-      __pyx_t_10 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_nn_coord_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 148, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_nn_coord_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 160, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_nn); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 148, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_nn); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 160, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_add); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 148, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_add); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 160, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_t_6 = NULL;
@@ -3407,12 +3514,12 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
       }
       __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_6, __pyx_v_coord_key) : __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_v_coord_key);
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 148, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 160, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "src/neural_fabric.py":147
+      /* "src/neural_fabric.py":159
  *             # now connect the neighbours to this new column
  *             #
  *             for nn_coord_key in self.neurons[coord_key]['nn']:             # <<<<<<<<<<<<<<
@@ -3424,8 +3531,8 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "src/neural_fabric.py":73
- *         """ a string representing the fabric layout structure - 'star' a central neuron with 4 neighbours, 'box' consists of a central neuron with 8 neighbours """
+  /* "src/neural_fabric.py":83
+ *         """ the threshold below with an edge probability is assumed to be zero and will be deleted """
  * 
  *     def seed_fabric(self, example_neuro_column: NeuroColumn, coords: set, hebbian_edges: set):             # <<<<<<<<<<<<<<
  *         """
@@ -3459,7 +3566,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
   return __pyx_r;
 }
 
-/* "src/neural_fabric.py":150
+/* "src/neural_fabric.py":162
  *                 self.neurons[nn_coord_key]['nn'].add(coord_key)
  * 
  *     def grow(self, example_neuro_column: NeuroColumn, coord_key: str = None, hebbian_edges: set = None):             # <<<<<<<<<<<<<<
@@ -3469,7 +3576,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_2seed_fabric(struc
 
 /* Python wrapper */
 static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_5grow(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_3src_13neural_fabric_12NeuralFabric_4grow[] = "\n        method to grow the neural fabric\n\n        :param example_neuro_column: the sdr to randomly initialise from\n        :param coord_key: str - the coord to grow from\n        :return: None\n        ";
+static char __pyx_doc_3src_13neural_fabric_12NeuralFabric_4grow[] = "\n        method to grow the neural fabric\n\n        :param example_neuro_column: the sdr to randomly initialise from\n        :param coord_key: str - the coord to grow from\n        :param hebbian_edges: set - set of edge_types that are hebbian learnt and needed to randomly initialise new neuro_columns\n        :return: None\n        ";
 static PyMethodDef __pyx_mdef_3src_13neural_fabric_12NeuralFabric_5grow = {"grow", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_13neural_fabric_12NeuralFabric_5grow, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_13neural_fabric_12NeuralFabric_4grow};
 static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_5grow(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_example_neuro_column = 0;
@@ -3518,7 +3625,7 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_5grow(PyObject *__
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "grow") < 0)) __PYX_ERR(0, 150, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "grow") < 0)) __PYX_ERR(0, 162, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -3537,14 +3644,14 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_5grow(PyObject *__
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("grow", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 150, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("grow", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 162, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.grow", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_coord_key), (&PyString_Type), 1, "coord_key", 1))) __PYX_ERR(0, 150, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_hebbian_edges), (&PySet_Type), 1, "hebbian_edges", 1))) __PYX_ERR(0, 150, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_coord_key), (&PyString_Type), 1, "coord_key", 1))) __PYX_ERR(0, 162, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_hebbian_edges), (&PySet_Type), 1, "hebbian_edges", 1))) __PYX_ERR(0, 162, __pyx_L1_error)
   __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_example_neuro_column, __pyx_v_coord_key, __pyx_v_hebbian_edges);
 
   /* function exit code */
@@ -3584,7 +3691,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("grow", 0);
 
-  /* "src/neural_fabric.py":165
+  /* "src/neural_fabric.py":178
  *         coord: tuple
  * 
  *         if coord_key is None:             # <<<<<<<<<<<<<<
@@ -3595,7 +3702,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "src/neural_fabric.py":166
+    /* "src/neural_fabric.py":179
  * 
  *         if coord_key is None:
  *             coord = (0, 0)             # <<<<<<<<<<<<<<
@@ -3605,7 +3712,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
     __Pyx_INCREF(__pyx_tuple__2);
     __pyx_v_coord = __pyx_tuple__2;
 
-    /* "src/neural_fabric.py":165
+    /* "src/neural_fabric.py":178
  *         coord: tuple
  * 
  *         if coord_key is None:             # <<<<<<<<<<<<<<
@@ -3615,7 +3722,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
     goto __pyx_L3;
   }
 
-  /* "src/neural_fabric.py":172
+  /* "src/neural_fabric.py":185
  *             # and work out which mini columns to add
  *             #
  *             coord = self.neurons[coord_key]['coord']             # <<<<<<<<<<<<<<
@@ -3625,31 +3732,31 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
   /*else*/ {
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 172, __pyx_L1_error)
+      __PYX_ERR(0, 185, __pyx_L1_error)
     }
-    __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 185, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_coord); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 172, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_coord); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 185, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (!(likely(PyTuple_CheckExact(__pyx_t_4))||((__pyx_t_4) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_4)->tp_name), 0))) __PYX_ERR(0, 172, __pyx_L1_error)
+    if (!(likely(PyTuple_CheckExact(__pyx_t_4))||((__pyx_t_4) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_4)->tp_name), 0))) __PYX_ERR(0, 185, __pyx_L1_error)
     __pyx_v_coord = ((PyObject*)__pyx_t_4);
     __pyx_t_4 = 0;
   }
   __pyx_L3:;
 
-  /* "src/neural_fabric.py":177
+  /* "src/neural_fabric.py":190
  *         # star configuration has 4 neighbours
  *         #
  *         if self.structure == 'star':             # <<<<<<<<<<<<<<
  *             coords_to_add = {(coord[0] + x, coord[1] + y)
  *                              for x in range(-1, 2)
  */
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->structure, __pyx_n_s_star, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->structure, __pyx_n_s_star, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 190, __pyx_L1_error)
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "src/neural_fabric.py":178
+    /* "src/neural_fabric.py":191
  *         #
  *         if self.structure == 'star':
  *             coords_to_add = {(coord[0] + x, coord[1] + y)             # <<<<<<<<<<<<<<
@@ -3657,10 +3764,10 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
  *                              for y in range(-1, 2)
  */
     { /* enter inner scope */
-      __pyx_t_4 = PySet_New(NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 178, __pyx_L1_error)
+      __pyx_t_4 = PySet_New(NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 191, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
 
-      /* "src/neural_fabric.py":179
+      /* "src/neural_fabric.py":192
  *         if self.structure == 'star':
  *             coords_to_add = {(coord[0] + x, coord[1] + y)
  *                              for x in range(-1, 2)             # <<<<<<<<<<<<<<
@@ -3670,7 +3777,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
       for (__pyx_t_5 = -1; __pyx_t_5 < 2; __pyx_t_5+=1) {
         __pyx_8genexpr4__pyx_v_x = __pyx_t_5;
 
-        /* "src/neural_fabric.py":180
+        /* "src/neural_fabric.py":193
  *             coords_to_add = {(coord[0] + x, coord[1] + y)
  *                              for x in range(-1, 2)
  *                              for y in range(-1, 2)             # <<<<<<<<<<<<<<
@@ -3680,7 +3787,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
         for (__pyx_t_6 = -1; __pyx_t_6 < 2; __pyx_t_6+=1) {
           __pyx_8genexpr4__pyx_v_y = __pyx_t_6;
 
-          /* "src/neural_fabric.py":181
+          /* "src/neural_fabric.py":194
  *                              for x in range(-1, 2)
  *                              for y in range(-1, 2)
  *                              if (((x == 0 and y != 0) or (y == 0 and x != 0)) and             # <<<<<<<<<<<<<<
@@ -3712,7 +3819,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
           }
           __pyx_L11_next_and:;
 
-          /* "src/neural_fabric.py":182
+          /* "src/neural_fabric.py":195
  *                              for y in range(-1, 2)
  *                              if (((x == 0 and y != 0) or (y == 0 and x != 0)) and
  *                                  (coord_key is None or '{}:{}'.format(coord[0] + x, coord[1] + y) not in self.neurons[coord_key]['nn']))}             # <<<<<<<<<<<<<<
@@ -3726,29 +3833,29 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
             __pyx_t_1 = __pyx_t_7;
             goto __pyx_L10_bool_binop_done;
           }
-          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 182, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 195, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           if (unlikely(__pyx_v_coord == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 182, __pyx_L1_error)
+            __PYX_ERR(0, 195, __pyx_L1_error)
           }
-          __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 182, __pyx_L1_error)
+          __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 195, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
-          __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_8genexpr4__pyx_v_x); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 182, __pyx_L1_error)
+          __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_8genexpr4__pyx_v_x); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 195, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
-          __pyx_t_11 = PyNumber_Add(__pyx_t_9, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 182, __pyx_L1_error)
+          __pyx_t_11 = PyNumber_Add(__pyx_t_9, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 195, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_11);
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           if (unlikely(__pyx_v_coord == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 182, __pyx_L1_error)
+            __PYX_ERR(0, 195, __pyx_L1_error)
           }
-          __pyx_t_10 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 182, __pyx_L1_error)
+          __pyx_t_10 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 195, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
-          __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_8genexpr4__pyx_v_y); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 182, __pyx_L1_error)
+          __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_8genexpr4__pyx_v_y); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 195, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
-          __pyx_t_12 = PyNumber_Add(__pyx_t_10, __pyx_t_9); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 182, __pyx_L1_error)
+          __pyx_t_12 = PyNumber_Add(__pyx_t_10, __pyx_t_9); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 195, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_12);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -3767,7 +3874,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
           #if CYTHON_FAST_PYCALL
           if (PyFunction_Check(__pyx_t_8)) {
             PyObject *__pyx_temp[3] = {__pyx_t_9, __pyx_t_11, __pyx_t_12};
-            __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 182, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 195, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
             __Pyx_GOTREF(__pyx_t_3);
             __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -3777,7 +3884,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
           #if CYTHON_FAST_PYCCALL
           if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
             PyObject *__pyx_temp[3] = {__pyx_t_9, __pyx_t_11, __pyx_t_12};
-            __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 182, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 195, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
             __Pyx_GOTREF(__pyx_t_3);
             __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -3785,7 +3892,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
           } else
           #endif
           {
-            __pyx_t_10 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 182, __pyx_L1_error)
+            __pyx_t_10 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 195, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_10);
             if (__pyx_t_9) {
               __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_9); __pyx_t_9 = NULL;
@@ -3796,28 +3903,28 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
             PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_13, __pyx_t_12);
             __pyx_t_11 = 0;
             __pyx_t_12 = 0;
-            __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 182, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 195, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           }
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           if (unlikely(__pyx_v_self->neurons == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 182, __pyx_L1_error)
+            __PYX_ERR(0, 195, __pyx_L1_error)
           }
-          __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 182, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 195, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_nn); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 182, __pyx_L1_error)
+          __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_nn); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 195, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_7 = (__Pyx_PySequence_ContainsTF(__pyx_t_3, __pyx_t_10, Py_NE)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 182, __pyx_L1_error)
+          __pyx_t_7 = (__Pyx_PySequence_ContainsTF(__pyx_t_3, __pyx_t_10, Py_NE)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 195, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           __pyx_t_2 = (__pyx_t_7 != 0);
           __pyx_t_1 = __pyx_t_2;
           __pyx_L10_bool_binop_done:;
 
-          /* "src/neural_fabric.py":181
+          /* "src/neural_fabric.py":194
  *                              for x in range(-1, 2)
  *                              for y in range(-1, 2)
  *                              if (((x == 0 and y != 0) or (y == 0 and x != 0)) and             # <<<<<<<<<<<<<<
@@ -3826,7 +3933,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
  */
           if (__pyx_t_1) {
 
-            /* "src/neural_fabric.py":178
+            /* "src/neural_fabric.py":191
  *         #
  *         if self.structure == 'star':
  *             coords_to_add = {(coord[0] + x, coord[1] + y)             # <<<<<<<<<<<<<<
@@ -3835,29 +3942,29 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
  */
             if (unlikely(__pyx_v_coord == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 178, __pyx_L1_error)
+              __PYX_ERR(0, 191, __pyx_L1_error)
             }
-            __pyx_t_10 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 178, __pyx_L1_error)
+            __pyx_t_10 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 191, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_10);
-            __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_8genexpr4__pyx_v_x); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 178, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_8genexpr4__pyx_v_x); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
-            __pyx_t_8 = PyNumber_Add(__pyx_t_10, __pyx_t_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 178, __pyx_L1_error)
+            __pyx_t_8 = PyNumber_Add(__pyx_t_10, __pyx_t_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 191, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
             __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
             if (unlikely(__pyx_v_coord == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 178, __pyx_L1_error)
+              __PYX_ERR(0, 191, __pyx_L1_error)
             }
-            __pyx_t_3 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 178, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
-            __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_8genexpr4__pyx_v_y); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 178, __pyx_L1_error)
+            __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_8genexpr4__pyx_v_y); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 191, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_10);
-            __pyx_t_12 = PyNumber_Add(__pyx_t_3, __pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 178, __pyx_L1_error)
+            __pyx_t_12 = PyNumber_Add(__pyx_t_3, __pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 191, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_12);
             __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-            __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 178, __pyx_L1_error)
+            __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 191, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_10);
             __Pyx_GIVEREF(__pyx_t_8);
             PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8);
@@ -3865,10 +3972,10 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
             PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_t_12);
             __pyx_t_8 = 0;
             __pyx_t_12 = 0;
-            if (unlikely(PySet_Add(__pyx_t_4, (PyObject*)__pyx_t_10))) __PYX_ERR(0, 178, __pyx_L1_error)
+            if (unlikely(PySet_Add(__pyx_t_4, (PyObject*)__pyx_t_10))) __PYX_ERR(0, 191, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-            /* "src/neural_fabric.py":181
+            /* "src/neural_fabric.py":194
  *                              for x in range(-1, 2)
  *                              for y in range(-1, 2)
  *                              if (((x == 0 and y != 0) or (y == 0 and x != 0)) and             # <<<<<<<<<<<<<<
@@ -3882,7 +3989,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
     __pyx_v_coords_to_add = ((PyObject*)__pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "src/neural_fabric.py":177
+    /* "src/neural_fabric.py":190
  *         # star configuration has 4 neighbours
  *         #
  *         if self.structure == 'star':             # <<<<<<<<<<<<<<
@@ -3892,7 +3999,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
     goto __pyx_L4;
   }
 
-  /* "src/neural_fabric.py":187
+  /* "src/neural_fabric.py":200
  *         #
  *         else:
  *             coords_to_add = {(coord[0] + x, coord[1] + y)             # <<<<<<<<<<<<<<
@@ -3901,10 +4008,10 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
  */
   /*else*/ {
     { /* enter inner scope */
-      __pyx_t_4 = PySet_New(NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 187, __pyx_L1_error)
+      __pyx_t_4 = PySet_New(NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
 
-      /* "src/neural_fabric.py":188
+      /* "src/neural_fabric.py":201
  *         else:
  *             coords_to_add = {(coord[0] + x, coord[1] + y)
  *                              for x in range(-1, 2)             # <<<<<<<<<<<<<<
@@ -3914,7 +4021,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
       for (__pyx_t_5 = -1; __pyx_t_5 < 2; __pyx_t_5+=1) {
         __pyx_8genexpr5__pyx_v_x = __pyx_t_5;
 
-        /* "src/neural_fabric.py":189
+        /* "src/neural_fabric.py":202
  *             coords_to_add = {(coord[0] + x, coord[1] + y)
  *                              for x in range(-1, 2)
  *                              for y in range(-1, 2)             # <<<<<<<<<<<<<<
@@ -3924,7 +4031,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
         for (__pyx_t_6 = -1; __pyx_t_6 < 2; __pyx_t_6+=1) {
           __pyx_8genexpr5__pyx_v_y = __pyx_t_6;
 
-          /* "src/neural_fabric.py":190
+          /* "src/neural_fabric.py":203
  *                              for x in range(-1, 2)
  *                              for y in range(-1, 2)
  *                              if ((coord[0] + x, coord[1] + y) != coord and             # <<<<<<<<<<<<<<
@@ -3933,29 +4040,29 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
  */
           if (unlikely(__pyx_v_coord == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 190, __pyx_L1_error)
+            __PYX_ERR(0, 203, __pyx_L1_error)
           }
-          __pyx_t_10 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 190, __pyx_L1_error)
+          __pyx_t_10 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 203, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
-          __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 190, __pyx_L1_error)
+          __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 203, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_12);
-          __pyx_t_8 = PyNumber_Add(__pyx_t_10, __pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 190, __pyx_L1_error)
+          __pyx_t_8 = PyNumber_Add(__pyx_t_10, __pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 203, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           if (unlikely(__pyx_v_coord == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 190, __pyx_L1_error)
+            __PYX_ERR(0, 203, __pyx_L1_error)
           }
-          __pyx_t_12 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 190, __pyx_L1_error)
+          __pyx_t_12 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 203, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_12);
-          __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_y); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 190, __pyx_L1_error)
+          __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_y); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 203, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
-          __pyx_t_3 = PyNumber_Add(__pyx_t_12, __pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 190, __pyx_L1_error)
+          __pyx_t_3 = PyNumber_Add(__pyx_t_12, __pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 203, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 190, __pyx_L1_error)
+          __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 203, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_GIVEREF(__pyx_t_8);
           PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8);
@@ -3963,9 +4070,9 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
           PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_t_3);
           __pyx_t_8 = 0;
           __pyx_t_3 = 0;
-          __pyx_t_3 = PyObject_RichCompare(__pyx_t_10, __pyx_v_coord, Py_NE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 190, __pyx_L1_error)
+          __pyx_t_3 = PyObject_RichCompare(__pyx_t_10, __pyx_v_coord, Py_NE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 203, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 190, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 203, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           if (__pyx_t_2) {
           } else {
@@ -3973,7 +4080,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
             goto __pyx_L21_bool_binop_done;
           }
 
-          /* "src/neural_fabric.py":191
+          /* "src/neural_fabric.py":204
  *                              for y in range(-1, 2)
  *                              if ((coord[0] + x, coord[1] + y) != coord and
  *                                  (coord_key is None or '{}:{}'.format(coord[0] + x, coord[1] + y) not in self.neurons[coord_key]['nn']))}             # <<<<<<<<<<<<<<
@@ -3987,29 +4094,29 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
             __pyx_t_1 = __pyx_t_7;
             goto __pyx_L21_bool_binop_done;
           }
-          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 191, __pyx_L1_error)
+          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 204, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
           if (unlikely(__pyx_v_coord == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 191, __pyx_L1_error)
+            __PYX_ERR(0, 204, __pyx_L1_error)
           }
-          __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 191, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 204, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 191, __pyx_L1_error)
+          __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 204, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_12);
-          __pyx_t_11 = PyNumber_Add(__pyx_t_8, __pyx_t_12); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 191, __pyx_L1_error)
+          __pyx_t_11 = PyNumber_Add(__pyx_t_8, __pyx_t_12); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 204, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_11);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           if (unlikely(__pyx_v_coord == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 191, __pyx_L1_error)
+            __PYX_ERR(0, 204, __pyx_L1_error)
           }
-          __pyx_t_12 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 191, __pyx_L1_error)
+          __pyx_t_12 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 204, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_12);
-          __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_y); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 191, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_y); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 204, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_9 = PyNumber_Add(__pyx_t_12, __pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 191, __pyx_L1_error)
+          __pyx_t_9 = PyNumber_Add(__pyx_t_12, __pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 204, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -4028,7 +4135,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
           #if CYTHON_FAST_PYCALL
           if (PyFunction_Check(__pyx_t_10)) {
             PyObject *__pyx_temp[3] = {__pyx_t_8, __pyx_t_11, __pyx_t_9};
-            __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_10, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_10, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 204, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_GOTREF(__pyx_t_3);
             __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -4038,7 +4145,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
           #if CYTHON_FAST_PYCCALL
           if (__Pyx_PyFastCFunction_Check(__pyx_t_10)) {
             PyObject *__pyx_temp[3] = {__pyx_t_8, __pyx_t_11, __pyx_t_9};
-            __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_10, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_10, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 204, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_GOTREF(__pyx_t_3);
             __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -4046,7 +4153,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
           } else
           #endif
           {
-            __pyx_t_12 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 191, __pyx_L1_error)
+            __pyx_t_12 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 204, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_12);
             if (__pyx_t_8) {
               __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_8); __pyx_t_8 = NULL;
@@ -4057,28 +4164,28 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
             PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_13, __pyx_t_9);
             __pyx_t_11 = 0;
             __pyx_t_9 = 0;
-            __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 204, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
             __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           }
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           if (unlikely(__pyx_v_self->neurons == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 191, __pyx_L1_error)
+            __PYX_ERR(0, 204, __pyx_L1_error)
           }
-          __pyx_t_10 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 191, __pyx_L1_error)
+          __pyx_t_10 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 204, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
-          __pyx_t_12 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_nn); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 191, __pyx_L1_error)
+          __pyx_t_12 = __Pyx_PyObject_Dict_GetItem(__pyx_t_10, __pyx_n_s_nn); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 204, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_12);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __pyx_t_7 = (__Pyx_PySequence_ContainsTF(__pyx_t_3, __pyx_t_12, Py_NE)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 191, __pyx_L1_error)
+          __pyx_t_7 = (__Pyx_PySequence_ContainsTF(__pyx_t_3, __pyx_t_12, Py_NE)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 204, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           __pyx_t_2 = (__pyx_t_7 != 0);
           __pyx_t_1 = __pyx_t_2;
           __pyx_L21_bool_binop_done:;
 
-          /* "src/neural_fabric.py":190
+          /* "src/neural_fabric.py":203
  *                              for x in range(-1, 2)
  *                              for y in range(-1, 2)
  *                              if ((coord[0] + x, coord[1] + y) != coord and             # <<<<<<<<<<<<<<
@@ -4087,7 +4194,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
  */
           if (__pyx_t_1) {
 
-            /* "src/neural_fabric.py":187
+            /* "src/neural_fabric.py":200
  *         #
  *         else:
  *             coords_to_add = {(coord[0] + x, coord[1] + y)             # <<<<<<<<<<<<<<
@@ -4096,29 +4203,29 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
  */
             if (unlikely(__pyx_v_coord == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 187, __pyx_L1_error)
+              __PYX_ERR(0, 200, __pyx_L1_error)
             }
-            __pyx_t_12 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 187, __pyx_L1_error)
+            __pyx_t_12 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_12);
-            __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_x); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 187, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_x); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
-            __pyx_t_10 = PyNumber_Add(__pyx_t_12, __pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 187, __pyx_L1_error)
+            __pyx_t_10 = PyNumber_Add(__pyx_t_12, __pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_10);
             __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
             __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
             if (unlikely(__pyx_v_coord == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 187, __pyx_L1_error)
+              __PYX_ERR(0, 200, __pyx_L1_error)
             }
-            __pyx_t_3 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 187, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_GetItemInt_Tuple(__pyx_v_coord, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
-            __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_y); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 187, __pyx_L1_error)
+            __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_8genexpr5__pyx_v_y); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_12);
-            __pyx_t_9 = PyNumber_Add(__pyx_t_3, __pyx_t_12); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 187, __pyx_L1_error)
+            __pyx_t_9 = PyNumber_Add(__pyx_t_3, __pyx_t_12); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_9);
             __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
             __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-            __pyx_t_12 = PyTuple_New(2); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 187, __pyx_L1_error)
+            __pyx_t_12 = PyTuple_New(2); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_12);
             __Pyx_GIVEREF(__pyx_t_10);
             PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_10);
@@ -4126,10 +4233,10 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
             PyTuple_SET_ITEM(__pyx_t_12, 1, __pyx_t_9);
             __pyx_t_10 = 0;
             __pyx_t_9 = 0;
-            if (unlikely(PySet_Add(__pyx_t_4, (PyObject*)__pyx_t_12))) __PYX_ERR(0, 187, __pyx_L1_error)
+            if (unlikely(PySet_Add(__pyx_t_4, (PyObject*)__pyx_t_12))) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-            /* "src/neural_fabric.py":190
+            /* "src/neural_fabric.py":203
  *                              for x in range(-1, 2)
  *                              for y in range(-1, 2)
  *                              if ((coord[0] + x, coord[1] + y) != coord and             # <<<<<<<<<<<<<<
@@ -4145,7 +4252,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
   }
   __pyx_L4:;
 
-  /* "src/neural_fabric.py":193
+  /* "src/neural_fabric.py":206
  *                                  (coord_key is None or '{}:{}'.format(coord[0] + x, coord[1] + y) not in self.neurons[coord_key]['nn']))}
  * 
  *         if coord_key is None:             # <<<<<<<<<<<<<<
@@ -4156,16 +4263,16 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "src/neural_fabric.py":194
+    /* "src/neural_fabric.py":207
  * 
  *         if coord_key is None:
  *             coords_to_add.add(coord)             # <<<<<<<<<<<<<<
  * 
  *         # seed the new columns
  */
-    __pyx_t_14 = PySet_Add(__pyx_v_coords_to_add, __pyx_v_coord); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 194, __pyx_L1_error)
+    __pyx_t_14 = PySet_Add(__pyx_v_coords_to_add, __pyx_v_coord); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 207, __pyx_L1_error)
 
-    /* "src/neural_fabric.py":193
+    /* "src/neural_fabric.py":206
  *                                  (coord_key is None or '{}:{}'.format(coord[0] + x, coord[1] + y) not in self.neurons[coord_key]['nn']))}
  * 
  *         if coord_key is None:             # <<<<<<<<<<<<<<
@@ -4174,27 +4281,27 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
  */
   }
 
-  /* "src/neural_fabric.py":198
+  /* "src/neural_fabric.py":211
  *         # seed the new columns
  *         #
  *         self.seed_fabric(example_neuro_column=example_neuro_column, coords=coords_to_add, hebbian_edges=hebbian_edges)             # <<<<<<<<<<<<<<
  * 
- *     def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> tuple:
+ *     def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> dict:
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_seed_fabric); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 198, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_seed_fabric); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 211, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_12 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 198, __pyx_L1_error)
+  __pyx_t_12 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 211, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_12);
-  if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_example_neuro_column, __pyx_v_example_neuro_column) < 0) __PYX_ERR(0, 198, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_coords, __pyx_v_coords_to_add) < 0) __PYX_ERR(0, 198, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_hebbian_edges, __pyx_v_hebbian_edges) < 0) __PYX_ERR(0, 198, __pyx_L1_error)
-  __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_12); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 198, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_example_neuro_column, __pyx_v_example_neuro_column) < 0) __PYX_ERR(0, 211, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_coords, __pyx_v_coords_to_add) < 0) __PYX_ERR(0, 211, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_hebbian_edges, __pyx_v_hebbian_edges) < 0) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_12); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 211, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-  /* "src/neural_fabric.py":150
+  /* "src/neural_fabric.py":162
  *                 self.neurons[nn_coord_key]['nn'].add(coord_key)
  * 
  *     def grow(self, example_neuro_column: NeuroColumn, coord_key: str = None, hebbian_edges: set = None):             # <<<<<<<<<<<<<<
@@ -4223,10 +4330,10 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_4grow(struct __pyx
   return __pyx_r;
 }
 
-/* "src/neural_fabric.py":200
+/* "src/neural_fabric.py":213
  *         self.seed_fabric(example_neuro_column=example_neuro_column, coords=coords_to_add, hebbian_edges=hebbian_edges)
  * 
- *     def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> tuple:             # <<<<<<<<<<<<<<
+ *     def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> dict:             # <<<<<<<<<<<<<<
  *         """
  *         method to calculate the distance of sdr to every neuron on the fabric
  */
@@ -4282,7 +4389,7 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_7distance_to_fabri
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "distance_to_fabric") < 0)) __PYX_ERR(0, 200, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "distance_to_fabric") < 0)) __PYX_ERR(0, 213, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -4301,14 +4408,14 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_7distance_to_fabri
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("distance_to_fabric", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 200, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("distance_to_fabric", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 213, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.distance_to_fabric", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_ref_id), (&PyString_Type), 1, "ref_id", 1))) __PYX_ERR(0, 200, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bmu_search_filters), (&PySet_Type), 1, "bmu_search_filters", 1))) __PYX_ERR(0, 200, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_ref_id), (&PyString_Type), 1, "ref_id", 1))) __PYX_ERR(0, 213, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bmu_search_filters), (&PySet_Type), 1, "bmu_search_filters", 1))) __PYX_ERR(0, 213, __pyx_L1_error)
   __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabric(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_neuro_column, __pyx_v_ref_id, __pyx_v_bmu_search_filters);
 
   /* function exit code */
@@ -4322,7 +4429,6 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_7distance_to_fabri
 
 static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabric(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_neuro_column, PyObject *__pyx_v_ref_id, PyObject *__pyx_v_bmu_search_filters) {
   PyObject *__pyx_v_fabric_dist = 0;
-  PyObject *__pyx_v_fabric_por = 0;
   double __pyx_v_distance;
   PyObject *__pyx_v_por = 0;
   double __pyx_v_bmu_dist;
@@ -4350,41 +4456,29 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("distance_to_fabric", 0);
 
-  /* "src/neural_fabric.py":211
+  /* "src/neural_fabric.py":224
  *         # declare variable types to help cython
  *         #
  *         fabric_dist: dict = {}             # <<<<<<<<<<<<<<
- *         fabric_por: dict = {}
  *         distance: cython.double
+ *         por: dict
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_fabric_dist = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":212
- *         #
- *         fabric_dist: dict = {}
- *         fabric_por: dict = {}             # <<<<<<<<<<<<<<
+  /* "src/neural_fabric.py":227
  *         distance: cython.double
- *         por: list
- */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 212, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_v_fabric_por = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "src/neural_fabric.py":215
- *         distance: cython.double
- *         por: list
+ *         por: dict
  *         bmu_dist: cython.double = 1.0             # <<<<<<<<<<<<<<
  *         bmu_coord_key: Optional[str] = None
  *         coord_key: str
  */
   __pyx_v_bmu_dist = 1.0;
 
-  /* "src/neural_fabric.py":216
- *         por: list
+  /* "src/neural_fabric.py":228
+ *         por: dict
  *         bmu_dist: cython.double = 1.0
  *         bmu_coord_key: Optional[str] = None             # <<<<<<<<<<<<<<
  *         coord_key: str
@@ -4393,7 +4487,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
   __Pyx_INCREF(Py_None);
   __pyx_v_bmu_coord_key = Py_None;
 
-  /* "src/neural_fabric.py":221
+  /* "src/neural_fabric.py":233
  *         motif: bool
  * 
  *         for coord_key in self.neurons:             # <<<<<<<<<<<<<<
@@ -4403,9 +4497,9 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
   __pyx_t_2 = 0;
   if (unlikely(__pyx_v_self->neurons == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
-    __PYX_ERR(0, 221, __pyx_L1_error)
+    __PYX_ERR(0, 233, __pyx_L1_error)
   }
-  __pyx_t_5 = __Pyx_dict_iterator(__pyx_v_self->neurons, 1, ((PyObject *)NULL), (&__pyx_t_3), (&__pyx_t_4)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_dict_iterator(__pyx_v_self->neurons, 1, ((PyObject *)NULL), (&__pyx_t_3), (&__pyx_t_4)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 233, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_1);
   __pyx_t_1 = __pyx_t_5;
@@ -4413,36 +4507,36 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
   while (1) {
     __pyx_t_6 = __Pyx_dict_iter_next(__pyx_t_1, __pyx_t_3, &__pyx_t_2, &__pyx_t_5, NULL, NULL, __pyx_t_4);
     if (unlikely(__pyx_t_6 == 0)) break;
-    if (unlikely(__pyx_t_6 == -1)) __PYX_ERR(0, 221, __pyx_L1_error)
+    if (unlikely(__pyx_t_6 == -1)) __PYX_ERR(0, 233, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    if (!(likely(PyString_CheckExact(__pyx_t_5))||((__pyx_t_5) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_5)->tp_name), 0))) __PYX_ERR(0, 221, __pyx_L1_error)
+    if (!(likely(PyString_CheckExact(__pyx_t_5))||((__pyx_t_5) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_5)->tp_name), 0))) __PYX_ERR(0, 233, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_coord_key, ((PyObject*)__pyx_t_5));
     __pyx_t_5 = 0;
 
-    /* "src/neural_fabric.py":222
+    /* "src/neural_fabric.py":234
  * 
  *         for coord_key in self.neurons:
  *             distance, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)             # <<<<<<<<<<<<<<
  *             fabric_dist[coord_key] = {'distance': distance,
- *                                       'last_bmu': self.neurons[coord_key]['last_bmu']}
+ *                                       'last_bmu': self.neurons[coord_key]['last_bmu'],
  */
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 222, __pyx_L1_error)
+      __PYX_ERR(0, 234, __pyx_L1_error)
     }
-    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 222, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 234, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_neuro_column); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 222, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_neuro_column); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 234, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_calc_distance); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 222, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_calc_distance); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 234, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 222, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 234, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_neuro_column, __pyx_v_neuro_column) < 0) __PYX_ERR(0, 222, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_filter_types, __pyx_v_bmu_search_filters) < 0) __PYX_ERR(0, 222, __pyx_L1_error)
-    __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_empty_tuple, __pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 222, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_neuro_column, __pyx_v_neuro_column) < 0) __PYX_ERR(0, 234, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_filter_types, __pyx_v_bmu_search_filters) < 0) __PYX_ERR(0, 234, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_empty_tuple, __pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 234, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -4452,7 +4546,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
       if (unlikely(size != 2)) {
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 222, __pyx_L1_error)
+        __PYX_ERR(0, 234, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
@@ -4465,15 +4559,15 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
       __Pyx_INCREF(__pyx_t_7);
       __Pyx_INCREF(__pyx_t_5);
       #else
-      __pyx_t_7 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 222, __pyx_L1_error)
+      __pyx_t_7 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 234, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_5 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 222, __pyx_L1_error)
+      __pyx_t_5 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 234, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       #endif
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     } else {
       Py_ssize_t index = -1;
-      __pyx_t_9 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 222, __pyx_L1_error)
+      __pyx_t_9 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 234, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __pyx_t_10 = Py_TYPE(__pyx_t_9)->tp_iternext;
@@ -4481,7 +4575,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
       __Pyx_GOTREF(__pyx_t_7);
       index = 1; __pyx_t_5 = __pyx_t_10(__pyx_t_9); if (unlikely(!__pyx_t_5)) goto __pyx_L5_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_5);
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_10(__pyx_t_9), 2) < 0) __PYX_ERR(0, 222, __pyx_L1_error)
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_10(__pyx_t_9), 2) < 0) __PYX_ERR(0, 234, __pyx_L1_error)
       __pyx_t_10 = NULL;
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       goto __pyx_L6_unpacking_done;
@@ -4489,106 +4583,106 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       __pyx_t_10 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 222, __pyx_L1_error)
+      __PYX_ERR(0, 234, __pyx_L1_error)
       __pyx_L6_unpacking_done:;
     }
-    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 222, __pyx_L1_error)
+    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 234, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (!(likely(PyList_CheckExact(__pyx_t_5))||((__pyx_t_5) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_t_5)->tp_name), 0))) __PYX_ERR(0, 222, __pyx_L1_error)
+    if (!(likely(PyDict_CheckExact(__pyx_t_5))||((__pyx_t_5) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_t_5)->tp_name), 0))) __PYX_ERR(0, 234, __pyx_L1_error)
     __pyx_v_distance = __pyx_t_11;
     __Pyx_XDECREF_SET(__pyx_v_por, ((PyObject*)__pyx_t_5));
     __pyx_t_5 = 0;
 
-    /* "src/neural_fabric.py":223
+    /* "src/neural_fabric.py":235
  *         for coord_key in self.neurons:
  *             distance, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
  *             fabric_dist[coord_key] = {'distance': distance,             # <<<<<<<<<<<<<<
- *                                       'last_bmu': self.neurons[coord_key]['last_bmu']}
- *             fabric_por[coord_key] = por
+ *                                       'last_bmu': self.neurons[coord_key]['last_bmu'],
+ *                                       'por': por}
  */
-    __pyx_t_8 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 223, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_5 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 223, __pyx_L1_error)
+    __pyx_t_5 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_distance, __pyx_t_5) < 0) __PYX_ERR(0, 223, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_distance, __pyx_t_5) < 0) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "src/neural_fabric.py":224
+    /* "src/neural_fabric.py":236
  *             distance, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
  *             fabric_dist[coord_key] = {'distance': distance,
- *                                       'last_bmu': self.neurons[coord_key]['last_bmu']}             # <<<<<<<<<<<<<<
- *             fabric_por[coord_key] = por
+ *                                       'last_bmu': self.neurons[coord_key]['last_bmu'],             # <<<<<<<<<<<<<<
+ *                                       'por': por}
  *             if fabric_dist[coord_key]['distance'] <= bmu_dist:
  */
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 224, __pyx_L1_error)
+      __PYX_ERR(0, 236, __pyx_L1_error)
     }
-    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 224, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 236, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_last_bmu); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 224, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_last_bmu); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 236, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_last_bmu, __pyx_t_7) < 0) __PYX_ERR(0, 223, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_last_bmu, __pyx_t_7) < 0) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "src/neural_fabric.py":223
- *         for coord_key in self.neurons:
- *             distance, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
- *             fabric_dist[coord_key] = {'distance': distance,             # <<<<<<<<<<<<<<
- *                                       'last_bmu': self.neurons[coord_key]['last_bmu']}
- *             fabric_por[coord_key] = por
- */
-    if (unlikely(PyDict_SetItem(__pyx_v_fabric_dist, __pyx_v_coord_key, __pyx_t_8) < 0)) __PYX_ERR(0, 223, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-
-    /* "src/neural_fabric.py":225
+    /* "src/neural_fabric.py":237
  *             fabric_dist[coord_key] = {'distance': distance,
- *                                       'last_bmu': self.neurons[coord_key]['last_bmu']}
- *             fabric_por[coord_key] = por             # <<<<<<<<<<<<<<
+ *                                       'last_bmu': self.neurons[coord_key]['last_bmu'],
+ *                                       'por': por}             # <<<<<<<<<<<<<<
  *             if fabric_dist[coord_key]['distance'] <= bmu_dist:
  *                 bmu_dist = fabric_dist[coord_key]['distance']
  */
-    if (unlikely(PyDict_SetItem(__pyx_v_fabric_por, __pyx_v_coord_key, __pyx_v_por) < 0)) __PYX_ERR(0, 225, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_por, __pyx_v_por) < 0) __PYX_ERR(0, 235, __pyx_L1_error)
 
-    /* "src/neural_fabric.py":226
- *                                       'last_bmu': self.neurons[coord_key]['last_bmu']}
- *             fabric_por[coord_key] = por
+    /* "src/neural_fabric.py":235
+ *         for coord_key in self.neurons:
+ *             distance, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
+ *             fabric_dist[coord_key] = {'distance': distance,             # <<<<<<<<<<<<<<
+ *                                       'last_bmu': self.neurons[coord_key]['last_bmu'],
+ *                                       'por': por}
+ */
+    if (unlikely(PyDict_SetItem(__pyx_v_fabric_dist, __pyx_v_coord_key, __pyx_t_8) < 0)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+
+    /* "src/neural_fabric.py":238
+ *                                       'last_bmu': self.neurons[coord_key]['last_bmu'],
+ *                                       'por': por}
  *             if fabric_dist[coord_key]['distance'] <= bmu_dist:             # <<<<<<<<<<<<<<
  *                 bmu_dist = fabric_dist[coord_key]['distance']
  *                 bmu_coord_key = coord_key
  */
-    __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_fabric_dist, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_fabric_dist, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 238, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_distance); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_distance); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 238, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_8 = PyFloat_FromDouble(__pyx_v_bmu_dist); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __pyx_t_8 = PyFloat_FromDouble(__pyx_v_bmu_dist); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 238, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_5 = PyObject_RichCompare(__pyx_t_7, __pyx_t_8, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __pyx_t_5 = PyObject_RichCompare(__pyx_t_7, __pyx_t_8, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 238, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 238, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     if (__pyx_t_12) {
 
-      /* "src/neural_fabric.py":227
- *             fabric_por[coord_key] = por
+      /* "src/neural_fabric.py":239
+ *                                       'por': por}
  *             if fabric_dist[coord_key]['distance'] <= bmu_dist:
  *                 bmu_dist = fabric_dist[coord_key]['distance']             # <<<<<<<<<<<<<<
  *                 bmu_coord_key = coord_key
  * 
  */
-      __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_fabric_dist, __pyx_v_coord_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 227, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_fabric_dist, __pyx_v_coord_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 239, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_distance); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 227, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_distance); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 239, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_8); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 227, __pyx_L1_error)
+      __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_8); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 239, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __pyx_v_bmu_dist = __pyx_t_11;
 
-      /* "src/neural_fabric.py":228
+      /* "src/neural_fabric.py":240
  *             if fabric_dist[coord_key]['distance'] <= bmu_dist:
  *                 bmu_dist = fabric_dist[coord_key]['distance']
  *                 bmu_coord_key = coord_key             # <<<<<<<<<<<<<<
@@ -4598,9 +4692,9 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
       __Pyx_INCREF(__pyx_v_coord_key);
       __Pyx_DECREF_SET(__pyx_v_bmu_coord_key, __pyx_v_coord_key);
 
-      /* "src/neural_fabric.py":226
- *                                       'last_bmu': self.neurons[coord_key]['last_bmu']}
- *             fabric_por[coord_key] = por
+      /* "src/neural_fabric.py":238
+ *                                       'last_bmu': self.neurons[coord_key]['last_bmu'],
+ *                                       'por': por}
  *             if fabric_dist[coord_key]['distance'] <= bmu_dist:             # <<<<<<<<<<<<<<
  *                 bmu_dist = fabric_dist[coord_key]['distance']
  *                 bmu_coord_key = coord_key
@@ -4609,7 +4703,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":232
+  /* "src/neural_fabric.py":244
  *         # if we have a ref_id then we can update the matrix profile
  *         #
  *         anomaly = False             # <<<<<<<<<<<<<<
@@ -4619,59 +4713,62 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
   __Pyx_INCREF(Py_False);
   __pyx_v_anomaly = Py_False;
 
-  /* "src/neural_fabric.py":233
+  /* "src/neural_fabric.py":245
  *         #
  *         anomaly = False
  *         motif = False             # <<<<<<<<<<<<<<
  *         if ref_id is not None:
- *             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_por[bmu_coord_key], ref_id=ref_id)
+ *             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_dist[bmu_coord_key]['por'], ref_id=ref_id)
  */
   __Pyx_INCREF(Py_False);
   __pyx_v_motif = Py_False;
 
-  /* "src/neural_fabric.py":234
+  /* "src/neural_fabric.py":246
  *         anomaly = False
  *         motif = False
  *         if ref_id is not None:             # <<<<<<<<<<<<<<
- *             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_por[bmu_coord_key], ref_id=ref_id)
+ *             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_dist[bmu_coord_key]['por'], ref_id=ref_id)
  * 
  */
   __pyx_t_12 = (__pyx_v_ref_id != ((PyObject*)Py_None));
   __pyx_t_13 = (__pyx_t_12 != 0);
   if (__pyx_t_13) {
 
-    /* "src/neural_fabric.py":235
+    /* "src/neural_fabric.py":247
  *         motif = False
  *         if ref_id is not None:
- *             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_por[bmu_coord_key], ref_id=ref_id)             # <<<<<<<<<<<<<<
+ *             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_dist[bmu_coord_key]['por'], ref_id=ref_id)             # <<<<<<<<<<<<<<
  * 
- *         return bmu_coord_key, bmu_dist, anomaly, motif, fabric_dist, fabric_por
+ *         return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_detect_anomaly_motif); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_detect_anomaly_motif); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 247, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_8 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 247, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_bmu_coord_key, __pyx_v_bmu_coord_key) < 0) __PYX_ERR(0, 235, __pyx_L1_error)
-    __pyx_t_5 = PyFloat_FromDouble(__pyx_v_bmu_dist); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 235, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_bmu_coord_key, __pyx_v_bmu_coord_key) < 0) __PYX_ERR(0, 247, __pyx_L1_error)
+    __pyx_t_5 = PyFloat_FromDouble(__pyx_v_bmu_dist); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 247, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_distance, __pyx_t_5) < 0) __PYX_ERR(0, 235, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_distance, __pyx_t_5) < 0) __PYX_ERR(0, 247, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_fabric_por, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_fabric_dist, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 247, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_por, __pyx_t_5) < 0) __PYX_ERR(0, 235, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_por); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 247, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_ref_id, __pyx_v_ref_id) < 0) __PYX_ERR(0, 235, __pyx_L1_error)
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_empty_tuple, __pyx_t_8); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 235, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_por, __pyx_t_7) < 0) __PYX_ERR(0, 247, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_ref_id, __pyx_v_ref_id) < 0) __PYX_ERR(0, 247, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_empty_tuple, __pyx_t_8); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 247, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    if ((likely(PyTuple_CheckExact(__pyx_t_5))) || (PyList_CheckExact(__pyx_t_5))) {
-      PyObject* sequence = __pyx_t_5;
+    if ((likely(PyTuple_CheckExact(__pyx_t_7))) || (PyList_CheckExact(__pyx_t_7))) {
+      PyObject* sequence = __pyx_t_7;
       Py_ssize_t size = __Pyx_PySequence_SIZE(sequence);
       if (unlikely(size != 2)) {
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 235, __pyx_L1_error)
+        __PYX_ERR(0, 247, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
@@ -4684,31 +4781,31 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
       __Pyx_INCREF(__pyx_t_8);
       __Pyx_INCREF(__pyx_t_1);
       #else
-      __pyx_t_8 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 235, __pyx_L1_error)
+      __pyx_t_8 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 247, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_1 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 235, __pyx_L1_error)
+      __pyx_t_1 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 247, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       #endif
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     } else {
       Py_ssize_t index = -1;
-      __pyx_t_7 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 235, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_10 = Py_TYPE(__pyx_t_7)->tp_iternext;
-      index = 0; __pyx_t_8 = __pyx_t_10(__pyx_t_7); if (unlikely(!__pyx_t_8)) goto __pyx_L9_unpacking_failed;
-      __Pyx_GOTREF(__pyx_t_8);
-      index = 1; __pyx_t_1 = __pyx_t_10(__pyx_t_7); if (unlikely(!__pyx_t_1)) goto __pyx_L9_unpacking_failed;
-      __Pyx_GOTREF(__pyx_t_1);
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_10(__pyx_t_7), 2) < 0) __PYX_ERR(0, 235, __pyx_L1_error)
-      __pyx_t_10 = NULL;
+      __pyx_t_5 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 247, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_10 = Py_TYPE(__pyx_t_5)->tp_iternext;
+      index = 0; __pyx_t_8 = __pyx_t_10(__pyx_t_5); if (unlikely(!__pyx_t_8)) goto __pyx_L9_unpacking_failed;
+      __Pyx_GOTREF(__pyx_t_8);
+      index = 1; __pyx_t_1 = __pyx_t_10(__pyx_t_5); if (unlikely(!__pyx_t_1)) goto __pyx_L9_unpacking_failed;
+      __Pyx_GOTREF(__pyx_t_1);
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_10(__pyx_t_5), 2) < 0) __PYX_ERR(0, 247, __pyx_L1_error)
+      __pyx_t_10 = NULL;
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       goto __pyx_L10_unpacking_done;
       __pyx_L9_unpacking_failed:;
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_10 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 235, __pyx_L1_error)
+      __PYX_ERR(0, 247, __pyx_L1_error)
       __pyx_L10_unpacking_done:;
     }
     __Pyx_DECREF_SET(__pyx_v_anomaly, __pyx_t_8);
@@ -4716,53 +4813,41 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
     __Pyx_DECREF_SET(__pyx_v_motif, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "src/neural_fabric.py":234
+    /* "src/neural_fabric.py":246
  *         anomaly = False
  *         motif = False
  *         if ref_id is not None:             # <<<<<<<<<<<<<<
- *             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_por[bmu_coord_key], ref_id=ref_id)
+ *             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_dist[bmu_coord_key]['por'], ref_id=ref_id)
  * 
  */
   }
 
-  /* "src/neural_fabric.py":237
- *             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_por[bmu_coord_key], ref_id=ref_id)
+  /* "src/neural_fabric.py":249
+ *             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_dist[bmu_coord_key]['por'], ref_id=ref_id)
  * 
- *         return bmu_coord_key, bmu_dist, anomaly, motif, fabric_dist, fabric_por             # <<<<<<<<<<<<<<
+ *         return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}             # <<<<<<<<<<<<<<
  * 
- *     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: list, ref_id: str) -> tuple:
+ *     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: dict, ref_id: str) -> tuple:
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_bmu_dist); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 237, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_1 = PyTuple_New(6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 237, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_bmu_coord, __pyx_v_bmu_coord_key) < 0) __PYX_ERR(0, 249, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_bmu_dist); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 249, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_INCREF(__pyx_v_bmu_coord_key);
-  __Pyx_GIVEREF(__pyx_v_bmu_coord_key);
-  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_bmu_coord_key);
-  __Pyx_GIVEREF(__pyx_t_5);
-  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_5);
-  __Pyx_INCREF(__pyx_v_anomaly);
-  __Pyx_GIVEREF(__pyx_v_anomaly);
-  PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_v_anomaly);
-  __Pyx_INCREF(__pyx_v_motif);
-  __Pyx_GIVEREF(__pyx_v_motif);
-  PyTuple_SET_ITEM(__pyx_t_1, 3, __pyx_v_motif);
-  __Pyx_INCREF(__pyx_v_fabric_dist);
-  __Pyx_GIVEREF(__pyx_v_fabric_dist);
-  PyTuple_SET_ITEM(__pyx_t_1, 4, __pyx_v_fabric_dist);
-  __Pyx_INCREF(__pyx_v_fabric_por);
-  __Pyx_GIVEREF(__pyx_v_fabric_por);
-  PyTuple_SET_ITEM(__pyx_t_1, 5, __pyx_v_fabric_por);
-  __pyx_t_5 = 0;
-  __pyx_r = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
+  if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_bmu_distance, __pyx_t_1) < 0) __PYX_ERR(0, 249, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_anomaly, __pyx_v_anomaly) < 0) __PYX_ERR(0, 249, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_motif, __pyx_v_motif) < 0) __PYX_ERR(0, 249, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_fabric_distance, __pyx_v_fabric_dist) < 0) __PYX_ERR(0, 249, __pyx_L1_error)
+  __pyx_r = ((PyObject*)__pyx_t_7);
+  __pyx_t_7 = 0;
   goto __pyx_L0;
 
-  /* "src/neural_fabric.py":200
+  /* "src/neural_fabric.py":213
  *         self.seed_fabric(example_neuro_column=example_neuro_column, coords=coords_to_add, hebbian_edges=hebbian_edges)
  * 
- *     def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> tuple:             # <<<<<<<<<<<<<<
+ *     def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> dict:             # <<<<<<<<<<<<<<
  *         """
  *         method to calculate the distance of sdr to every neuron on the fabric
  */
@@ -4778,7 +4863,6 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_fabric_dist);
-  __Pyx_XDECREF(__pyx_v_fabric_por);
   __Pyx_XDECREF(__pyx_v_por);
   __Pyx_XDECREF(__pyx_v_bmu_coord_key);
   __Pyx_XDECREF(__pyx_v_coord_key);
@@ -4789,17 +4873,17 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_6distance_to_fabri
   return __pyx_r;
 }
 
-/* "src/neural_fabric.py":239
- *         return bmu_coord_key, bmu_dist, anomaly, motif, fabric_dist, fabric_por
+/* "src/neural_fabric.py":251
+ *         return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
  * 
- *     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: list, ref_id: str) -> tuple:             # <<<<<<<<<<<<<<
+ *     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: dict, ref_id: str) -> tuple:             # <<<<<<<<<<<<<<
  *         """
  *         method to detect if an anomaly or motif has occurred based on the recent max and min bmu distances. This is an implementation of matrix profile
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_9detect_anomaly_motif(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_motif[] = "\n        method to detect if an anomaly or motif has occurred based on the recent max and min bmu distances. This is an implementation of matrix profile\n\n        :param bmu_coord_key: str - the bmu cord key\n        :param distance: double - bmu distance\n        :param por: - list of distance por records\n        :param ref_id: str - the reference id of this update\n        :return: tuple of bools with format (anomaly, motif)\n        ";
+static char __pyx_doc_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_motif[] = "\n        method to detect if an anomaly or motif has occurred based on the recent max and min bmu distances. This is an implementation of matrix profile\n\n        :param bmu_coord_key: str - the bmu cord key\n        :param distance: double - bmu distance\n        :param por: - path of reasoning dict\n        :param ref_id: str - the reference id of this update\n        :return: tuple of bools with format (anomaly, motif)\n        ";
 static PyMethodDef __pyx_mdef_3src_13neural_fabric_12NeuralFabric_9detect_anomaly_motif = {"detect_anomaly_motif", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_13neural_fabric_12NeuralFabric_9detect_anomaly_motif, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_motif};
 static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_9detect_anomaly_motif(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_bmu_coord_key = 0;
@@ -4839,23 +4923,23 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_9detect_anomaly_mo
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_distance)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("detect_anomaly_motif", 1, 4, 4, 1); __PYX_ERR(0, 239, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("detect_anomaly_motif", 1, 4, 4, 1); __PYX_ERR(0, 251, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_por)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("detect_anomaly_motif", 1, 4, 4, 2); __PYX_ERR(0, 239, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("detect_anomaly_motif", 1, 4, 4, 2); __PYX_ERR(0, 251, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ref_id)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("detect_anomaly_motif", 1, 4, 4, 3); __PYX_ERR(0, 239, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("detect_anomaly_motif", 1, 4, 4, 3); __PYX_ERR(0, 251, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "detect_anomaly_motif") < 0)) __PYX_ERR(0, 239, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "detect_anomaly_motif") < 0)) __PYX_ERR(0, 251, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -4866,21 +4950,21 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_9detect_anomaly_mo
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
     }
     __pyx_v_bmu_coord_key = ((PyObject*)values[0]);
-    __pyx_v_distance = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_distance == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 239, __pyx_L3_error)
+    __pyx_v_distance = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_distance == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 251, __pyx_L3_error)
     __pyx_v_por = ((PyObject*)values[2]);
     __pyx_v_ref_id = ((PyObject*)values[3]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("detect_anomaly_motif", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 239, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("detect_anomaly_motif", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 251, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.detect_anomaly_motif", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bmu_coord_key), (&PyString_Type), 1, "bmu_coord_key", 1))) __PYX_ERR(0, 239, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_por), (&PyList_Type), 1, "por", 1))) __PYX_ERR(0, 239, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_ref_id), (&PyString_Type), 1, "ref_id", 1))) __PYX_ERR(0, 239, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bmu_coord_key), (&PyString_Type), 1, "bmu_coord_key", 1))) __PYX_ERR(0, 251, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_por), (&PyDict_Type), 1, "por", 1))) __PYX_ERR(0, 251, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_ref_id), (&PyString_Type), 1, "ref_id", 1))) __PYX_ERR(0, 251, __pyx_L1_error)
   __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_motif(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_bmu_coord_key, __pyx_v_distance, __pyx_v_por, __pyx_v_ref_id);
 
   /* function exit code */
@@ -4902,16 +4986,16 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
   int __pyx_t_3;
   int __pyx_t_4;
   PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
-  Py_ssize_t __pyx_t_8;
-  double __pyx_t_9;
+  int __pyx_t_6;
+  Py_ssize_t __pyx_t_7;
+  double __pyx_t_8;
+  PyObject *__pyx_t_9 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("detect_anomaly_motif", 0);
 
-  /* "src/neural_fabric.py":252
+  /* "src/neural_fabric.py":264
  *         # establish if this is an anomaly or motif
  *         #
  *         anomaly = False             # <<<<<<<<<<<<<<
@@ -4920,7 +5004,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
  */
   __pyx_v_anomaly = 0;
 
-  /* "src/neural_fabric.py":253
+  /* "src/neural_fabric.py":265
  *         #
  *         anomaly = False
  *         motif = False             # <<<<<<<<<<<<<<
@@ -4929,7 +5013,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
  */
   __pyx_v_motif = 0;
 
-  /* "src/neural_fabric.py":254
+  /* "src/neural_fabric.py":266
  *         anomaly = False
  *         motif = False
  *         if self.mapped >= 2 * self.max_stm:             # <<<<<<<<<<<<<<
@@ -4939,14 +5023,14 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
   __pyx_t_1 = ((__pyx_v_self->mapped >= (2 * __pyx_v_self->max_stm)) != 0);
   if (__pyx_t_1) {
 
-    /* "src/neural_fabric.py":256
+    /* "src/neural_fabric.py":268
  *         if self.mapped >= 2 * self.max_stm:
  * 
  *             if self.motif_threshold is not None and self.anomaly_threshold is not None:             # <<<<<<<<<<<<<<
  *                 # check if this is a new low distance indicating a motif
  *                 #
  */
-    __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->motif_threshold); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 256, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->motif_threshold); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 268, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_3 = (__pyx_t_2 != Py_None);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -4956,7 +5040,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
       __pyx_t_1 = __pyx_t_4;
       goto __pyx_L5_bool_binop_done;
     }
-    __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->anomaly_threshold); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 256, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->anomaly_threshold); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 268, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_4 = (__pyx_t_2 != Py_None);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -4965,127 +5049,117 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
     __pyx_L5_bool_binop_done:;
     if (__pyx_t_1) {
 
-      /* "src/neural_fabric.py":259
+      /* "src/neural_fabric.py":271
  *                 # check if this is a new low distance indicating a motif
  *                 #
  *                 if distance <= self.motif_threshold:             # <<<<<<<<<<<<<<
  * 
- *                     self.motif[ref_id] = (bmu_coord_key, distance, self.motif_threshold, por)
+ *                     self.motif[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.motif_threshold, 'por': por, 'updated': True}
  */
       __pyx_t_1 = ((__pyx_v_distance <= __pyx_v_self->motif_threshold) != 0);
       if (__pyx_t_1) {
 
-        /* "src/neural_fabric.py":261
+        /* "src/neural_fabric.py":273
  *                 if distance <= self.motif_threshold:
  * 
- *                     self.motif[ref_id] = (bmu_coord_key, distance, self.motif_threshold, por)             # <<<<<<<<<<<<<<
+ *                     self.motif[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.motif_threshold, 'por': por, 'updated': True}             # <<<<<<<<<<<<<<
  *                     motif = True
  * 
  */
-        __pyx_t_2 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 261, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 273, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_self->motif_threshold); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 261, __pyx_L1_error)
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_bmu_coord, __pyx_v_bmu_coord_key) < 0) __PYX_ERR(0, 273, __pyx_L1_error)
+        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 273, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_6 = PyTuple_New(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 261, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
-        __Pyx_INCREF(__pyx_v_bmu_coord_key);
-        __Pyx_GIVEREF(__pyx_v_bmu_coord_key);
-        PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_bmu_coord_key);
-        __Pyx_GIVEREF(__pyx_t_2);
-        PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_t_2);
-        __Pyx_GIVEREF(__pyx_t_5);
-        PyTuple_SET_ITEM(__pyx_t_6, 2, __pyx_t_5);
-        __Pyx_INCREF(__pyx_v_por);
-        __Pyx_GIVEREF(__pyx_v_por);
-        PyTuple_SET_ITEM(__pyx_t_6, 3, __pyx_v_por);
-        __pyx_t_2 = 0;
-        __pyx_t_5 = 0;
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_distance, __pyx_t_5) < 0) __PYX_ERR(0, 273, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_self->motif_threshold); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 273, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_threshold, __pyx_t_5) < 0) __PYX_ERR(0, 273, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_por, __pyx_v_por) < 0) __PYX_ERR(0, 273, __pyx_L1_error)
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_updated, Py_True) < 0) __PYX_ERR(0, 273, __pyx_L1_error)
         if (unlikely(__pyx_v_self->motif == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 261, __pyx_L1_error)
+          __PYX_ERR(0, 273, __pyx_L1_error)
         }
-        if (unlikely(PyDict_SetItem(__pyx_v_self->motif, __pyx_v_ref_id, __pyx_t_6) < 0)) __PYX_ERR(0, 261, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        if (unlikely(PyDict_SetItem(__pyx_v_self->motif, __pyx_v_ref_id, __pyx_t_2) < 0)) __PYX_ERR(0, 273, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "src/neural_fabric.py":262
+        /* "src/neural_fabric.py":274
  * 
- *                     self.motif[ref_id] = (bmu_coord_key, distance, self.motif_threshold, por)
+ *                     self.motif[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.motif_threshold, 'por': por, 'updated': True}
  *                     motif = True             # <<<<<<<<<<<<<<
  * 
  *                 if distance >= self.anomaly_threshold:
  */
         __pyx_v_motif = 1;
 
-        /* "src/neural_fabric.py":259
+        /* "src/neural_fabric.py":271
  *                 # check if this is a new low distance indicating a motif
  *                 #
  *                 if distance <= self.motif_threshold:             # <<<<<<<<<<<<<<
  * 
- *                     self.motif[ref_id] = (bmu_coord_key, distance, self.motif_threshold, por)
+ *                     self.motif[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.motif_threshold, 'por': por, 'updated': True}
  */
       }
 
-      /* "src/neural_fabric.py":264
+      /* "src/neural_fabric.py":276
  *                     motif = True
  * 
  *                 if distance >= self.anomaly_threshold:             # <<<<<<<<<<<<<<
- *                     self.anomaly[ref_id] = (bmu_coord_key, distance, self.anomaly_threshold, por)
+ *                     self.anomaly[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.anomaly_threshold, 'por': por, 'updated': True}
  *                     anomaly = True
  */
       __pyx_t_1 = ((__pyx_v_distance >= __pyx_v_self->anomaly_threshold) != 0);
       if (__pyx_t_1) {
 
-        /* "src/neural_fabric.py":265
+        /* "src/neural_fabric.py":277
  * 
  *                 if distance >= self.anomaly_threshold:
- *                     self.anomaly[ref_id] = (bmu_coord_key, distance, self.anomaly_threshold, por)             # <<<<<<<<<<<<<<
+ *                     self.anomaly[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.anomaly_threshold, 'por': por, 'updated': True}             # <<<<<<<<<<<<<<
  *                     anomaly = True
  * 
  */
-        __pyx_t_6 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 265, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_self->anomaly_threshold); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 265, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_2 = PyTuple_New(4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 265, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 277, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_INCREF(__pyx_v_bmu_coord_key);
-        __Pyx_GIVEREF(__pyx_v_bmu_coord_key);
-        PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_bmu_coord_key);
-        __Pyx_GIVEREF(__pyx_t_6);
-        PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_6);
-        __Pyx_GIVEREF(__pyx_t_5);
-        PyTuple_SET_ITEM(__pyx_t_2, 2, __pyx_t_5);
-        __Pyx_INCREF(__pyx_v_por);
-        __Pyx_GIVEREF(__pyx_v_por);
-        PyTuple_SET_ITEM(__pyx_t_2, 3, __pyx_v_por);
-        __pyx_t_6 = 0;
-        __pyx_t_5 = 0;
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_bmu_coord, __pyx_v_bmu_coord_key) < 0) __PYX_ERR(0, 277, __pyx_L1_error)
+        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 277, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_distance, __pyx_t_5) < 0) __PYX_ERR(0, 277, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_self->anomaly_threshold); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 277, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_threshold, __pyx_t_5) < 0) __PYX_ERR(0, 277, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_por, __pyx_v_por) < 0) __PYX_ERR(0, 277, __pyx_L1_error)
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_updated, Py_True) < 0) __PYX_ERR(0, 277, __pyx_L1_error)
         if (unlikely(__pyx_v_self->anomaly == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 265, __pyx_L1_error)
+          __PYX_ERR(0, 277, __pyx_L1_error)
         }
-        if (unlikely(PyDict_SetItem(__pyx_v_self->anomaly, __pyx_v_ref_id, __pyx_t_2) < 0)) __PYX_ERR(0, 265, __pyx_L1_error)
+        if (unlikely(PyDict_SetItem(__pyx_v_self->anomaly, __pyx_v_ref_id, __pyx_t_2) < 0)) __PYX_ERR(0, 277, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "src/neural_fabric.py":266
+        /* "src/neural_fabric.py":278
  *                 if distance >= self.anomaly_threshold:
- *                     self.anomaly[ref_id] = (bmu_coord_key, distance, self.anomaly_threshold, por)
+ *                     self.anomaly[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.anomaly_threshold, 'por': por, 'updated': True}
  *                     anomaly = True             # <<<<<<<<<<<<<<
  * 
  *             self.mp_window.append(distance)
  */
         __pyx_v_anomaly = 1;
 
-        /* "src/neural_fabric.py":264
+        /* "src/neural_fabric.py":276
  *                     motif = True
  * 
  *                 if distance >= self.anomaly_threshold:             # <<<<<<<<<<<<<<
- *                     self.anomaly[ref_id] = (bmu_coord_key, distance, self.anomaly_threshold, por)
+ *                     self.anomaly[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.anomaly_threshold, 'por': por, 'updated': True}
  *                     anomaly = True
  */
       }
 
-      /* "src/neural_fabric.py":256
+      /* "src/neural_fabric.py":268
  *         if self.mapped >= 2 * self.max_stm:
  * 
  *             if self.motif_threshold is not None and self.anomaly_threshold is not None:             # <<<<<<<<<<<<<<
@@ -5094,7 +5168,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
  */
     }
 
-    /* "src/neural_fabric.py":268
+    /* "src/neural_fabric.py":280
  *                     anomaly = True
  * 
  *             self.mp_window.append(distance)             # <<<<<<<<<<<<<<
@@ -5103,14 +5177,14 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
  */
     if (unlikely(__pyx_v_self->mp_window == Py_None)) {
       PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-      __PYX_ERR(0, 268, __pyx_L1_error)
+      __PYX_ERR(0, 280, __pyx_L1_error)
     }
-    __pyx_t_2 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 268, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 280, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_7 = __Pyx_PyList_Append(__pyx_v_self->mp_window, __pyx_t_2); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 268, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyList_Append(__pyx_v_self->mp_window, __pyx_t_2); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 280, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "src/neural_fabric.py":272
+    /* "src/neural_fabric.py":284
  *             # maintain sliding window
  *             #
  *             if len(self.mp_window) > self.mp_window_size:             # <<<<<<<<<<<<<<
@@ -5121,14 +5195,14 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
     __Pyx_INCREF(__pyx_t_2);
     if (unlikely(__pyx_t_2 == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-      __PYX_ERR(0, 272, __pyx_L1_error)
+      __PYX_ERR(0, 284, __pyx_L1_error)
     }
-    __pyx_t_8 = PyList_GET_SIZE(__pyx_t_2); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 272, __pyx_L1_error)
+    __pyx_t_7 = PyList_GET_SIZE(__pyx_t_2); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 284, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_1 = ((__pyx_t_8 > __pyx_v_self->mp_window_size) != 0);
+    __pyx_t_1 = ((__pyx_t_7 > __pyx_v_self->mp_window_size) != 0);
     if (__pyx_t_1) {
 
-      /* "src/neural_fabric.py":273
+      /* "src/neural_fabric.py":285
  *             #
  *             if len(self.mp_window) > self.mp_window_size:
  *                 self.mp_window.pop(0)             # <<<<<<<<<<<<<<
@@ -5137,13 +5211,13 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
  */
       if (unlikely(__pyx_v_self->mp_window == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "pop");
-        __PYX_ERR(0, 273, __pyx_L1_error)
+        __PYX_ERR(0, 285, __pyx_L1_error)
       }
-      __pyx_t_2 = __Pyx_PyList_PopIndex(__pyx_v_self->mp_window, __pyx_int_0, 0, 1, Py_ssize_t, PyInt_FromSsize_t); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyList_PopIndex(__pyx_v_self->mp_window, __pyx_int_0, 0, 1, Py_ssize_t, PyInt_FromSsize_t); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 285, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "src/neural_fabric.py":272
+      /* "src/neural_fabric.py":284
  *             # maintain sliding window
  *             #
  *             if len(self.mp_window) > self.mp_window_size:             # <<<<<<<<<<<<<<
@@ -5152,33 +5226,33 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
  */
     }
 
-    /* "src/neural_fabric.py":275
+    /* "src/neural_fabric.py":287
  *                 self.mp_window.pop(0)
  * 
  *             self.motif_threshold = min(self.mp_window)             # <<<<<<<<<<<<<<
  *             self.anomaly_threshold = max(self.mp_window)
  *         return anomaly, motif
  */
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_min, __pyx_v_self->mp_window); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 275, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_min, __pyx_v_self->mp_window); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 287, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 275, __pyx_L1_error)
+    __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 287, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_v_self->motif_threshold = __pyx_t_9;
+    __pyx_v_self->motif_threshold = __pyx_t_8;
 
-    /* "src/neural_fabric.py":276
+    /* "src/neural_fabric.py":288
  * 
  *             self.motif_threshold = min(self.mp_window)
  *             self.anomaly_threshold = max(self.mp_window)             # <<<<<<<<<<<<<<
  *         return anomaly, motif
  * 
  */
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_max, __pyx_v_self->mp_window); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 276, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_max, __pyx_v_self->mp_window); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 288, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 276, __pyx_L1_error)
+    __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 288, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_v_self->anomaly_threshold = __pyx_t_9;
+    __pyx_v_self->anomaly_threshold = __pyx_t_8;
 
-    /* "src/neural_fabric.py":254
+    /* "src/neural_fabric.py":266
  *         anomaly = False
  *         motif = False
  *         if self.mapped >= 2 * self.max_stm:             # <<<<<<<<<<<<<<
@@ -5187,7 +5261,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
  */
   }
 
-  /* "src/neural_fabric.py":277
+  /* "src/neural_fabric.py":289
  *             self.motif_threshold = min(self.mp_window)
  *             self.anomaly_threshold = max(self.mp_window)
  *         return anomaly, motif             # <<<<<<<<<<<<<<
@@ -5195,26 +5269,26 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
  *     @cython.ccall
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyBool_FromLong(__pyx_v_anomaly); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyBool_FromLong(__pyx_v_anomaly); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 289, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = __Pyx_PyBool_FromLong(__pyx_v_motif); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyBool_FromLong(__pyx_v_motif); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 289, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 277, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_9 = PyTuple_New(2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 289, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_9);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_5);
-  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_t_5);
+  PyTuple_SET_ITEM(__pyx_t_9, 1, __pyx_t_5);
   __pyx_t_2 = 0;
   __pyx_t_5 = 0;
-  __pyx_r = ((PyObject*)__pyx_t_6);
-  __pyx_t_6 = 0;
+  __pyx_r = ((PyObject*)__pyx_t_9);
+  __pyx_t_9 = 0;
   goto __pyx_L0;
 
-  /* "src/neural_fabric.py":239
- *         return bmu_coord_key, bmu_dist, anomaly, motif, fabric_dist, fabric_por
+  /* "src/neural_fabric.py":251
+ *         return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
  * 
- *     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: list, ref_id: str) -> tuple:             # <<<<<<<<<<<<<<
+ *     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: dict, ref_id: str) -> tuple:             # <<<<<<<<<<<<<<
  *         """
  *         method to detect if an anomaly or motif has occurred based on the recent max and min bmu distances. This is an implementation of matrix profile
  */
@@ -5223,7 +5297,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_9);
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.detect_anomaly_motif", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -5232,7 +5306,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_mo
   return __pyx_r;
 }
 
-/* "src/neural_fabric.py":280
+/* "src/neural_fabric.py":292
  * 
  *     @cython.ccall
  *     def update_bmu_stats(self, bmu_coord_key: str, distance: float):             # <<<<<<<<<<<<<<
@@ -5268,11 +5342,11 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_update_bmu_stats); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_update_bmu_stats); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_3src_13neural_fabric_12NeuralFabric_11update_bmu_stats)) {
         __Pyx_XDECREF(__pyx_r);
-        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 280, __pyx_L1_error)
+        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 292, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
@@ -5290,7 +5364,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_4)) {
           PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_v_bmu_coord_key, __pyx_t_3};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 280, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 292, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -5299,14 +5373,14 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
           PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_v_bmu_coord_key, __pyx_t_3};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 280, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 292, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         } else
         #endif
         {
-          __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 280, __pyx_L1_error)
+          __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 292, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           if (__pyx_t_5) {
             __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
@@ -5317,7 +5391,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
           __Pyx_GIVEREF(__pyx_t_3);
           PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_t_3);
           __pyx_t_3 = 0;
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 280, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 292, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         }
@@ -5340,7 +5414,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
     #endif
   }
 
-  /* "src/neural_fabric.py":295
+  /* "src/neural_fabric.py":307
  *         # update the fabric properties
  *         #
  *         self.mapped += 1             # <<<<<<<<<<<<<<
@@ -5349,7 +5423,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
  */
   __pyx_v_self->mapped = (__pyx_v_self->mapped + 1);
 
-  /* "src/neural_fabric.py":296
+  /* "src/neural_fabric.py":308
  *         #
  *         self.mapped += 1
  *         self.sum_distance += distance             # <<<<<<<<<<<<<<
@@ -5358,7 +5432,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
  */
   __pyx_v_self->sum_distance = (__pyx_v_self->sum_distance + __pyx_v_distance);
 
-  /* "src/neural_fabric.py":297
+  /* "src/neural_fabric.py":309
  *         self.mapped += 1
  *         self.sum_distance += distance
  *         self.mean_distance = self.sum_distance / self.mapped             # <<<<<<<<<<<<<<
@@ -5367,11 +5441,11 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
  */
   if (unlikely(__pyx_v_self->mapped == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 297, __pyx_L1_error)
+    __PYX_ERR(0, 309, __pyx_L1_error)
   }
   __pyx_v_self->mean_distance = (__pyx_v_self->sum_distance / __pyx_v_self->mapped);
 
-  /* "src/neural_fabric.py":301
+  /* "src/neural_fabric.py":313
  *         # update the bmu neuron properties
  *         #
  *         self.neurons[bmu_coord_key]['n_bmu'] += 1             # <<<<<<<<<<<<<<
@@ -5380,101 +5454,117 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
  */
   if (unlikely(__pyx_v_self->neurons == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 301, __pyx_L1_error)
+    __PYX_ERR(0, 313, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_n_bmu);
   __pyx_t_8 = __pyx_n_s_n_bmu;
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_t_8); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_t_8); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_AddObjC(__pyx_t_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_AddObjC(__pyx_t_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_t_8, __pyx_t_4) < 0)) __PYX_ERR(0, 301, __pyx_L1_error)
+  if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_t_8, __pyx_t_4) < 0)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":302
+  /* "src/neural_fabric.py":314
  *         #
  *         self.neurons[bmu_coord_key]['n_bmu'] += 1
  *         self.neurons[bmu_coord_key]['last_bmu'] = self.mapped             # <<<<<<<<<<<<<<
  *         self.neurons[bmu_coord_key]['sum_distance'] = distance
  *         self.neurons[bmu_coord_key]['mean_distance'] = self.neurons[bmu_coord_key]['sum_distance'] / self.neurons[bmu_coord_key]['n_bmu']
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->mapped); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 302, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->mapped); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 314, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (unlikely(__pyx_v_self->neurons == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 302, __pyx_L1_error)
+    __PYX_ERR(0, 314, __pyx_L1_error)
   }
-  __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 302, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 314, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (unlikely(PyObject_SetItem(__pyx_t_4, __pyx_n_s_last_bmu, __pyx_t_1) < 0)) __PYX_ERR(0, 302, __pyx_L1_error)
+  if (unlikely(PyObject_SetItem(__pyx_t_4, __pyx_n_s_last_bmu, __pyx_t_1) < 0)) __PYX_ERR(0, 314, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":303
+  /* "src/neural_fabric.py":315
  *         self.neurons[bmu_coord_key]['n_bmu'] += 1
  *         self.neurons[bmu_coord_key]['last_bmu'] = self.mapped
  *         self.neurons[bmu_coord_key]['sum_distance'] = distance             # <<<<<<<<<<<<<<
  *         self.neurons[bmu_coord_key]['mean_distance'] = self.neurons[bmu_coord_key]['sum_distance'] / self.neurons[bmu_coord_key]['n_bmu']
- * 
+ *         self.neurons[bmu_coord_key]['updated'] = True
  */
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 303, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 315, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (unlikely(__pyx_v_self->neurons == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 303, __pyx_L1_error)
+    __PYX_ERR(0, 315, __pyx_L1_error)
   }
-  __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 303, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 315, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (unlikely(PyObject_SetItem(__pyx_t_4, __pyx_n_s_sum_distance, __pyx_t_1) < 0)) __PYX_ERR(0, 303, __pyx_L1_error)
+  if (unlikely(PyObject_SetItem(__pyx_t_4, __pyx_n_s_sum_distance, __pyx_t_1) < 0)) __PYX_ERR(0, 315, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":304
+  /* "src/neural_fabric.py":316
  *         self.neurons[bmu_coord_key]['last_bmu'] = self.mapped
  *         self.neurons[bmu_coord_key]['sum_distance'] = distance
  *         self.neurons[bmu_coord_key]['mean_distance'] = self.neurons[bmu_coord_key]['sum_distance'] / self.neurons[bmu_coord_key]['n_bmu']             # <<<<<<<<<<<<<<
+ *         self.neurons[bmu_coord_key]['updated'] = True
+ * 
+ */
+  if (unlikely(__pyx_v_self->neurons == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 316, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 316, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sum_distance); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 316, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (unlikely(__pyx_v_self->neurons == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 316, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 316, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_n_bmu); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 316, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyNumber_Divide(__pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 316, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(__pyx_v_self->neurons == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 316, __pyx_L1_error)
+  }
+  __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 316, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_n_s_mean_distance, __pyx_t_1) < 0)) __PYX_ERR(0, 316, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "src/neural_fabric.py":317
+ *         self.neurons[bmu_coord_key]['sum_distance'] = distance
+ *         self.neurons[bmu_coord_key]['mean_distance'] = self.neurons[bmu_coord_key]['sum_distance'] / self.neurons[bmu_coord_key]['n_bmu']
+ *         self.neurons[bmu_coord_key]['updated'] = True             # <<<<<<<<<<<<<<
  * 
  *         for nn_key in self.neurons[bmu_coord_key]['nn']:
  */
   if (unlikely(__pyx_v_self->neurons == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 304, __pyx_L1_error)
+    __PYX_ERR(0, 317, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 304, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 317, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sum_distance); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 304, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(__pyx_v_self->neurons == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 304, __pyx_L1_error)
-  }
-  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 304, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_n_bmu); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 304, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyNumber_Divide(__pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 304, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(__pyx_v_self->neurons == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 304, __pyx_L1_error)
-  }
-  __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 304, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_n_s_mean_distance, __pyx_t_1) < 0)) __PYX_ERR(0, 304, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_n_s_updated, Py_True) < 0)) __PYX_ERR(0, 317, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":306
- *         self.neurons[bmu_coord_key]['mean_distance'] = self.neurons[bmu_coord_key]['sum_distance'] / self.neurons[bmu_coord_key]['n_bmu']
+  /* "src/neural_fabric.py":319
+ *         self.neurons[bmu_coord_key]['updated'] = True
  * 
  *         for nn_key in self.neurons[bmu_coord_key]['nn']:             # <<<<<<<<<<<<<<
  *             self.neurons[nn_key]['n_nn'] += 1
@@ -5482,20 +5572,20 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
  */
   if (unlikely(__pyx_v_self->neurons == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 306, __pyx_L1_error)
+    __PYX_ERR(0, 319, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 306, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 319, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_nn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 306, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_nn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 319, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (likely(PyList_CheckExact(__pyx_t_2)) || PyTuple_CheckExact(__pyx_t_2)) {
     __pyx_t_1 = __pyx_t_2; __Pyx_INCREF(__pyx_t_1); __pyx_t_9 = 0;
     __pyx_t_10 = NULL;
   } else {
-    __pyx_t_9 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 306, __pyx_L1_error)
+    __pyx_t_9 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 319, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_10 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 306, __pyx_L1_error)
+    __pyx_t_10 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 319, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   for (;;) {
@@ -5503,17 +5593,17 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 306, __pyx_L1_error)
+        __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 319, __pyx_L1_error)
         #else
-        __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 306, __pyx_L1_error)
+        __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 319, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         #endif
       } else {
         if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 306, __pyx_L1_error)
+        __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 319, __pyx_L1_error)
         #else
-        __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 306, __pyx_L1_error)
+        __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 319, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         #endif
       }
@@ -5523,62 +5613,78 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 306, __pyx_L1_error)
+          else __PYX_ERR(0, 319, __pyx_L1_error)
         }
         break;
       }
       __Pyx_GOTREF(__pyx_t_2);
     }
-    if (!(likely(PyString_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 306, __pyx_L1_error)
+    if (!(likely(PyString_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 319, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_nn_key, ((PyObject*)__pyx_t_2));
     __pyx_t_2 = 0;
 
-    /* "src/neural_fabric.py":307
+    /* "src/neural_fabric.py":320
  * 
  *         for nn_key in self.neurons[bmu_coord_key]['nn']:
  *             self.neurons[nn_key]['n_nn'] += 1             # <<<<<<<<<<<<<<
  *             self.neurons[nn_key]['last_nn'] = self.mapped
- * 
+ *             self.neurons[nn_key]['updated'] = True
  */
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 307, __pyx_L1_error)
+      __PYX_ERR(0, 320, __pyx_L1_error)
     }
-    __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_nn_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 307, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_nn_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 320, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_n_s_n_nn);
     __pyx_t_8 = __pyx_n_s_n_nn;
-    __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 307, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 320, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_t_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 307, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_t_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 320, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_t_8, __pyx_t_7) < 0)) __PYX_ERR(0, 307, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_t_8, __pyx_t_7) < 0)) __PYX_ERR(0, 320, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "src/neural_fabric.py":308
+    /* "src/neural_fabric.py":321
  *         for nn_key in self.neurons[bmu_coord_key]['nn']:
  *             self.neurons[nn_key]['n_nn'] += 1
  *             self.neurons[nn_key]['last_nn'] = self.mapped             # <<<<<<<<<<<<<<
+ *             self.neurons[nn_key]['updated'] = True
  * 
- *     @cython.ccall
  */
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->mapped); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 308, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->mapped); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 321, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 308, __pyx_L1_error)
+      __PYX_ERR(0, 321, __pyx_L1_error)
     }
-    __pyx_t_7 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_nn_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 308, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_nn_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 321, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    if (unlikely(PyObject_SetItem(__pyx_t_7, __pyx_n_s_last_nn, __pyx_t_2) < 0)) __PYX_ERR(0, 308, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(__pyx_t_7, __pyx_n_s_last_nn, __pyx_t_2) < 0)) __PYX_ERR(0, 321, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "src/neural_fabric.py":306
- *         self.neurons[bmu_coord_key]['mean_distance'] = self.neurons[bmu_coord_key]['sum_distance'] / self.neurons[bmu_coord_key]['n_bmu']
+    /* "src/neural_fabric.py":322
+ *             self.neurons[nn_key]['n_nn'] += 1
+ *             self.neurons[nn_key]['last_nn'] = self.mapped
+ *             self.neurons[nn_key]['updated'] = True             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+    if (unlikely(__pyx_v_self->neurons == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 322, __pyx_L1_error)
+    }
+    __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_nn_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 322, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_n_s_updated, Py_True) < 0)) __PYX_ERR(0, 322, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+    /* "src/neural_fabric.py":319
+ *         self.neurons[bmu_coord_key]['updated'] = True
  * 
  *         for nn_key in self.neurons[bmu_coord_key]['nn']:             # <<<<<<<<<<<<<<
  *             self.neurons[nn_key]['n_nn'] += 1
@@ -5587,7 +5693,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(st
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":280
+  /* "src/neural_fabric.py":292
  * 
  *     @cython.ccall
  *     def update_bmu_stats(self, bmu_coord_key: str, distance: float):             # <<<<<<<<<<<<<<
@@ -5651,11 +5757,11 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_11update_bmu_stats
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_distance)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("update_bmu_stats", 1, 2, 2, 1); __PYX_ERR(0, 280, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("update_bmu_stats", 1, 2, 2, 1); __PYX_ERR(0, 292, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "update_bmu_stats") < 0)) __PYX_ERR(0, 280, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "update_bmu_stats") < 0)) __PYX_ERR(0, 292, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -5664,17 +5770,17 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_11update_bmu_stats
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bmu_coord_key = ((PyObject*)values[0]);
-    __pyx_v_distance = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_distance == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 280, __pyx_L3_error)
+    __pyx_v_distance = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_distance == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 292, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("update_bmu_stats", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 280, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("update_bmu_stats", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 292, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.update_bmu_stats", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bmu_coord_key), (&PyString_Type), 1, "bmu_coord_key", 1))) __PYX_ERR(0, 280, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bmu_coord_key), (&PyString_Type), 1, "bmu_coord_key", 1))) __PYX_ERR(0, 292, __pyx_L1_error)
   __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_10update_bmu_stats(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_bmu_coord_key, __pyx_v_distance);
 
   /* function exit code */
@@ -5695,7 +5801,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_10update_bmu_stats
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("update_bmu_stats", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(__pyx_v_self, __pyx_v_bmu_coord_key, __pyx_v_distance, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_3src_13neural_fabric_12NeuralFabric_update_bmu_stats(__pyx_v_self, __pyx_v_bmu_coord_key, __pyx_v_distance, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5712,7 +5818,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_10update_bmu_stats
   return __pyx_r;
 }
 
-/* "src/neural_fabric.py":311
+/* "src/neural_fabric.py":326
  * 
  *     @cython.ccall
  *     def learn(self, neuro_column: NeuroColumn, bmu_coord: str, coords: list, learn_rates: list, hebbian_edges: set = None):             # <<<<<<<<<<<<<<
@@ -5758,7 +5864,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_learn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 311, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_learn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 326, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_3src_13neural_fabric_12NeuralFabric_13learn)) {
         __Pyx_XDECREF(__pyx_r);
@@ -5778,7 +5884,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[6] = {__pyx_t_4, __pyx_v_neuro_column, __pyx_v_bmu_coord, __pyx_v_coords, __pyx_v_learn_rates, __pyx_v_hebbian_edges};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 311, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 326, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_2);
         } else
@@ -5786,13 +5892,13 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[6] = {__pyx_t_4, __pyx_v_neuro_column, __pyx_v_bmu_coord, __pyx_v_coords, __pyx_v_learn_rates, __pyx_v_hebbian_edges};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 311, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 326, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_2);
         } else
         #endif
         {
-          __pyx_t_6 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 311, __pyx_L1_error)
+          __pyx_t_6 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 326, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
           if (__pyx_t_4) {
             __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -5812,7 +5918,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
           __Pyx_INCREF(__pyx_v_hebbian_edges);
           __Pyx_GIVEREF(__pyx_v_hebbian_edges);
           PyTuple_SET_ITEM(__pyx_t_6, 4+__pyx_t_5, __pyx_v_hebbian_edges);
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 311, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 326, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         }
@@ -5835,7 +5941,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
     #endif
   }
 
-  /* "src/neural_fabric.py":332
+  /* "src/neural_fabric.py":347
  *         # assume coords and learning_rates of same length and index position aligns
  *         #
  *         for idx in range(len(coords)):             # <<<<<<<<<<<<<<
@@ -5844,14 +5950,14 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
  */
   if (unlikely(__pyx_v_coords == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-    __PYX_ERR(0, 332, __pyx_L1_error)
+    __PYX_ERR(0, 347, __pyx_L1_error)
   }
-  __pyx_t_7 = PyList_GET_SIZE(__pyx_v_coords); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 332, __pyx_L1_error)
+  __pyx_t_7 = PyList_GET_SIZE(__pyx_v_coords); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 347, __pyx_L1_error)
   __pyx_t_8 = __pyx_t_7;
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_8; __pyx_t_5+=1) {
     __pyx_v_idx = __pyx_t_5;
 
-    /* "src/neural_fabric.py":333
+    /* "src/neural_fabric.py":348
  *         #
  *         for idx in range(len(coords)):
  *             coord_key = coords[idx]             # <<<<<<<<<<<<<<
@@ -5860,26 +5966,26 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
  */
     if (unlikely(__pyx_v_coords == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 333, __pyx_L1_error)
+      __PYX_ERR(0, 348, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_coords, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 333, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_coords, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 348, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 333, __pyx_L1_error)
+    if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 348, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_coord_key, ((PyObject*)__pyx_t_1));
     __pyx_t_1 = 0;
 
-    /* "src/neural_fabric.py":334
+    /* "src/neural_fabric.py":349
  *         for idx in range(len(coords)):
  *             coord_key = coords[idx]
  *             if coord_key == bmu_coord:             # <<<<<<<<<<<<<<
  *                 bmu = True
  *             else:
  */
-    __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_coord_key, __pyx_v_bmu_coord, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 334, __pyx_L1_error)
+    __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_coord_key, __pyx_v_bmu_coord, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 349, __pyx_L1_error)
     __pyx_t_10 = (__pyx_t_9 != 0);
     if (__pyx_t_10) {
 
-      /* "src/neural_fabric.py":335
+      /* "src/neural_fabric.py":350
  *             coord_key = coords[idx]
  *             if coord_key == bmu_coord:
  *                 bmu = True             # <<<<<<<<<<<<<<
@@ -5889,7 +5995,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
       __Pyx_INCREF(Py_True);
       __Pyx_XDECREF_SET(__pyx_v_bmu, Py_True);
 
-      /* "src/neural_fabric.py":334
+      /* "src/neural_fabric.py":349
  *         for idx in range(len(coords)):
  *             coord_key = coords[idx]
  *             if coord_key == bmu_coord:             # <<<<<<<<<<<<<<
@@ -5899,7 +6005,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
       goto __pyx_L5;
     }
 
-    /* "src/neural_fabric.py":337
+    /* "src/neural_fabric.py":352
  *                 bmu = True
  *             else:
  *                 bmu = False             # <<<<<<<<<<<<<<
@@ -5912,7 +6018,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
     }
     __pyx_L5:;
 
-    /* "src/neural_fabric.py":339
+    /* "src/neural_fabric.py":354
  *                 bmu = False
  * 
  *             learn_rate = learn_rates[idx]             # <<<<<<<<<<<<<<
@@ -5921,15 +6027,15 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
  */
     if (unlikely(__pyx_v_learn_rates == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 339, __pyx_L1_error)
+      __PYX_ERR(0, 354, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_learn_rates, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 339, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_learn_rates, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 354, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 339, __pyx_L1_error)
+    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 354, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_learn_rate = __pyx_t_11;
 
-    /* "src/neural_fabric.py":340
+    /* "src/neural_fabric.py":355
  * 
  *             learn_rate = learn_rates[idx]
  *             self.neurons[coord_key]['neuro_column'].learn(neuro_column=neuro_column, learn_rate=learn_rate, hebbian_edges=hebbian_edges, is_bmu=bmu)             # <<<<<<<<<<<<<<
@@ -5938,33 +6044,33 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_learn(struct __pyx_
  */
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 340, __pyx_L1_error)
+      __PYX_ERR(0, 355, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 340, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 355, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_neuro_column); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 340, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_neuro_column); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 355, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_learn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 340, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_learn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 355, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 340, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 355, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_neuro_column, __pyx_v_neuro_column) < 0) __PYX_ERR(0, 340, __pyx_L1_error)
-    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_learn_rate); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 340, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_neuro_column, __pyx_v_neuro_column) < 0) __PYX_ERR(0, 355, __pyx_L1_error)
+    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_learn_rate); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 355, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_learn_rate, __pyx_t_3) < 0) __PYX_ERR(0, 340, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_learn_rate, __pyx_t_3) < 0) __PYX_ERR(0, 355, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_hebbian_edges, __pyx_v_hebbian_edges) < 0) __PYX_ERR(0, 340, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_is_bmu, __pyx_v_bmu) < 0) __PYX_ERR(0, 340, __pyx_L1_error)
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 340, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_hebbian_edges, __pyx_v_hebbian_edges) < 0) __PYX_ERR(0, 355, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_is_bmu, __pyx_v_bmu) < 0) __PYX_ERR(0, 355, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 355, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
 
-  /* "src/neural_fabric.py":311
+  /* "src/neural_fabric.py":326
  * 
  *     @cython.ccall
  *     def learn(self, neuro_column: NeuroColumn, bmu_coord: str, coords: list, learn_rates: list, hebbian_edges: set = None):             # <<<<<<<<<<<<<<
@@ -6037,19 +6143,19 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_13learn(PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_bmu_coord)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("learn", 0, 4, 5, 1); __PYX_ERR(0, 311, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("learn", 0, 4, 5, 1); __PYX_ERR(0, 326, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_coords)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("learn", 0, 4, 5, 2); __PYX_ERR(0, 311, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("learn", 0, 4, 5, 2); __PYX_ERR(0, 326, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_learn_rates)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("learn", 0, 4, 5, 3); __PYX_ERR(0, 311, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("learn", 0, 4, 5, 3); __PYX_ERR(0, 326, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -6059,7 +6165,7 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_13learn(PyObject *
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "learn") < 0)) __PYX_ERR(0, 311, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "learn") < 0)) __PYX_ERR(0, 326, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -6081,16 +6187,16 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_13learn(PyObject *
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("learn", 0, 4, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 311, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("learn", 0, 4, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 326, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.learn", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bmu_coord), (&PyString_Type), 1, "bmu_coord", 1))) __PYX_ERR(0, 311, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_coords), (&PyList_Type), 1, "coords", 1))) __PYX_ERR(0, 311, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_learn_rates), (&PyList_Type), 1, "learn_rates", 1))) __PYX_ERR(0, 311, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_hebbian_edges), (&PySet_Type), 1, "hebbian_edges", 1))) __PYX_ERR(0, 311, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bmu_coord), (&PyString_Type), 1, "bmu_coord", 1))) __PYX_ERR(0, 326, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_coords), (&PyList_Type), 1, "coords", 1))) __PYX_ERR(0, 326, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_learn_rates), (&PyList_Type), 1, "learn_rates", 1))) __PYX_ERR(0, 326, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_hebbian_edges), (&PySet_Type), 1, "hebbian_edges", 1))) __PYX_ERR(0, 326, __pyx_L1_error)
   __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_12learn(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_neuro_column, __pyx_v_bmu_coord, __pyx_v_coords, __pyx_v_learn_rates, __pyx_v_hebbian_edges);
 
   /* function exit code */
@@ -6114,7 +6220,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_12learn(struct __p
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 1;
   __pyx_t_2.hebbian_edges = __pyx_v_hebbian_edges;
-  __pyx_t_1 = __pyx_vtabptr_3src_13neural_fabric_NeuralFabric->learn(__pyx_v_self, __pyx_v_neuro_column, __pyx_v_bmu_coord, __pyx_v_coords, __pyx_v_learn_rates, 1, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 311, __pyx_L1_error)
+  __pyx_t_1 = __pyx_vtabptr_3src_13neural_fabric_NeuralFabric->learn(__pyx_v_self, __pyx_v_neuro_column, __pyx_v_bmu_coord, __pyx_v_coords, __pyx_v_learn_rates, 1, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 326, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6131,7 +6237,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_12learn(struct __p
   return __pyx_r;
 }
 
-/* "src/neural_fabric.py":343
+/* "src/neural_fabric.py":358
  * 
  *     @cython.ccall
  *     def community_update(self, bmu_coord_key: str, learn_rate: cython.double):             # <<<<<<<<<<<<<<
@@ -6175,11 +6281,11 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_community_update); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 343, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_community_update); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 358, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_3src_13neural_fabric_12NeuralFabric_15community_update)) {
         __Pyx_XDECREF(__pyx_r);
-        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_learn_rate); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 343, __pyx_L1_error)
+        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_learn_rate); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 358, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
@@ -6197,7 +6303,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_4)) {
           PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_v_bmu_coord_key, __pyx_t_3};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 343, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 358, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -6206,14 +6312,14 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
           PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_v_bmu_coord_key, __pyx_t_3};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 343, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 358, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         } else
         #endif
         {
-          __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 343, __pyx_L1_error)
+          __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 358, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           if (__pyx_t_5) {
             __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
@@ -6224,7 +6330,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
           __Pyx_GIVEREF(__pyx_t_3);
           PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_t_3);
           __pyx_t_3 = 0;
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 343, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 358, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         }
@@ -6247,14 +6353,14 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
     #endif
   }
 
-  /* "src/neural_fabric.py":360
+  /* "src/neural_fabric.py":375
  *         max_weight: cython.double
  *         target_neuron: str
  *         bmu_neuron: str = '{}:{}'.format(self.uid, bmu_coord_key)             # <<<<<<<<<<<<<<
  *         bmu_coord_nc: NeuroColumn
  *         curr_community_edge: dict
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 360, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 375, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = NULL;
   __pyx_t_6 = 0;
@@ -6271,7 +6377,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_self->uid, __pyx_v_bmu_coord_key};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 360, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 375, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
@@ -6279,13 +6385,13 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_self->uid, __pyx_v_bmu_coord_key};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 360, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 375, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
   #endif
   {
-    __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 360, __pyx_L1_error)
+    __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 375, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     if (__pyx_t_4) {
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -6296,40 +6402,40 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
     __Pyx_INCREF(__pyx_v_bmu_coord_key);
     __Pyx_GIVEREF(__pyx_v_bmu_coord_key);
     PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_v_bmu_coord_key);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_7, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 360, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_7, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 375, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 360, __pyx_L1_error)
+  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 375, __pyx_L1_error)
   __pyx_v_bmu_neuron = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":366
+  /* "src/neural_fabric.py":381
  *         # get list of coordinates to update
  *         #
  *         coords_to_update = [nn_key for nn_key in self.neurons[bmu_coord_key]['nn']]             # <<<<<<<<<<<<<<
  *         coords_to_update.append(bmu_coord_key)
  * 
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 366, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 381, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (unlikely(__pyx_v_self->neurons == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 366, __pyx_L1_error)
+    __PYX_ERR(0, 381, __pyx_L1_error)
   }
-  __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 366, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_bmu_coord_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 381, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_nn); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 366, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_nn); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 381, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (likely(PyList_CheckExact(__pyx_t_7)) || PyTuple_CheckExact(__pyx_t_7)) {
     __pyx_t_2 = __pyx_t_7; __Pyx_INCREF(__pyx_t_2); __pyx_t_8 = 0;
     __pyx_t_9 = NULL;
   } else {
-    __pyx_t_8 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 366, __pyx_L1_error)
+    __pyx_t_8 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 381, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_9 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 366, __pyx_L1_error)
+    __pyx_t_9 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 381, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   for (;;) {
@@ -6337,17 +6443,17 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
       if (likely(PyList_CheckExact(__pyx_t_2))) {
         if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_2)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_7 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_8); __Pyx_INCREF(__pyx_t_7); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 366, __pyx_L1_error)
+        __pyx_t_7 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_8); __Pyx_INCREF(__pyx_t_7); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 381, __pyx_L1_error)
         #else
-        __pyx_t_7 = PySequence_ITEM(__pyx_t_2, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 366, __pyx_L1_error)
+        __pyx_t_7 = PySequence_ITEM(__pyx_t_2, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 381, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         #endif
       } else {
         if (__pyx_t_8 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_7 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_8); __Pyx_INCREF(__pyx_t_7); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 366, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_8); __Pyx_INCREF(__pyx_t_7); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 381, __pyx_L1_error)
         #else
-        __pyx_t_7 = PySequence_ITEM(__pyx_t_2, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 366, __pyx_L1_error)
+        __pyx_t_7 = PySequence_ITEM(__pyx_t_2, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 381, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         #endif
       }
@@ -6357,31 +6463,31 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 366, __pyx_L1_error)
+          else __PYX_ERR(0, 381, __pyx_L1_error)
         }
         break;
       }
       __Pyx_GOTREF(__pyx_t_7);
     }
-    if (!(likely(PyString_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_7)->tp_name), 0))) __PYX_ERR(0, 366, __pyx_L1_error)
+    if (!(likely(PyString_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_7)->tp_name), 0))) __PYX_ERR(0, 381, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_nn_key, ((PyObject*)__pyx_t_7));
     __pyx_t_7 = 0;
-    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_v_nn_key))) __PYX_ERR(0, 366, __pyx_L1_error)
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_v_nn_key))) __PYX_ERR(0, 381, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_coords_to_update = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":367
+  /* "src/neural_fabric.py":382
  *         #
  *         coords_to_update = [nn_key for nn_key in self.neurons[bmu_coord_key]['nn']]
  *         coords_to_update.append(bmu_coord_key)             # <<<<<<<<<<<<<<
  * 
  *         for coord_key in coords_to_update:
  */
-  __pyx_t_10 = __Pyx_PyList_Append(__pyx_v_coords_to_update, __pyx_v_bmu_coord_key); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 367, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyList_Append(__pyx_v_coords_to_update, __pyx_v_bmu_coord_key); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 382, __pyx_L1_error)
 
-  /* "src/neural_fabric.py":369
+  /* "src/neural_fabric.py":384
  *         coords_to_update.append(bmu_coord_key)
  * 
  *         for coord_key in coords_to_update:             # <<<<<<<<<<<<<<
@@ -6392,23 +6498,23 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
   for (;;) {
     if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_1)) break;
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_8); __Pyx_INCREF(__pyx_t_2); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 369, __pyx_L1_error)
+    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_8); __Pyx_INCREF(__pyx_t_2); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 384, __pyx_L1_error)
     #else
-    __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 369, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 384, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     #endif
-    if (!(likely(PyString_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 369, __pyx_L1_error)
+    if (!(likely(PyString_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 384, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_coord_key, ((PyObject*)__pyx_t_2));
     __pyx_t_2 = 0;
 
-    /* "src/neural_fabric.py":371
+    /* "src/neural_fabric.py":386
  *         for coord_key in coords_to_update:
  * 
  *             bmu_coord_nc = NeuroColumn()             # <<<<<<<<<<<<<<
  * 
  *             # create an sdr to represent the bmu coordinates
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 386, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
@@ -6422,20 +6528,20 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
     }
     __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 371, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 386, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_XDECREF_SET(__pyx_v_bmu_coord_nc, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "src/neural_fabric.py":375
+    /* "src/neural_fabric.py":390
  *             # create an sdr to represent the bmu coordinates
  *             #
  *             source_neuron = '{}:{}'.format(self.uid, coord_key)             # <<<<<<<<<<<<<<
- *             bmu_coord_nc.upsert(edge_type='in_community',
+ *             bmu_coord_nc.upsert(edge_type='in_community', edge_uid='',
  *                                 source_type='neuron', source_uid=source_neuron,
  */
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 375, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_, __pyx_n_s_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 390, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_4 = NULL;
     __pyx_t_6 = 0;
@@ -6452,7 +6558,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_7)) {
       PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_self->uid, __pyx_v_coord_key};
-      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 375, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 390, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else
@@ -6460,13 +6566,13 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
       PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_self->uid, __pyx_v_coord_key};
-      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 375, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 390, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else
     #endif
     {
-      __pyx_t_3 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 375, __pyx_L1_error)
+      __pyx_t_3 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 390, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       if (__pyx_t_4) {
         __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -6477,7 +6583,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
       __Pyx_INCREF(__pyx_v_coord_key);
       __Pyx_GIVEREF(__pyx_v_coord_key);
       PyTuple_SET_ITEM(__pyx_t_3, 1+__pyx_t_6, __pyx_v_coord_key);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 375, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 390, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
@@ -6485,88 +6591,105 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
     __Pyx_XDECREF_SET(__pyx_v_source_neuron, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "src/neural_fabric.py":376
+    /* "src/neural_fabric.py":391
  *             #
  *             source_neuron = '{}:{}'.format(self.uid, coord_key)
- *             bmu_coord_nc.upsert(edge_type='in_community',             # <<<<<<<<<<<<<<
+ *             bmu_coord_nc.upsert(edge_type='in_community', edge_uid='',             # <<<<<<<<<<<<<<
  *                                 source_type='neuron', source_uid=source_neuron,
  *                                 target_type='neuron', target_uid=bmu_neuron,
  */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_bmu_coord_nc, __pyx_n_s_upsert); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 376, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_bmu_coord_nc, __pyx_n_s_upsert); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 391, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_7 = __Pyx_PyDict_NewPresized(7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 376, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyDict_NewPresized(8); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 391, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_edge_type, __pyx_n_s_in_community) < 0) __PYX_ERR(0, 376, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_source_type, __pyx_n_s_neuron) < 0) __PYX_ERR(0, 376, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_edge_type, __pyx_n_s_in_community) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_edge_uid, __pyx_kp_s__3) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_source_type, __pyx_n_s_neuron) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
 
-    /* "src/neural_fabric.py":377
+    /* "src/neural_fabric.py":392
  *             source_neuron = '{}:{}'.format(self.uid, coord_key)
- *             bmu_coord_nc.upsert(edge_type='in_community',
+ *             bmu_coord_nc.upsert(edge_type='in_community', edge_uid='',
  *                                 source_type='neuron', source_uid=source_neuron,             # <<<<<<<<<<<<<<
  *                                 target_type='neuron', target_uid=bmu_neuron,
  *                                 neuron_id=0,
  */
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_source_uid, __pyx_v_source_neuron) < 0) __PYX_ERR(0, 376, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_target_type, __pyx_n_s_neuron) < 0) __PYX_ERR(0, 376, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_source_uid, __pyx_v_source_neuron) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_target_type, __pyx_n_s_neuron) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
 
-    /* "src/neural_fabric.py":378
- *             bmu_coord_nc.upsert(edge_type='in_community',
+    /* "src/neural_fabric.py":393
+ *             bmu_coord_nc.upsert(edge_type='in_community', edge_uid='',
  *                                 source_type='neuron', source_uid=source_neuron,
  *                                 target_type='neuron', target_uid=bmu_neuron,             # <<<<<<<<<<<<<<
  *                                 neuron_id=0,
  *                                 prob=1.0)
  */
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_target_uid, __pyx_v_bmu_neuron) < 0) __PYX_ERR(0, 376, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_neuron_id, __pyx_int_0) < 0) __PYX_ERR(0, 376, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_prob, __pyx_float_1_0) < 0) __PYX_ERR(0, 376, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_target_uid, __pyx_v_bmu_neuron) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_neuron_id, __pyx_int_0) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_prob, __pyx_float_1_0) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
 
-    /* "src/neural_fabric.py":376
+    /* "src/neural_fabric.py":391
  *             #
  *             source_neuron = '{}:{}'.format(self.uid, coord_key)
- *             bmu_coord_nc.upsert(edge_type='in_community',             # <<<<<<<<<<<<<<
+ *             bmu_coord_nc.upsert(edge_type='in_community', edge_uid='',             # <<<<<<<<<<<<<<
  *                                 source_type='neuron', source_uid=source_neuron,
  *                                 target_type='neuron', target_uid=bmu_neuron,
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 376, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 391, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "src/neural_fabric.py":382
+    /* "src/neural_fabric.py":397
  *                                 prob=1.0)
  * 
  *             self.neurons[coord_key]['community_nc'].learn(neuro_column=bmu_coord_nc, learn_rate=learn_rate)             # <<<<<<<<<<<<<<
+ * 
+ *             self.neurons[coord_key]['updated'] = True
+ */
+    if (unlikely(__pyx_v_self->neurons == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 397, __pyx_L1_error)
+    }
+    __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 397, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_community_nc); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 397, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_learn); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 397, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 397, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_neuro_column, __pyx_v_bmu_coord_nc) < 0) __PYX_ERR(0, 397, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_v_learn_rate); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 397, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_learn_rate, __pyx_t_2) < 0) __PYX_ERR(0, 397, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 397, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+    /* "src/neural_fabric.py":399
+ *             self.neurons[coord_key]['community_nc'].learn(neuro_column=bmu_coord_nc, learn_rate=learn_rate)
+ * 
+ *             self.neurons[coord_key]['updated'] = True             # <<<<<<<<<<<<<<
  * 
  *             curr_community_edge = self.neurons[coord_key]['community_nc'].get_edge_by_max_probability()
  */
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 382, __pyx_L1_error)
+      __PYX_ERR(0, 399, __pyx_L1_error)
     }
-    __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 382, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_community_nc); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 382, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_learn); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 382, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 382, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_neuro_column, __pyx_v_bmu_coord_nc) < 0) __PYX_ERR(0, 382, __pyx_L1_error)
-    __pyx_t_2 = PyFloat_FromDouble(__pyx_v_learn_rate); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 382, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 399, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_learn_rate, __pyx_t_2) < 0) __PYX_ERR(0, 382, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 382, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_n_s_updated, Py_True) < 0)) __PYX_ERR(0, 399, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "src/neural_fabric.py":384
- *             self.neurons[coord_key]['community_nc'].learn(neuro_column=bmu_coord_nc, learn_rate=learn_rate)
+    /* "src/neural_fabric.py":401
+ *             self.neurons[coord_key]['updated'] = True
  * 
  *             curr_community_edge = self.neurons[coord_key]['community_nc'].get_edge_by_max_probability()             # <<<<<<<<<<<<<<
  *             if curr_community_edge is not None:
@@ -6574,14 +6697,14 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
  */
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 384, __pyx_L1_error)
+      __PYX_ERR(0, 401, __pyx_L1_error)
     }
-    __pyx_t_7 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 384, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 401, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_community_nc); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 384, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_community_nc); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 401, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_get_edge_by_max_probability); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 384, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_get_edge_by_max_probability); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 401, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = NULL;
@@ -6596,14 +6719,14 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
     }
     __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 384, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 401, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (!(likely(PyDict_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 384, __pyx_L1_error)
+    if (!(likely(PyDict_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 401, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_curr_community_edge, ((PyObject*)__pyx_t_2));
     __pyx_t_2 = 0;
 
-    /* "src/neural_fabric.py":385
+    /* "src/neural_fabric.py":402
  * 
  *             curr_community_edge = self.neurons[coord_key]['community_nc'].get_edge_by_max_probability()
  *             if curr_community_edge is not None:             # <<<<<<<<<<<<<<
@@ -6614,7 +6737,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
     __pyx_t_12 = (__pyx_t_11 != 0);
     if (__pyx_t_12) {
 
-      /* "src/neural_fabric.py":389
+      /* "src/neural_fabric.py":406
  *                 # update the community label for this column of neurons
  *                 #
  *                 self.neurons[coord_key]['community_label'] = curr_community_edge['target_uid']             # <<<<<<<<<<<<<<
@@ -6623,21 +6746,21 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
  */
       if (unlikely(__pyx_v_curr_community_edge == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 389, __pyx_L1_error)
+        __PYX_ERR(0, 406, __pyx_L1_error)
       }
-      __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_curr_community_edge, __pyx_n_s_target_uid); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 389, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_curr_community_edge, __pyx_n_s_target_uid); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 406, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       if (unlikely(__pyx_v_self->neurons == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 389, __pyx_L1_error)
+        __PYX_ERR(0, 406, __pyx_L1_error)
       }
-      __pyx_t_7 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 389, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 406, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      if (unlikely(PyObject_SetItem(__pyx_t_7, __pyx_n_s_community_label, __pyx_t_2) < 0)) __PYX_ERR(0, 389, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(__pyx_t_7, __pyx_n_s_community_label, __pyx_t_2) < 0)) __PYX_ERR(0, 406, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "src/neural_fabric.py":385
+      /* "src/neural_fabric.py":402
  * 
  *             curr_community_edge = self.neurons[coord_key]['community_nc'].get_edge_by_max_probability()
  *             if curr_community_edge is not None:             # <<<<<<<<<<<<<<
@@ -6646,7 +6769,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
  */
     }
 
-    /* "src/neural_fabric.py":369
+    /* "src/neural_fabric.py":384
  *         coords_to_update.append(bmu_coord_key)
  * 
  *         for coord_key in coords_to_update:             # <<<<<<<<<<<<<<
@@ -6656,7 +6779,7 @@ static PyObject *__pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(st
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":343
+  /* "src/neural_fabric.py":358
  * 
  *     @cython.ccall
  *     def community_update(self, bmu_coord_key: str, learn_rate: cython.double):             # <<<<<<<<<<<<<<
@@ -6725,11 +6848,11 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_15community_update
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_learn_rate)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("community_update", 1, 2, 2, 1); __PYX_ERR(0, 343, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("community_update", 1, 2, 2, 1); __PYX_ERR(0, 358, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "community_update") < 0)) __PYX_ERR(0, 343, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "community_update") < 0)) __PYX_ERR(0, 358, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -6738,17 +6861,17 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_15community_update
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bmu_coord_key = ((PyObject*)values[0]);
-    __pyx_v_learn_rate = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_learn_rate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 343, __pyx_L3_error)
+    __pyx_v_learn_rate = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_learn_rate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 358, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("community_update", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 343, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("community_update", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 358, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.community_update", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bmu_coord_key), (&PyString_Type), 1, "bmu_coord_key", 1))) __PYX_ERR(0, 343, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bmu_coord_key), (&PyString_Type), 1, "bmu_coord_key", 1))) __PYX_ERR(0, 358, __pyx_L1_error)
   __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_14community_update(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_bmu_coord_key, __pyx_v_learn_rate);
 
   /* function exit code */
@@ -6769,7 +6892,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_14community_update
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("community_update", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(__pyx_v_self, __pyx_v_bmu_coord_key, __pyx_v_learn_rate, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 343, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_3src_13neural_fabric_12NeuralFabric_community_update(__pyx_v_self, __pyx_v_bmu_coord_key, __pyx_v_learn_rate, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 358, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6786,7 +6909,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_14community_update
   return __pyx_r;
 }
 
-/* "src/neural_fabric.py":391
+/* "src/neural_fabric.py":408
  *                 self.neurons[coord_key]['community_label'] = curr_community_edge['target_uid']
  * 
  *     def merge_neurons(self, coords: list, merge_factors: list) -> NeuroColumn:             # <<<<<<<<<<<<<<
@@ -6830,11 +6953,11 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_17merge_neurons(Py
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_merge_factors)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("merge_neurons", 1, 2, 2, 1); __PYX_ERR(0, 391, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("merge_neurons", 1, 2, 2, 1); __PYX_ERR(0, 408, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "merge_neurons") < 0)) __PYX_ERR(0, 391, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "merge_neurons") < 0)) __PYX_ERR(0, 408, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -6847,14 +6970,14 @@ static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_17merge_neurons(Py
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("merge_neurons", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 391, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("merge_neurons", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 408, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.merge_neurons", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_coords), (&PyList_Type), 1, "coords", 1))) __PYX_ERR(0, 391, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_merge_factors), (&PyList_Type), 1, "merge_factors", 1))) __PYX_ERR(0, 391, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_coords), (&PyList_Type), 1, "coords", 1))) __PYX_ERR(0, 408, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_merge_factors), (&PyList_Type), 1, "merge_factors", 1))) __PYX_ERR(0, 408, __pyx_L1_error)
   __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_coords, __pyx_v_merge_factors);
 
   /* function exit code */
@@ -6888,14 +7011,14 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(st
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("merge_neurons", 0);
 
-  /* "src/neural_fabric.py":405
+  /* "src/neural_fabric.py":422
  *         # the SDR to hold the merged data
  *         #
  *         merged_column: NeuroColumn = NeuroColumn()             # <<<<<<<<<<<<<<
  * 
  *         idx: cython.int
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 405, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 422, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -6909,26 +7032,26 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(st
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 405, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 422, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_merged_column = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":413
+  /* "src/neural_fabric.py":430
  *         # we will normalise the weights with the total sum of merged factors
  *         #
  *         total_merge_factors = sum(merge_factors)             # <<<<<<<<<<<<<<
  *         if total_merge_factors == 0.0:
  *             total_merge_factors = 1.0
  */
-  __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_sum, __pyx_v_merge_factors); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_sum, __pyx_v_merge_factors); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 430, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 413, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 430, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_total_merge_factors = __pyx_t_4;
 
-  /* "src/neural_fabric.py":414
+  /* "src/neural_fabric.py":431
  *         #
  *         total_merge_factors = sum(merge_factors)
  *         if total_merge_factors == 0.0:             # <<<<<<<<<<<<<<
@@ -6938,7 +7061,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(st
   __pyx_t_5 = ((__pyx_v_total_merge_factors == 0.0) != 0);
   if (__pyx_t_5) {
 
-    /* "src/neural_fabric.py":415
+    /* "src/neural_fabric.py":432
  *         total_merge_factors = sum(merge_factors)
  *         if total_merge_factors == 0.0:
  *             total_merge_factors = 1.0             # <<<<<<<<<<<<<<
@@ -6947,7 +7070,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(st
  */
     __pyx_v_total_merge_factors = 1.0;
 
-    /* "src/neural_fabric.py":414
+    /* "src/neural_fabric.py":431
  *         #
  *         total_merge_factors = sum(merge_factors)
  *         if total_merge_factors == 0.0:             # <<<<<<<<<<<<<<
@@ -6956,7 +7079,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(st
  */
   }
 
-  /* "src/neural_fabric.py":419
+  /* "src/neural_fabric.py":436
  *         # assume coords and merge_factors of same length and index position aligns
  *         #
  *         for idx in range(len(coords)):             # <<<<<<<<<<<<<<
@@ -6965,14 +7088,14 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(st
  */
   if (unlikely(__pyx_v_coords == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-    __PYX_ERR(0, 419, __pyx_L1_error)
+    __PYX_ERR(0, 436, __pyx_L1_error)
   }
-  __pyx_t_6 = PyList_GET_SIZE(__pyx_v_coords); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 419, __pyx_L1_error)
+  __pyx_t_6 = PyList_GET_SIZE(__pyx_v_coords); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 436, __pyx_L1_error)
   __pyx_t_7 = __pyx_t_6;
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
     __pyx_v_idx = __pyx_t_8;
 
-    /* "src/neural_fabric.py":420
+    /* "src/neural_fabric.py":437
  *         #
  *         for idx in range(len(coords)):
  *             coord_key = coords[idx]             # <<<<<<<<<<<<<<
@@ -6981,15 +7104,15 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(st
  */
     if (unlikely(__pyx_v_coords == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 420, __pyx_L1_error)
+      __PYX_ERR(0, 437, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_coords, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 420, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_coords, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 437, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 420, __pyx_L1_error)
+    if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 437, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_coord_key, ((PyObject*)__pyx_t_1));
     __pyx_t_1 = 0;
 
-    /* "src/neural_fabric.py":424
+    /* "src/neural_fabric.py":441
  *             # normalise the merge_factor for this neuron
  *             #
  *             merge_factor = merge_factors[idx] / total_merge_factors             # <<<<<<<<<<<<<<
@@ -6998,65 +7121,66 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(st
  */
     if (unlikely(__pyx_v_merge_factors == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 424, __pyx_L1_error)
+      __PYX_ERR(0, 441, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_merge_factors, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 424, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_merge_factors, __pyx_v_idx, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 441, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = PyFloat_FromDouble(__pyx_v_total_merge_factors); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 424, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_v_total_merge_factors); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 441, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 424, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 441, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 424, __pyx_L1_error)
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 441, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_merge_factor = __pyx_t_4;
 
-    /* "src/neural_fabric.py":426
+    /* "src/neural_fabric.py":443
  *             merge_factor = merge_factors[idx] / total_merge_factors
  * 
  *             merged_column.merge(neuro_column=self.neurons[coord_key]['neuro_column'], merge_factor=merge_factor)             # <<<<<<<<<<<<<<
  *         return merged_column
  * 
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_merged_column, __pyx_n_s_merge); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 426, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_merged_column, __pyx_n_s_merge); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 426, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     if (unlikely(__pyx_v_self->neurons == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 426, __pyx_L1_error)
+      __PYX_ERR(0, 443, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_neuro_column); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 426, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_neuro_column); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_neuro_column, __pyx_t_9) < 0) __PYX_ERR(0, 426, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_neuro_column, __pyx_t_9) < 0) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-    __pyx_t_9 = PyFloat_FromDouble(__pyx_v_merge_factor); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 426, __pyx_L1_error)
+    __pyx_t_9 = PyFloat_FromDouble(__pyx_v_merge_factor); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_merge_factor, __pyx_t_9) < 0) __PYX_ERR(0, 426, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_merge_factor, __pyx_t_9) < 0) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-    __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 426, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   }
 
-  /* "src/neural_fabric.py":427
+  /* "src/neural_fabric.py":444
  * 
  *             merged_column.merge(neuro_column=self.neurons[coord_key]['neuro_column'], merge_factor=merge_factor)
  *         return merged_column             # <<<<<<<<<<<<<<
  * 
+ *     def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, reset_updated: bool = False, community_sdr: bool = False) -> dict:
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v_merged_column);
   __pyx_r = __pyx_v_merged_column;
   goto __pyx_L0;
 
-  /* "src/neural_fabric.py":391
+  /* "src/neural_fabric.py":408
  *                 self.neurons[coord_key]['community_label'] = curr_community_edge['target_uid']
  * 
  *     def merge_neurons(self, coords: list, merge_factors: list) -> NeuroColumn:             # <<<<<<<<<<<<<<
@@ -7075,6 +7199,2112 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_16merge_neurons(st
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_merged_column);
   __Pyx_XDECREF(__pyx_v_coord_key);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/neural_fabric.py":446
+ *         return merged_column
+ * 
+ *     def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, reset_updated: bool = False, community_sdr: bool = False) -> dict:             # <<<<<<<<<<<<<<
+ *         """
+ *         method to decode the entire fabric
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_19decode(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_3src_13neural_fabric_12NeuralFabric_18decode[] = "\n        method to decode the entire fabric\n\n        :param coords: set of neuro_column coords to decode. if None then all will be decoded\n        :param all_details: If True then all fabric properties will be included else if False just the NeuroColumns\n        :param only_updated: If True only the changed data willbe included else if False then all data\n        :param reset_updated: If True the update flags will be reset to False else if False the update flags left as is\n        :param community_sdr: If True then the community sdr is included\n        :return: dictionary representation of the fabric properties\n        ";
+static PyMethodDef __pyx_mdef_3src_13neural_fabric_12NeuralFabric_19decode = {"decode", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_13neural_fabric_12NeuralFabric_19decode, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_13neural_fabric_12NeuralFabric_18decode};
+static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_19decode(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_coords = 0;
+  PyObject *__pyx_v_all_details = 0;
+  PyObject *__pyx_v_only_updated = 0;
+  PyObject *__pyx_v_reset_updated = 0;
+  PyObject *__pyx_v_community_sdr = 0;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("decode (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_coords,&__pyx_n_s_all_details,&__pyx_n_s_only_updated,&__pyx_n_s_reset_updated,&__pyx_n_s_community_sdr,0};
+    PyObject* values[5] = {0,0,0,0,0};
+    values[0] = ((PyObject*)Py_None);
+    values[1] = ((PyObject *)Py_True);
+    values[2] = ((PyObject *)Py_False);
+    values[3] = ((PyObject *)Py_False);
+    values[4] = ((PyObject *)Py_False);
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_coords);
+          if (value) { values[0] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_all_details);
+          if (value) { values[1] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_only_updated);
+          if (value) { values[2] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_reset_updated);
+          if (value) { values[3] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  4:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_community_sdr);
+          if (value) { values[4] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "decode") < 0)) __PYX_ERR(0, 446, __pyx_L3_error)
+      }
+    } else {
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    __pyx_v_coords = ((PyObject*)values[0]);
+    __pyx_v_all_details = values[1];
+    __pyx_v_only_updated = values[2];
+    __pyx_v_reset_updated = values[3];
+    __pyx_v_community_sdr = values[4];
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("decode", 0, 0, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 446, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.decode", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_coords), (&PySet_Type), 1, "coords", 1))) __PYX_ERR(0, 446, __pyx_L1_error)
+  __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_18decode(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), __pyx_v_coords, __pyx_v_all_details, __pyx_v_only_updated, __pyx_v_reset_updated, __pyx_v_community_sdr);
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18decode(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_coords, PyObject *__pyx_v_all_details, PyObject *__pyx_v_only_updated, PyObject *__pyx_v_reset_updated, PyObject *__pyx_v_community_sdr) {
+  PyObject *__pyx_v_ref_id = 0;
+  PyObject *__pyx_v_fabric = 0;
+  PyObject *__pyx_v_coords_to_decode = 0;
+  PyObject *__pyx_v_coord_key = 0;
+  PyObject *__pyx_8genexpr6__pyx_v_ref_id = NULL;
+  PyObject *__pyx_8genexpr7__pyx_v_attr = NULL;
+  PyObject *__pyx_8genexpr8__pyx_v_ref_id = NULL;
+  PyObject *__pyx_8genexpr9__pyx_v_attr = NULL;
+  PyObject *__pyx_9genexpr10__pyx_v_n_attr = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  Py_ssize_t __pyx_t_5;
+  Py_ssize_t __pyx_t_6;
+  int __pyx_t_7;
+  PyObject *__pyx_t_8 = NULL;
+  int __pyx_t_9;
+  int __pyx_t_10;
+  int __pyx_t_11;
+  PyObject *__pyx_t_12 = NULL;
+  PyObject *__pyx_t_13 = NULL;
+  Py_ssize_t __pyx_t_14;
+  PyObject *(*__pyx_t_15)(PyObject *);
+  PyObject *__pyx_t_16 = NULL;
+  PyObject *__pyx_t_17 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("decode", 0);
+
+  /* "src/neural_fabric.py":465
+ *         n_attr: str
+ * 
+ *         if all_details:             # <<<<<<<<<<<<<<
+ *             fabric = {'mp_window': self.mp_window,
+ *                       'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]
+ */
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_all_details); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 465, __pyx_L1_error)
+  if (__pyx_t_1) {
+
+    /* "src/neural_fabric.py":466
+ * 
+ *         if all_details:
+ *             fabric = {'mp_window': self.mp_window,             # <<<<<<<<<<<<<<
+ *                       'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]
+ *                                            for attr in self.anomaly[ref_id]
+ */
+    __pyx_t_2 = __Pyx_PyDict_NewPresized(9); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 466, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_mp_window, __pyx_v_self->mp_window) < 0) __PYX_ERR(0, 466, __pyx_L1_error)
+    { /* enter inner scope */
+
+      /* "src/neural_fabric.py":467
+ *         if all_details:
+ *             fabric = {'mp_window': self.mp_window,
+ *                       'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]             # <<<<<<<<<<<<<<
+ *                                            for attr in self.anomaly[ref_id]
+ *                                            if attr != 'updated'}
+ */
+      __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 467, __pyx_L6_error)
+      __Pyx_GOTREF(__pyx_t_3);
+
+      /* "src/neural_fabric.py":470
+ *                                            for attr in self.anomaly[ref_id]
+ *                                            if attr != 'updated'}
+ *                                   for ref_id in self.anomaly             # <<<<<<<<<<<<<<
+ *                                   if not only_updated or self.anomaly[ref_id]['updated']},
+ *                       'motif': {ref_id: {attr: self.motif[ref_id][attr]
+ */
+      __pyx_t_5 = 0;
+      if (unlikely(__pyx_v_self->anomaly == Py_None)) {
+        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
+        __PYX_ERR(0, 470, __pyx_L6_error)
+      }
+      __pyx_t_8 = __Pyx_dict_iterator(__pyx_v_self->anomaly, 1, ((PyObject *)NULL), (&__pyx_t_6), (&__pyx_t_7)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 470, __pyx_L6_error)
+      __Pyx_GOTREF(__pyx_t_8);
+      __Pyx_XDECREF(__pyx_t_4);
+      __pyx_t_4 = __pyx_t_8;
+      __pyx_t_8 = 0;
+      while (1) {
+        __pyx_t_9 = __Pyx_dict_iter_next(__pyx_t_4, __pyx_t_6, &__pyx_t_5, &__pyx_t_8, NULL, NULL, __pyx_t_7);
+        if (unlikely(__pyx_t_9 == 0)) break;
+        if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(0, 470, __pyx_L6_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        if (!(likely(PyString_CheckExact(__pyx_t_8))||((__pyx_t_8) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_8)->tp_name), 0))) __PYX_ERR(0, 470, __pyx_L6_error)
+        __Pyx_XDECREF_SET(__pyx_8genexpr6__pyx_v_ref_id, ((PyObject*)__pyx_t_8));
+        __pyx_t_8 = 0;
+
+        /* "src/neural_fabric.py":471
+ *                                            if attr != 'updated'}
+ *                                   for ref_id in self.anomaly
+ *                                   if not only_updated or self.anomaly[ref_id]['updated']},             # <<<<<<<<<<<<<<
+ *                       'motif': {ref_id: {attr: self.motif[ref_id][attr]
+ *                                          for attr in self.motif[ref_id]
+ */
+        __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_v_only_updated); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 471, __pyx_L6_error)
+        __pyx_t_11 = ((!__pyx_t_10) != 0);
+        if (!__pyx_t_11) {
+        } else {
+          __pyx_t_1 = __pyx_t_11;
+          goto __pyx_L10_bool_binop_done;
+        }
+        if (unlikely(__pyx_v_self->anomaly == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+          __PYX_ERR(0, 471, __pyx_L6_error)
+        }
+        __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_self->anomaly, __pyx_8genexpr6__pyx_v_ref_id); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 471, __pyx_L6_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_12 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_updated); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 471, __pyx_L6_error)
+        __Pyx_GOTREF(__pyx_t_12);
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_12); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 471, __pyx_L6_error)
+        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+        __pyx_t_1 = __pyx_t_11;
+        __pyx_L10_bool_binop_done:;
+        if (__pyx_t_1) {
+
+          /* "src/neural_fabric.py":467
+ *         if all_details:
+ *             fabric = {'mp_window': self.mp_window,
+ *                       'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]             # <<<<<<<<<<<<<<
+ *                                            for attr in self.anomaly[ref_id]
+ *                                            if attr != 'updated'}
+ */
+          { /* enter inner scope */
+            __pyx_t_12 = PyDict_New(); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 467, __pyx_L14_error)
+            __Pyx_GOTREF(__pyx_t_12);
+
+            /* "src/neural_fabric.py":468
+ *             fabric = {'mp_window': self.mp_window,
+ *                       'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]
+ *                                            for attr in self.anomaly[ref_id]             # <<<<<<<<<<<<<<
+ *                                            if attr != 'updated'}
+ *                                   for ref_id in self.anomaly
+ */
+            if (unlikely(__pyx_v_self->anomaly == Py_None)) {
+              PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+              __PYX_ERR(0, 468, __pyx_L14_error)
+            }
+            __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_self->anomaly, __pyx_8genexpr6__pyx_v_ref_id); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 468, __pyx_L14_error)
+            __Pyx_GOTREF(__pyx_t_8);
+            if (likely(PyList_CheckExact(__pyx_t_8)) || PyTuple_CheckExact(__pyx_t_8)) {
+              __pyx_t_13 = __pyx_t_8; __Pyx_INCREF(__pyx_t_13); __pyx_t_14 = 0;
+              __pyx_t_15 = NULL;
+            } else {
+              __pyx_t_14 = -1; __pyx_t_13 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 468, __pyx_L14_error)
+              __Pyx_GOTREF(__pyx_t_13);
+              __pyx_t_15 = Py_TYPE(__pyx_t_13)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 468, __pyx_L14_error)
+            }
+            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+            for (;;) {
+              if (likely(!__pyx_t_15)) {
+                if (likely(PyList_CheckExact(__pyx_t_13))) {
+                  if (__pyx_t_14 >= PyList_GET_SIZE(__pyx_t_13)) break;
+                  #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+                  __pyx_t_8 = PyList_GET_ITEM(__pyx_t_13, __pyx_t_14); __Pyx_INCREF(__pyx_t_8); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 468, __pyx_L14_error)
+                  #else
+                  __pyx_t_8 = PySequence_ITEM(__pyx_t_13, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 468, __pyx_L14_error)
+                  __Pyx_GOTREF(__pyx_t_8);
+                  #endif
+                } else {
+                  if (__pyx_t_14 >= PyTuple_GET_SIZE(__pyx_t_13)) break;
+                  #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+                  __pyx_t_8 = PyTuple_GET_ITEM(__pyx_t_13, __pyx_t_14); __Pyx_INCREF(__pyx_t_8); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 468, __pyx_L14_error)
+                  #else
+                  __pyx_t_8 = PySequence_ITEM(__pyx_t_13, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 468, __pyx_L14_error)
+                  __Pyx_GOTREF(__pyx_t_8);
+                  #endif
+                }
+              } else {
+                __pyx_t_8 = __pyx_t_15(__pyx_t_13);
+                if (unlikely(!__pyx_t_8)) {
+                  PyObject* exc_type = PyErr_Occurred();
+                  if (exc_type) {
+                    if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+                    else __PYX_ERR(0, 468, __pyx_L14_error)
+                  }
+                  break;
+                }
+                __Pyx_GOTREF(__pyx_t_8);
+              }
+              if (!(likely(PyString_CheckExact(__pyx_t_8))||((__pyx_t_8) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_8)->tp_name), 0))) __PYX_ERR(0, 468, __pyx_L14_error)
+              __Pyx_XDECREF_SET(__pyx_8genexpr7__pyx_v_attr, ((PyObject*)__pyx_t_8));
+              __pyx_t_8 = 0;
+
+              /* "src/neural_fabric.py":469
+ *                       'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]
+ *                                            for attr in self.anomaly[ref_id]
+ *                                            if attr != 'updated'}             # <<<<<<<<<<<<<<
+ *                                   for ref_id in self.anomaly
+ *                                   if not only_updated or self.anomaly[ref_id]['updated']},
+ */
+              __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_8genexpr7__pyx_v_attr, __pyx_n_s_updated, Py_NE)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 469, __pyx_L14_error)
+              __pyx_t_11 = (__pyx_t_1 != 0);
+              if (__pyx_t_11) {
+
+                /* "src/neural_fabric.py":467
+ *         if all_details:
+ *             fabric = {'mp_window': self.mp_window,
+ *                       'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]             # <<<<<<<<<<<<<<
+ *                                            for attr in self.anomaly[ref_id]
+ *                                            if attr != 'updated'}
+ */
+                if (unlikely(__pyx_v_self->anomaly == Py_None)) {
+                  PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+                  __PYX_ERR(0, 467, __pyx_L14_error)
+                }
+                __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_self->anomaly, __pyx_8genexpr6__pyx_v_ref_id); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 467, __pyx_L14_error)
+                __Pyx_GOTREF(__pyx_t_8);
+                __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_8genexpr7__pyx_v_attr); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 467, __pyx_L14_error)
+                __Pyx_GOTREF(__pyx_t_16);
+                __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+                if (unlikely(PyDict_SetItem(__pyx_t_12, (PyObject*)__pyx_8genexpr7__pyx_v_attr, (PyObject*)__pyx_t_16))) __PYX_ERR(0, 467, __pyx_L14_error)
+                __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+
+                /* "src/neural_fabric.py":469
+ *                       'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]
+ *                                            for attr in self.anomaly[ref_id]
+ *                                            if attr != 'updated'}             # <<<<<<<<<<<<<<
+ *                                   for ref_id in self.anomaly
+ *                                   if not only_updated or self.anomaly[ref_id]['updated']},
+ */
+              }
+
+              /* "src/neural_fabric.py":468
+ *             fabric = {'mp_window': self.mp_window,
+ *                       'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]
+ *                                            for attr in self.anomaly[ref_id]             # <<<<<<<<<<<<<<
+ *                                            if attr != 'updated'}
+ *                                   for ref_id in self.anomaly
+ */
+            }
+            __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+            __Pyx_XDECREF(__pyx_8genexpr7__pyx_v_attr); __pyx_8genexpr7__pyx_v_attr = 0;
+            goto __pyx_L18_exit_scope;
+            __pyx_L14_error:;
+            __Pyx_XDECREF(__pyx_8genexpr7__pyx_v_attr); __pyx_8genexpr7__pyx_v_attr = 0;
+            goto __pyx_L6_error;
+            __pyx_L18_exit_scope:;
+          } /* exit inner scope */
+          if (unlikely(PyDict_SetItem(__pyx_t_3, (PyObject*)__pyx_8genexpr6__pyx_v_ref_id, (PyObject*)__pyx_t_12))) __PYX_ERR(0, 467, __pyx_L6_error)
+          __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+
+          /* "src/neural_fabric.py":471
+ *                                            if attr != 'updated'}
+ *                                   for ref_id in self.anomaly
+ *                                   if not only_updated or self.anomaly[ref_id]['updated']},             # <<<<<<<<<<<<<<
+ *                       'motif': {ref_id: {attr: self.motif[ref_id][attr]
+ *                                          for attr in self.motif[ref_id]
+ */
+        }
+      }
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_XDECREF(__pyx_8genexpr6__pyx_v_ref_id); __pyx_8genexpr6__pyx_v_ref_id = 0;
+      goto __pyx_L19_exit_scope;
+      __pyx_L6_error:;
+      __Pyx_XDECREF(__pyx_8genexpr6__pyx_v_ref_id); __pyx_8genexpr6__pyx_v_ref_id = 0;
+      goto __pyx_L1_error;
+      __pyx_L19_exit_scope:;
+    } /* exit inner scope */
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_anomaly, __pyx_t_3) < 0) __PYX_ERR(0, 466, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    { /* enter inner scope */
+
+      /* "src/neural_fabric.py":472
+ *                                   for ref_id in self.anomaly
+ *                                   if not only_updated or self.anomaly[ref_id]['updated']},
+ *                       'motif': {ref_id: {attr: self.motif[ref_id][attr]             # <<<<<<<<<<<<<<
+ *                                          for attr in self.motif[ref_id]
+ *                                          if attr != 'updated'}
+ */
+      __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 472, __pyx_L22_error)
+      __Pyx_GOTREF(__pyx_t_3);
+
+      /* "src/neural_fabric.py":475
+ *                                          for attr in self.motif[ref_id]
+ *                                          if attr != 'updated'}
+ *                                 for ref_id in self.motif             # <<<<<<<<<<<<<<
+ *                                 if only_updated or self.motif[ref_id]['updated']},
+ *                       'anomaly_threshold': self.anomaly_threshold,
+ */
+      __pyx_t_6 = 0;
+      if (unlikely(__pyx_v_self->motif == Py_None)) {
+        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
+        __PYX_ERR(0, 475, __pyx_L22_error)
+      }
+      __pyx_t_12 = __Pyx_dict_iterator(__pyx_v_self->motif, 1, ((PyObject *)NULL), (&__pyx_t_5), (&__pyx_t_7)); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 475, __pyx_L22_error)
+      __Pyx_GOTREF(__pyx_t_12);
+      __Pyx_XDECREF(__pyx_t_4);
+      __pyx_t_4 = __pyx_t_12;
+      __pyx_t_12 = 0;
+      while (1) {
+        __pyx_t_9 = __Pyx_dict_iter_next(__pyx_t_4, __pyx_t_5, &__pyx_t_6, &__pyx_t_12, NULL, NULL, __pyx_t_7);
+        if (unlikely(__pyx_t_9 == 0)) break;
+        if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(0, 475, __pyx_L22_error)
+        __Pyx_GOTREF(__pyx_t_12);
+        if (!(likely(PyString_CheckExact(__pyx_t_12))||((__pyx_t_12) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_12)->tp_name), 0))) __PYX_ERR(0, 475, __pyx_L22_error)
+        __Pyx_XDECREF_SET(__pyx_8genexpr8__pyx_v_ref_id, ((PyObject*)__pyx_t_12));
+        __pyx_t_12 = 0;
+
+        /* "src/neural_fabric.py":476
+ *                                          if attr != 'updated'}
+ *                                 for ref_id in self.motif
+ *                                 if only_updated or self.motif[ref_id]['updated']},             # <<<<<<<<<<<<<<
+ *                       'anomaly_threshold': self.anomaly_threshold,
+ *                       'motif_threshold': self.motif_threshold,
+ */
+        __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_only_updated); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 476, __pyx_L22_error)
+        if (!__pyx_t_1) {
+        } else {
+          __pyx_t_11 = __pyx_t_1;
+          goto __pyx_L26_bool_binop_done;
+        }
+        if (unlikely(__pyx_v_self->motif == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+          __PYX_ERR(0, 476, __pyx_L22_error)
+        }
+        __pyx_t_12 = __Pyx_PyDict_GetItem(__pyx_v_self->motif, __pyx_8genexpr8__pyx_v_ref_id); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 476, __pyx_L22_error)
+        __Pyx_GOTREF(__pyx_t_12);
+        __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_t_12, __pyx_n_s_updated); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 476, __pyx_L22_error)
+        __Pyx_GOTREF(__pyx_t_13);
+        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+        __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_13); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 476, __pyx_L22_error)
+        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+        __pyx_t_11 = __pyx_t_1;
+        __pyx_L26_bool_binop_done:;
+        if (__pyx_t_11) {
+
+          /* "src/neural_fabric.py":472
+ *                                   for ref_id in self.anomaly
+ *                                   if not only_updated or self.anomaly[ref_id]['updated']},
+ *                       'motif': {ref_id: {attr: self.motif[ref_id][attr]             # <<<<<<<<<<<<<<
+ *                                          for attr in self.motif[ref_id]
+ *                                          if attr != 'updated'}
+ */
+          { /* enter inner scope */
+            __pyx_t_13 = PyDict_New(); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 472, __pyx_L30_error)
+            __Pyx_GOTREF(__pyx_t_13);
+
+            /* "src/neural_fabric.py":473
+ *                                   if not only_updated or self.anomaly[ref_id]['updated']},
+ *                       'motif': {ref_id: {attr: self.motif[ref_id][attr]
+ *                                          for attr in self.motif[ref_id]             # <<<<<<<<<<<<<<
+ *                                          if attr != 'updated'}
+ *                                 for ref_id in self.motif
+ */
+            if (unlikely(__pyx_v_self->motif == Py_None)) {
+              PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+              __PYX_ERR(0, 473, __pyx_L30_error)
+            }
+            __pyx_t_12 = __Pyx_PyDict_GetItem(__pyx_v_self->motif, __pyx_8genexpr8__pyx_v_ref_id); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 473, __pyx_L30_error)
+            __Pyx_GOTREF(__pyx_t_12);
+            if (likely(PyList_CheckExact(__pyx_t_12)) || PyTuple_CheckExact(__pyx_t_12)) {
+              __pyx_t_16 = __pyx_t_12; __Pyx_INCREF(__pyx_t_16); __pyx_t_14 = 0;
+              __pyx_t_15 = NULL;
+            } else {
+              __pyx_t_14 = -1; __pyx_t_16 = PyObject_GetIter(__pyx_t_12); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 473, __pyx_L30_error)
+              __Pyx_GOTREF(__pyx_t_16);
+              __pyx_t_15 = Py_TYPE(__pyx_t_16)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 473, __pyx_L30_error)
+            }
+            __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+            for (;;) {
+              if (likely(!__pyx_t_15)) {
+                if (likely(PyList_CheckExact(__pyx_t_16))) {
+                  if (__pyx_t_14 >= PyList_GET_SIZE(__pyx_t_16)) break;
+                  #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+                  __pyx_t_12 = PyList_GET_ITEM(__pyx_t_16, __pyx_t_14); __Pyx_INCREF(__pyx_t_12); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 473, __pyx_L30_error)
+                  #else
+                  __pyx_t_12 = PySequence_ITEM(__pyx_t_16, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 473, __pyx_L30_error)
+                  __Pyx_GOTREF(__pyx_t_12);
+                  #endif
+                } else {
+                  if (__pyx_t_14 >= PyTuple_GET_SIZE(__pyx_t_16)) break;
+                  #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+                  __pyx_t_12 = PyTuple_GET_ITEM(__pyx_t_16, __pyx_t_14); __Pyx_INCREF(__pyx_t_12); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 473, __pyx_L30_error)
+                  #else
+                  __pyx_t_12 = PySequence_ITEM(__pyx_t_16, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 473, __pyx_L30_error)
+                  __Pyx_GOTREF(__pyx_t_12);
+                  #endif
+                }
+              } else {
+                __pyx_t_12 = __pyx_t_15(__pyx_t_16);
+                if (unlikely(!__pyx_t_12)) {
+                  PyObject* exc_type = PyErr_Occurred();
+                  if (exc_type) {
+                    if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+                    else __PYX_ERR(0, 473, __pyx_L30_error)
+                  }
+                  break;
+                }
+                __Pyx_GOTREF(__pyx_t_12);
+              }
+              if (!(likely(PyString_CheckExact(__pyx_t_12))||((__pyx_t_12) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_12)->tp_name), 0))) __PYX_ERR(0, 473, __pyx_L30_error)
+              __Pyx_XDECREF_SET(__pyx_8genexpr9__pyx_v_attr, ((PyObject*)__pyx_t_12));
+              __pyx_t_12 = 0;
+
+              /* "src/neural_fabric.py":474
+ *                       'motif': {ref_id: {attr: self.motif[ref_id][attr]
+ *                                          for attr in self.motif[ref_id]
+ *                                          if attr != 'updated'}             # <<<<<<<<<<<<<<
+ *                                 for ref_id in self.motif
+ *                                 if only_updated or self.motif[ref_id]['updated']},
+ */
+              __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_8genexpr9__pyx_v_attr, __pyx_n_s_updated, Py_NE)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 474, __pyx_L30_error)
+              __pyx_t_1 = (__pyx_t_11 != 0);
+              if (__pyx_t_1) {
+
+                /* "src/neural_fabric.py":472
+ *                                   for ref_id in self.anomaly
+ *                                   if not only_updated or self.anomaly[ref_id]['updated']},
+ *                       'motif': {ref_id: {attr: self.motif[ref_id][attr]             # <<<<<<<<<<<<<<
+ *                                          for attr in self.motif[ref_id]
+ *                                          if attr != 'updated'}
+ */
+                if (unlikely(__pyx_v_self->motif == Py_None)) {
+                  PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+                  __PYX_ERR(0, 472, __pyx_L30_error)
+                }
+                __pyx_t_12 = __Pyx_PyDict_GetItem(__pyx_v_self->motif, __pyx_8genexpr8__pyx_v_ref_id); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 472, __pyx_L30_error)
+                __Pyx_GOTREF(__pyx_t_12);
+                __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_12, __pyx_8genexpr9__pyx_v_attr); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 472, __pyx_L30_error)
+                __Pyx_GOTREF(__pyx_t_8);
+                __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+                if (unlikely(PyDict_SetItem(__pyx_t_13, (PyObject*)__pyx_8genexpr9__pyx_v_attr, (PyObject*)__pyx_t_8))) __PYX_ERR(0, 472, __pyx_L30_error)
+                __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+
+                /* "src/neural_fabric.py":474
+ *                       'motif': {ref_id: {attr: self.motif[ref_id][attr]
+ *                                          for attr in self.motif[ref_id]
+ *                                          if attr != 'updated'}             # <<<<<<<<<<<<<<
+ *                                 for ref_id in self.motif
+ *                                 if only_updated or self.motif[ref_id]['updated']},
+ */
+              }
+
+              /* "src/neural_fabric.py":473
+ *                                   if not only_updated or self.anomaly[ref_id]['updated']},
+ *                       'motif': {ref_id: {attr: self.motif[ref_id][attr]
+ *                                          for attr in self.motif[ref_id]             # <<<<<<<<<<<<<<
+ *                                          if attr != 'updated'}
+ *                                 for ref_id in self.motif
+ */
+            }
+            __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+            __Pyx_XDECREF(__pyx_8genexpr9__pyx_v_attr); __pyx_8genexpr9__pyx_v_attr = 0;
+            goto __pyx_L34_exit_scope;
+            __pyx_L30_error:;
+            __Pyx_XDECREF(__pyx_8genexpr9__pyx_v_attr); __pyx_8genexpr9__pyx_v_attr = 0;
+            goto __pyx_L22_error;
+            __pyx_L34_exit_scope:;
+          } /* exit inner scope */
+          if (unlikely(PyDict_SetItem(__pyx_t_3, (PyObject*)__pyx_8genexpr8__pyx_v_ref_id, (PyObject*)__pyx_t_13))) __PYX_ERR(0, 472, __pyx_L22_error)
+          __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+
+          /* "src/neural_fabric.py":476
+ *                                          if attr != 'updated'}
+ *                                 for ref_id in self.motif
+ *                                 if only_updated or self.motif[ref_id]['updated']},             # <<<<<<<<<<<<<<
+ *                       'anomaly_threshold': self.anomaly_threshold,
+ *                       'motif_threshold': self.motif_threshold,
+ */
+        }
+      }
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_XDECREF(__pyx_8genexpr8__pyx_v_ref_id); __pyx_8genexpr8__pyx_v_ref_id = 0;
+      goto __pyx_L35_exit_scope;
+      __pyx_L22_error:;
+      __Pyx_XDECREF(__pyx_8genexpr8__pyx_v_ref_id); __pyx_8genexpr8__pyx_v_ref_id = 0;
+      goto __pyx_L1_error;
+      __pyx_L35_exit_scope:;
+    } /* exit inner scope */
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_motif, __pyx_t_3) < 0) __PYX_ERR(0, 466, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "src/neural_fabric.py":477
+ *                                 for ref_id in self.motif
+ *                                 if only_updated or self.motif[ref_id]['updated']},
+ *                       'anomaly_threshold': self.anomaly_threshold,             # <<<<<<<<<<<<<<
+ *                       'motif_threshold': self.motif_threshold,
+ *                       'mapped': self.mapped,
+ */
+    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_self->anomaly_threshold); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_anomaly_threshold, __pyx_t_3) < 0) __PYX_ERR(0, 466, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "src/neural_fabric.py":478
+ *                                 if only_updated or self.motif[ref_id]['updated']},
+ *                       'anomaly_threshold': self.anomaly_threshold,
+ *                       'motif_threshold': self.motif_threshold,             # <<<<<<<<<<<<<<
+ *                       'mapped': self.mapped,
+ *                       'sum_distance': self.sum_distance,
+ */
+    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_self->motif_threshold); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 478, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_motif_threshold, __pyx_t_3) < 0) __PYX_ERR(0, 466, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "src/neural_fabric.py":479
+ *                       'anomaly_threshold': self.anomaly_threshold,
+ *                       'motif_threshold': self.motif_threshold,
+ *                       'mapped': self.mapped,             # <<<<<<<<<<<<<<
+ *                       'sum_distance': self.sum_distance,
+ *                       'mean_distance': self.mean_distance,
+ */
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->mapped); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 479, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_mapped, __pyx_t_3) < 0) __PYX_ERR(0, 466, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "src/neural_fabric.py":480
+ *                       'motif_threshold': self.motif_threshold,
+ *                       'mapped': self.mapped,
+ *                       'sum_distance': self.sum_distance,             # <<<<<<<<<<<<<<
+ *                       'mean_distance': self.mean_distance,
+ *                       'neuro_columns': {}
+ */
+    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_self->sum_distance); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 480, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_sum_distance, __pyx_t_3) < 0) __PYX_ERR(0, 466, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "src/neural_fabric.py":481
+ *                       'mapped': self.mapped,
+ *                       'sum_distance': self.sum_distance,
+ *                       'mean_distance': self.mean_distance,             # <<<<<<<<<<<<<<
+ *                       'neuro_columns': {}
+ *                       }
+ */
+    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_self->mean_distance); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 481, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_mean_distance, __pyx_t_3) < 0) __PYX_ERR(0, 466, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "src/neural_fabric.py":482
+ *                       'sum_distance': self.sum_distance,
+ *                       'mean_distance': self.mean_distance,
+ *                       'neuro_columns': {}             # <<<<<<<<<<<<<<
+ *                       }
+ * 
+ */
+    __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 482, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_neuro_columns, __pyx_t_3) < 0) __PYX_ERR(0, 466, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_v_fabric = ((PyObject*)__pyx_t_2);
+    __pyx_t_2 = 0;
+
+    /* "src/neural_fabric.py":485
+ *                       }
+ * 
+ *             if reset_updated:             # <<<<<<<<<<<<<<
+ *                 for ref_id in fabric['anomaly']:
+ *                     self.anomaly[ref_id]['updated'] = False
+ */
+    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_reset_updated); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 485, __pyx_L1_error)
+    if (__pyx_t_1) {
+
+      /* "src/neural_fabric.py":486
+ * 
+ *             if reset_updated:
+ *                 for ref_id in fabric['anomaly']:             # <<<<<<<<<<<<<<
+ *                     self.anomaly[ref_id]['updated'] = False
+ *                 for ref_id in fabric['motif']:
+ */
+      __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_anomaly); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 486, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      if (likely(PyList_CheckExact(__pyx_t_2)) || PyTuple_CheckExact(__pyx_t_2)) {
+        __pyx_t_3 = __pyx_t_2; __Pyx_INCREF(__pyx_t_3); __pyx_t_5 = 0;
+        __pyx_t_15 = NULL;
+      } else {
+        __pyx_t_5 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 486, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __pyx_t_15 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 486, __pyx_L1_error)
+      }
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      for (;;) {
+        if (likely(!__pyx_t_15)) {
+          if (likely(PyList_CheckExact(__pyx_t_3))) {
+            if (__pyx_t_5 >= PyList_GET_SIZE(__pyx_t_3)) break;
+            #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+            __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_5); __Pyx_INCREF(__pyx_t_2); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 486, __pyx_L1_error)
+            #else
+            __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 486, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_2);
+            #endif
+          } else {
+            if (__pyx_t_5 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
+            #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+            __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_5); __Pyx_INCREF(__pyx_t_2); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 486, __pyx_L1_error)
+            #else
+            __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 486, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_2);
+            #endif
+          }
+        } else {
+          __pyx_t_2 = __pyx_t_15(__pyx_t_3);
+          if (unlikely(!__pyx_t_2)) {
+            PyObject* exc_type = PyErr_Occurred();
+            if (exc_type) {
+              if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+              else __PYX_ERR(0, 486, __pyx_L1_error)
+            }
+            break;
+          }
+          __Pyx_GOTREF(__pyx_t_2);
+        }
+        if (!(likely(PyString_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 486, __pyx_L1_error)
+        __Pyx_XDECREF_SET(__pyx_v_ref_id, ((PyObject*)__pyx_t_2));
+        __pyx_t_2 = 0;
+
+        /* "src/neural_fabric.py":487
+ *             if reset_updated:
+ *                 for ref_id in fabric['anomaly']:
+ *                     self.anomaly[ref_id]['updated'] = False             # <<<<<<<<<<<<<<
+ *                 for ref_id in fabric['motif']:
+ *                     self.motif[ref_id]['updated'] = False
+ */
+        if (unlikely(__pyx_v_self->anomaly == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+          __PYX_ERR(0, 487, __pyx_L1_error)
+        }
+        __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->anomaly, __pyx_v_ref_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 487, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_n_s_updated, Py_False) < 0)) __PYX_ERR(0, 487, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+        /* "src/neural_fabric.py":486
+ * 
+ *             if reset_updated:
+ *                 for ref_id in fabric['anomaly']:             # <<<<<<<<<<<<<<
+ *                     self.anomaly[ref_id]['updated'] = False
+ *                 for ref_id in fabric['motif']:
+ */
+      }
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+      /* "src/neural_fabric.py":488
+ *                 for ref_id in fabric['anomaly']:
+ *                     self.anomaly[ref_id]['updated'] = False
+ *                 for ref_id in fabric['motif']:             # <<<<<<<<<<<<<<
+ *                     self.motif[ref_id]['updated'] = False
+ * 
+ */
+      __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_motif); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 488, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      if (likely(PyList_CheckExact(__pyx_t_3)) || PyTuple_CheckExact(__pyx_t_3)) {
+        __pyx_t_2 = __pyx_t_3; __Pyx_INCREF(__pyx_t_2); __pyx_t_5 = 0;
+        __pyx_t_15 = NULL;
+      } else {
+        __pyx_t_5 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 488, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_15 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 488, __pyx_L1_error)
+      }
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      for (;;) {
+        if (likely(!__pyx_t_15)) {
+          if (likely(PyList_CheckExact(__pyx_t_2))) {
+            if (__pyx_t_5 >= PyList_GET_SIZE(__pyx_t_2)) break;
+            #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+            __pyx_t_3 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_5); __Pyx_INCREF(__pyx_t_3); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 488, __pyx_L1_error)
+            #else
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_2, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 488, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_3);
+            #endif
+          } else {
+            if (__pyx_t_5 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
+            #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+            __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_5); __Pyx_INCREF(__pyx_t_3); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 488, __pyx_L1_error)
+            #else
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_2, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 488, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_3);
+            #endif
+          }
+        } else {
+          __pyx_t_3 = __pyx_t_15(__pyx_t_2);
+          if (unlikely(!__pyx_t_3)) {
+            PyObject* exc_type = PyErr_Occurred();
+            if (exc_type) {
+              if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+              else __PYX_ERR(0, 488, __pyx_L1_error)
+            }
+            break;
+          }
+          __Pyx_GOTREF(__pyx_t_3);
+        }
+        if (!(likely(PyString_CheckExact(__pyx_t_3))||((__pyx_t_3) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_3)->tp_name), 0))) __PYX_ERR(0, 488, __pyx_L1_error)
+        __Pyx_XDECREF_SET(__pyx_v_ref_id, ((PyObject*)__pyx_t_3));
+        __pyx_t_3 = 0;
+
+        /* "src/neural_fabric.py":489
+ *                     self.anomaly[ref_id]['updated'] = False
+ *                 for ref_id in fabric['motif']:
+ *                     self.motif[ref_id]['updated'] = False             # <<<<<<<<<<<<<<
+ * 
+ *         else:
+ */
+        if (unlikely(__pyx_v_self->motif == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+          __PYX_ERR(0, 489, __pyx_L1_error)
+        }
+        __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_self->motif, __pyx_v_ref_id); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 489, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        if (unlikely(PyObject_SetItem(__pyx_t_3, __pyx_n_s_updated, Py_False) < 0)) __PYX_ERR(0, 489, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+        /* "src/neural_fabric.py":488
+ *                 for ref_id in fabric['anomaly']:
+ *                     self.anomaly[ref_id]['updated'] = False
+ *                 for ref_id in fabric['motif']:             # <<<<<<<<<<<<<<
+ *                     self.motif[ref_id]['updated'] = False
+ * 
+ */
+      }
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+      /* "src/neural_fabric.py":485
+ *                       }
+ * 
+ *             if reset_updated:             # <<<<<<<<<<<<<<
+ *                 for ref_id in fabric['anomaly']:
+ *                     self.anomaly[ref_id]['updated'] = False
+ */
+    }
+
+    /* "src/neural_fabric.py":465
+ *         n_attr: str
+ * 
+ *         if all_details:             # <<<<<<<<<<<<<<
+ *             fabric = {'mp_window': self.mp_window,
+ *                       'anomaly': {ref_id: {attr: self.anomaly[ref_id][attr]
+ */
+    goto __pyx_L3;
+  }
+
+  /* "src/neural_fabric.py":492
+ * 
+ *         else:
+ *             fabric = {'neuro_columns': {}}             # <<<<<<<<<<<<<<
+ * 
+ *         if coords is None:
+ */
+  /*else*/ {
+    __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 492, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 492, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_neuro_columns, __pyx_t_3) < 0) __PYX_ERR(0, 492, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_v_fabric = ((PyObject*)__pyx_t_2);
+    __pyx_t_2 = 0;
+  }
+  __pyx_L3:;
+
+  /* "src/neural_fabric.py":494
+ *             fabric = {'neuro_columns': {}}
+ * 
+ *         if coords is None:             # <<<<<<<<<<<<<<
+ *             coords_to_decode = set(self.neurons.keys())
+ *         else:
+ */
+  __pyx_t_1 = (__pyx_v_coords == ((PyObject*)Py_None));
+  __pyx_t_11 = (__pyx_t_1 != 0);
+  if (__pyx_t_11) {
+
+    /* "src/neural_fabric.py":495
+ * 
+ *         if coords is None:
+ *             coords_to_decode = set(self.neurons.keys())             # <<<<<<<<<<<<<<
+ *         else:
+ *             coords_to_decode = coords
+ */
+    if (unlikely(__pyx_v_self->neurons == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "keys");
+      __PYX_ERR(0, 495, __pyx_L1_error)
+    }
+    __pyx_t_2 = __Pyx_PyDict_Keys(__pyx_v_self->neurons); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 495, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = PySet_New(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 495, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_v_coords_to_decode = ((PyObject*)__pyx_t_3);
+    __pyx_t_3 = 0;
+
+    /* "src/neural_fabric.py":494
+ *             fabric = {'neuro_columns': {}}
+ * 
+ *         if coords is None:             # <<<<<<<<<<<<<<
+ *             coords_to_decode = set(self.neurons.keys())
+ *         else:
+ */
+    goto __pyx_L41;
+  }
+
+  /* "src/neural_fabric.py":497
+ *             coords_to_decode = set(self.neurons.keys())
+ *         else:
+ *             coords_to_decode = coords             # <<<<<<<<<<<<<<
+ * 
+ *         for coord_key in coords_to_decode:
+ */
+  /*else*/ {
+    __Pyx_INCREF(__pyx_v_coords);
+    __pyx_v_coords_to_decode = __pyx_v_coords;
+  }
+  __pyx_L41:;
+
+  /* "src/neural_fabric.py":499
+ *             coords_to_decode = coords
+ * 
+ *         for coord_key in coords_to_decode:             # <<<<<<<<<<<<<<
+ *             if not only_updated or self.neurons[coord_key]['updated']:
+ *                 if reset_updated:
+ */
+  __pyx_t_5 = 0;
+  __pyx_t_2 = __Pyx_set_iterator(__pyx_v_coords_to_decode, 1, (&__pyx_t_6), (&__pyx_t_7)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 499, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __pyx_t_3 = __pyx_t_2;
+  __pyx_t_2 = 0;
+  while (1) {
+    __pyx_t_9 = __Pyx_set_iter_next(__pyx_t_3, __pyx_t_6, &__pyx_t_5, &__pyx_t_2, __pyx_t_7);
+    if (unlikely(__pyx_t_9 == 0)) break;
+    if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(0, 499, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    if (!(likely(PyString_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 499, __pyx_L1_error)
+    __Pyx_XDECREF_SET(__pyx_v_coord_key, ((PyObject*)__pyx_t_2));
+    __pyx_t_2 = 0;
+
+    /* "src/neural_fabric.py":500
+ * 
+ *         for coord_key in coords_to_decode:
+ *             if not only_updated or self.neurons[coord_key]['updated']:             # <<<<<<<<<<<<<<
+ *                 if reset_updated:
+ *                     self.neurons[coord_key]['updated'] = False
+ */
+    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_only_updated); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 500, __pyx_L1_error)
+    __pyx_t_10 = ((!__pyx_t_1) != 0);
+    if (!__pyx_t_10) {
+    } else {
+      __pyx_t_11 = __pyx_t_10;
+      goto __pyx_L45_bool_binop_done;
+    }
+    if (unlikely(__pyx_v_self->neurons == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 500, __pyx_L1_error)
+    }
+    __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 500, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_updated); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 500, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 500, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_11 = __pyx_t_10;
+    __pyx_L45_bool_binop_done:;
+    if (__pyx_t_11) {
+
+      /* "src/neural_fabric.py":501
+ *         for coord_key in coords_to_decode:
+ *             if not only_updated or self.neurons[coord_key]['updated']:
+ *                 if reset_updated:             # <<<<<<<<<<<<<<
+ *                     self.neurons[coord_key]['updated'] = False
+ * 
+ */
+      __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_v_reset_updated); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 501, __pyx_L1_error)
+      if (__pyx_t_11) {
+
+        /* "src/neural_fabric.py":502
+ *             if not only_updated or self.neurons[coord_key]['updated']:
+ *                 if reset_updated:
+ *                     self.neurons[coord_key]['updated'] = False             # <<<<<<<<<<<<<<
+ * 
+ *                 # convert sets to lists
+ */
+        if (unlikely(__pyx_v_self->neurons == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+          __PYX_ERR(0, 502, __pyx_L1_error)
+        }
+        __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 502, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        if (unlikely(PyObject_SetItem(__pyx_t_4, __pyx_n_s_updated, Py_False) < 0)) __PYX_ERR(0, 502, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+        /* "src/neural_fabric.py":501
+ *         for coord_key in coords_to_decode:
+ *             if not only_updated or self.neurons[coord_key]['updated']:
+ *                 if reset_updated:             # <<<<<<<<<<<<<<
+ *                     self.neurons[coord_key]['updated'] = False
+ * 
+ */
+      }
+
+      /* "src/neural_fabric.py":506
+ *                 # convert sets to lists
+ *                 #
+ *                 fabric['neuro_columns'][coord_key] = {n_attr: (list(self.neurons[coord_key][n_attr])             # <<<<<<<<<<<<<<
+ *                                                                if isinstance(self.neurons[coord_key][n_attr], set)
+ *                                                                else self.neurons[coord_key][n_attr])
+ */
+      { /* enter inner scope */
+        __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 506, __pyx_L50_error)
+        __Pyx_GOTREF(__pyx_t_4);
+
+        /* "src/neural_fabric.py":509
+ *                                                                if isinstance(self.neurons[coord_key][n_attr], set)
+ *                                                                else self.neurons[coord_key][n_attr])
+ *                                                       for n_attr in self.neurons[coord_key]             # <<<<<<<<<<<<<<
+ *                                                       if n_attr not in ['neuro_column', 'community_nc', 'updated']}
+ * 
+ */
+        if (unlikely(__pyx_v_self->neurons == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+          __PYX_ERR(0, 509, __pyx_L50_error)
+        }
+        __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 509, __pyx_L50_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        if (likely(PyList_CheckExact(__pyx_t_2)) || PyTuple_CheckExact(__pyx_t_2)) {
+          __pyx_t_13 = __pyx_t_2; __Pyx_INCREF(__pyx_t_13); __pyx_t_14 = 0;
+          __pyx_t_15 = NULL;
+        } else {
+          __pyx_t_14 = -1; __pyx_t_13 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 509, __pyx_L50_error)
+          __Pyx_GOTREF(__pyx_t_13);
+          __pyx_t_15 = Py_TYPE(__pyx_t_13)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 509, __pyx_L50_error)
+        }
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        for (;;) {
+          if (likely(!__pyx_t_15)) {
+            if (likely(PyList_CheckExact(__pyx_t_13))) {
+              if (__pyx_t_14 >= PyList_GET_SIZE(__pyx_t_13)) break;
+              #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+              __pyx_t_2 = PyList_GET_ITEM(__pyx_t_13, __pyx_t_14); __Pyx_INCREF(__pyx_t_2); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 509, __pyx_L50_error)
+              #else
+              __pyx_t_2 = PySequence_ITEM(__pyx_t_13, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 509, __pyx_L50_error)
+              __Pyx_GOTREF(__pyx_t_2);
+              #endif
+            } else {
+              if (__pyx_t_14 >= PyTuple_GET_SIZE(__pyx_t_13)) break;
+              #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+              __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_13, __pyx_t_14); __Pyx_INCREF(__pyx_t_2); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 509, __pyx_L50_error)
+              #else
+              __pyx_t_2 = PySequence_ITEM(__pyx_t_13, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 509, __pyx_L50_error)
+              __Pyx_GOTREF(__pyx_t_2);
+              #endif
+            }
+          } else {
+            __pyx_t_2 = __pyx_t_15(__pyx_t_13);
+            if (unlikely(!__pyx_t_2)) {
+              PyObject* exc_type = PyErr_Occurred();
+              if (exc_type) {
+                if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+                else __PYX_ERR(0, 509, __pyx_L50_error)
+              }
+              break;
+            }
+            __Pyx_GOTREF(__pyx_t_2);
+          }
+          if (!(likely(PyString_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 509, __pyx_L50_error)
+          __Pyx_XDECREF_SET(__pyx_9genexpr10__pyx_v_n_attr, ((PyObject*)__pyx_t_2));
+          __pyx_t_2 = 0;
+
+          /* "src/neural_fabric.py":510
+ *                                                                else self.neurons[coord_key][n_attr])
+ *                                                       for n_attr in self.neurons[coord_key]
+ *                                                       if n_attr not in ['neuro_column', 'community_nc', 'updated']}             # <<<<<<<<<<<<<<
+ * 
+ *                 fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)
+ */
+          __Pyx_INCREF(__pyx_9genexpr10__pyx_v_n_attr);
+          __pyx_t_17 = __pyx_9genexpr10__pyx_v_n_attr;
+          __pyx_t_10 = (__Pyx_PyString_Equals(__pyx_t_17, __pyx_n_s_neuro_column, Py_NE)); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 510, __pyx_L50_error)
+          __pyx_t_1 = (__pyx_t_10 != 0);
+          if (__pyx_t_1) {
+          } else {
+            __pyx_t_11 = __pyx_t_1;
+            goto __pyx_L54_bool_binop_done;
+          }
+          __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_t_17, __pyx_n_s_community_nc, Py_NE)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 510, __pyx_L50_error)
+          __pyx_t_10 = (__pyx_t_1 != 0);
+          if (__pyx_t_10) {
+          } else {
+            __pyx_t_11 = __pyx_t_10;
+            goto __pyx_L54_bool_binop_done;
+          }
+          __pyx_t_10 = (__Pyx_PyString_Equals(__pyx_t_17, __pyx_n_s_updated, Py_NE)); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 510, __pyx_L50_error)
+          __pyx_t_1 = (__pyx_t_10 != 0);
+          __pyx_t_11 = __pyx_t_1;
+          __pyx_L54_bool_binop_done:;
+          __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+          __pyx_t_1 = (__pyx_t_11 != 0);
+          if (__pyx_t_1) {
+
+            /* "src/neural_fabric.py":507
+ *                 #
+ *                 fabric['neuro_columns'][coord_key] = {n_attr: (list(self.neurons[coord_key][n_attr])
+ *                                                                if isinstance(self.neurons[coord_key][n_attr], set)             # <<<<<<<<<<<<<<
+ *                                                                else self.neurons[coord_key][n_attr])
+ *                                                       for n_attr in self.neurons[coord_key]
+ */
+            if (unlikely(__pyx_v_self->neurons == Py_None)) {
+              PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+              __PYX_ERR(0, 507, __pyx_L50_error)
+            }
+            __pyx_t_16 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 507, __pyx_L50_error)
+            __Pyx_GOTREF(__pyx_t_16);
+            __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_16, __pyx_9genexpr10__pyx_v_n_attr); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 507, __pyx_L50_error)
+            __Pyx_GOTREF(__pyx_t_8);
+            __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+            __pyx_t_1 = PySet_Check(__pyx_t_8); 
+            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+            if ((__pyx_t_1 != 0)) {
+
+              /* "src/neural_fabric.py":506
+ *                 # convert sets to lists
+ *                 #
+ *                 fabric['neuro_columns'][coord_key] = {n_attr: (list(self.neurons[coord_key][n_attr])             # <<<<<<<<<<<<<<
+ *                                                                if isinstance(self.neurons[coord_key][n_attr], set)
+ *                                                                else self.neurons[coord_key][n_attr])
+ */
+              if (unlikely(__pyx_v_self->neurons == Py_None)) {
+                PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+                __PYX_ERR(0, 506, __pyx_L50_error)
+              }
+              __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 506, __pyx_L50_error)
+              __Pyx_GOTREF(__pyx_t_8);
+              __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_9genexpr10__pyx_v_n_attr); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 506, __pyx_L50_error)
+              __Pyx_GOTREF(__pyx_t_16);
+              __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+              __pyx_t_8 = PySequence_List(__pyx_t_16); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 506, __pyx_L50_error)
+              __Pyx_GOTREF(__pyx_t_8);
+              __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+              __pyx_t_2 = __pyx_t_8;
+              __pyx_t_8 = 0;
+            } else {
+
+              /* "src/neural_fabric.py":508
+ *                 fabric['neuro_columns'][coord_key] = {n_attr: (list(self.neurons[coord_key][n_attr])
+ *                                                                if isinstance(self.neurons[coord_key][n_attr], set)
+ *                                                                else self.neurons[coord_key][n_attr])             # <<<<<<<<<<<<<<
+ *                                                       for n_attr in self.neurons[coord_key]
+ *                                                       if n_attr not in ['neuro_column', 'community_nc', 'updated']}
+ */
+              if (unlikely(__pyx_v_self->neurons == Py_None)) {
+                PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+                __PYX_ERR(0, 508, __pyx_L50_error)
+              }
+              __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 508, __pyx_L50_error)
+              __Pyx_GOTREF(__pyx_t_8);
+              __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_9genexpr10__pyx_v_n_attr); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 508, __pyx_L50_error)
+              __Pyx_GOTREF(__pyx_t_16);
+              __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+              __pyx_t_2 = __pyx_t_16;
+              __pyx_t_16 = 0;
+            }
+            if (unlikely(PyDict_SetItem(__pyx_t_4, (PyObject*)__pyx_9genexpr10__pyx_v_n_attr, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 506, __pyx_L50_error)
+            __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+            /* "src/neural_fabric.py":510
+ *                                                                else self.neurons[coord_key][n_attr])
+ *                                                       for n_attr in self.neurons[coord_key]
+ *                                                       if n_attr not in ['neuro_column', 'community_nc', 'updated']}             # <<<<<<<<<<<<<<
+ * 
+ *                 fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)
+ */
+          }
+
+          /* "src/neural_fabric.py":509
+ *                                                                if isinstance(self.neurons[coord_key][n_attr], set)
+ *                                                                else self.neurons[coord_key][n_attr])
+ *                                                       for n_attr in self.neurons[coord_key]             # <<<<<<<<<<<<<<
+ *                                                       if n_attr not in ['neuro_column', 'community_nc', 'updated']}
+ * 
+ */
+        }
+        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+        __Pyx_XDECREF(__pyx_9genexpr10__pyx_v_n_attr); __pyx_9genexpr10__pyx_v_n_attr = 0;
+        goto __pyx_L57_exit_scope;
+        __pyx_L50_error:;
+        __Pyx_XDECREF(__pyx_9genexpr10__pyx_v_n_attr); __pyx_9genexpr10__pyx_v_n_attr = 0;
+        goto __pyx_L1_error;
+        __pyx_L57_exit_scope:;
+      } /* exit inner scope */
+
+      /* "src/neural_fabric.py":506
+ *                 # convert sets to lists
+ *                 #
+ *                 fabric['neuro_columns'][coord_key] = {n_attr: (list(self.neurons[coord_key][n_attr])             # <<<<<<<<<<<<<<
+ *                                                                if isinstance(self.neurons[coord_key][n_attr], set)
+ *                                                                else self.neurons[coord_key][n_attr])
+ */
+      __pyx_t_13 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 506, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_13);
+      if (unlikely(PyObject_SetItem(__pyx_t_13, __pyx_v_coord_key, __pyx_t_4) < 0)) __PYX_ERR(0, 506, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+      /* "src/neural_fabric.py":512
+ *                                                       if n_attr not in ['neuro_column', 'community_nc', 'updated']}
+ * 
+ *                 fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)             # <<<<<<<<<<<<<<
+ *                 if community_sdr:
+ *                     fabric['neuro_columns'][coord_key]['community_nc'] = self.neurons[coord_key]['community_nc'].decode(only_updated)
+ */
+      if (unlikely(__pyx_v_self->neurons == Py_None)) {
+        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+        __PYX_ERR(0, 512, __pyx_L1_error)
+      }
+      __pyx_t_13 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 512, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_13);
+      __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_13, __pyx_n_s_neuro_column); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 512, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+      __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_decode); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 512, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_13);
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __pyx_t_2 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_13))) {
+        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_13);
+        if (likely(__pyx_t_2)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_13);
+          __Pyx_INCREF(__pyx_t_2);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_13, function);
+        }
+      }
+      __pyx_t_4 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_13, __pyx_t_2, __pyx_v_only_updated) : __Pyx_PyObject_CallOneArg(__pyx_t_13, __pyx_v_only_updated);
+      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 512, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+      __pyx_t_13 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 512, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_13);
+      __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_13, __pyx_v_coord_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 512, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+      if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_n_s_neuro_column, __pyx_t_4) < 0)) __PYX_ERR(0, 512, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+      /* "src/neural_fabric.py":513
+ * 
+ *                 fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)
+ *                 if community_sdr:             # <<<<<<<<<<<<<<
+ *                     fabric['neuro_columns'][coord_key]['community_nc'] = self.neurons[coord_key]['community_nc'].decode(only_updated)
+ * 
+ */
+      __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_community_sdr); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 513, __pyx_L1_error)
+      if (__pyx_t_1) {
+
+        /* "src/neural_fabric.py":514
+ *                 fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)
+ *                 if community_sdr:
+ *                     fabric['neuro_columns'][coord_key]['community_nc'] = self.neurons[coord_key]['community_nc'].decode(only_updated)             # <<<<<<<<<<<<<<
+ * 
+ *         return fabric
+ */
+        if (unlikely(__pyx_v_self->neurons == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+          __PYX_ERR(0, 514, __pyx_L1_error)
+        }
+        __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 514, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_community_nc); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 514, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_13);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_n_s_decode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 514, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+        __pyx_t_13 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+          __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_2);
+          if (likely(__pyx_t_13)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+            __Pyx_INCREF(__pyx_t_13);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_2, function);
+          }
+        }
+        __pyx_t_4 = (__pyx_t_13) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_13, __pyx_v_only_updated) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_only_updated);
+        __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 514, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 514, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_v_coord_key); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 514, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_13);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        if (unlikely(PyObject_SetItem(__pyx_t_13, __pyx_n_s_community_nc, __pyx_t_4) < 0)) __PYX_ERR(0, 514, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+        /* "src/neural_fabric.py":513
+ * 
+ *                 fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)
+ *                 if community_sdr:             # <<<<<<<<<<<<<<
+ *                     fabric['neuro_columns'][coord_key]['community_nc'] = self.neurons[coord_key]['community_nc'].decode(only_updated)
+ * 
+ */
+      }
+
+      /* "src/neural_fabric.py":500
+ * 
+ *         for coord_key in coords_to_decode:
+ *             if not only_updated or self.neurons[coord_key]['updated']:             # <<<<<<<<<<<<<<
+ *                 if reset_updated:
+ *                     self.neurons[coord_key]['updated'] = False
+ */
+    }
+  }
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "src/neural_fabric.py":516
+ *                     fabric['neuro_columns'][coord_key]['community_nc'] = self.neurons[coord_key]['community_nc'].decode(only_updated)
+ * 
+ *         return fabric             # <<<<<<<<<<<<<<
+ * 
+ *     def restore(self, fabric: dict) -> None:
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(__pyx_v_fabric);
+  __pyx_r = __pyx_v_fabric;
+  goto __pyx_L0;
+
+  /* "src/neural_fabric.py":446
+ *         return merged_column
+ * 
+ *     def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, reset_updated: bool = False, community_sdr: bool = False) -> dict:             # <<<<<<<<<<<<<<
+ *         """
+ *         method to decode the entire fabric
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_8);
+  __Pyx_XDECREF(__pyx_t_12);
+  __Pyx_XDECREF(__pyx_t_13);
+  __Pyx_XDECREF(__pyx_t_16);
+  __Pyx_XDECREF(__pyx_t_17);
+  __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.decode", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_ref_id);
+  __Pyx_XDECREF(__pyx_v_fabric);
+  __Pyx_XDECREF(__pyx_v_coords_to_decode);
+  __Pyx_XDECREF(__pyx_v_coord_key);
+  __Pyx_XDECREF(__pyx_8genexpr6__pyx_v_ref_id);
+  __Pyx_XDECREF(__pyx_8genexpr7__pyx_v_attr);
+  __Pyx_XDECREF(__pyx_8genexpr8__pyx_v_ref_id);
+  __Pyx_XDECREF(__pyx_8genexpr9__pyx_v_attr);
+  __Pyx_XDECREF(__pyx_9genexpr10__pyx_v_n_attr);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/neural_fabric.py":518
+ *         return fabric
+ * 
+ *     def restore(self, fabric: dict) -> None:             # <<<<<<<<<<<<<<
+ *         """
+ *         method to restore all the properties of the fabric from a dictionary representation
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_21restore(PyObject *__pyx_v_self, PyObject *__pyx_v_fabric); /*proto*/
+static char __pyx_doc_3src_13neural_fabric_12NeuralFabric_20restore[] = "\n        method to restore all the properties of the fabric from a dictionary representation\n\n        :param fabric: the dictionary representation\n        :return: None\n        ";
+static PyMethodDef __pyx_mdef_3src_13neural_fabric_12NeuralFabric_21restore = {"restore", (PyCFunction)__pyx_pw_3src_13neural_fabric_12NeuralFabric_21restore, METH_O, __pyx_doc_3src_13neural_fabric_12NeuralFabric_20restore};
+static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_21restore(PyObject *__pyx_v_self, PyObject *__pyx_v_fabric) {
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("restore (wrapper)", 0);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fabric), (&PyDict_Type), 1, "fabric", 1))) __PYX_ERR(0, 518, __pyx_L1_error)
+  __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_20restore(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), ((PyObject*)__pyx_v_fabric));
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_20restore(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_fabric) {
+  PyObject *__pyx_v_coord_key = NULL;
+  PyObject *__pyx_v_neuron_id = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  double __pyx_t_2;
+  int __pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  Py_ssize_t __pyx_t_5;
+  PyObject *(*__pyx_t_6)(PyObject *);
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  PyObject *__pyx_t_9 = NULL;
+  Py_ssize_t __pyx_t_10;
+  PyObject *(*__pyx_t_11)(PyObject *);
+  PyObject *__pyx_t_12 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("restore", 0);
+
+  /* "src/neural_fabric.py":525
+ *         :return: None
+ *         """
+ *         self.mp_window = fabric['mp_window']             # <<<<<<<<<<<<<<
+ *         self.anomaly = fabric['anomaly']
+ *         self.anomaly_threshold = fabric['anomaly_threshold']
+ */
+  if (unlikely(__pyx_v_fabric == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 525, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_mp_window); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 525, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (!(likely(PyList_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 525, __pyx_L1_error)
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->mp_window);
+  __Pyx_DECREF(__pyx_v_self->mp_window);
+  __pyx_v_self->mp_window = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "src/neural_fabric.py":526
+ *         """
+ *         self.mp_window = fabric['mp_window']
+ *         self.anomaly = fabric['anomaly']             # <<<<<<<<<<<<<<
+ *         self.anomaly_threshold = fabric['anomaly_threshold']
+ * 
+ */
+  if (unlikely(__pyx_v_fabric == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 526, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_anomaly); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 526, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (!(likely(PyDict_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 526, __pyx_L1_error)
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->anomaly);
+  __Pyx_DECREF(__pyx_v_self->anomaly);
+  __pyx_v_self->anomaly = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "src/neural_fabric.py":527
+ *         self.mp_window = fabric['mp_window']
+ *         self.anomaly = fabric['anomaly']
+ *         self.anomaly_threshold = fabric['anomaly_threshold']             # <<<<<<<<<<<<<<
+ * 
+ *         self.motif = fabric['motif']
+ */
+  if (unlikely(__pyx_v_fabric == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 527, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_anomaly_threshold); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 527, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 527, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_self->anomaly_threshold = __pyx_t_2;
+
+  /* "src/neural_fabric.py":529
+ *         self.anomaly_threshold = fabric['anomaly_threshold']
+ * 
+ *         self.motif = fabric['motif']             # <<<<<<<<<<<<<<
+ *         self.motif_threshold = fabric['motif_threshold']
+ *         self.mapped = fabric['mapped']
+ */
+  if (unlikely(__pyx_v_fabric == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 529, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_motif); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 529, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (!(likely(PyDict_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 529, __pyx_L1_error)
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->motif);
+  __Pyx_DECREF(__pyx_v_self->motif);
+  __pyx_v_self->motif = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "src/neural_fabric.py":530
+ * 
+ *         self.motif = fabric['motif']
+ *         self.motif_threshold = fabric['motif_threshold']             # <<<<<<<<<<<<<<
+ *         self.mapped = fabric['mapped']
+ *         self.sum_distance = fabric['sum_distance']
+ */
+  if (unlikely(__pyx_v_fabric == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 530, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_motif_threshold); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 530, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 530, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_self->motif_threshold = __pyx_t_2;
+
+  /* "src/neural_fabric.py":531
+ *         self.motif = fabric['motif']
+ *         self.motif_threshold = fabric['motif_threshold']
+ *         self.mapped = fabric['mapped']             # <<<<<<<<<<<<<<
+ *         self.sum_distance = fabric['sum_distance']
+ *         self.mean_distance = fabric['mean_distance']
+ */
+  if (unlikely(__pyx_v_fabric == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 531, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_mapped); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 531, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 531, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_self->mapped = __pyx_t_3;
+
+  /* "src/neural_fabric.py":532
+ *         self.motif_threshold = fabric['motif_threshold']
+ *         self.mapped = fabric['mapped']
+ *         self.sum_distance = fabric['sum_distance']             # <<<<<<<<<<<<<<
+ *         self.mean_distance = fabric['mean_distance']
+ * 
+ */
+  if (unlikely(__pyx_v_fabric == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 532, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_sum_distance); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 532, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 532, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_self->sum_distance = __pyx_t_2;
+
+  /* "src/neural_fabric.py":533
+ *         self.mapped = fabric['mapped']
+ *         self.sum_distance = fabric['sum_distance']
+ *         self.mean_distance = fabric['mean_distance']             # <<<<<<<<<<<<<<
+ * 
+ *         for coord_key in fabric['neuro_columns']:
+ */
+  if (unlikely(__pyx_v_fabric == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 533, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_mean_distance); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 533, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 533, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_self->mean_distance = __pyx_t_2;
+
+  /* "src/neural_fabric.py":535
+ *         self.mean_distance = fabric['mean_distance']
+ * 
+ *         for coord_key in fabric['neuro_columns']:             # <<<<<<<<<<<<<<
+ *             self.neurons[coord_key] = {'neuro_column': NeuroColumn(prune_threshold=self.prune_threshold),
+ *                                        'coord': fabric['neuro_columns'][coord_key]['coord'],
+ */
+  if (unlikely(__pyx_v_fabric == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 535, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 535, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
+    __pyx_t_4 = __pyx_t_1; __Pyx_INCREF(__pyx_t_4); __pyx_t_5 = 0;
+    __pyx_t_6 = NULL;
+  } else {
+    __pyx_t_5 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 535, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_6 = Py_TYPE(__pyx_t_4)->tp_iternext; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 535, __pyx_L1_error)
+  }
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  for (;;) {
+    if (likely(!__pyx_t_6)) {
+      if (likely(PyList_CheckExact(__pyx_t_4))) {
+        if (__pyx_t_5 >= PyList_GET_SIZE(__pyx_t_4)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_5); __Pyx_INCREF(__pyx_t_1); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 535, __pyx_L1_error)
+        #else
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_4, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 535, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        #endif
+      } else {
+        if (__pyx_t_5 >= PyTuple_GET_SIZE(__pyx_t_4)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_5); __Pyx_INCREF(__pyx_t_1); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 535, __pyx_L1_error)
+        #else
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_4, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 535, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        #endif
+      }
+    } else {
+      __pyx_t_1 = __pyx_t_6(__pyx_t_4);
+      if (unlikely(!__pyx_t_1)) {
+        PyObject* exc_type = PyErr_Occurred();
+        if (exc_type) {
+          if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+          else __PYX_ERR(0, 535, __pyx_L1_error)
+        }
+        break;
+      }
+      __Pyx_GOTREF(__pyx_t_1);
+    }
+    __Pyx_XDECREF_SET(__pyx_v_coord_key, __pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "src/neural_fabric.py":536
+ * 
+ *         for coord_key in fabric['neuro_columns']:
+ *             self.neurons[coord_key] = {'neuro_column': NeuroColumn(prune_threshold=self.prune_threshold),             # <<<<<<<<<<<<<<
+ *                                        'coord': fabric['neuro_columns'][coord_key]['coord'],
+ *                                        'n_bmu': fabric['neuro_columns'][coord_key]['n_bmu'],
+ */
+    __pyx_t_1 = __Pyx_PyDict_NewPresized(12); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_8 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __pyx_t_9 = PyFloat_FromDouble(__pyx_v_self->prune_threshold); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_prune_threshold, __pyx_t_9) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_empty_tuple, __pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_neuro_column, __pyx_t_9) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "src/neural_fabric.py":537
+ *         for coord_key in fabric['neuro_columns']:
+ *             self.neurons[coord_key] = {'neuro_column': NeuroColumn(prune_threshold=self.prune_threshold),
+ *                                        'coord': fabric['neuro_columns'][coord_key]['coord'],             # <<<<<<<<<<<<<<
+ *                                        'n_bmu': fabric['neuro_columns'][coord_key]['n_bmu'],
+ *                                        'n_nn': fabric['neuro_columns'][coord_key]['n_nn'],
+ */
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 537, __pyx_L1_error)
+    }
+    __pyx_t_9 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 537, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_9, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 537, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_coord); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 537, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_coord, __pyx_t_9) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "src/neural_fabric.py":538
+ *             self.neurons[coord_key] = {'neuro_column': NeuroColumn(prune_threshold=self.prune_threshold),
+ *                                        'coord': fabric['neuro_columns'][coord_key]['coord'],
+ *                                        'n_bmu': fabric['neuro_columns'][coord_key]['n_bmu'],             # <<<<<<<<<<<<<<
+ *                                        'n_nn': fabric['neuro_columns'][coord_key]['n_nn'],
+ *                                        'last_bmu': fabric['neuro_columns'][coord_key]['last_bmu'],
+ */
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 538, __pyx_L1_error)
+    }
+    __pyx_t_9 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 538, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_9, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 538, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_n_bmu); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 538, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_n_bmu, __pyx_t_9) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "src/neural_fabric.py":539
+ *                                        'coord': fabric['neuro_columns'][coord_key]['coord'],
+ *                                        'n_bmu': fabric['neuro_columns'][coord_key]['n_bmu'],
+ *                                        'n_nn': fabric['neuro_columns'][coord_key]['n_nn'],             # <<<<<<<<<<<<<<
+ *                                        'last_bmu': fabric['neuro_columns'][coord_key]['last_bmu'],
+ *                                        'last_nn': fabric['neuro_columns'][coord_key]['last_nn'],
+ */
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 539, __pyx_L1_error)
+    }
+    __pyx_t_9 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 539, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_9, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 539, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_n_nn); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 539, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_n_nn, __pyx_t_9) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "src/neural_fabric.py":540
+ *                                        'n_bmu': fabric['neuro_columns'][coord_key]['n_bmu'],
+ *                                        'n_nn': fabric['neuro_columns'][coord_key]['n_nn'],
+ *                                        'last_bmu': fabric['neuro_columns'][coord_key]['last_bmu'],             # <<<<<<<<<<<<<<
+ *                                        'last_nn': fabric['neuro_columns'][coord_key]['last_nn'],
+ *                                        'sum_distance': fabric['neuro_columns'][coord_key]['sum_distance'],
+ */
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 540, __pyx_L1_error)
+    }
+    __pyx_t_9 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 540, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_9, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 540, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_last_bmu); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 540, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_last_bmu, __pyx_t_9) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "src/neural_fabric.py":541
+ *                                        'n_nn': fabric['neuro_columns'][coord_key]['n_nn'],
+ *                                        'last_bmu': fabric['neuro_columns'][coord_key]['last_bmu'],
+ *                                        'last_nn': fabric['neuro_columns'][coord_key]['last_nn'],             # <<<<<<<<<<<<<<
+ *                                        'sum_distance': fabric['neuro_columns'][coord_key]['sum_distance'],
+ *                                        'mean_distance': fabric['neuro_columns'][coord_key]['mean_distance'],
+ */
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 541, __pyx_L1_error)
+    }
+    __pyx_t_9 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 541, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_9, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 541, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_last_nn); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 541, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_last_nn, __pyx_t_9) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "src/neural_fabric.py":542
+ *                                        'last_bmu': fabric['neuro_columns'][coord_key]['last_bmu'],
+ *                                        'last_nn': fabric['neuro_columns'][coord_key]['last_nn'],
+ *                                        'sum_distance': fabric['neuro_columns'][coord_key]['sum_distance'],             # <<<<<<<<<<<<<<
+ *                                        'mean_distance': fabric['neuro_columns'][coord_key]['mean_distance'],
+ *                                        'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
+ */
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 542, __pyx_L1_error)
+    }
+    __pyx_t_9 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 542, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_9, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 542, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_sum_distance); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 542, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_sum_distance, __pyx_t_9) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "src/neural_fabric.py":543
+ *                                        'last_nn': fabric['neuro_columns'][coord_key]['last_nn'],
+ *                                        'sum_distance': fabric['neuro_columns'][coord_key]['sum_distance'],
+ *                                        'mean_distance': fabric['neuro_columns'][coord_key]['mean_distance'],             # <<<<<<<<<<<<<<
+ *                                        'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
+ *                                        'community_label': fabric['neuro_columns'][coord_key]['community_label'],
+ */
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 543, __pyx_L1_error)
+    }
+    __pyx_t_9 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 543, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_9, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 543, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_mean_distance); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 543, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_mean_distance, __pyx_t_9) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "src/neural_fabric.py":544
+ *                                        'sum_distance': fabric['neuro_columns'][coord_key]['sum_distance'],
+ *                                        'mean_distance': fabric['neuro_columns'][coord_key]['mean_distance'],
+ *                                        'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),             # <<<<<<<<<<<<<<
+ *                                        'community_label': fabric['neuro_columns'][coord_key]['community_label'],
+ *                                        'updated': False,
+ */
+    __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 544, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_8 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 544, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __pyx_t_7 = PyFloat_FromDouble(__pyx_v_self->prune_threshold); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 544, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_prune_threshold, __pyx_t_7) < 0) __PYX_ERR(0, 544, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_empty_tuple, __pyx_t_8); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 544, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_community_nc, __pyx_t_7) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+    /* "src/neural_fabric.py":545
+ *                                        'mean_distance': fabric['neuro_columns'][coord_key]['mean_distance'],
+ *                                        'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
+ *                                        'community_label': fabric['neuro_columns'][coord_key]['community_label'],             # <<<<<<<<<<<<<<
+ *                                        'updated': False,
+ *                                        'nn': fabric['neuro_columns'][coord_key]['nn']
+ */
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 545, __pyx_L1_error)
+    }
+    __pyx_t_7 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 545, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_7, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 545, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_community_label); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 545, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_community_label, __pyx_t_7) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+    /* "src/neural_fabric.py":546
+ *                                        'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
+ *                                        'community_label': fabric['neuro_columns'][coord_key]['community_label'],
+ *                                        'updated': False,             # <<<<<<<<<<<<<<
+ *                                        'nn': fabric['neuro_columns'][coord_key]['nn']
+ *                                        }
+ */
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_updated, Py_False) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+
+    /* "src/neural_fabric.py":547
+ *                                        'community_label': fabric['neuro_columns'][coord_key]['community_label'],
+ *                                        'updated': False,
+ *                                        'nn': fabric['neuro_columns'][coord_key]['nn']             # <<<<<<<<<<<<<<
+ *                                        }
+ * 
+ */
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 547, __pyx_L1_error)
+    }
+    __pyx_t_7 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 547, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_t_7, __pyx_v_coord_key); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 547, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_nn); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 547, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_nn, __pyx_t_7) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+    /* "src/neural_fabric.py":536
+ * 
+ *         for coord_key in fabric['neuro_columns']:
+ *             self.neurons[coord_key] = {'neuro_column': NeuroColumn(prune_threshold=self.prune_threshold),             # <<<<<<<<<<<<<<
+ *                                        'coord': fabric['neuro_columns'][coord_key]['coord'],
+ *                                        'n_bmu': fabric['neuro_columns'][coord_key]['n_bmu'],
+ */
+    if (unlikely(__pyx_v_self->neurons == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 536, __pyx_L1_error)
+    }
+    if (unlikely(PyDict_SetItem(__pyx_v_self->neurons, __pyx_v_coord_key, __pyx_t_1) < 0)) __PYX_ERR(0, 536, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "src/neural_fabric.py":552
+ *             # init each neuro_column
+ *             #
+ *             for neuron_id in fabric['neuro_columns'][coord_key]['neuro_column']:             # <<<<<<<<<<<<<<
+ *                 self.neurons[coord_key]['neuro_column'].upsert_sdr(sdr=fabric['neuro_columns'][coord_key]['neuro_column'][neuron_id], neuron_id=neuron_id)
+ * 
+ */
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 552, __pyx_L1_error)
+    }
+    __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 552, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_v_coord_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 552, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_neuro_column); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 552, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
+      __pyx_t_7 = __pyx_t_1; __Pyx_INCREF(__pyx_t_7); __pyx_t_10 = 0;
+      __pyx_t_11 = NULL;
+    } else {
+      __pyx_t_10 = -1; __pyx_t_7 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 552, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __pyx_t_11 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 552, __pyx_L1_error)
+    }
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    for (;;) {
+      if (likely(!__pyx_t_11)) {
+        if (likely(PyList_CheckExact(__pyx_t_7))) {
+          if (__pyx_t_10 >= PyList_GET_SIZE(__pyx_t_7)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_10); __Pyx_INCREF(__pyx_t_1); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 552, __pyx_L1_error)
+          #else
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_7, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 552, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          #endif
+        } else {
+          if (__pyx_t_10 >= PyTuple_GET_SIZE(__pyx_t_7)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_10); __Pyx_INCREF(__pyx_t_1); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 552, __pyx_L1_error)
+          #else
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_7, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 552, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          #endif
+        }
+      } else {
+        __pyx_t_1 = __pyx_t_11(__pyx_t_7);
+        if (unlikely(!__pyx_t_1)) {
+          PyObject* exc_type = PyErr_Occurred();
+          if (exc_type) {
+            if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+            else __PYX_ERR(0, 552, __pyx_L1_error)
+          }
+          break;
+        }
+        __Pyx_GOTREF(__pyx_t_1);
+      }
+      __Pyx_XDECREF_SET(__pyx_v_neuron_id, __pyx_t_1);
+      __pyx_t_1 = 0;
+
+      /* "src/neural_fabric.py":553
+ *             #
+ *             for neuron_id in fabric['neuro_columns'][coord_key]['neuro_column']:
+ *                 self.neurons[coord_key]['neuro_column'].upsert_sdr(sdr=fabric['neuro_columns'][coord_key]['neuro_column'][neuron_id], neuron_id=neuron_id)             # <<<<<<<<<<<<<<
+ * 
+ *             # init the community neuro_column
+ */
+      if (unlikely(__pyx_v_self->neurons == Py_None)) {
+        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+        __PYX_ERR(0, 553, __pyx_L1_error)
+      }
+      __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 553, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_neuro_column); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 553, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_8);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_upsert_sdr); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 553, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+      __pyx_t_8 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 553, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_8);
+      if (unlikely(__pyx_v_fabric == Py_None)) {
+        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+        __PYX_ERR(0, 553, __pyx_L1_error)
+      }
+      __pyx_t_9 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 553, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_9);
+      __pyx_t_12 = __Pyx_PyObject_GetItem(__pyx_t_9, __pyx_v_coord_key); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 553, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_12);
+      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_t_12, __pyx_n_s_neuro_column); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 553, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_9);
+      __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+      __pyx_t_12 = __Pyx_PyObject_GetItem(__pyx_t_9, __pyx_v_neuron_id); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 553, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_12);
+      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_sdr, __pyx_t_12) < 0) __PYX_ERR(0, 553, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+      if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_neuron_id, __pyx_v_neuron_id) < 0) __PYX_ERR(0, 553, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_empty_tuple, __pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 553, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_12);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+      __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+
+      /* "src/neural_fabric.py":552
+ *             # init each neuro_column
+ *             #
+ *             for neuron_id in fabric['neuro_columns'][coord_key]['neuro_column']:             # <<<<<<<<<<<<<<
+ *                 self.neurons[coord_key]['neuro_column'].upsert_sdr(sdr=fabric['neuro_columns'][coord_key]['neuro_column'][neuron_id], neuron_id=neuron_id)
+ * 
+ */
+    }
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+    /* "src/neural_fabric.py":557
+ *             # init the community neuro_column
+ *             #
+ *             self.neurons[coord_key]['community_nc'].upsert_sdr(sdr=fabric['neuro_columns'][coord_key]['community_nc'], neuron_id=0)             # <<<<<<<<<<<<<<
+ * 
+ */
+    if (unlikely(__pyx_v_self->neurons == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 557, __pyx_L1_error)
+    }
+    __pyx_t_7 = __Pyx_PyDict_GetItem(__pyx_v_self->neurons, __pyx_v_coord_key); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 557, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_12 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_community_nc); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 557, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_12);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_n_s_upsert_sdr); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 557, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+    __pyx_t_12 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 557, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_12);
+    if (unlikely(__pyx_v_fabric == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 557, __pyx_L1_error)
+    }
+    __pyx_t_8 = __Pyx_PyDict_GetItem(__pyx_v_fabric, __pyx_n_s_neuro_columns); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 557, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_8, __pyx_v_coord_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 557, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_community_nc); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 557, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_sdr, __pyx_t_8) < 0) __PYX_ERR(0, 557, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (PyDict_SetItem(__pyx_t_12, __pyx_n_s_neuron_id, __pyx_int_0) < 0) __PYX_ERR(0, 557, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_empty_tuple, __pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 557, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+
+    /* "src/neural_fabric.py":535
+ *         self.mean_distance = fabric['mean_distance']
+ * 
+ *         for coord_key in fabric['neuro_columns']:             # <<<<<<<<<<<<<<
+ *             self.neurons[coord_key] = {'neuro_column': NeuroColumn(prune_threshold=self.prune_threshold),
+ *                                        'coord': fabric['neuro_columns'][coord_key]['coord'],
+ */
+  }
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "src/neural_fabric.py":518
+ *         return fabric
+ * 
+ *     def restore(self, fabric: dict) -> None:             # <<<<<<<<<<<<<<
+ *         """
+ *         method to restore all the properties of the fabric from a dictionary representation
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_8);
+  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_12);
+  __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.restore", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_coord_key);
+  __Pyx_XDECREF(__pyx_v_neuron_id);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
@@ -8117,7 +10347,7 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_12sum_distance_2__set__(
  *     sum_distance = cython.declare(cython.double, visibility='public')
  *     mean_distance = cython.declare(cython.double, visibility='public')             # <<<<<<<<<<<<<<
  *     structure = cython.declare(str, visibility='public')
- * 
+ *     prune_threshold = cython.declare(cython.double, visibility='public')
  */
 
 /* Python wrapper */
@@ -8198,8 +10428,8 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_13mean_distance_2__set__
  *     sum_distance = cython.declare(cython.double, visibility='public')
  *     mean_distance = cython.declare(cython.double, visibility='public')
  *     structure = cython.declare(str, visibility='public')             # <<<<<<<<<<<<<<
+ *     prune_threshold = cython.declare(cython.double, visibility='public')
  * 
- *     def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.int = 5, structure: str = 'star'):
  */
 
 /* Python wrapper */
@@ -8302,6 +10532,88 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_9structure_4__del__(stru
   return __pyx_r;
 }
 
+/* "src/neural_fabric.py":27
+ *     mean_distance = cython.declare(cython.double, visibility='public')
+ *     structure = cython.declare(str, visibility='public')
+ *     prune_threshold = cython.declare(cython.double, visibility='public')             # <<<<<<<<<<<<<<
+ * 
+ *     def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.int = 5, structure: str = 'star', prune_threshold: float = 0.00001):
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_15prune_threshold_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_15prune_threshold_1__get__(PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_15prune_threshold___get__(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_15prune_threshold___get__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("__get__", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->prune_threshold); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.prune_threshold.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static int __pyx_pw_3src_13neural_fabric_12NeuralFabric_15prune_threshold_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static int __pyx_pw_3src_13neural_fabric_12NeuralFabric_15prune_threshold_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_15prune_threshold_2__set__(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_15prune_threshold_2__set__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v_value) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  double __pyx_t_1;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("__set__", 0);
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_v_self->prune_threshold = __pyx_t_1;
+
+  /* function exit code */
+  __pyx_r = 0;
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.prune_threshold.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
 /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     cdef tuple state
@@ -8309,20 +10621,20 @@ static int __pyx_pf_3src_13neural_fabric_12NeuralFabric_9structure_4__del__(stru
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_19__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyMethodDef __pyx_mdef_3src_13neural_fabric_12NeuralFabric_19__reduce_cython__ = {"__reduce_cython__", (PyCFunction)__pyx_pw_3src_13neural_fabric_12NeuralFabric_19__reduce_cython__, METH_NOARGS, 0};
-static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_19__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_23__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef_3src_13neural_fabric_12NeuralFabric_23__reduce_cython__ = {"__reduce_cython__", (PyCFunction)__pyx_pw_3src_13neural_fabric_12NeuralFabric_23__reduce_cython__, METH_NOARGS, 0};
+static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_23__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython__(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self));
+  __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_22__reduce_cython__(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self) {
+static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_22__reduce_cython__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self) {
   PyObject *__pyx_v_state = 0;
   PyObject *__pyx_v__dict = 0;
   int __pyx_v_use_setstate;
@@ -8336,9 +10648,10 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython_
   PyObject *__pyx_t_6 = NULL;
   PyObject *__pyx_t_7 = NULL;
   PyObject *__pyx_t_8 = NULL;
-  int __pyx_t_9;
+  PyObject *__pyx_t_9 = NULL;
   int __pyx_t_10;
   int __pyx_t_11;
+  int __pyx_t_12;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -8347,7 +10660,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython_
   /* "(tree fragment)":5
  *     cdef object _dict
  *     cdef bint use_setstate
- *     state = (self.anomaly, self.anomaly_threshold, self.mapped, self.max_stm, self.mean_distance, self.motif, self.motif_threshold, self.mp_window, self.mp_window_size, self.neurons, self.structure, self.sum_distance, self.uid)             # <<<<<<<<<<<<<<
+ *     state = (self.anomaly, self.anomaly_threshold, self.mapped, self.max_stm, self.mean_distance, self.motif, self.motif_threshold, self.mp_window, self.mp_window_size, self.neurons, self.prune_threshold, self.structure, self.sum_distance, self.uid)             # <<<<<<<<<<<<<<
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:
  */
@@ -8363,42 +10676,46 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython_
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->mp_window_size); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyFloat_FromDouble(__pyx_v_self->sum_distance); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_7 = PyFloat_FromDouble(__pyx_v_self->prune_threshold); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_8 = PyTuple_New(13); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_8 = PyFloat_FromDouble(__pyx_v_self->sum_distance); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
+  __pyx_t_9 = PyTuple_New(14); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_9);
   __Pyx_INCREF(__pyx_v_self->anomaly);
   __Pyx_GIVEREF(__pyx_v_self->anomaly);
-  PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_v_self->anomaly);
+  PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_v_self->anomaly);
   __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_8, 1, __pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_9, 1, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_8, 2, __pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_9, 2, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_8, 3, __pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_9, 3, __pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_8, 4, __pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_9, 4, __pyx_t_4);
   __Pyx_INCREF(__pyx_v_self->motif);
   __Pyx_GIVEREF(__pyx_v_self->motif);
-  PyTuple_SET_ITEM(__pyx_t_8, 5, __pyx_v_self->motif);
+  PyTuple_SET_ITEM(__pyx_t_9, 5, __pyx_v_self->motif);
   __Pyx_GIVEREF(__pyx_t_5);
-  PyTuple_SET_ITEM(__pyx_t_8, 6, __pyx_t_5);
+  PyTuple_SET_ITEM(__pyx_t_9, 6, __pyx_t_5);
   __Pyx_INCREF(__pyx_v_self->mp_window);
   __Pyx_GIVEREF(__pyx_v_self->mp_window);
-  PyTuple_SET_ITEM(__pyx_t_8, 7, __pyx_v_self->mp_window);
+  PyTuple_SET_ITEM(__pyx_t_9, 7, __pyx_v_self->mp_window);
   __Pyx_GIVEREF(__pyx_t_6);
-  PyTuple_SET_ITEM(__pyx_t_8, 8, __pyx_t_6);
+  PyTuple_SET_ITEM(__pyx_t_9, 8, __pyx_t_6);
   __Pyx_INCREF(__pyx_v_self->neurons);
   __Pyx_GIVEREF(__pyx_v_self->neurons);
-  PyTuple_SET_ITEM(__pyx_t_8, 9, __pyx_v_self->neurons);
+  PyTuple_SET_ITEM(__pyx_t_9, 9, __pyx_v_self->neurons);
+  __Pyx_GIVEREF(__pyx_t_7);
+  PyTuple_SET_ITEM(__pyx_t_9, 10, __pyx_t_7);
   __Pyx_INCREF(__pyx_v_self->structure);
   __Pyx_GIVEREF(__pyx_v_self->structure);
-  PyTuple_SET_ITEM(__pyx_t_8, 10, __pyx_v_self->structure);
-  __Pyx_GIVEREF(__pyx_t_7);
-  PyTuple_SET_ITEM(__pyx_t_8, 11, __pyx_t_7);
+  PyTuple_SET_ITEM(__pyx_t_9, 11, __pyx_v_self->structure);
+  __Pyx_GIVEREF(__pyx_t_8);
+  PyTuple_SET_ITEM(__pyx_t_9, 12, __pyx_t_8);
   __Pyx_INCREF(__pyx_v_self->uid);
   __Pyx_GIVEREF(__pyx_v_self->uid);
-  PyTuple_SET_ITEM(__pyx_t_8, 12, __pyx_v_self->uid);
+  PyTuple_SET_ITEM(__pyx_t_9, 13, __pyx_v_self->uid);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
@@ -8406,31 +10723,32 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython_
   __pyx_t_5 = 0;
   __pyx_t_6 = 0;
   __pyx_t_7 = 0;
-  __pyx_v_state = ((PyObject*)__pyx_t_8);
   __pyx_t_8 = 0;
+  __pyx_v_state = ((PyObject*)__pyx_t_9);
+  __pyx_t_9 = 0;
 
   /* "(tree fragment)":6
  *     cdef bint use_setstate
- *     state = (self.anomaly, self.anomaly_threshold, self.mapped, self.max_stm, self.mean_distance, self.motif, self.motif_threshold, self.mp_window, self.mp_window_size, self.neurons, self.structure, self.sum_distance, self.uid)
+ *     state = (self.anomaly, self.anomaly_threshold, self.mapped, self.max_stm, self.mean_distance, self.motif, self.motif_threshold, self.mp_window, self.mp_window_size, self.neurons, self.prune_threshold, self.structure, self.sum_distance, self.uid)
  *     _dict = getattr(self, '__dict__', None)             # <<<<<<<<<<<<<<
  *     if _dict is not None:
  *         state += (_dict,)
  */
-  __pyx_t_8 = __Pyx_GetAttr3(((PyObject *)__pyx_v_self), __pyx_n_s_dict, Py_None); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 6, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __pyx_v__dict = __pyx_t_8;
-  __pyx_t_8 = 0;
+  __pyx_t_9 = __Pyx_GetAttr3(((PyObject *)__pyx_v_self), __pyx_n_s_dict, Py_None); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 6, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_9);
+  __pyx_v__dict = __pyx_t_9;
+  __pyx_t_9 = 0;
 
   /* "(tree fragment)":7
- *     state = (self.anomaly, self.anomaly_threshold, self.mapped, self.max_stm, self.mean_distance, self.motif, self.motif_threshold, self.mp_window, self.mp_window_size, self.neurons, self.structure, self.sum_distance, self.uid)
+ *     state = (self.anomaly, self.anomaly_threshold, self.mapped, self.max_stm, self.mean_distance, self.motif, self.motif_threshold, self.mp_window, self.mp_window_size, self.neurons, self.prune_threshold, self.structure, self.sum_distance, self.uid)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
  *         use_setstate = True
  */
-  __pyx_t_9 = (__pyx_v__dict != Py_None);
-  __pyx_t_10 = (__pyx_t_9 != 0);
-  if (__pyx_t_10) {
+  __pyx_t_10 = (__pyx_v__dict != Py_None);
+  __pyx_t_11 = (__pyx_t_10 != 0);
+  if (__pyx_t_11) {
 
     /* "(tree fragment)":8
  *     _dict = getattr(self, '__dict__', None)
@@ -8439,16 +10757,16 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython_
  *         use_setstate = True
  *     else:
  */
-    __pyx_t_8 = PyTuple_New(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 8, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
+    __pyx_t_9 = PyTuple_New(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 8, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
     __Pyx_INCREF(__pyx_v__dict);
     __Pyx_GIVEREF(__pyx_v__dict);
-    PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_v__dict);
-    __pyx_t_7 = PyNumber_InPlaceAdd(__pyx_v_state, __pyx_t_8); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 8, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __Pyx_DECREF_SET(__pyx_v_state, ((PyObject*)__pyx_t_7));
-    __pyx_t_7 = 0;
+    PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_v__dict);
+    __pyx_t_8 = PyNumber_InPlaceAdd(__pyx_v_state, __pyx_t_9); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 8, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __Pyx_DECREF_SET(__pyx_v_state, ((PyObject*)__pyx_t_8));
+    __pyx_t_8 = 0;
 
     /* "(tree fragment)":9
  *     if _dict is not None:
@@ -8460,7 +10778,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython_
     __pyx_v_use_setstate = 1;
 
     /* "(tree fragment)":7
- *     state = (self.anomaly, self.anomaly_threshold, self.mapped, self.max_stm, self.mean_distance, self.motif, self.motif_threshold, self.mp_window, self.mp_window_size, self.neurons, self.structure, self.sum_distance, self.uid)
+ *     state = (self.anomaly, self.anomaly_threshold, self.mapped, self.max_stm, self.mean_distance, self.motif, self.motif_threshold, self.mp_window, self.mp_window_size, self.neurons, self.prune_threshold, self.structure, self.sum_distance, self.uid)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -8474,49 +10792,49 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython_
  *     else:
  *         use_setstate = self.anomaly is not None or self.motif is not None or self.mp_window is not None or self.neurons is not None or self.structure is not None or self.uid is not None             # <<<<<<<<<<<<<<
  *     if use_setstate:
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, None), state
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, None), state
  */
   /*else*/ {
-    __pyx_t_9 = (__pyx_v_self->anomaly != ((PyObject*)Py_None));
-    __pyx_t_11 = (__pyx_t_9 != 0);
-    if (!__pyx_t_11) {
+    __pyx_t_10 = (__pyx_v_self->anomaly != ((PyObject*)Py_None));
+    __pyx_t_12 = (__pyx_t_10 != 0);
+    if (!__pyx_t_12) {
     } else {
-      __pyx_t_10 = __pyx_t_11;
+      __pyx_t_11 = __pyx_t_12;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_11 = (__pyx_v_self->motif != ((PyObject*)Py_None));
-    __pyx_t_9 = (__pyx_t_11 != 0);
-    if (!__pyx_t_9) {
+    __pyx_t_12 = (__pyx_v_self->motif != ((PyObject*)Py_None));
+    __pyx_t_10 = (__pyx_t_12 != 0);
+    if (!__pyx_t_10) {
     } else {
-      __pyx_t_10 = __pyx_t_9;
+      __pyx_t_11 = __pyx_t_10;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_9 = (__pyx_v_self->mp_window != ((PyObject*)Py_None));
-    __pyx_t_11 = (__pyx_t_9 != 0);
-    if (!__pyx_t_11) {
+    __pyx_t_10 = (__pyx_v_self->mp_window != ((PyObject*)Py_None));
+    __pyx_t_12 = (__pyx_t_10 != 0);
+    if (!__pyx_t_12) {
     } else {
-      __pyx_t_10 = __pyx_t_11;
+      __pyx_t_11 = __pyx_t_12;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_11 = (__pyx_v_self->neurons != ((PyObject*)Py_None));
-    __pyx_t_9 = (__pyx_t_11 != 0);
-    if (!__pyx_t_9) {
+    __pyx_t_12 = (__pyx_v_self->neurons != ((PyObject*)Py_None));
+    __pyx_t_10 = (__pyx_t_12 != 0);
+    if (!__pyx_t_10) {
     } else {
-      __pyx_t_10 = __pyx_t_9;
+      __pyx_t_11 = __pyx_t_10;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_9 = (__pyx_v_self->structure != ((PyObject*)Py_None));
-    __pyx_t_11 = (__pyx_t_9 != 0);
-    if (!__pyx_t_11) {
+    __pyx_t_10 = (__pyx_v_self->structure != ((PyObject*)Py_None));
+    __pyx_t_12 = (__pyx_t_10 != 0);
+    if (!__pyx_t_12) {
     } else {
-      __pyx_t_10 = __pyx_t_11;
+      __pyx_t_11 = __pyx_t_12;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_11 = (__pyx_v_self->uid != ((PyObject*)Py_None));
-    __pyx_t_9 = (__pyx_t_11 != 0);
-    __pyx_t_10 = __pyx_t_9;
+    __pyx_t_12 = (__pyx_v_self->uid != ((PyObject*)Py_None));
+    __pyx_t_10 = (__pyx_t_12 != 0);
+    __pyx_t_11 = __pyx_t_10;
     __pyx_L4_bool_binop_done:;
-    __pyx_v_use_setstate = __pyx_t_10;
+    __pyx_v_use_setstate = __pyx_t_11;
   }
   __pyx_L3:;
 
@@ -8524,89 +10842,89 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython_
  *     else:
  *         use_setstate = self.anomaly is not None or self.motif is not None or self.mp_window is not None or self.neurons is not None or self.structure is not None or self.uid is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, None), state
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, None), state
  *     else:
  */
-  __pyx_t_10 = (__pyx_v_use_setstate != 0);
-  if (__pyx_t_10) {
+  __pyx_t_11 = (__pyx_v_use_setstate != 0);
+  if (__pyx_t_11) {
 
     /* "(tree fragment)":13
  *         use_setstate = self.anomaly is not None or self.motif is not None or self.mp_window is not None or self.neurons is not None or self.structure is not None or self.uid is not None
  *     if use_setstate:
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, None), state             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, None), state             # <<<<<<<<<<<<<<
  *     else:
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, state)
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, state)
  */
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_pyx_unpickle_NeuralFabric); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = PyTuple_New(3); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_pyx_unpickle_NeuralFabric); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 13, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
+    __pyx_t_9 = PyTuple_New(3); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    PyTuple_SET_ITEM(__pyx_t_8, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_218991942);
-    __Pyx_GIVEREF(__pyx_int_218991942);
-    PyTuple_SET_ITEM(__pyx_t_8, 1, __pyx_int_218991942);
+    PyTuple_SET_ITEM(__pyx_t_9, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
+    __Pyx_INCREF(__pyx_int_94886471);
+    __Pyx_GIVEREF(__pyx_int_94886471);
+    PyTuple_SET_ITEM(__pyx_t_9, 1, __pyx_int_94886471);
     __Pyx_INCREF(Py_None);
     __Pyx_GIVEREF(Py_None);
-    PyTuple_SET_ITEM(__pyx_t_8, 2, Py_None);
-    __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_GIVEREF(__pyx_t_7);
-    PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_7);
+    PyTuple_SET_ITEM(__pyx_t_9, 2, Py_None);
+    __pyx_t_7 = PyTuple_New(3); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
     __Pyx_GIVEREF(__pyx_t_8);
-    PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_t_8);
+    PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_8);
+    __Pyx_GIVEREF(__pyx_t_9);
+    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_9);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
-    PyTuple_SET_ITEM(__pyx_t_6, 2, __pyx_v_state);
-    __pyx_t_7 = 0;
+    PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_v_state);
     __pyx_t_8 = 0;
-    __pyx_r = __pyx_t_6;
-    __pyx_t_6 = 0;
+    __pyx_t_9 = 0;
+    __pyx_r = __pyx_t_7;
+    __pyx_t_7 = 0;
     goto __pyx_L0;
 
     /* "(tree fragment)":12
  *     else:
  *         use_setstate = self.anomaly is not None or self.motif is not None or self.mp_window is not None or self.neurons is not None or self.structure is not None or self.uid is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, None), state
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, None), state
  *     else:
  */
   }
 
   /* "(tree fragment)":15
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, None), state
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, None), state
  *     else:
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, state)             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, state)             # <<<<<<<<<<<<<<
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_NeuralFabric__set_state(self, __pyx_state)
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_pyx_unpickle_NeuralFabric); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 15, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_8 = PyTuple_New(3); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 15, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_pyx_unpickle_NeuralFabric); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 15, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_9 = PyTuple_New(3); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 15, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    PyTuple_SET_ITEM(__pyx_t_8, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_218991942);
-    __Pyx_GIVEREF(__pyx_int_218991942);
-    PyTuple_SET_ITEM(__pyx_t_8, 1, __pyx_int_218991942);
+    PyTuple_SET_ITEM(__pyx_t_9, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
+    __Pyx_INCREF(__pyx_int_94886471);
+    __Pyx_GIVEREF(__pyx_int_94886471);
+    PyTuple_SET_ITEM(__pyx_t_9, 1, __pyx_int_94886471);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
-    PyTuple_SET_ITEM(__pyx_t_8, 2, __pyx_v_state);
-    __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 15, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6);
-    __Pyx_GIVEREF(__pyx_t_8);
-    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_8);
-    __pyx_t_6 = 0;
-    __pyx_t_8 = 0;
-    __pyx_r = __pyx_t_7;
+    PyTuple_SET_ITEM(__pyx_t_9, 2, __pyx_v_state);
+    __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 15, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_GIVEREF(__pyx_t_7);
+    PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_7);
+    __Pyx_GIVEREF(__pyx_t_9);
+    PyTuple_SET_ITEM(__pyx_t_8, 1, __pyx_t_9);
     __pyx_t_7 = 0;
+    __pyx_t_9 = 0;
+    __pyx_r = __pyx_t_8;
+    __pyx_t_8 = 0;
     goto __pyx_L0;
   }
 
@@ -8626,6 +10944,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython_
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_8);
+  __Pyx_XDECREF(__pyx_t_9);
   __Pyx_AddTraceback("src.neural_fabric.NeuralFabric.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -8638,26 +10957,26 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_18__reduce_cython_
 
 /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, state)
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_NeuralFabric__set_state(self, __pyx_state)
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_21__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyMethodDef __pyx_mdef_3src_13neural_fabric_12NeuralFabric_21__setstate_cython__ = {"__setstate_cython__", (PyCFunction)__pyx_pw_3src_13neural_fabric_12NeuralFabric_21__setstate_cython__, METH_O, 0};
-static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_21__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_25__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyMethodDef __pyx_mdef_3src_13neural_fabric_12NeuralFabric_25__setstate_cython__ = {"__setstate_cython__", (PyCFunction)__pyx_pw_3src_13neural_fabric_12NeuralFabric_25__setstate_cython__, METH_O, 0};
+static PyObject *__pyx_pw_3src_13neural_fabric_12NeuralFabric_25__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_20__setstate_cython__(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_3src_13neural_fabric_12NeuralFabric_24__setstate_cython__(((struct __pyx_obj_3src_13neural_fabric_NeuralFabric *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_20__setstate_cython__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_24__setstate_cython__(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -8667,7 +10986,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_20__setstate_cytho
   __Pyx_RefNannySetupContext("__setstate_cython__", 0);
 
   /* "(tree fragment)":17
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, state)
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, state)
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_NeuralFabric__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
@@ -8678,7 +10997,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric_12NeuralFabric_20__setstate_cytho
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, state)
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_NeuralFabric__set_state(self, __pyx_state)
  */
@@ -8797,18 +11116,18 @@ static PyObject *__pyx_pf_3src_13neural_fabric___pyx_unpickle_NeuralFabric(CYTHO
   /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0xd0d8d46:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x5a7da47:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xd0d8d46 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, structure, sum_distance, uid))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x5a7da47 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, prune_threshold, structure, sum_distance, uid))" % __pyx_checksum)
  */
-  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0xd0d8d46) != 0);
+  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x5a7da47) != 0);
   if (__pyx_t_1) {
 
     /* "(tree fragment)":5
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0xd0d8d46:
+ *     if __pyx_checksum != 0x5a7da47:
  *         from pickle import PickleError as __pyx_PickleError             # <<<<<<<<<<<<<<
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xd0d8d46 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, structure, sum_distance, uid))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x5a7da47 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, prune_threshold, structure, sum_distance, uid))" % __pyx_checksum)
  *     __pyx_result = NeuralFabric.__new__(__pyx_type)
  */
     __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 5, __pyx_L1_error)
@@ -8827,15 +11146,15 @@ static PyObject *__pyx_pf_3src_13neural_fabric___pyx_unpickle_NeuralFabric(CYTHO
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":6
- *     if __pyx_checksum != 0xd0d8d46:
+ *     if __pyx_checksum != 0x5a7da47:
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xd0d8d46 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, structure, sum_distance, uid))" % __pyx_checksum)             # <<<<<<<<<<<<<<
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x5a7da47 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, prune_threshold, structure, sum_distance, uid))" % __pyx_checksum)             # <<<<<<<<<<<<<<
  *     __pyx_result = NeuralFabric.__new__(__pyx_type)
  *     if __pyx_state is not None:
  */
     __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v___pyx_checksum); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0xd0, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x5a, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_v___pyx_PickleError);
@@ -8862,15 +11181,15 @@ static PyObject *__pyx_pf_3src_13neural_fabric___pyx_unpickle_NeuralFabric(CYTHO
     /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0xd0d8d46:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x5a7da47:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xd0d8d46 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, structure, sum_distance, uid))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x5a7da47 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, prune_threshold, structure, sum_distance, uid))" % __pyx_checksum)
  */
   }
 
   /* "(tree fragment)":7
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xd0d8d46 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, structure, sum_distance, uid))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x5a7da47 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, prune_threshold, structure, sum_distance, uid))" % __pyx_checksum)
  *     __pyx_result = NeuralFabric.__new__(__pyx_type)             # <<<<<<<<<<<<<<
  *     if __pyx_state is not None:
  *         __pyx_unpickle_NeuralFabric__set_state(<NeuralFabric> __pyx_result, __pyx_state)
@@ -8896,7 +11215,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric___pyx_unpickle_NeuralFabric(CYTHO
   __pyx_t_3 = 0;
 
   /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xd0d8d46 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, structure, sum_distance, uid))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x5a7da47 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, prune_threshold, structure, sum_distance, uid))" % __pyx_checksum)
  *     __pyx_result = NeuralFabric.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_NeuralFabric__set_state(<NeuralFabric> __pyx_result, __pyx_state)
@@ -8919,7 +11238,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric___pyx_unpickle_NeuralFabric(CYTHO
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xd0d8d46 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, structure, sum_distance, uid))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x5a7da47 = (anomaly, anomaly_threshold, mapped, max_stm, mean_distance, motif, motif_threshold, mp_window, mp_window_size, neurons, prune_threshold, structure, sum_distance, uid))" % __pyx_checksum)
  *     __pyx_result = NeuralFabric.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_NeuralFabric__set_state(<NeuralFabric> __pyx_result, __pyx_state)
@@ -8932,7 +11251,7 @@ static PyObject *__pyx_pf_3src_13neural_fabric___pyx_unpickle_NeuralFabric(CYTHO
  *         __pyx_unpickle_NeuralFabric__set_state(<NeuralFabric> __pyx_result, __pyx_state)
  *     return __pyx_result             # <<<<<<<<<<<<<<
  * cdef __pyx_unpickle_NeuralFabric__set_state(NeuralFabric __pyx_result, tuple __pyx_state):
- *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.structure = __pyx_state[10]; __pyx_result.sum_distance = __pyx_state[11]; __pyx_result.uid = __pyx_state[12]
+ *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.prune_threshold = __pyx_state[10]; __pyx_result.structure = __pyx_state[11]; __pyx_result.sum_distance = __pyx_state[12]; __pyx_result.uid = __pyx_state[13]
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v___pyx_result);
@@ -8965,8 +11284,8 @@ static PyObject *__pyx_pf_3src_13neural_fabric___pyx_unpickle_NeuralFabric(CYTHO
  *         __pyx_unpickle_NeuralFabric__set_state(<NeuralFabric> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_NeuralFabric__set_state(NeuralFabric __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.structure = __pyx_state[10]; __pyx_result.sum_distance = __pyx_state[11]; __pyx_result.uid = __pyx_state[12]
- *     if len(__pyx_state) > 13 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.prune_threshold = __pyx_state[10]; __pyx_result.structure = __pyx_state[11]; __pyx_result.sum_distance = __pyx_state[12]; __pyx_result.uid = __pyx_state[13]
+ *     if len(__pyx_state) > 14 and hasattr(__pyx_result, '__dict__'):
  */
 
 static PyObject *__pyx_f_3src_13neural_fabric___pyx_unpickle_NeuralFabric__set_state(struct __pyx_obj_3src_13neural_fabric_NeuralFabric *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
@@ -8990,9 +11309,9 @@ static PyObject *__pyx_f_3src_13neural_fabric___pyx_unpickle_NeuralFabric__set_s
   /* "(tree fragment)":12
  *     return __pyx_result
  * cdef __pyx_unpickle_NeuralFabric__set_state(NeuralFabric __pyx_result, tuple __pyx_state):
- *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.structure = __pyx_state[10]; __pyx_result.sum_distance = __pyx_state[11]; __pyx_result.uid = __pyx_state[12]             # <<<<<<<<<<<<<<
- *     if len(__pyx_state) > 13 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[13])
+ *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.prune_threshold = __pyx_state[10]; __pyx_result.structure = __pyx_state[11]; __pyx_result.sum_distance = __pyx_state[12]; __pyx_result.uid = __pyx_state[13]             # <<<<<<<<<<<<<<
+ *     if len(__pyx_state) > 14 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[14])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -9102,6 +11421,15 @@ static PyObject *__pyx_f_3src_13neural_fabric___pyx_unpickle_NeuralFabric__set_s
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 10, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v___pyx_result->prune_threshold = __pyx_t_2;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 11, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->structure);
@@ -9112,7 +11440,7 @@ static PyObject *__pyx_f_3src_13neural_fabric___pyx_unpickle_NeuralFabric__set_s
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 11, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 12, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -9121,7 +11449,7 @@ static PyObject *__pyx_f_3src_13neural_fabric___pyx_unpickle_NeuralFabric__set_s
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 12, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 13, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -9132,16 +11460,16 @@ static PyObject *__pyx_f_3src_13neural_fabric___pyx_unpickle_NeuralFabric__set_s
 
   /* "(tree fragment)":13
  * cdef __pyx_unpickle_NeuralFabric__set_state(NeuralFabric __pyx_result, tuple __pyx_state):
- *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.structure = __pyx_state[10]; __pyx_result.sum_distance = __pyx_state[11]; __pyx_result.uid = __pyx_state[12]
- *     if len(__pyx_state) > 13 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[13])
+ *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.prune_threshold = __pyx_state[10]; __pyx_result.structure = __pyx_state[11]; __pyx_result.sum_distance = __pyx_state[12]; __pyx_result.uid = __pyx_state[13]
+ *     if len(__pyx_state) > 14 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[14])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
     __PYX_ERR(1, 13, __pyx_L1_error)
   }
   __pyx_t_5 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 13, __pyx_L1_error)
-  __pyx_t_6 = ((__pyx_t_5 > 13) != 0);
+  __pyx_t_6 = ((__pyx_t_5 > 14) != 0);
   if (__pyx_t_6) {
   } else {
     __pyx_t_4 = __pyx_t_6;
@@ -9154,9 +11482,9 @@ static PyObject *__pyx_f_3src_13neural_fabric___pyx_unpickle_NeuralFabric__set_s
   if (__pyx_t_4) {
 
     /* "(tree fragment)":14
- *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.structure = __pyx_state[10]; __pyx_result.sum_distance = __pyx_state[11]; __pyx_result.uid = __pyx_state[12]
- *     if len(__pyx_state) > 13 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[13])             # <<<<<<<<<<<<<<
+ *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.prune_threshold = __pyx_state[10]; __pyx_result.structure = __pyx_state[11]; __pyx_result.sum_distance = __pyx_state[12]; __pyx_result.uid = __pyx_state[13]
+ *     if len(__pyx_state) > 14 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[14])             # <<<<<<<<<<<<<<
  */
     __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 14, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
@@ -9167,7 +11495,7 @@ static PyObject *__pyx_f_3src_13neural_fabric___pyx_unpickle_NeuralFabric__set_s
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(1, 14, __pyx_L1_error)
     }
-    __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 13, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 14, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 14, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 14, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_10 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_9))) {
@@ -9189,9 +11517,9 @@ static PyObject *__pyx_f_3src_13neural_fabric___pyx_unpickle_NeuralFabric__set_s
 
     /* "(tree fragment)":13
  * cdef __pyx_unpickle_NeuralFabric__set_state(NeuralFabric __pyx_result, tuple __pyx_state):
- *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.structure = __pyx_state[10]; __pyx_result.sum_distance = __pyx_state[11]; __pyx_result.uid = __pyx_state[12]
- *     if len(__pyx_state) > 13 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[13])
+ *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.prune_threshold = __pyx_state[10]; __pyx_result.structure = __pyx_state[11]; __pyx_result.sum_distance = __pyx_state[12]; __pyx_result.uid = __pyx_state[13]
+ *     if len(__pyx_state) > 14 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[14])
  */
   }
 
@@ -9199,8 +11527,8 @@ static PyObject *__pyx_f_3src_13neural_fabric___pyx_unpickle_NeuralFabric__set_s
  *         __pyx_unpickle_NeuralFabric__set_state(<NeuralFabric> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_NeuralFabric__set_state(NeuralFabric __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.structure = __pyx_state[10]; __pyx_result.sum_distance = __pyx_state[11]; __pyx_result.uid = __pyx_state[12]
- *     if len(__pyx_state) > 13 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.anomaly = __pyx_state[0]; __pyx_result.anomaly_threshold = __pyx_state[1]; __pyx_result.mapped = __pyx_state[2]; __pyx_result.max_stm = __pyx_state[3]; __pyx_result.mean_distance = __pyx_state[4]; __pyx_result.motif = __pyx_state[5]; __pyx_result.motif_threshold = __pyx_state[6]; __pyx_result.mp_window = __pyx_state[7]; __pyx_result.mp_window_size = __pyx_state[8]; __pyx_result.neurons = __pyx_state[9]; __pyx_result.prune_threshold = __pyx_state[10]; __pyx_result.structure = __pyx_state[11]; __pyx_result.sum_distance = __pyx_state[12]; __pyx_result.uid = __pyx_state[13]
+ *     if len(__pyx_state) > 14 and hasattr(__pyx_result, '__dict__'):
  */
 
   /* function exit code */
@@ -9469,14 +11797,30 @@ static int __pyx_setprop_3src_13neural_fabric_12NeuralFabric_structure(PyObject 
   }
 }
 
+static PyObject *__pyx_getprop_3src_13neural_fabric_12NeuralFabric_prune_threshold(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_3src_13neural_fabric_12NeuralFabric_15prune_threshold_1__get__(o);
+}
+
+static int __pyx_setprop_3src_13neural_fabric_12NeuralFabric_prune_threshold(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
+  if (v) {
+    return __pyx_pw_3src_13neural_fabric_12NeuralFabric_15prune_threshold_3__set__(o, v);
+  }
+  else {
+    PyErr_SetString(PyExc_NotImplementedError, "__del__");
+    return -1;
+  }
+}
+
 static PyMethodDef __pyx_methods_3src_13neural_fabric_NeuralFabric[] = {
   {"seed_fabric", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_13neural_fabric_12NeuralFabric_3seed_fabric, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_13neural_fabric_12NeuralFabric_2seed_fabric},
   {"grow", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_13neural_fabric_12NeuralFabric_5grow, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_13neural_fabric_12NeuralFabric_4grow},
   {"distance_to_fabric", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_13neural_fabric_12NeuralFabric_7distance_to_fabric, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_13neural_fabric_12NeuralFabric_6distance_to_fabric},
   {"detect_anomaly_motif", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_13neural_fabric_12NeuralFabric_9detect_anomaly_motif, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_13neural_fabric_12NeuralFabric_8detect_anomaly_motif},
   {"merge_neurons", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_13neural_fabric_12NeuralFabric_17merge_neurons, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_13neural_fabric_12NeuralFabric_16merge_neurons},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_3src_13neural_fabric_12NeuralFabric_19__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_3src_13neural_fabric_12NeuralFabric_21__setstate_cython__, METH_O, 0},
+  {"decode", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3src_13neural_fabric_12NeuralFabric_19decode, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_13neural_fabric_12NeuralFabric_18decode},
+  {"restore", (PyCFunction)__pyx_pw_3src_13neural_fabric_12NeuralFabric_21restore, METH_O, __pyx_doc_3src_13neural_fabric_12NeuralFabric_20restore},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_3src_13neural_fabric_12NeuralFabric_23__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_3src_13neural_fabric_12NeuralFabric_25__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -9494,6 +11838,7 @@ static struct PyGetSetDef __pyx_getsets_3src_13neural_fabric_NeuralFabric[] = {
   {(char *)"sum_distance", __pyx_getprop_3src_13neural_fabric_12NeuralFabric_sum_distance, __pyx_setprop_3src_13neural_fabric_12NeuralFabric_sum_distance, (char *)0, 0},
   {(char *)"mean_distance", __pyx_getprop_3src_13neural_fabric_12NeuralFabric_mean_distance, __pyx_setprop_3src_13neural_fabric_12NeuralFabric_mean_distance, (char *)0, 0},
   {(char *)"structure", __pyx_getprop_3src_13neural_fabric_12NeuralFabric_structure, __pyx_setprop_3src_13neural_fabric_12NeuralFabric_structure, (char *)0, 0},
+  {(char *)"prune_threshold", __pyx_getprop_3src_13neural_fabric_12NeuralFabric_prune_threshold, __pyx_setprop_3src_13neural_fabric_12NeuralFabric_prune_threshold, (char *)0, 0},
   {0, 0, 0, 0, 0}
 };
 
@@ -9613,48 +11958,61 @@ static struct PyModuleDef __pyx_moduledef = {
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_, __pyx_k_, sizeof(__pyx_k_), 0, 0, 1, 0},
-  {&__pyx_kp_s_Incompatible_checksums_s_vs_0xd0, __pyx_k_Incompatible_checksums_s_vs_0xd0, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xd0), 0, 0, 1, 0},
+  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x5a, __pyx_k_Incompatible_checksums_s_vs_0x5a, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x5a), 0, 0, 1, 0},
   {&__pyx_n_s_NeuralFabric, __pyx_k_NeuralFabric, sizeof(__pyx_k_NeuralFabric), 0, 0, 1, 1},
   {&__pyx_n_s_NeuralFabric___reduce_cython, __pyx_k_NeuralFabric___reduce_cython, sizeof(__pyx_k_NeuralFabric___reduce_cython), 0, 0, 1, 1},
   {&__pyx_n_s_NeuralFabric___setstate_cython, __pyx_k_NeuralFabric___setstate_cython, sizeof(__pyx_k_NeuralFabric___setstate_cython), 0, 0, 1, 1},
   {&__pyx_n_s_NeuralFabric_community_update, __pyx_k_NeuralFabric_community_update, sizeof(__pyx_k_NeuralFabric_community_update), 0, 0, 1, 1},
+  {&__pyx_n_s_NeuralFabric_decode, __pyx_k_NeuralFabric_decode, sizeof(__pyx_k_NeuralFabric_decode), 0, 0, 1, 1},
   {&__pyx_n_s_NeuralFabric_detect_anomaly_moti, __pyx_k_NeuralFabric_detect_anomaly_moti, sizeof(__pyx_k_NeuralFabric_detect_anomaly_moti), 0, 0, 1, 1},
   {&__pyx_n_s_NeuralFabric_distance_to_fabric, __pyx_k_NeuralFabric_distance_to_fabric, sizeof(__pyx_k_NeuralFabric_distance_to_fabric), 0, 0, 1, 1},
   {&__pyx_n_s_NeuralFabric_grow, __pyx_k_NeuralFabric_grow, sizeof(__pyx_k_NeuralFabric_grow), 0, 0, 1, 1},
   {&__pyx_n_s_NeuralFabric_learn, __pyx_k_NeuralFabric_learn, sizeof(__pyx_k_NeuralFabric_learn), 0, 0, 1, 1},
   {&__pyx_n_s_NeuralFabric_merge_neurons, __pyx_k_NeuralFabric_merge_neurons, sizeof(__pyx_k_NeuralFabric_merge_neurons), 0, 0, 1, 1},
+  {&__pyx_n_s_NeuralFabric_restore, __pyx_k_NeuralFabric_restore, sizeof(__pyx_k_NeuralFabric_restore), 0, 0, 1, 1},
   {&__pyx_n_s_NeuralFabric_seed_fabric, __pyx_k_NeuralFabric_seed_fabric, sizeof(__pyx_k_NeuralFabric_seed_fabric), 0, 0, 1, 1},
   {&__pyx_n_s_NeuralFabric_update_bmu_stats, __pyx_k_NeuralFabric_update_bmu_stats, sizeof(__pyx_k_NeuralFabric_update_bmu_stats), 0, 0, 1, 1},
   {&__pyx_n_s_NeuroColumn, __pyx_k_NeuroColumn, sizeof(__pyx_k_NeuroColumn), 0, 0, 1, 1},
   {&__pyx_n_s_Optional, __pyx_k_Optional, sizeof(__pyx_k_Optional), 0, 0, 1, 1},
   {&__pyx_n_s_PickleError, __pyx_k_PickleError, sizeof(__pyx_k_PickleError), 0, 0, 1, 1},
+  {&__pyx_kp_s__3, __pyx_k__3, sizeof(__pyx_k__3), 0, 0, 1, 0},
   {&__pyx_n_s_add, __pyx_k_add, sizeof(__pyx_k_add), 0, 0, 1, 1},
+  {&__pyx_n_s_all_details, __pyx_k_all_details, sizeof(__pyx_k_all_details), 0, 0, 1, 1},
   {&__pyx_n_s_anomaly, __pyx_k_anomaly, sizeof(__pyx_k_anomaly), 0, 0, 1, 1},
+  {&__pyx_n_s_anomaly_threshold, __pyx_k_anomaly_threshold, sizeof(__pyx_k_anomaly_threshold), 0, 0, 1, 1},
+  {&__pyx_n_s_attr, __pyx_k_attr, sizeof(__pyx_k_attr), 0, 0, 1, 1},
   {&__pyx_n_s_bmu_coord, __pyx_k_bmu_coord, sizeof(__pyx_k_bmu_coord), 0, 0, 1, 1},
   {&__pyx_n_s_bmu_coord_key, __pyx_k_bmu_coord_key, sizeof(__pyx_k_bmu_coord_key), 0, 0, 1, 1},
   {&__pyx_n_s_bmu_dist, __pyx_k_bmu_dist, sizeof(__pyx_k_bmu_dist), 0, 0, 1, 1},
+  {&__pyx_n_s_bmu_distance, __pyx_k_bmu_distance, sizeof(__pyx_k_bmu_distance), 0, 0, 1, 1},
   {&__pyx_n_s_bmu_search_filters, __pyx_k_bmu_search_filters, sizeof(__pyx_k_bmu_search_filters), 0, 0, 1, 1},
   {&__pyx_n_s_calc_distance, __pyx_k_calc_distance, sizeof(__pyx_k_calc_distance), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_community_label, __pyx_k_community_label, sizeof(__pyx_k_community_label), 0, 0, 1, 1},
   {&__pyx_n_s_community_nc, __pyx_k_community_nc, sizeof(__pyx_k_community_nc), 0, 0, 1, 1},
+  {&__pyx_n_s_community_sdr, __pyx_k_community_sdr, sizeof(__pyx_k_community_sdr), 0, 0, 1, 1},
   {&__pyx_n_s_community_update, __pyx_k_community_update, sizeof(__pyx_k_community_update), 0, 0, 1, 1},
   {&__pyx_n_s_coord, __pyx_k_coord, sizeof(__pyx_k_coord), 0, 0, 1, 1},
   {&__pyx_n_s_coord_key, __pyx_k_coord_key, sizeof(__pyx_k_coord_key), 0, 0, 1, 1},
   {&__pyx_n_s_coord_keys_in_fabric, __pyx_k_coord_keys_in_fabric, sizeof(__pyx_k_coord_keys_in_fabric), 0, 0, 1, 1},
   {&__pyx_n_s_coords, __pyx_k_coords, sizeof(__pyx_k_coords), 0, 0, 1, 1},
   {&__pyx_n_s_coords_to_add, __pyx_k_coords_to_add, sizeof(__pyx_k_coords_to_add), 0, 0, 1, 1},
+  {&__pyx_n_s_coords_to_decode, __pyx_k_coords_to_decode, sizeof(__pyx_k_coords_to_decode), 0, 0, 1, 1},
+  {&__pyx_n_s_decode, __pyx_k_decode, sizeof(__pyx_k_decode), 0, 0, 1, 1},
   {&__pyx_n_s_detect_anomaly_motif, __pyx_k_detect_anomaly_motif, sizeof(__pyx_k_detect_anomaly_motif), 0, 0, 1, 1},
   {&__pyx_n_s_dict, __pyx_k_dict, sizeof(__pyx_k_dict), 0, 0, 1, 1},
-  {&__pyx_n_s_dict_2, __pyx_k_dict_2, sizeof(__pyx_k_dict_2), 0, 0, 1, 1},
+  {&__pyx_n_u_dict_2, __pyx_k_dict_2, sizeof(__pyx_k_dict_2), 0, 1, 0, 1},
+  {&__pyx_n_s_dict_3, __pyx_k_dict_3, sizeof(__pyx_k_dict_3), 0, 0, 1, 1},
   {&__pyx_n_s_distance, __pyx_k_distance, sizeof(__pyx_k_distance), 0, 0, 1, 1},
   {&__pyx_n_s_distance_to_fabric, __pyx_k_distance_to_fabric, sizeof(__pyx_k_distance_to_fabric), 0, 0, 1, 1},
   {&__pyx_n_u_double, __pyx_k_double, sizeof(__pyx_k_double), 0, 1, 0, 1},
   {&__pyx_n_s_edge_type, __pyx_k_edge_type, sizeof(__pyx_k_edge_type), 0, 0, 1, 1},
+  {&__pyx_n_s_edge_uid, __pyx_k_edge_uid, sizeof(__pyx_k_edge_uid), 0, 0, 1, 1},
   {&__pyx_n_s_edges_to_randomise, __pyx_k_edges_to_randomise, sizeof(__pyx_k_edges_to_randomise), 0, 0, 1, 1},
   {&__pyx_n_s_example_neuro_column, __pyx_k_example_neuro_column, sizeof(__pyx_k_example_neuro_column), 0, 0, 1, 1},
+  {&__pyx_n_s_fabric, __pyx_k_fabric, sizeof(__pyx_k_fabric), 0, 0, 1, 1},
   {&__pyx_n_s_fabric_dist, __pyx_k_fabric_dist, sizeof(__pyx_k_fabric_dist), 0, 0, 1, 1},
-  {&__pyx_n_s_fabric_por, __pyx_k_fabric_por, sizeof(__pyx_k_fabric_por), 0, 0, 1, 1},
+  {&__pyx_n_s_fabric_distance, __pyx_k_fabric_distance, sizeof(__pyx_k_fabric_distance), 0, 0, 1, 1},
   {&__pyx_n_s_filter_types, __pyx_k_filter_types, sizeof(__pyx_k_filter_types), 0, 0, 1, 1},
   {&__pyx_n_u_float, __pyx_k_float, sizeof(__pyx_k_float), 0, 1, 0, 1},
   {&__pyx_n_s_format, __pyx_k_format, sizeof(__pyx_k_format), 0, 0, 1, 1},
@@ -9666,6 +12024,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_in_community, __pyx_k_in_community, sizeof(__pyx_k_in_community), 0, 0, 1, 1},
   {&__pyx_n_s_is_bmu, __pyx_k_is_bmu, sizeof(__pyx_k_is_bmu), 0, 0, 1, 1},
+  {&__pyx_n_s_keys, __pyx_k_keys, sizeof(__pyx_k_keys), 0, 0, 1, 1},
   {&__pyx_n_s_last_bmu, __pyx_k_last_bmu, sizeof(__pyx_k_last_bmu), 0, 0, 1, 1},
   {&__pyx_n_s_last_nn, __pyx_k_last_nn, sizeof(__pyx_k_last_nn), 0, 0, 1, 1},
   {&__pyx_n_s_learn, __pyx_k_learn, sizeof(__pyx_k_learn), 0, 0, 1, 1},
@@ -9673,6 +12032,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_learn_rates, __pyx_k_learn_rates, sizeof(__pyx_k_learn_rates), 0, 0, 1, 1},
   {&__pyx_n_u_list, __pyx_k_list, sizeof(__pyx_k_list), 0, 1, 0, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
+  {&__pyx_n_s_mapped, __pyx_k_mapped, sizeof(__pyx_k_mapped), 0, 0, 1, 1},
   {&__pyx_n_s_max, __pyx_k_max, sizeof(__pyx_k_max), 0, 0, 1, 1},
   {&__pyx_n_s_max_short_term_memory, __pyx_k_max_short_term_memory, sizeof(__pyx_k_max_short_term_memory), 0, 0, 1, 1},
   {&__pyx_n_s_mean_distance, __pyx_k_mean_distance, sizeof(__pyx_k_mean_distance), 0, 0, 1, 1},
@@ -9683,20 +12043,26 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_merged_column, __pyx_k_merged_column, sizeof(__pyx_k_merged_column), 0, 0, 1, 1},
   {&__pyx_n_s_min, __pyx_k_min, sizeof(__pyx_k_min), 0, 0, 1, 1},
   {&__pyx_n_s_motif, __pyx_k_motif, sizeof(__pyx_k_motif), 0, 0, 1, 1},
+  {&__pyx_n_s_motif_threshold, __pyx_k_motif_threshold, sizeof(__pyx_k_motif_threshold), 0, 0, 1, 1},
   {&__pyx_n_s_mp_threshold, __pyx_k_mp_threshold, sizeof(__pyx_k_mp_threshold), 0, 0, 1, 1},
+  {&__pyx_n_s_mp_window, __pyx_k_mp_window, sizeof(__pyx_k_mp_window), 0, 0, 1, 1},
+  {&__pyx_n_s_n_attr, __pyx_k_n_attr, sizeof(__pyx_k_n_attr), 0, 0, 1, 1},
   {&__pyx_n_s_n_bmu, __pyx_k_n_bmu, sizeof(__pyx_k_n_bmu), 0, 0, 1, 1},
   {&__pyx_n_s_n_nn, __pyx_k_n_nn, sizeof(__pyx_k_n_nn), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_neuro_column, __pyx_k_neuro_column, sizeof(__pyx_k_neuro_column), 0, 0, 1, 1},
+  {&__pyx_n_s_neuro_columns, __pyx_k_neuro_columns, sizeof(__pyx_k_neuro_columns), 0, 0, 1, 1},
   {&__pyx_n_s_neuron, __pyx_k_neuron, sizeof(__pyx_k_neuron), 0, 0, 1, 1},
   {&__pyx_n_s_neuron_id, __pyx_k_neuron_id, sizeof(__pyx_k_neuron_id), 0, 0, 1, 1},
   {&__pyx_n_s_new, __pyx_k_new, sizeof(__pyx_k_new), 0, 0, 1, 1},
   {&__pyx_n_s_nn, __pyx_k_nn, sizeof(__pyx_k_nn), 0, 0, 1, 1},
   {&__pyx_n_s_nn_coord_key, __pyx_k_nn_coord_key, sizeof(__pyx_k_nn_coord_key), 0, 0, 1, 1},
+  {&__pyx_n_s_only_updated, __pyx_k_only_updated, sizeof(__pyx_k_only_updated), 0, 0, 1, 1},
   {&__pyx_n_s_pickle, __pyx_k_pickle, sizeof(__pyx_k_pickle), 0, 0, 1, 1},
   {&__pyx_n_s_pop, __pyx_k_pop, sizeof(__pyx_k_pop), 0, 0, 1, 1},
   {&__pyx_n_s_por, __pyx_k_por, sizeof(__pyx_k_por), 0, 0, 1, 1},
   {&__pyx_n_s_prob, __pyx_k_prob, sizeof(__pyx_k_prob), 0, 0, 1, 1},
+  {&__pyx_n_s_prune_threshold, __pyx_k_prune_threshold, sizeof(__pyx_k_prune_threshold), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_PickleError, __pyx_k_pyx_PickleError, sizeof(__pyx_k_pyx_PickleError), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_checksum, __pyx_k_pyx_checksum, sizeof(__pyx_k_pyx_checksum), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_result, __pyx_k_pyx_result, sizeof(__pyx_k_pyx_result), 0, 0, 1, 1},
@@ -9710,7 +12076,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
   {&__pyx_n_s_ref_id, __pyx_k_ref_id, sizeof(__pyx_k_ref_id), 0, 0, 1, 1},
+  {&__pyx_n_s_reset_updated, __pyx_k_reset_updated, sizeof(__pyx_k_reset_updated), 0, 0, 1, 1},
+  {&__pyx_n_s_restore, __pyx_k_restore, sizeof(__pyx_k_restore), 0, 0, 1, 1},
   {&__pyx_n_s_return, __pyx_k_return, sizeof(__pyx_k_return), 0, 0, 1, 1},
+  {&__pyx_n_s_sdr, __pyx_k_sdr, sizeof(__pyx_k_sdr), 0, 0, 1, 1},
   {&__pyx_n_s_seed_fabric, __pyx_k_seed_fabric, sizeof(__pyx_k_seed_fabric), 0, 0, 1, 1},
   {&__pyx_n_s_self, __pyx_k_self, sizeof(__pyx_k_self), 0, 0, 1, 1},
   {&__pyx_n_u_set, __pyx_k_set, sizeof(__pyx_k_set), 0, 1, 0, 1},
@@ -9731,6 +12100,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_target_type, __pyx_k_target_type, sizeof(__pyx_k_target_type), 0, 0, 1, 1},
   {&__pyx_n_s_target_uid, __pyx_k_target_uid, sizeof(__pyx_k_target_uid), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
+  {&__pyx_n_s_threshold, __pyx_k_threshold, sizeof(__pyx_k_threshold), 0, 0, 1, 1},
   {&__pyx_n_s_total_merge_factors, __pyx_k_total_merge_factors, sizeof(__pyx_k_total_merge_factors), 0, 0, 1, 1},
   {&__pyx_n_u_tuple, __pyx_k_tuple, sizeof(__pyx_k_tuple), 0, 1, 0, 1},
   {&__pyx_n_s_typing, __pyx_k_typing, sizeof(__pyx_k_typing), 0, 0, 1, 1},
@@ -9739,16 +12109,17 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_update_bmu_stats, __pyx_k_update_bmu_stats, sizeof(__pyx_k_update_bmu_stats), 0, 0, 1, 1},
   {&__pyx_n_s_updated, __pyx_k_updated, sizeof(__pyx_k_updated), 0, 0, 1, 1},
   {&__pyx_n_s_upsert, __pyx_k_upsert, sizeof(__pyx_k_upsert), 0, 0, 1, 1},
+  {&__pyx_n_s_upsert_sdr, __pyx_k_upsert_sdr, sizeof(__pyx_k_upsert_sdr), 0, 0, 1, 1},
   {&__pyx_n_s_use_setstate, __pyx_k_use_setstate, sizeof(__pyx_k_use_setstate), 0, 0, 1, 1},
   {&__pyx_n_s_x, __pyx_k_x, sizeof(__pyx_k_x), 0, 0, 1, 1},
   {&__pyx_n_s_y, __pyx_k_y, sizeof(__pyx_k_y), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 129, __pyx_L1_error)
-  __pyx_builtin_min = __Pyx_GetBuiltinName(__pyx_n_s_min); if (!__pyx_builtin_min) __PYX_ERR(0, 275, __pyx_L1_error)
-  __pyx_builtin_max = __Pyx_GetBuiltinName(__pyx_n_s_max); if (!__pyx_builtin_max) __PYX_ERR(0, 276, __pyx_L1_error)
-  __pyx_builtin_sum = __Pyx_GetBuiltinName(__pyx_n_s_sum); if (!__pyx_builtin_sum) __PYX_ERR(0, 413, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 141, __pyx_L1_error)
+  __pyx_builtin_min = __Pyx_GetBuiltinName(__pyx_n_s_min); if (!__pyx_builtin_min) __PYX_ERR(0, 287, __pyx_L1_error)
+  __pyx_builtin_max = __Pyx_GetBuiltinName(__pyx_n_s_max); if (!__pyx_builtin_max) __PYX_ERR(0, 288, __pyx_L1_error)
+  __pyx_builtin_sum = __Pyx_GetBuiltinName(__pyx_n_s_sum); if (!__pyx_builtin_sum) __PYX_ERR(0, 430, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -9758,143 +12129,167 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "src/neural_fabric.py":166
+  /* "src/neural_fabric.py":179
  * 
  *         if coord_key is None:
  *             coord = (0, 0)             # <<<<<<<<<<<<<<
  *         else:
  * 
  */
-  __pyx_tuple__2 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_0); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 166, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_0); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 179, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "src/neural_fabric.py":73
- *         """ a string representing the fabric layout structure - 'star' a central neuron with 4 neighbours, 'box' consists of a central neuron with 8 neighbours """
+  /* "src/neural_fabric.py":83
+ *         """ the threshold below with an edge probability is assumed to be zero and will be deleted """
  * 
  *     def seed_fabric(self, example_neuro_column: NeuroColumn, coords: set, hebbian_edges: set):             # <<<<<<<<<<<<<<
  *         """
  *         method to initialise the fabric with randomised sdrs whose edges and values depend on
  */
-  __pyx_tuple__3 = PyTuple_Pack(17, __pyx_n_s_self, __pyx_n_s_example_neuro_column, __pyx_n_s_coords, __pyx_n_s_hebbian_edges, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_coord_keys_in_fabric, __pyx_n_s_coord, __pyx_n_s_coord_key, __pyx_n_s_nn_coord_key, __pyx_n_s_neuro_column, __pyx_n_s_coord, __pyx_n_s_coord_key, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_x, __pyx_n_s_y); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 73, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__3);
-  __Pyx_GIVEREF(__pyx_tuple__3);
-  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(4, 0, 17, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_seed_fabric, 73, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_tuple__4 = PyTuple_Pack(17, __pyx_n_s_self, __pyx_n_s_example_neuro_column, __pyx_n_s_coords, __pyx_n_s_hebbian_edges, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_coord_keys_in_fabric, __pyx_n_s_coord, __pyx_n_s_coord_key, __pyx_n_s_nn_coord_key, __pyx_n_s_neuro_column, __pyx_n_s_coord, __pyx_n_s_coord_key, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_x, __pyx_n_s_y); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 83, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__4);
+  __Pyx_GIVEREF(__pyx_tuple__4);
+  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(4, 0, 17, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_seed_fabric, 83, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) __PYX_ERR(0, 83, __pyx_L1_error)
 
-  /* "src/neural_fabric.py":150
+  /* "src/neural_fabric.py":162
  *                 self.neurons[nn_coord_key]['nn'].add(coord_key)
  * 
  *     def grow(self, example_neuro_column: NeuroColumn, coord_key: str = None, hebbian_edges: set = None):             # <<<<<<<<<<<<<<
  *         """
  *         method to grow the neural fabric
  */
-  __pyx_tuple__5 = PyTuple_Pack(12, __pyx_n_s_self, __pyx_n_s_example_neuro_column, __pyx_n_s_coord_key, __pyx_n_s_hebbian_edges, __pyx_n_s_coords_to_add, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_coord, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_x, __pyx_n_s_y); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 150, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__5);
-  __Pyx_GIVEREF(__pyx_tuple__5);
-  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(4, 0, 12, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_grow, 150, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 150, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(12, __pyx_n_s_self, __pyx_n_s_example_neuro_column, __pyx_n_s_coord_key, __pyx_n_s_hebbian_edges, __pyx_n_s_coords_to_add, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_coord, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_x, __pyx_n_s_y); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 162, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__6);
+  __Pyx_GIVEREF(__pyx_tuple__6);
+  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(4, 0, 12, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_grow, 162, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(0, 162, __pyx_L1_error)
 
-  /* "src/neural_fabric.py":200
+  /* "src/neural_fabric.py":213
  *         self.seed_fabric(example_neuro_column=example_neuro_column, coords=coords_to_add, hebbian_edges=hebbian_edges)
  * 
- *     def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> tuple:             # <<<<<<<<<<<<<<
+ *     def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> dict:             # <<<<<<<<<<<<<<
  *         """
  *         method to calculate the distance of sdr to every neuron on the fabric
  */
-  __pyx_tuple__7 = PyTuple_Pack(13, __pyx_n_s_self, __pyx_n_s_neuro_column, __pyx_n_s_ref_id, __pyx_n_s_bmu_search_filters, __pyx_n_s_fabric_dist, __pyx_n_s_fabric_por, __pyx_n_s_distance, __pyx_n_s_por, __pyx_n_s_bmu_dist, __pyx_n_s_bmu_coord_key, __pyx_n_s_coord_key, __pyx_n_s_anomaly, __pyx_n_s_motif); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 200, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__7);
-  __Pyx_GIVEREF(__pyx_tuple__7);
-  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(4, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_distance_to_fabric, 200, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 200, __pyx_L1_error)
+  __pyx_tuple__8 = PyTuple_Pack(12, __pyx_n_s_self, __pyx_n_s_neuro_column, __pyx_n_s_ref_id, __pyx_n_s_bmu_search_filters, __pyx_n_s_fabric_dist, __pyx_n_s_distance, __pyx_n_s_por, __pyx_n_s_bmu_dist, __pyx_n_s_bmu_coord_key, __pyx_n_s_coord_key, __pyx_n_s_anomaly, __pyx_n_s_motif); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__8);
+  __Pyx_GIVEREF(__pyx_tuple__8);
+  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(4, 0, 12, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_distance_to_fabric, 213, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 213, __pyx_L1_error)
 
-  /* "src/neural_fabric.py":239
- *         return bmu_coord_key, bmu_dist, anomaly, motif, fabric_dist, fabric_por
+  /* "src/neural_fabric.py":251
+ *         return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
  * 
- *     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: list, ref_id: str) -> tuple:             # <<<<<<<<<<<<<<
+ *     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: dict, ref_id: str) -> tuple:             # <<<<<<<<<<<<<<
  *         """
  *         method to detect if an anomaly or motif has occurred based on the recent max and min bmu distances. This is an implementation of matrix profile
  */
-  __pyx_tuple__9 = PyTuple_Pack(7, __pyx_n_s_self, __pyx_n_s_bmu_coord_key, __pyx_n_s_distance, __pyx_n_s_por, __pyx_n_s_ref_id, __pyx_n_s_anomaly, __pyx_n_s_motif); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 239, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__9);
-  __Pyx_GIVEREF(__pyx_tuple__9);
-  __pyx_codeobj__10 = (PyObject*)__Pyx_PyCode_New(5, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__9, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_detect_anomaly_motif, 239, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__10)) __PYX_ERR(0, 239, __pyx_L1_error)
+  __pyx_tuple__10 = PyTuple_Pack(7, __pyx_n_s_self, __pyx_n_s_bmu_coord_key, __pyx_n_s_distance, __pyx_n_s_por, __pyx_n_s_ref_id, __pyx_n_s_anomaly, __pyx_n_s_motif); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__10);
+  __Pyx_GIVEREF(__pyx_tuple__10);
+  __pyx_codeobj__11 = (PyObject*)__Pyx_PyCode_New(5, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__10, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_detect_anomaly_motif, 251, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__11)) __PYX_ERR(0, 251, __pyx_L1_error)
 
-  /* "src/neural_fabric.py":280
+  /* "src/neural_fabric.py":292
  * 
  *     @cython.ccall
  *     def update_bmu_stats(self, bmu_coord_key: str, distance: float):             # <<<<<<<<<<<<<<
  *         """
  *         method to update the stats of the bmu and its neighbours
  */
-  __pyx_tuple__11 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_bmu_coord_key, __pyx_n_s_distance); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 280, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__11);
-  __Pyx_GIVEREF(__pyx_tuple__11);
-  __pyx_codeobj__12 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__11, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_update_bmu_stats, 280, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__12)) __PYX_ERR(0, 280, __pyx_L1_error)
+  __pyx_tuple__12 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_bmu_coord_key, __pyx_n_s_distance); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__12);
+  __Pyx_GIVEREF(__pyx_tuple__12);
+  __pyx_codeobj__13 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__12, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_update_bmu_stats, 292, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__13)) __PYX_ERR(0, 292, __pyx_L1_error)
 
-  /* "src/neural_fabric.py":311
+  /* "src/neural_fabric.py":326
  * 
  *     @cython.ccall
  *     def learn(self, neuro_column: NeuroColumn, bmu_coord: str, coords: list, learn_rates: list, hebbian_edges: set = None):             # <<<<<<<<<<<<<<
  *         """
  *         hebbian updates the neurons specified using learning rates
  */
-  __pyx_tuple__13 = PyTuple_Pack(6, __pyx_n_s_self, __pyx_n_s_neuro_column, __pyx_n_s_bmu_coord, __pyx_n_s_coords, __pyx_n_s_learn_rates, __pyx_n_s_hebbian_edges); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 311, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__13);
-  __Pyx_GIVEREF(__pyx_tuple__13);
-  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(6, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_learn, 311, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 311, __pyx_L1_error)
+  __pyx_tuple__14 = PyTuple_Pack(6, __pyx_n_s_self, __pyx_n_s_neuro_column, __pyx_n_s_bmu_coord, __pyx_n_s_coords, __pyx_n_s_learn_rates, __pyx_n_s_hebbian_edges); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 326, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__14);
+  __Pyx_GIVEREF(__pyx_tuple__14);
+  __pyx_codeobj__15 = (PyObject*)__Pyx_PyCode_New(6, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__14, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_learn, 326, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__15)) __PYX_ERR(0, 326, __pyx_L1_error)
 
-  /* "src/neural_fabric.py":343
+  /* "src/neural_fabric.py":358
  * 
  *     @cython.ccall
  *     def community_update(self, bmu_coord_key: str, learn_rate: cython.double):             # <<<<<<<<<<<<<<
  *         """
  *         method to hebbian update the community SDR for the bmu neurons and its neighbours
  */
-  __pyx_tuple__15 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_bmu_coord_key, __pyx_n_s_learn_rate); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 343, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
-  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_community_update, 343, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 343, __pyx_L1_error)
+  __pyx_tuple__16 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_bmu_coord_key, __pyx_n_s_learn_rate); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 358, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__16);
+  __Pyx_GIVEREF(__pyx_tuple__16);
+  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__16, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_community_update, 358, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) __PYX_ERR(0, 358, __pyx_L1_error)
 
-  /* "src/neural_fabric.py":391
+  /* "src/neural_fabric.py":408
  *                 self.neurons[coord_key]['community_label'] = curr_community_edge['target_uid']
  * 
  *     def merge_neurons(self, coords: list, merge_factors: list) -> NeuroColumn:             # <<<<<<<<<<<<<<
  *         """
  *         method to create a single SDR from a list of neuron sdrs using a merge_factor
  */
-  __pyx_tuple__17 = PyTuple_Pack(8, __pyx_n_s_self, __pyx_n_s_coords, __pyx_n_s_merge_factors, __pyx_n_s_total_merge_factors, __pyx_n_s_merged_column, __pyx_n_s_idx, __pyx_n_s_coord_key, __pyx_n_s_merge_factor); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 391, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__17);
-  __Pyx_GIVEREF(__pyx_tuple__17);
-  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(3, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_merge_neurons, 391, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 391, __pyx_L1_error)
+  __pyx_tuple__18 = PyTuple_Pack(8, __pyx_n_s_self, __pyx_n_s_coords, __pyx_n_s_merge_factors, __pyx_n_s_total_merge_factors, __pyx_n_s_merged_column, __pyx_n_s_idx, __pyx_n_s_coord_key, __pyx_n_s_merge_factor); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(0, 408, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__18);
+  __Pyx_GIVEREF(__pyx_tuple__18);
+  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(3, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_merge_neurons, 408, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 408, __pyx_L1_error)
+
+  /* "src/neural_fabric.py":446
+ *         return merged_column
+ * 
+ *     def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, reset_updated: bool = False, community_sdr: bool = False) -> dict:             # <<<<<<<<<<<<<<
+ *         """
+ *         method to decode the entire fabric
+ */
+  __pyx_tuple__20 = PyTuple_Pack(17, __pyx_n_s_self, __pyx_n_s_coords, __pyx_n_s_all_details, __pyx_n_s_only_updated, __pyx_n_s_reset_updated, __pyx_n_s_community_sdr, __pyx_n_s_ref_id, __pyx_n_s_attr, __pyx_n_s_fabric, __pyx_n_s_coords_to_decode, __pyx_n_s_coord_key, __pyx_n_s_n_attr, __pyx_n_s_ref_id, __pyx_n_s_attr, __pyx_n_s_ref_id, __pyx_n_s_attr, __pyx_n_s_n_attr); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 446, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__20);
+  __Pyx_GIVEREF(__pyx_tuple__20);
+  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(6, 0, 17, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_decode, 446, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 446, __pyx_L1_error)
+
+  /* "src/neural_fabric.py":518
+ *         return fabric
+ * 
+ *     def restore(self, fabric: dict) -> None:             # <<<<<<<<<<<<<<
+ *         """
+ *         method to restore all the properties of the fabric from a dictionary representation
+ */
+  __pyx_tuple__22 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_fabric, __pyx_n_s_coord_key, __pyx_n_s_neuron_id); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 518, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__22);
+  __Pyx_GIVEREF(__pyx_tuple__22);
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_neural_fabric_py, __pyx_n_s_restore, 518, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 518, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     cdef tuple state
  *     cdef object _dict
  */
-  __pyx_tuple__19 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_state, __pyx_n_s_dict_2, __pyx_n_s_use_setstate); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__19);
-  __Pyx_GIVEREF(__pyx_tuple__19);
-  __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_reduce_cython, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_tuple__24 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_state, __pyx_n_s_dict_3, __pyx_n_s_use_setstate); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__24);
+  __Pyx_GIVEREF(__pyx_tuple__24);
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_reduce_cython, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(1, 1, __pyx_L1_error)
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, state)
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_NeuralFabric__set_state(self, __pyx_state)
  */
-  __pyx_tuple__21 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_pyx_state); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(1, 16, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__21);
-  __Pyx_GIVEREF(__pyx_tuple__21);
-  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_setstate_cython, 16, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(1, 16, __pyx_L1_error)
+  __pyx_tuple__26 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_pyx_state); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(1, 16, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__26);
+  __Pyx_GIVEREF(__pyx_tuple__26);
+  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_setstate_cython, 16, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(1, 16, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_NeuralFabric(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
  */
-  __pyx_tuple__23 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__23);
-  __Pyx_GIVEREF(__pyx_tuple__23);
-  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_NeuralFabric, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_tuple__28 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__28);
+  __Pyx_GIVEREF(__pyx_tuple__28);
+  __pyx_codeobj__29 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_NeuralFabric, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__29)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -9903,13 +12298,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 }
 
 static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
+  __pyx_umethod_PyDict_Type_keys.type = (PyObject*)&PyDict_Type;
   __pyx_umethod_PySet_Type_update.type = (PyObject*)&PySet_Type;
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
   __pyx_float_0_0 = PyFloat_FromDouble(0.0); if (unlikely(!__pyx_float_0_0)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_1_0 = PyFloat_FromDouble(1.0); if (unlikely(!__pyx_float_1_0)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_0 = PyInt_FromLong(0); if (unlikely(!__pyx_int_0)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_1 = PyInt_FromLong(1); if (unlikely(!__pyx_int_1)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_218991942 = PyInt_FromLong(218991942L); if (unlikely(!__pyx_int_218991942)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_94886471 = PyInt_FromLong(94886471L); if (unlikely(!__pyx_int_94886471)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -10255,181 +12651,223 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/neural_fabric.py":73
- *         """ a string representing the fabric layout structure - 'star' a central neuron with 4 neighbours, 'box' consists of a central neuron with 8 neighbours """
+  /* "src/neural_fabric.py":83
+ *         """ the threshold below with an edge probability is assumed to be zero and will be deleted """
  * 
  *     def seed_fabric(self, example_neuro_column: NeuroColumn, coords: set, hebbian_edges: set):             # <<<<<<<<<<<<<<
  *         """
  *         method to initialise the fabric with randomised sdrs whose edges and values depend on
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_example_neuro_column, __pyx_t_2) < 0) __PYX_ERR(0, 73, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_example_neuro_column, __pyx_t_2) < 0) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_coords, __pyx_n_u_set) < 0) __PYX_ERR(0, 73, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_hebbian_edges, __pyx_n_u_set) < 0) __PYX_ERR(0, 73, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_3seed_fabric, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_seed_fabric, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__4)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_coords, __pyx_n_u_set) < 0) __PYX_ERR(0, 83, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_hebbian_edges, __pyx_n_u_set) < 0) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_3seed_fabric, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_seed_fabric, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__5)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_2, __pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_seed_fabric, __pyx_t_2) < 0) __PYX_ERR(0, 73, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_seed_fabric, __pyx_t_2) < 0) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   PyType_Modified(__pyx_ptype_3src_13neural_fabric_NeuralFabric);
 
-  /* "src/neural_fabric.py":150
+  /* "src/neural_fabric.py":162
  *                 self.neurons[nn_coord_key]['nn'].add(coord_key)
  * 
  *     def grow(self, example_neuro_column: NeuroColumn, coord_key: str = None, hebbian_edges: set = None):             # <<<<<<<<<<<<<<
  *         """
  *         method to grow the neural fabric
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 150, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 162, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 150, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 162, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_example_neuro_column, __pyx_t_1) < 0) __PYX_ERR(0, 150, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_example_neuro_column, __pyx_t_1) < 0) __PYX_ERR(0, 162, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_coord_key, __pyx_n_u_str) < 0) __PYX_ERR(0, 150, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_hebbian_edges, __pyx_n_u_set) < 0) __PYX_ERR(0, 150, __pyx_L1_error)
-  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_5grow, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_grow, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__6)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 150, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_coord_key, __pyx_n_u_str) < 0) __PYX_ERR(0, 162, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_hebbian_edges, __pyx_n_u_set) < 0) __PYX_ERR(0, 162, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_5grow, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_grow, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 162, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_1, __pyx_t_2);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_grow, __pyx_t_1) < 0) __PYX_ERR(0, 150, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_grow, __pyx_t_1) < 0) __PYX_ERR(0, 162, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_3src_13neural_fabric_NeuralFabric);
 
-  /* "src/neural_fabric.py":200
+  /* "src/neural_fabric.py":213
  *         self.seed_fabric(example_neuro_column=example_neuro_column, coords=coords_to_add, hebbian_edges=hebbian_edges)
  * 
- *     def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> tuple:             # <<<<<<<<<<<<<<
+ *     def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> dict:             # <<<<<<<<<<<<<<
  *         """
  *         method to calculate the distance of sdr to every neuron on the fabric
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 200, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 213, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_neuro_column, __pyx_t_2) < 0) __PYX_ERR(0, 200, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_neuro_column, __pyx_t_2) < 0) __PYX_ERR(0, 213, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_ref_id, __pyx_n_u_str) < 0) __PYX_ERR(0, 200, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_bmu_search_filters, __pyx_n_u_set) < 0) __PYX_ERR(0, 200, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_return, __pyx_n_u_tuple) < 0) __PYX_ERR(0, 200, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_7distance_to_fabric, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_distance_to_fabric, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__8)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_ref_id, __pyx_n_u_str) < 0) __PYX_ERR(0, 213, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_bmu_search_filters, __pyx_n_u_set) < 0) __PYX_ERR(0, 213, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_return, __pyx_n_u_dict_2) < 0) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_7distance_to_fabric, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_distance_to_fabric, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__9)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 213, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_2, __pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_distance_to_fabric, __pyx_t_2) < 0) __PYX_ERR(0, 200, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_distance_to_fabric, __pyx_t_2) < 0) __PYX_ERR(0, 213, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   PyType_Modified(__pyx_ptype_3src_13neural_fabric_NeuralFabric);
 
-  /* "src/neural_fabric.py":239
- *         return bmu_coord_key, bmu_dist, anomaly, motif, fabric_dist, fabric_por
+  /* "src/neural_fabric.py":251
+ *         return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
  * 
- *     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: list, ref_id: str) -> tuple:             # <<<<<<<<<<<<<<
+ *     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: dict, ref_id: str) -> tuple:             # <<<<<<<<<<<<<<
  *         """
  *         method to detect if an anomaly or motif has occurred based on the recent max and min bmu distances. This is an implementation of matrix profile
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 239, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_bmu_coord_key, __pyx_n_u_str) < 0) __PYX_ERR(0, 239, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_distance, __pyx_n_u_float) < 0) __PYX_ERR(0, 239, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_por, __pyx_n_u_list) < 0) __PYX_ERR(0, 239, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_ref_id, __pyx_n_u_str) < 0) __PYX_ERR(0, 239, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_return, __pyx_n_u_tuple) < 0) __PYX_ERR(0, 239, __pyx_L1_error)
-  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_9detect_anomaly_motif, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_detect_anomaly_moti, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__10)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 239, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_bmu_coord_key, __pyx_n_u_str) < 0) __PYX_ERR(0, 251, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_distance, __pyx_n_u_float) < 0) __PYX_ERR(0, 251, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_por, __pyx_n_u_dict_2) < 0) __PYX_ERR(0, 251, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_ref_id, __pyx_n_u_str) < 0) __PYX_ERR(0, 251, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_return, __pyx_n_u_tuple) < 0) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_9detect_anomaly_motif, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_detect_anomaly_moti, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__11)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_1, __pyx_t_2);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_detect_anomaly_motif, __pyx_t_1) < 0) __PYX_ERR(0, 239, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_detect_anomaly_motif, __pyx_t_1) < 0) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_3src_13neural_fabric_NeuralFabric);
 
-  /* "src/neural_fabric.py":280
+  /* "src/neural_fabric.py":292
  * 
  *     @cython.ccall
  *     def update_bmu_stats(self, bmu_coord_key: str, distance: float):             # <<<<<<<<<<<<<<
  *         """
  *         method to update the stats of the bmu and its neighbours
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_bmu_coord_key, __pyx_n_u_str) < 0) __PYX_ERR(0, 280, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_distance, __pyx_n_u_float) < 0) __PYX_ERR(0, 280, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_11update_bmu_stats, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_update_bmu_stats, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__12)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 280, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_bmu_coord_key, __pyx_n_u_str) < 0) __PYX_ERR(0, 292, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_distance, __pyx_n_u_float) < 0) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_11update_bmu_stats, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_update_bmu_stats, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__13)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 292, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_2, __pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_update_bmu_stats, __pyx_t_2) < 0) __PYX_ERR(0, 280, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_update_bmu_stats, __pyx_t_2) < 0) __PYX_ERR(0, 292, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   PyType_Modified(__pyx_ptype_3src_13neural_fabric_NeuralFabric);
 
-  /* "src/neural_fabric.py":311
+  /* "src/neural_fabric.py":326
  * 
  *     @cython.ccall
  *     def learn(self, neuro_column: NeuroColumn, bmu_coord: str, coords: list, learn_rates: list, hebbian_edges: set = None):             # <<<<<<<<<<<<<<
  *         """
  *         hebbian updates the neurons specified using learning rates
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 311, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 326, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 311, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 326, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_neuro_column, __pyx_t_1) < 0) __PYX_ERR(0, 311, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_neuro_column, __pyx_t_1) < 0) __PYX_ERR(0, 326, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_bmu_coord, __pyx_n_u_str) < 0) __PYX_ERR(0, 311, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_coords, __pyx_n_u_list) < 0) __PYX_ERR(0, 311, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_learn_rates, __pyx_n_u_list) < 0) __PYX_ERR(0, 311, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_hebbian_edges, __pyx_n_u_set) < 0) __PYX_ERR(0, 311, __pyx_L1_error)
-  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_13learn, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_learn, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__14)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 311, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_bmu_coord, __pyx_n_u_str) < 0) __PYX_ERR(0, 326, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_coords, __pyx_n_u_list) < 0) __PYX_ERR(0, 326, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_learn_rates, __pyx_n_u_list) < 0) __PYX_ERR(0, 326, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_hebbian_edges, __pyx_n_u_set) < 0) __PYX_ERR(0, 326, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_13learn, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_learn, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__15)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 326, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_1, __pyx_t_2);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_learn, __pyx_t_1) < 0) __PYX_ERR(0, 311, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_learn, __pyx_t_1) < 0) __PYX_ERR(0, 326, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_3src_13neural_fabric_NeuralFabric);
 
-  /* "src/neural_fabric.py":343
+  /* "src/neural_fabric.py":358
  * 
  *     @cython.ccall
  *     def community_update(self, bmu_coord_key: str, learn_rate: cython.double):             # <<<<<<<<<<<<<<
  *         """
  *         method to hebbian update the community SDR for the bmu neurons and its neighbours
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 343, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 358, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_bmu_coord_key, __pyx_n_u_str) < 0) __PYX_ERR(0, 343, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_learn_rate, __pyx_n_u_double) < 0) __PYX_ERR(0, 343, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_15community_update, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_community_update, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__16)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 343, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_bmu_coord_key, __pyx_n_u_str) < 0) __PYX_ERR(0, 358, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_learn_rate, __pyx_n_u_double) < 0) __PYX_ERR(0, 358, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_15community_update, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_community_update, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__17)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 358, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_2, __pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_community_update, __pyx_t_2) < 0) __PYX_ERR(0, 343, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_community_update, __pyx_t_2) < 0) __PYX_ERR(0, 358, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   PyType_Modified(__pyx_ptype_3src_13neural_fabric_NeuralFabric);
 
-  /* "src/neural_fabric.py":391
+  /* "src/neural_fabric.py":408
  *                 self.neurons[coord_key]['community_label'] = curr_community_edge['target_uid']
  * 
  *     def merge_neurons(self, coords: list, merge_factors: list) -> NeuroColumn:             # <<<<<<<<<<<<<<
  *         """
  *         method to create a single SDR from a list of neuron sdrs using a merge_factor
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 391, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 408, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_coords, __pyx_n_u_list) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_merge_factors, __pyx_n_u_list) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 391, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_coords, __pyx_n_u_list) < 0) __PYX_ERR(0, 408, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_merge_factors, __pyx_n_u_list) < 0) __PYX_ERR(0, 408, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_NeuroColumn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 408, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_return, __pyx_t_1) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_return, __pyx_t_1) < 0) __PYX_ERR(0, 408, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_17merge_neurons, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_merge_neurons, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__18)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 391, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_17merge_neurons, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_merge_neurons, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__19)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 408, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_1, __pyx_t_2);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_merge_neurons, __pyx_t_1) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_merge_neurons, __pyx_t_1) < 0) __PYX_ERR(0, 408, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  PyType_Modified(__pyx_ptype_3src_13neural_fabric_NeuralFabric);
+
+  /* "src/neural_fabric.py":446
+ *         return merged_column
+ * 
+ *     def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, reset_updated: bool = False, community_sdr: bool = False) -> dict:             # <<<<<<<<<<<<<<
+ *         """
+ *         method to decode the entire fabric
+ */
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 446, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_coords, __pyx_n_u_set) < 0) __PYX_ERR(0, 446, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_all_details, ((PyObject*)&PyBool_Type)) < 0) __PYX_ERR(0, 446, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_only_updated, ((PyObject*)&PyBool_Type)) < 0) __PYX_ERR(0, 446, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_reset_updated, ((PyObject*)&PyBool_Type)) < 0) __PYX_ERR(0, 446, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_community_sdr, ((PyObject*)&PyBool_Type)) < 0) __PYX_ERR(0, 446, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_return, __pyx_n_u_dict_2) < 0) __PYX_ERR(0, 446, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_19decode, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_decode, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 446, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_2, __pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_decode, __pyx_t_2) < 0) __PYX_ERR(0, 446, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  PyType_Modified(__pyx_ptype_3src_13neural_fabric_NeuralFabric);
+
+  /* "src/neural_fabric.py":518
+ *         return fabric
+ * 
+ *     def restore(self, fabric: dict) -> None:             # <<<<<<<<<<<<<<
+ *         """
+ *         method to restore all the properties of the fabric from a dictionary representation
+ */
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 518, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_fabric, __pyx_n_u_dict_2) < 0) __PYX_ERR(0, 518, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_return, Py_None) < 0) __PYX_ERR(0, 518, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_21restore, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric_restore, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 518, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_1, __pyx_t_2);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_restore, __pyx_t_1) < 0) __PYX_ERR(0, 518, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_3src_13neural_fabric_NeuralFabric);
 
@@ -10438,7 +12876,7 @@ if (!__Pyx_RefNanny) {
  *     cdef tuple state
  *     cdef object _dict
  */
-  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_19__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric___reduce_cython, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__20)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_23__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric___reduce_cython, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_reduce_cython, __pyx_t_1) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -10446,11 +12884,11 @@ if (!__Pyx_RefNanny) {
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_NeuralFabric, (type(self), 0xd0d8d46, state)
+ *         return __pyx_unpickle_NeuralFabric, (type(self), 0x5a7da47, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_NeuralFabric__set_state(self, __pyx_state)
  */
-  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_21__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric___setstate_cython, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 16, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_12NeuralFabric_25__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_NeuralFabric___setstate_cython, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 16, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem((PyObject *)__pyx_ptype_3src_13neural_fabric_NeuralFabric->tp_dict, __pyx_n_s_setstate_cython, __pyx_t_1) < 0) __PYX_ERR(1, 16, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -10461,7 +12899,7 @@ if (!__Pyx_RefNanny) {
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
  */
-  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_1__pyx_unpickle_NeuralFabric, 0, __pyx_n_s_pyx_unpickle_NeuralFabric, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__24)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_3src_13neural_fabric_1__pyx_unpickle_NeuralFabric, 0, __pyx_n_s_pyx_unpickle_NeuralFabric, NULL, __pyx_n_s_src_neural_fabric, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_pyx_unpickle_NeuralFabric, __pyx_t_1) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -12008,6 +14446,62 @@ static PyObject* __Pyx_PyInt_AddObjC(PyObject *op1, PyObject *op2, CYTHON_UNUSED
             return PyFloat_FromDouble(result);
     }
     return (inplace ? PyNumber_InPlaceAdd : PyNumber_Add)(op1, op2);
+}
+#endif
+
+/* CallUnboundCMethod0 */
+static PyObject* __Pyx__CallUnboundCMethod0(__Pyx_CachedCFunction* cfunc, PyObject* self) {
+    PyObject *args, *result = NULL;
+    if (unlikely(!cfunc->method) && unlikely(__Pyx_TryUnpackUnboundCMethod(cfunc) < 0)) return NULL;
+#if CYTHON_ASSUME_SAFE_MACROS
+    args = PyTuple_New(1);
+    if (unlikely(!args)) goto bad;
+    Py_INCREF(self);
+    PyTuple_SET_ITEM(args, 0, self);
+#else
+    args = PyTuple_Pack(1, self);
+    if (unlikely(!args)) goto bad;
+#endif
+    result = __Pyx_PyObject_Call(cfunc->method, args, NULL);
+    Py_DECREF(args);
+bad:
+    return result;
+}
+
+/* py_dict_keys */
+static CYTHON_INLINE PyObject* __Pyx_PyDict_Keys(PyObject* d) {
+    if (PY_MAJOR_VERSION >= 3)
+        return __Pyx_CallUnboundCMethod0(&__pyx_umethod_PyDict_Type_keys, d);
+    else
+        return PyDict_Keys(d);
+}
+
+/* ObjectGetItem */
+#if CYTHON_USE_TYPE_SLOTS
+static PyObject *__Pyx_PyObject_GetIndex(PyObject *obj, PyObject* index) {
+    PyObject *runerr;
+    Py_ssize_t key_value;
+    PySequenceMethods *m = Py_TYPE(obj)->tp_as_sequence;
+    if (unlikely(!(m && m->sq_item))) {
+        PyErr_Format(PyExc_TypeError, "'%.200s' object is not subscriptable", Py_TYPE(obj)->tp_name);
+        return NULL;
+    }
+    key_value = __Pyx_PyIndex_AsSsize_t(index);
+    if (likely(key_value != -1 || !(runerr = PyErr_Occurred()))) {
+        return __Pyx_GetItemInt_Fast(obj, key_value, 0, 1, 1);
+    }
+    if (PyErr_GivenExceptionMatches(runerr, PyExc_OverflowError)) {
+        PyErr_Clear();
+        PyErr_Format(PyExc_IndexError, "cannot fit '%.200s' into an index-sized integer", Py_TYPE(index)->tp_name);
+    }
+    return NULL;
+}
+static PyObject *__Pyx_PyObject_GetItem(PyObject *obj, PyObject* key) {
+    PyMappingMethods *m = Py_TYPE(obj)->tp_as_mapping;
+    if (likely(m && m->mp_subscript)) {
+        return m->mp_subscript(obj, key);
+    }
+    return __Pyx_PyObject_GetIndex(obj, key);
 }
 #endif
 
