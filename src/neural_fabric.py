@@ -222,9 +222,8 @@ class NeuralFabric:
         # declare variable types to help cython
         #
         fabric_dist: dict = {}
-        fabric_por: dict = {}
         distance: cython.double
-        por: list
+        por: dict
         bmu_dist: cython.double = 1.0
         bmu_coord_key: Optional[str] = None
         coord_key: str
@@ -234,8 +233,8 @@ class NeuralFabric:
         for coord_key in self.neurons:
             distance, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
             fabric_dist[coord_key] = {'distance': distance,
-                                      'last_bmu': self.neurons[coord_key]['last_bmu']}
-            fabric_por[coord_key] = por
+                                      'last_bmu': self.neurons[coord_key]['last_bmu'],
+                                      'por': por}
             if fabric_dist[coord_key]['distance'] <= bmu_dist:
                 bmu_dist = fabric_dist[coord_key]['distance']
                 bmu_coord_key = coord_key
@@ -245,17 +244,17 @@ class NeuralFabric:
         anomaly = False
         motif = False
         if ref_id is not None:
-            anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_por[bmu_coord_key], ref_id=ref_id)
+            anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_dist[bmu_coord_key]['por'], ref_id=ref_id)
 
-        return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist, 'fabric_por': fabric_por}
+        return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
 
-    def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: list, ref_id: str) -> tuple:
+    def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: dict, ref_id: str) -> tuple:
         """
         method to detect if an anomaly or motif has occurred based on the recent max and min bmu distances. This is an implementation of matrix profile
 
         :param bmu_coord_key: str - the bmu cord key
         :param distance: double - bmu distance
-        :param por: - list of distance por records
+        :param por: - path of reasoning dict
         :param ref_id: str - the reference id of this update
         :return: tuple of bools with format (anomaly, motif)
         """
@@ -444,16 +443,24 @@ class NeuralFabric:
             merged_column.merge(neuro_column=self.neurons[coord_key]['neuro_column'], merge_factor=merge_factor)
         return merged_column
 
-    def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, community_sdr: bool = False) -> dict:
+    def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, reset_updated: bool = False, community_sdr: bool = False) -> dict:
         """
         method to decode the entire fabric
 
         :param coords: set of neuro_column coords to decode. if None then all will be decoded
-        :param all_details: If true then all fabric properties will be included else if False just the NeuroColumns
-        :param only_updated: If Tue only the changed data willbe included else if False then all data
+        :param all_details: If True then all fabric properties will be included else if False just the NeuroColumns
+        :param only_updated: If True only the changed data willbe included else if False then all data
+        :param reset_updated: If True the update flags will be reset to False else if False the update flags left as is
         :param community_sdr: If True then the community sdr is included
         :return: dictionary representation of the fabric properties
         """
+
+        ref_id: str
+        attr: str
+        fabric: dict
+        coords_to_decode: set
+        coord_key: str
+        n_attr: str
 
         if all_details:
             fabric = {'mp_window': self.mp_window,
@@ -475,7 +482,7 @@ class NeuralFabric:
                       'neuro_columns': {}
                       }
 
-            if only_updated:
+            if reset_updated:
                 for ref_id in fabric['anomaly']:
                     self.anomaly[ref_id]['updated'] = False
                 for ref_id in fabric['motif']:
@@ -485,13 +492,13 @@ class NeuralFabric:
             fabric = {'neuro_columns': {}}
 
         if coords is None:
-            coords_to_decode = self.neurons.keys()
+            coords_to_decode = set(self.neurons.keys())
         else:
             coords_to_decode = coords
 
         for coord_key in coords_to_decode:
             if not only_updated or self.neurons[coord_key]['updated']:
-                if only_updated:
+                if reset_updated:
                     self.neurons[coord_key]['updated'] = False
 
                 # convert sets to lists
