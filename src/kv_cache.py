@@ -307,7 +307,7 @@ class KVGraphCache:
                     if e['_target_type'] not in node_keys[nqe['named_query']]:
                         node_keys[nqe['named_query']][e['_target_type']] = set()
 
-                    if isinstance(e['_target_type'], str) and ' ' in e['_target_type']:
+                    if isinstance(e['_target_uid'], str) and ' ' in e['_target_uid']:
                         node_keys[nqe['named_query']][e['_target_type']].add(e['_target_uid'].replace(' ', '_'))
                     else:
                         node_keys[nqe['named_query']][e['_target_type']].add(e['_target_uid'])
@@ -430,3 +430,43 @@ class KVGraphCache:
                 result = self._store[store_name][key]['value']
 
         return result
+
+
+
+if __name__ == '__main__':
+    import os
+    from dotenv import load_dotenv
+
+    g = AMFGraph()
+
+    g.set_edge(source=('Trade', 'XYZ_123'), target=('client', 'abc ltd'), edge=('has', 'client'), prob=1.0)
+
+    load_dotenv()
+
+    config = {'db_name': os.getenv("DB_NAME"),
+              'db_username': os.getenv("DB_USERNAME"),
+              'db_password': os.getenv("DB_PASSWORD"),
+              'db_system': os.getenv("DB_SYSTEM"),
+              'db_config_file_path': os.getenv("DB_CONFIG_PATH"),
+              'db_queries_file_path': os.getenv("DB_QUERIES_PATH"),
+              }
+
+    in_memory_cache = KVGraphCache(config=config)
+
+    in_memory_cache.set_kv(store_name='my_data', key='rec_3', value=g)
+
+    in_memory_cache.persist()
+
+    in_memory_cache_2 = KVGraphCache(config=config)
+
+    in_memory_cache_2.restore(store_name='my_data', key='rec_3')
+
+    restored_graph = in_memory_cache_2.get_kv(store_name='my_data', key='rec_3')
+
+    restored_graph.update_edge(source=('Trade', 'XYZ_123'), target=('client','abc ltd'), edge=('has', 'client'), prob=0.5)
+
+    in_memory_cache_2.set_kv(store_name='my_data', key='rec_3', value=restored_graph)
+
+    in_memory_cache_2.persist()
+
+    print('finished')
