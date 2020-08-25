@@ -23,9 +23,6 @@ FeatureMapType = Dict[EdgeKeyType, Dict[EdgeFeatureKeyType, EdgeFeatureType]]
 FilterType = Set[str]
 """ Filters are sets of strings """
 
-ContributionType = Dict[str, Union[str, float]]
-""" the contribution dictionary specify the edge, prob and numeric contributions"""
-
 
 @cython.cclass
 class NeuroColumn:
@@ -181,12 +178,12 @@ class NeuroColumn:
                             numeric_max=sdrs[idx][sdr_key]['numeric_max']
                             )
 
-    def calc_distance(self, neuro_column, filter_types: Optional[FilterType] = None) -> Tuple[float, List[ContributionType]]:
+    def calc_distance(self, neuro_column, filter_types: Optional[FilterType] = None) -> Tuple[float, dict]:
         """
         method to calculate the distance between two SDRs
         :param neuro_column: the neuro_column to compare to
         :param filter_types: a set of edge types to compare
-        :return: a tuple of the distance and list of distance contributions {edge: EdgeKeyType, prob: Double, numeric: Double}
+        :return: a tuple of the distance and por - a dictionary keyed by edge
         """
 
         # help cython static type
@@ -194,7 +191,7 @@ class NeuroColumn:
         distance: cython.double
         sum_min: cython.double = 0.0
         sum_max: cython.double = 0.0
-        contributions: List[ContributionType] = []
+        por: dict = {}
         edge_key: EdgeKeyType
         edges_to_process: Set[EdgeKeyType]
 
@@ -212,58 +209,94 @@ class NeuroColumn:
             # edge_key in both NeuroColumns
             #
             if edge_key in self.edges and edge_key in neuro_column.edges:
-                sum_min += min(neuro_column.edges[edge_key]['prob'], self.edges[edge_key]['prob'])
-                sum_max += max(neuro_column.edges[edge_key]['prob'], self.edges[edge_key]['prob'])
-                contributions.append({'edge': edge_key, 'prob': abs(neuro_column.edges[edge_key]['prob'] - self.edges[edge_key]['prob'])})
+
+                por[edge_key] = {'compared': 'both', 'prob': {}, 'numeric': {}}
+
+                if neuro_column.edges[edge_key]['prob'] > self.edges[edge_key]['prob']:
+                    sum_min += self.edges[edge_key]['prob']
+                    sum_max += neuro_column.edges[edge_key]['prob']
+                    por[edge_key]['prob']['min'] = ('self', self.edges[edge_key]['prob'])
+                    por[edge_key]['prob']['max'] = ('nc', neuro_column.edges[edge_key]['prob'])
+
+                else:
+                    sum_min += neuro_column.edges[edge_key]['prob']
+                    sum_max += self.edges[edge_key]['prob']
+                    por[edge_key]['prob']['max'] = ('self', self.edges[edge_key]['prob'])
+                    por[edge_key]['prob']['min'] = ('nc', neuro_column.edges[edge_key]['prob'])
 
                 if 'numeric' in neuro_column.edges[edge_key]:
-                    sum_min += min(neuro_column.edges[edge_key]['numeric'], self.edges[edge_key]['numeric'])
-                    sum_max += max(neuro_column.edges[edge_key]['numeric'], self.edges[edge_key]['numeric'])
-                    contributions.append({'edge': edge_key, 'numeric': abs(neuro_column.edges[edge_key]['numeric'] - self.edges[edge_key]['numeric'])})
+
+                    if neuro_column.edges[edge_key]['numeric'] > self.edges[edge_key]['numeric']:
+                        sum_min += self.edges[edge_key]['numeric']
+                        sum_max += neuro_column.edges[edge_key]['numeric']
+                        por[edge_key]['numeric']['min'] = ('self', self.edges[edge_key]['numeric'])
+                        por[edge_key]['numeric']['max'] = ('nc', neuro_column.edges[edge_key]['numeric'])
+
+                    else:
+                        sum_min += neuro_column.edges[edge_key]['numeric']
+                        sum_max += self.edges[edge_key]['numeric']
+                        por[edge_key]['numeric']['max'] = ('self', self.edges[edge_key]['numeric'])
+                        por[edge_key]['numeric']['min'] = ('nc', neuro_column.edges[edge_key]['numeric'])
+
                 else:
                     # if no numeric then add place holder to remove numeric bias
                     #
-                    sum_min += 1.0
-                    sum_max += 1.0
+                    #sum_min += 1.0
+                    #sum_max += 1.0
+                    pass
 
             # edge key only in this NeuroColumn
             #
             elif edge_key in self.edges:
+
                 sum_max += self.edges[edge_key]['prob']
-                contributions.append({'edge': edge_key, 'prob': self.edges[edge_key]['prob']})
+
+                por[edge_key] = {'compared': 'nc', 'prob': {}, 'numeric': {}}
+                por[edge_key]['prob']['max'] = ('self', self.edges[edge_key]['prob'])
+                por[edge_key]['prob']['min'] = ('nc', 0.0)
 
                 if 'numeric' in self.edges[edge_key]:
                     sum_max += self.edges[edge_key]['numeric']
-                    contributions.append({'edge': edge_key, 'numeric': self.edges[edge_key]['numeric']})
+                    por[edge_key]['numeric']['max'] = ('self', self.edges[edge_key]['numeric'])
+                    por[edge_key]['numeric']['min'] = ('nc', 0.0)
+
                 else:
                     # if no numeric then add place holder to remove numeric bias
                     #
-                    sum_min += 1.0
-                    sum_max += 1.0
+                    #sum_min += 1.0
+                    #sum_max += 1.0
+                    pass
 
             # edge_key in the NeuroColumn to compare to
             #
             else:
                 sum_max += neuro_column.edges[edge_key]['prob']
-                contributions.append({'edge': edge_key, 'prob': neuro_column.edges[edge_key]['prob']})
+
+                por[edge_key] = {'compared': 'sdr', 'prob': {}, 'numeric': {}}
+                por[edge_key]['prob']['max'] = ('nc', neuro_column.edges[edge_key]['prob'])
+                por[edge_key]['prob']['min'] = ('self', 0.0)
 
                 if 'numeric' in neuro_column.edges[edge_key]:
                     sum_max += neuro_column.edges[edge_key]['numeric']
-                    contributions.append({'edge': edge_key, 'numeric': neuro_column.edges[edge_key]['numeric']})
+
+                    por[edge_key]['numeric']['max'] = ('nc', neuro_column.edges[edge_key]['numeric'])
+                    por[edge_key]['numeric']['min'] = ('self', 0.0)
+
                 else:
                     # if no numeric then add place holder to remove numeric bias
                     #
-                    sum_min += 1.0
-                    sum_max += 1.0
+                    #sum_min += 1.0
+                    #sum_max += 1.0
+                    pass
 
         distance = 1.0
         if sum_max > 0:
 
-            # weighted Jaccard Distance is 1 - (ratio of sum of mins / sum of maxs)
+            # weighted Jaccard Distance is 1 - (ratio of sum of min / sum of max)
             #
             distance = 1 - (sum_min / sum_max)
 
-        return distance, contributions
+        return distance, por
 
     def learn(self, neuro_column, learn_rate: cython.double, is_bmu: bool = True, hebbian_edges: Optional[FilterType] = None) -> None:
         """
