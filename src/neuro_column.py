@@ -241,8 +241,8 @@ class NeuroColumn:
                 else:
                     # if no numeric then add place holder to remove numeric bias
                     #
-                    #sum_min += 1.0
-                    #sum_max += 1.0
+                    sum_min += 1.0
+                    sum_max += 1.0
                     pass
 
             # edge key only in this NeuroColumn
@@ -263,8 +263,8 @@ class NeuroColumn:
                 else:
                     # if no numeric then add place holder to remove numeric bias
                     #
-                    #sum_min += 1.0
-                    #sum_max += 1.0
+                    sum_min += 1.0
+                    sum_max += 1.0
                     pass
 
             # edge_key in the NeuroColumn to compare to
@@ -285,8 +285,8 @@ class NeuroColumn:
                 else:
                     # if no numeric then add place holder to remove numeric bias
                     #
-                    #sum_min += 1.0
-                    #sum_max += 1.0
+                    sum_min += 1.0
+                    sum_max += 1.0
                     pass
 
         distance = 1.0
