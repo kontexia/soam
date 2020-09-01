@@ -253,7 +253,7 @@ def test():
     short_term_memory = 5
     amf = AMFabric(uid='colours',
                    short_term_memory=short_term_memory,
-                   mp_threshold=6,
+                   mp_threshold=0.1,
                    structure='star',
                    prune_threshold=0.0)
 
@@ -312,7 +312,6 @@ def test():
 
 
     print('finished')
-
 
 
 if __name__ == '__main__':
