@@ -16,7 +16,7 @@ class AMFabric:
     def __init__(self,
                  uid: str,
                  short_term_memory: int = 1,
-                 mp_threshold: int = 5,
+                 mp_threshold: float = 0.1,
                  structure: str = 'star',
                  prune_threshold: float = 0.00001,
                  random_seed=None) -> None:
@@ -25,7 +25,7 @@ class AMFabric:
 
         :param uid: str unique name foe this area of the fabric
         :param short_term_memory: the maximum number of neurons in a column of neurons
-        :param mp_threshold: the matrix profile window multiplier
+        :param mp_threshold: the noise threshold used to determine anomalies and motifs using matrix profile
         :param structure: str - 'star' structure each column has 4 neighbours  or 'box' structure where each column has 8 neighbours
         :param prune_threshold: float - threshold below which learnt edges are assumed to have zero probability and removed
 
@@ -43,7 +43,7 @@ class AMFabric:
         """ list of last sequence_dimension SDRs received """
 
         self.mp_threshold = mp_threshold
-        """ the matrix profile window multiplier """
+        """ the matrix profile noise threshold """
 
         self.structure = structure
         """ the structure of the neuro_columns - star - 5 columns connected in a star, square - 9 neuro_columns connected in a square"""
@@ -130,6 +130,7 @@ class AMFabric:
         #
         por['bmu'] = search_results['bmu_coord']
         por['bmu_distance'] = search_results['bmu_distance']
+        por['bmu_similarity'] = search_results['bmu_similarity']
         por['anomaly'] = search_results['anomaly']
         por['motif'] = search_results['motif']
         por['fabric_distance'] = search_results['fabric_distance']
@@ -161,28 +162,17 @@ class AMFabric:
         #
         bmu_distance = search_por['bmu_distance']
 
-        # if the bmu distance exceeded the anomaly threshold
+        # bmu similarity
         #
-        anomaly = search_por['anomaly']
+        bmu_similarity = search_por['bmu_similarity']
+
+        # the learn_rate is inversely proportional to the similarity
+        #
+        bmu_learn_rate = (1 - bmu_similarity)
 
         # the distance to all columns
         #
         fabric_dist = search_por['fabric_distance']
-
-        # if this is an anomaly then want to find the neuron column that is currently on the edge of the fabric
-        # any column on the edge cannot have been a BMU as each column keeps track the last time it was the BMU
-        # by calculating (mapped - last_bmu) edge columns will have a large number
-        # sorting in descending order of (1-distance) * (mapped - last_bmu) will present the closest edge columns
-        #
-
-        if anomaly:
-            dist_list = [(coord_key,
-                          fabric_dist[coord_key]['distance'],
-                          (1 - fabric_dist[coord_key]['distance']) * (self.fabric.mapped - fabric_dist[coord_key]['last_bmu']))
-                         for coord_key in fabric_dist]
-            dist_list.sort(key=lambda x: x[2], reverse=True)
-            bmu_coord_key = dist_list[0][0]
-            bmu_distance = dist_list[0][1]
 
         # grow the mini column neighbours if required - note any edge columns will always require new neighbours
         # if selected as the bmu
@@ -196,7 +186,7 @@ class AMFabric:
 
         # update the bmu and its neighbours stats
         #
-        self.fabric.update_bmu_stats(bmu_coord_key=bmu_coord_key, distance=bmu_distance)
+        self.fabric.update_bmu_stats(bmu_coord_key=bmu_coord_key, distance=bmu_distance, similarity=bmu_similarity)
 
         # get neighbourhood of neurons to learn
         #
@@ -206,24 +196,26 @@ class AMFabric:
         #
         coords_to_update.append(bmu_coord_key)
 
-        # and the learn rates for each mini column of neurons. if mini-column has just been grown then won't be in fabric_dist so default to bmu dist
+        # and the learn rates for each mini column of neurons. if mini-column has just been grown then won't be in fabric_dist so default to bmu_learn_rate
         #
-        learn_rates = [fabric_dist[coord_key]['distance'] if coord_key in fabric_dist else bmu_distance for coord_key in coords_to_update]
+        learn_rates = [(1 - fabric_dist[coord_key]['similarity']) if coord_key in fabric_dist else bmu_learn_rate for coord_key in coords_to_update]
 
         self.fabric.learn(neuro_column=neuro_column, bmu_coord=bmu_coord_key, coords=coords_to_update, learn_rates=learn_rates, hebbian_edges=hebbian_edges)
 
         # update communities
         #
-        self.fabric.community_update(bmu_coord_key=bmu_coord_key, learn_rate=(1 - bmu_distance))
+        self.fabric.community_update(bmu_coord_key=bmu_coord_key, learn_rate=bmu_similarity)
 
         learn_por = {'updated_bmu': bmu_coord_key,
-                     'updated_bmu_learn_rate': bmu_distance,
+                     'updated_bmu_learn_rate': bmu_learn_rate,
                      'updated_nn': [nn for nn in coords_to_update if nn != bmu_coord_key],
                      'updated_nn_learn_rate': [learn_rates[idx]
                                                for idx in range(len(coords_to_update))
                                                if coords_to_update[idx] != bmu_coord_key],
-                     'coords_grown': list(new_coords)
-                     }
+                     'coords_grown': list(new_coords),
+                     'mean_distance':  self.fabric.mean_distance,
+                     'std_distance': self.fabric.std_distance,
+        }
 
         return learn_por
 
@@ -290,9 +282,10 @@ class AMFabric:
             result['neuro_column'] = self.fabric.neurons[bmu_coord_key]['neuro_column'].decode()
         else:
 
-            # create a list of distances and neuron coords, sort in assending order of distance and then pick out the first top_n
+            # create a list of distances and neuron coords, sort in ascending order of distance and then pick out the first top_n
             #
-            distances = [(coord_key, search_results['fabric_distance'][coord_key]['distance']) for coord_key in search_results['fabric_distance']]
+            distances = [(coord_key, search_results['fabric_distance'][coord_key]['distance'], search_results['fabric_distance'][coord_key]['similarity'])
+                         for coord_key in search_results['fabric_distance']]
             distances.sort(key=lambda x: x[1])
             merge_factors = []
             coords_to_merge = []
@@ -301,13 +294,13 @@ class AMFabric:
             while n < top_n and idx < len(distances):
                 if distances[idx][1] < 1.0:
                     coords_to_merge.append(distances[idx][0])
-                    merge_factors.append(1 - distances[idx][1])
+                    merge_factors.append(distances[idx][2])
                     n += 1
                     idx += 1
                 else:
                     break
 
-            # merge the top_n neurons with a merge factor equal to  similarity ie 1 - distance
+            # merge the top_n neurons with a merge factor equal to similarity
             #
             merged_neuron = self.fabric.merge_neurons(coords=coords_to_merge, merge_factors=merge_factors)
             result['coords'] = coords_to_merge
@@ -386,7 +379,7 @@ class AMFabric:
             # add edge to represent the setup data
             #
             edge_properties = {'stm_size': self.stm_size,
-                               'mp_threshold': self.mp_threshold,
+                               'mp_window_size': self.mp_window_size,
                                'structure': self.structure,
                                'prune_threshold': self.prune_threshold,
                                'ref_id': str_ref_id}
@@ -510,7 +503,7 @@ class AMFabric:
         #
         has_setup = pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('amfabric_setup', None), None)]
         self.stm_size = has_setup['stm_size']
-        self.mp_threshold = has_setup['mp_threshold']
+        self.mp_window_size = has_setup['mp_window_size']
         self.structure = has_setup['structure']
         self.prune_threshold = has_setup['prune_threshold']
 
