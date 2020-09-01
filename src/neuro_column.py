@@ -178,7 +178,7 @@ class NeuroColumn:
                             numeric_max=sdrs[idx][sdr_key]['numeric_max']
                             )
 
-    def calc_distance(self, neuro_column, filter_types: Optional[FilterType] = None) -> Tuple[float, dict]:
+    def calc_distance(self, neuro_column, filter_types: Optional[FilterType] = None) -> Tuple[float, float, dict]:
         """
         method to calculate the distance between two SDRs
         :param neuro_column: the neuro_column to compare to
@@ -188,6 +188,7 @@ class NeuroColumn:
 
         # help cython static type
         #
+        similarity: cython.double
         distance: cython.double
         sum_min: cython.double = 0.0
         sum_max: cython.double = 0.0
@@ -210,93 +211,152 @@ class NeuroColumn:
             #
             if edge_key in self.edges and edge_key in neuro_column.edges:
 
-                por[edge_key] = {'compared': 'both', 'prob': {}, 'numeric': {}}
+                # por keyed by neuron_id
+                #
+                if self.edges[edge_key]['neuron_id'] not in por:
+                    por[self.edges[edge_key]['neuron_id']] = {'distance': 0.0, 'edges': {}}
+
+                # the distance between probabilities
+                #
+                edge_dist = abs(self.edges[edge_key]['prob'] - neuro_column.edges[edge_key]['prob'])
+                por[self.edges[edge_key]['neuron_id']]['distance'] += edge_dist
+                por[self.edges[edge_key]['neuron_id']]['edges'][edge_key] = {'prob': {'distance': edge_dist,
+                                                                                      'min': None,
+                                                                                      'max': None},
+                                                                             'numeric': {'distance': None, 'min': None, 'max': None},
+                                                                             'distance': edge_dist
+                                                                             }
 
                 if neuro_column.edges[edge_key]['prob'] > self.edges[edge_key]['prob']:
+                    por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['prob']['min'] = self.edges[edge_key]['prob']
+                    por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['prob']['max'] = neuro_column.edges[edge_key]['prob']
+
                     sum_min += self.edges[edge_key]['prob']
                     sum_max += neuro_column.edges[edge_key]['prob']
-                    por[edge_key]['prob']['min'] = ('self', self.edges[edge_key]['prob'])
-                    por[edge_key]['prob']['max'] = ('nc', neuro_column.edges[edge_key]['prob'])
 
                 else:
+                    por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['prob']['max'] = self.edges[edge_key]['prob']
+                    por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['prob']['min'] = neuro_column.edges[edge_key]['prob']
+
                     sum_min += neuro_column.edges[edge_key]['prob']
                     sum_max += self.edges[edge_key]['prob']
-                    por[edge_key]['prob']['max'] = ('self', self.edges[edge_key]['prob'])
-                    por[edge_key]['prob']['min'] = ('nc', neuro_column.edges[edge_key]['prob'])
 
                 if 'numeric' in neuro_column.edges[edge_key]:
 
+                    # the distance between numerics
+                    #
+                    edge_dist = abs(self.edges[edge_key]['numeric'] - neuro_column.edges[edge_key]['numeric'])
+                    por[self.edges[edge_key]['neuron_id']]['distance'] += edge_dist
+                    por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['distance'] += edge_dist
+                    por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['numeric']['distance'] = edge_dist
+
                     if neuro_column.edges[edge_key]['numeric'] > self.edges[edge_key]['numeric']:
+                        por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['numeric']['min'] = self.edges[edge_key]['numeric']
+                        por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['numeric']['max'] = neuro_column.edges[edge_key]['numeric']
+
                         sum_min += self.edges[edge_key]['numeric']
                         sum_max += neuro_column.edges[edge_key]['numeric']
-                        por[edge_key]['numeric']['min'] = ('self', self.edges[edge_key]['numeric'])
-                        por[edge_key]['numeric']['max'] = ('nc', neuro_column.edges[edge_key]['numeric'])
 
                     else:
+                        por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['numeric']['max'] = self.edges[edge_key]['numeric']
+                        por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['numeric']['min'] = neuro_column.edges[edge_key]['numeric']
+
                         sum_min += neuro_column.edges[edge_key]['numeric']
                         sum_max += self.edges[edge_key]['numeric']
-                        por[edge_key]['numeric']['max'] = ('self', self.edges[edge_key]['numeric'])
-                        por[edge_key]['numeric']['min'] = ('nc', neuro_column.edges[edge_key]['numeric'])
 
                 else:
                     # if no numeric then add place holder to remove numeric bias
                     #
                     sum_min += 1.0
                     sum_max += 1.0
-                    pass
 
             # edge key only in this NeuroColumn
             #
             elif edge_key in self.edges:
 
-                sum_max += self.edges[edge_key]['prob']
+                # por keyed by neuron_id
+                #
+                if self.edges[edge_key]['neuron_id'] not in por:
+                    por[self.edges[edge_key]['neuron_id']] = {'distance': 0.0, 'edges': {}}
 
-                por[edge_key] = {'compared': 'nc', 'prob': {}, 'numeric': {}}
-                por[edge_key]['prob']['max'] = ('self', self.edges[edge_key]['prob'])
-                por[edge_key]['prob']['min'] = ('nc', 0.0)
+                # the distance between probabilities
+                #
+                edge_dist = self.edges[edge_key]['prob']
+                por[self.edges[edge_key]['neuron_id']]['distance'] += edge_dist
+                por[self.edges[edge_key]['neuron_id']]['edges'][edge_key] = {'prob': {'distance': edge_dist,
+                                                                                      'min': 0.0,
+                                                                                      'max': edge_dist},
+                                                                             'numeric': {'distance': None, 'min': None, 'max': None},
+                                                                             'distance': edge_dist}
+                sum_max += edge_dist
 
                 if 'numeric' in self.edges[edge_key]:
-                    sum_max += self.edges[edge_key]['numeric']
-                    por[edge_key]['numeric']['max'] = ('self', self.edges[edge_key]['numeric'])
-                    por[edge_key]['numeric']['min'] = ('nc', 0.0)
+
+                    edge_dist = self.edges[edge_key]['numeric']
+                    por[self.edges[edge_key]['neuron_id']]['distance'] += edge_dist
+                    por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['distance'] += edge_dist
+                    por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['numeric']['max'] = edge_dist
+                    por[self.edges[edge_key]['neuron_id']]['edges'][edge_key]['numeric']['min'] = 0.0
+
+                    sum_max += edge_dist
 
                 else:
                     # if no numeric then add place holder to remove numeric bias
                     #
                     sum_min += 1.0
                     sum_max += 1.0
-                    pass
 
             # edge_key in the NeuroColumn to compare to
             #
             else:
-                sum_max += neuro_column.edges[edge_key]['prob']
 
-                por[edge_key] = {'compared': 'sdr', 'prob': {}, 'numeric': {}}
-                por[edge_key]['prob']['max'] = ('nc', neuro_column.edges[edge_key]['prob'])
-                por[edge_key]['prob']['min'] = ('self', 0.0)
+                # por keyed by neuron_id
+                #
+                if neuro_column.edges[edge_key]['neuron_id'] not in por:
+                    por[neuro_column.edges[edge_key]['neuron_id']] = {'distance': 0.0, 'edges': {}}
+
+                # the distance between probabilities
+                #
+                edge_dist = neuro_column.edges[edge_key]['prob']
+                por[neuro_column.edges[edge_key]['neuron_id']]['distance'] += edge_dist
+                por[neuro_column.edges[edge_key]['neuron_id']]['edges'][edge_key] = {'prob': {'distance': edge_dist,
+                                                                                              'min': 0.0,
+                                                                                              'max': edge_dist},
+                                                                                     'numeric': {'distance': None, 'min': None, 'max': None},
+                                                                                     'distance': edge_dist
+                                                                                     }
+                sum_max += edge_dist
 
                 if 'numeric' in neuro_column.edges[edge_key]:
-                    sum_max += neuro_column.edges[edge_key]['numeric']
 
-                    por[edge_key]['numeric']['max'] = ('nc', neuro_column.edges[edge_key]['numeric'])
-                    por[edge_key]['numeric']['min'] = ('self', 0.0)
+                    # the distance between numeric
+                    #
+                    edge_dist = neuro_column.edges[edge_key]['numeric']
+                    por[neuro_column.edges[edge_key]['neuron_id']]['distance'] += edge_dist
+                    por[neuro_column.edges[edge_key]['neuron_id']]['edges'][edge_key]['distance'] += edge_dist
+                    por[neuro_column.edges[edge_key]['neuron_id']]['edges'][edge_key]['numeric']['max'] = edge_dist
+                    por[neuro_column.edges[edge_key]['neuron_id']]['edges'][edge_key]['numeric']['min'] = 0.0
+                    sum_max += edge_dist
 
                 else:
                     # if no numeric then add place holder to remove numeric bias
                     #
                     sum_min += 1.0
                     sum_max += 1.0
-                    pass
 
+        similarity = 0.0
         distance = 1.0
         if sum_max > 0:
 
-            # weighted Jaccard Distance is 1 - (ratio of sum of min / sum of max)
+            # weighted Jaccard similarity is sum of min / sum of max
             #
-            distance = 1 - (sum_min / sum_max)
+            similarity = (sum_min / sum_max)
 
-        return distance, por
+            # total distance is diff between sum_max and sum_min
+            #
+            distance = sum_max - sum_min
+
+        return distance, similarity, por
 
     def learn(self, neuro_column, learn_rate: cython.double, is_bmu: bool = True, hebbian_edges: Optional[FilterType] = None) -> None:
         """
