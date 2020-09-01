@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+import math
 from typing import Optional
 from src.neuro_column import NeuroColumn
 import cython
@@ -14,7 +15,6 @@ class NeuralFabric:
     uid = cython.declare(str, visibility='public')
     neurons = cython.declare(dict, visibility='public')
     max_stm = cython.declare(cython.int, visibility='public')
-    mp_window_size = cython.declare(cython.int, visibility='public')
     mp_window = cython.declare(list, visibility='public')
     anomaly = cython.declare(dict, visibility='public')
     motif = cython.declare(dict, visibility='public')
@@ -23,17 +23,22 @@ class NeuralFabric:
     mapped = cython.declare(cython.int, visibility='public')
     sum_distance = cython.declare(cython.double, visibility='public')
     mean_distance = cython.declare(cython.double, visibility='public')
+    std_distance = cython.declare(cython.double, visibility='public')
+    sum_similarity = cython.declare(cython.double, visibility='public')
+    mean_similarity = cython.declare(cython.double, visibility='public')
+    std_similarity = cython.declare(cython.double, visibility='public')
+
     structure = cython.declare(str, visibility='public')
     prune_threshold = cython.declare(cython.double, visibility='public')
 
-    def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.int = 5, structure: str = 'star', prune_threshold: float = 0.00001):
+    def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.float = 0.1, structure: str = 'star', prune_threshold: float = 0.00001):
         """
         class to represent the columns of neurons in the associative memory fabric.
         Each column is keyed by an x, y coordinate pair key and consists of an collection of sdrs
 
         :param uid: str unique name foe this area of the fabric
         :param max_short_term_memory: the maximum number of neurons in a column of neurons
-        :param mp_threshold: the matrix profile window multiplier
+        :param mp_threshold: the matrix profile noise threshold
         :param structure: str - 'star' structure each column has 4 neighbours  or 'square' structure where each column has 8 neighbours
         :param prune_threshold: float - threshold below which learnt edges are assumed to have zero probability and removed
         """
@@ -47,8 +52,8 @@ class NeuralFabric:
         self.max_stm = max_short_term_memory
         """ the maximum short term memory allowed """
 
-        self.mp_window_size = mp_threshold * self.max_stm
-        """ the size of the window used to determine motifs and anomalies """
+        self.mp_threshold = mp_threshold
+        """ the noise threshold used to determine motifs and anomalies """
 
         self.mp_window = []
         """ window of last mp_window_size distances to the BMU """
@@ -59,10 +64,10 @@ class NeuralFabric:
         self.motif = {}
         """ the motifs detected so far, keyed by ref_id"""
 
-        self.anomaly_threshold = 0.0
+        self.anomaly_threshold = None
         """ the current distance threshold above which an anomaly is detected """
 
-        self.motif_threshold = 1.0
+        self.motif_threshold = None
         """ the current distance threshold below which a motif is detected """
 
         self.mapped = 0
@@ -73,6 +78,18 @@ class NeuralFabric:
 
         self.mean_distance = 0.0
         """ the mean of the BMU distances to mapped data so far """
+
+        self.std_distance = 0.0
+        """ the sample stdev of the BMU distances to mapped data so far """
+
+        self.sum_similarity = 0.0
+        """ the sum of the BMU similarities to mapped data so far """
+
+        self.mean_similarity = 0.0
+        """ the mean of the BMU similarities to mapped data so far """
+
+        self.std_similarity = 0.0
+        """ the sample stdev of the BMU similarity to mapped data so far """
 
         self.structure = structure
         """ a string representing the fabric layout structure - 'star' a central neuron with 4 neighbours, 'square' consists of a central neuron with 8 neighbours """
@@ -223,20 +240,24 @@ class NeuralFabric:
         #
         fabric_dist: dict = {}
         distance: cython.double
+        similarity: cython.double
         por: dict
-        bmu_dist: cython.double = 1.0
+        bmu_dist: cython.double = float('inf')
+        bmu_similarity: cython.double = 0.0
         bmu_coord_key: Optional[str] = None
         coord_key: str
         anomaly: bool
         motif: bool
 
         for coord_key in self.neurons:
-            distance, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
+            distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
             fabric_dist[coord_key] = {'distance': distance,
+                                      'similarity': similarity,
                                       'last_bmu': self.neurons[coord_key]['last_bmu'],
                                       'por': por}
             if fabric_dist[coord_key]['distance'] <= bmu_dist:
                 bmu_dist = fabric_dist[coord_key]['distance']
+                bmu_similarity = fabric_dist[coord_key]['similarity']
                 bmu_coord_key = coord_key
 
         # if we have a ref_id then we can update the matrix profile
@@ -246,7 +267,7 @@ class NeuralFabric:
         if ref_id is not None:
             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_dist[bmu_coord_key]['por'], ref_id=ref_id)
 
-        return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
+        return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'bmu_similarity': bmu_similarity, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
 
     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: dict, ref_id: str) -> tuple:
         """
@@ -261,9 +282,27 @@ class NeuralFabric:
 
         # establish if this is an anomaly or motif
         #
-        anomaly = False
-        motif = False
-        if self.mapped >= 2 * self.max_stm:
+        anomaly: bool = False
+        motif: bool = False
+        low: cython.double
+        high: cython.double
+        mp_max: cython.double
+        mp_min: cython.double
+        mp_range: cython.double
+        mp_mid: cython.double
+
+        # maintain sliding window of bmu distance (matrix profile)
+        #
+        self.mp_window.append(distance)
+        if self.max_stm == 1:
+            window_size = 20
+        else:
+            window_size = self.max_stm * 2
+
+        if len(self.mp_window) > window_size:
+            self.mp_window.pop(0)
+
+        if self.mapped >= window_size:
 
             if self.motif_threshold is not None and self.anomaly_threshold is not None:
                 # check if this is a new low distance indicating a motif
@@ -277,36 +316,64 @@ class NeuralFabric:
                     self.anomaly[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.anomaly_threshold, 'por': por, 'updated': True}
                     anomaly = True
 
-            self.mp_window.append(distance)
-
-            # maintain sliding window
+            # calculate the exponential moving average of the matrix profile
             #
-            if len(self.mp_window) > self.mp_window_size:
-                self.mp_window.pop(0)
+            mp_max = max(self.mp_window)
+            mp_min = min(self.mp_window)
+            mp_range = (mp_max - mp_min)
+            mp_mid = (mp_max + mp_min) / 2.0
+            mp_range = mp_range * (1 + self.mp_threshold) / 2.0
 
-            self.motif_threshold = min(self.mp_window)
-            self.anomaly_threshold = max(self.mp_window)
+            # update the anomaly and motif thresholds
+            #
+            self.anomaly_threshold = mp_mid + mp_range
+            self.motif_threshold = mp_mid - mp_range
+
         return anomaly, motif
 
+
     @cython.ccall
-    def update_bmu_stats(self, bmu_coord_key: str, distance: float):
+    def update_bmu_stats(self, bmu_coord_key: str, distance: float, similarity: float):
         """
         method to update the stats of the bmu and its neighbours
 
         :param bmu_coord_key: str - the bmu coordinates
         :param distance: double - the bmu distance
+        :param similarity: double - the bmu similarity
         :return: None
         """
 
         # declare variable types to help cython
         #
         nn_key: str
+        delta: cython.double
+        count: int
 
         # update the fabric properties
         #
         self.mapped += 1
-        self.sum_distance += distance
-        self.mean_distance = self.sum_distance / self.mapped
+
+        if self.mapped >= 20:
+            if self.mapped == 20:
+                self.sum_distance = distance
+                self.mean_distance = distance
+                self.sum_similarity = similarity
+                self.mean_similarity = similarity
+
+            else:
+                count = self.mapped - 20
+                delta = self.mean_distance + ((distance - self.mean_distance) / count)
+
+                self.sum_distance += (distance - self.mean_distance) * (distance - delta)
+                self.mean_distance = delta
+
+                delta = self.mean_similarity + ((similarity - self.mean_similarity) / count)
+                self.sum_similarity += (similarity - self.mean_similarity) * (similarity - delta)
+                self.mean_similarity = delta
+
+                if count > 1:
+                    self.std_distance = math.sqrt(self.sum_distance / (count - 1))
+                    self.std_similarity = math.sqrt(self.sum_similarity / (count - 1))
 
         # update the bmu neuron properties
         #
@@ -314,6 +381,8 @@ class NeuralFabric:
         self.neurons[bmu_coord_key]['last_bmu'] = self.mapped
         self.neurons[bmu_coord_key]['sum_distance'] = distance
         self.neurons[bmu_coord_key]['mean_distance'] = self.neurons[bmu_coord_key]['sum_distance'] / self.neurons[bmu_coord_key]['n_bmu']
+        self.neurons[bmu_coord_key]['sum_similarity'] = similarity
+        self.neurons[bmu_coord_key]['mean_similarity'] = self.neurons[bmu_coord_key]['sum_similarity'] / self.neurons[bmu_coord_key]['n_bmu']
         self.neurons[bmu_coord_key]['updated'] = True
 
         for nn_key in self.neurons[bmu_coord_key]['nn']:
@@ -416,14 +485,13 @@ class NeuralFabric:
         # declare variable types to help cython
         #
         total_merge_factors: cython.double
+        idx: cython.int
+        coord_key: str
+        merge_factor: cython.double
 
         # the SDR to hold the merged data
         #
         merged_column: NeuroColumn = NeuroColumn()
-
-        idx: cython.int
-        coord_key: str
-        merge_factor: cython.double
 
         # we will normalise the weights with the total sum of merged factors
         #
@@ -479,6 +547,8 @@ class NeuralFabric:
                       'mapped': self.mapped,
                       'sum_distance': self.sum_distance,
                       'mean_distance': self.mean_distance,
+                      'sum_similarity': self.sum_similarity,
+                      'mean_similarity': self.mean_similarity,
                       'neuro_columns': {}
                       }
 
@@ -531,6 +601,8 @@ class NeuralFabric:
         self.mapped = fabric['mapped']
         self.sum_distance = fabric['sum_distance']
         self.mean_distance = fabric['mean_distance']
+        self.sum_similarity = fabric['sum_similarity']
+        self.mean_similarity = fabric['mean_similarity']
 
         for coord_key in fabric['neuro_columns']:
             self.neurons[coord_key] = {'neuro_column': NeuroColumn(prune_threshold=self.prune_threshold),
@@ -541,6 +613,8 @@ class NeuralFabric:
                                        'last_nn': fabric['neuro_columns'][coord_key]['last_nn'],
                                        'sum_distance': fabric['neuro_columns'][coord_key]['sum_distance'],
                                        'mean_distance': fabric['neuro_columns'][coord_key]['mean_distance'],
+                                       'sum_similarity': fabric['neuro_columns'][coord_key]['sum_similarity'],
+                                       'mean_similarity': fabric['neuro_columns'][coord_key]['mean_similarity'],
                                        'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
                                        'community_label': fabric['neuro_columns'][coord_key]['community_label'],
                                        'updated': False,
