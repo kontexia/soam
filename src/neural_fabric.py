@@ -227,13 +227,15 @@ class NeuralFabric:
         #
         self.seed_fabric(example_neuro_column=example_neuro_column, coords=coords_to_add, hebbian_edges=hebbian_edges)
 
-    def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None) -> dict:
+    def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None, bmu_only: bool=True) -> dict:
         """
         method to calculate the distance of sdr to every neuron on the fabric
 
         :param neuro_column: the NeuroColumn to compare
         :param ref_id: provide a reference id if this search is part of training and matrix profile will be updated
         :param bmu_search_filters: edge types, source node types or target node types to ignore during distance calculation
+        :param bmu_only: if true the faster search algorithm is used that finds the closest neurocolumn that has been a bmu first and then checks its neighbours if they are closer.
+                        If False then a brute force search is used
         :return: a tuple of the neuron distances and path of reasoning structures
         """
         # declare variable types to help cython
@@ -245,20 +247,42 @@ class NeuralFabric:
         bmu_dist: cython.double = float('inf')
         bmu_similarity: cython.double = 0.0
         bmu_coord_key: Optional[str] = None
+        new_bmu_coord_key: Optional[str] = None
+
         coord_key: str
         anomaly: bool
         motif: bool
 
+        # first search previous bmus
+        #
         for coord_key in self.neurons:
-            distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
-            fabric_dist[coord_key] = {'distance': distance,
-                                      'similarity': similarity,
-                                      'last_bmu': self.neurons[coord_key]['last_bmu'],
-                                      'por': por}
-            if fabric_dist[coord_key]['distance'] <= bmu_dist:
-                bmu_dist = fabric_dist[coord_key]['distance']
-                bmu_similarity = fabric_dist[coord_key]['similarity']
-                bmu_coord_key = coord_key
+            if not bmu_only or (self.mapped == 0 or self.neurons[coord_key]['n_bmu'] > 0):
+                distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
+                fabric_dist[coord_key] = {'distance': distance,
+                                          'similarity': similarity,
+                                          'last_bmu': self.neurons[coord_key]['last_bmu'],
+                                          'por': por}
+                if fabric_dist[coord_key]['distance'] <= bmu_dist:
+                    bmu_dist = fabric_dist[coord_key]['distance']
+                    bmu_similarity = fabric_dist[coord_key]['similarity']
+                    bmu_coord_key = coord_key
+
+        if bmu_only:
+            new_bmu_coord_key = None
+            for coord_key in self.neurons[bmu_coord_key]['nn']:
+                if coord_key not in fabric_dist:
+                    distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
+                    fabric_dist[coord_key] = {'distance': distance,
+                                              'similarity': similarity,
+                                              'last_bmu': self.neurons[coord_key]['last_bmu'],
+                                              'por': por}
+                    if fabric_dist[coord_key]['distance'] <= bmu_dist:
+                        new_bmu_coord_key = coord_key
+
+            if new_bmu_coord_key is not None:
+                bmu_dist = fabric_dist[new_bmu_coord_key]['distance']
+                bmu_similarity = fabric_dist[new_bmu_coord_key]['similarity']
+                bmu_coord_key = new_bmu_coord_key
 
         # if we have a ref_id then we can update the matrix profile
         #
