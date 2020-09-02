@@ -217,7 +217,7 @@ def print_neurons_raw_data(raw_data, fabric, title, neuron_ids=None, max_neurons
             neuron_x.append(fabric['neuro_columns'][coord]['neuro_column']['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'r')]['numeric'])
             neuron_y.append(fabric['neuro_columns'][coord]['neuro_column']['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'g')]['numeric'])
             neuron_z.append(fabric['neuro_columns'][coord]['neuro_column']['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'b')]['numeric'])
-            neuron_colour.append('rgb({},{},{})'.format(neuron_x[-1], neuron_y[-1], neuron_z[-1]))
+            neuron_colour.append('rgb({},{},{})'.format(round(neuron_x[-1]), round(neuron_y[-1]), round(neuron_z[-1])))
 
     neuron_scatter = go.Scatter3d(x=neuron_x, y=neuron_y, z=neuron_z, text=neuron_label, mode='markers+text', marker=dict(size=neuron_size, color=neuron_colour, opacity=0.7))
 
@@ -253,7 +253,7 @@ def test():
     short_term_memory = 5
     amf = AMFabric(uid='colours',
                    short_term_memory=short_term_memory,
-                   mp_threshold=0.1,
+                   mp_threshold=0.20,
                    structure='star',
                    prune_threshold=0.0)
 
@@ -296,7 +296,7 @@ def test():
     print('predict sequence from idx {} given {}'.format(start_idx, context_colour_sequence[:-1]), '\n')
     print('Expect {}'.format(context_colour_sequence[-1]), '\n')
 
-    result = amf.query(sdr=context)
+    result = amf.query(sdr=context, top_n=2)
 
     sdr_result = [(result['neuro_column'][key]['edge_type'],
                    result['neuro_column'][key]['target_type'], result['neuro_column'][key]['target_uid'],
