@@ -227,13 +227,14 @@ class NeuralFabric:
         #
         self.seed_fabric(example_neuro_column=example_neuro_column, coords=coords_to_add, hebbian_edges=hebbian_edges)
 
-    def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, bmu_search_filters: set = None, bmu_only: bool=True) -> dict:
+    def distance_to_fabric(self, neuro_column: NeuroColumn, ref_id: str = None, edge_type_filters: set = None, neuron_id_filters: set = None, bmu_only: bool = True) -> dict:
         """
         method to calculate the distance of sdr to every neuron on the fabric
 
         :param neuro_column: the NeuroColumn to compare
         :param ref_id: provide a reference id if this search is part of training and matrix profile will be updated
-        :param bmu_search_filters: edge types, source node types or target node types to ignore during distance calculation
+        :param edge_type_filters: edge types to compare during distance calculation
+        :param neuron_id_filters: neuron_ids to compare during distance calculation
         :param bmu_only: if true the faster search algorithm is used that finds the closest neurocolumn that has been a bmu first and then checks its neighbours if they are closer.
                         If False then a brute force search is used
         :return: a tuple of the neuron distances and path of reasoning structures
@@ -248,7 +249,6 @@ class NeuralFabric:
         bmu_similarity: cython.double = 0.0
         bmu_coord_key: Optional[str] = None
         new_bmu_coord_key: Optional[str] = None
-
         coord_key: str
         anomaly: bool
         motif: bool
@@ -257,7 +257,9 @@ class NeuralFabric:
         #
         for coord_key in self.neurons:
             if not bmu_only or (self.mapped == 0 or self.neurons[coord_key]['n_bmu'] > 0):
-                distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
+                distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column,
+                                                                                                  edge_type_filters=edge_type_filters,
+                                                                                                  neuron_id_filters=neuron_id_filters)
                 fabric_dist[coord_key] = {'distance': distance,
                                           'similarity': similarity,
                                           'last_bmu': self.neurons[coord_key]['last_bmu'],
@@ -271,7 +273,9 @@ class NeuralFabric:
             new_bmu_coord_key = None
             for coord_key in self.neurons[bmu_coord_key]['nn']:
                 if coord_key not in fabric_dist:
-                    distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column, filter_types=bmu_search_filters)
+                    distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=neuro_column,
+                                                                                                      edge_type_filters=edge_type_filters,
+                                                                                                      neuron_id_filters=neuron_id_filters)
                     fabric_dist[coord_key] = {'distance': distance,
                                               'similarity': similarity,
                                               'last_bmu': self.neurons[coord_key]['last_bmu'],
@@ -291,7 +295,8 @@ class NeuralFabric:
         if ref_id is not None:
             anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_dist[bmu_coord_key]['por'], ref_id=ref_id)
 
-        return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'bmu_similarity': bmu_similarity, 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
+        return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'bmu_similarity': bmu_similarity,
+                'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
 
     def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: dict, ref_id: str) -> tuple:
         """
