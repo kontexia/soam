@@ -211,7 +211,7 @@ def print_neurons_raw_data(raw_data, fabric, title, neuron_ids=None, max_neurons
             neuron_x.append(fabric['neuro_columns'][coord]['neuro_column']['trade:*:{}:{}:{}:{}:{}'.format('has_rgb', 'r', neuron_id, 'rgb', 'r')]['numeric'])
             neuron_y.append(fabric['neuro_columns'][coord]['neuro_column']['trade:*:{}:{}:{}:{}:{}'.format('has_rgb', 'g', neuron_id, 'rgb', 'g')]['numeric'])
             neuron_z.append(fabric['neuro_columns'][coord]['neuro_column']['trade:*:{}:{}:{}:{}:{}'.format('has_rgb', 'b', neuron_id, 'rgb', 'b')]['numeric'])
-            neuron_colour.append('rgb({},{},{})'.format(neuron_x[-1], neuron_y[-1], neuron_z[-1]))
+            neuron_colour.append('rgb({},{},{})'.format(int(neuron_x[-1]), int(neuron_y[-1]), int(neuron_z[-1])))
 
     neuron_scatter = go.Scatter3d(x=neuron_x, y=neuron_y, z=neuron_z, text=neuron_label, mode='markers+text', marker=dict(size=neuron_size, color=neuron_colour, opacity=0.7))
 
@@ -255,7 +255,7 @@ def test():
 
         training_sdrs[record['client']].append((record['trade_id'], sdr))
 
-    short_term_memory = 5
+    short_term_memory = 10
     amf = AMFabric(uid='colours',
                    short_term_memory=short_term_memory,
                    mp_threshold=0.15,
