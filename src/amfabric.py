@@ -117,6 +117,10 @@ class AMFabric:
         else:
             hebbian_edges = None
 
+        # get set of neuron_ids to search for
+        #
+        search_neuron_ids = {neuro_column[edge_key]['neuron_id'] for edge_key in neuro_column}
+
         # if the fabric is empty initialise
         #
         if len(self.fabric.neurons) == 0:
@@ -124,7 +128,7 @@ class AMFabric:
 
         # find the BMU by calculating the distance of the NeuroColumn to every column in the fabric
         #
-        search_results = self.fabric.distance_to_fabric(neuro_column=neuro_column, ref_id=str_ref_id, bmu_search_filters=hebbian_edges)
+        search_results = self.fabric.distance_to_fabric(neuro_column=neuro_column, ref_id=str_ref_id, edge_type_filters=hebbian_edges, neuron_id_filters=search_neuron_ids, bmu_only=True)
 
         # update the the por
         #
@@ -137,10 +141,12 @@ class AMFabric:
 
         return por
 
-    def learn(self, search_por: dict) -> dict:
+    def learn(self, search_por: dict, fast_learn: bool = False) -> dict:
         """
         method that learns the current short term memory taking into account the bmu suggested in search_por
         :param search_por: the por resulting from a previous call to search_for_bmu
+        :param fast_learn: if true then learning rate is proportional to the distance,
+                            else if false learning rate is proportional to similarity
         :return: learn_por
         """
 
@@ -166,9 +172,14 @@ class AMFabric:
         #
         bmu_similarity = search_por['bmu_similarity']
 
-        # the learn_rate is inversely proportional to the similarity
-        #
-        bmu_learn_rate = (1 - bmu_similarity)
+        if fast_learn:
+            # the learn_rate is proportional to the distance
+            #
+            bmu_learn_rate = (1 - bmu_similarity)
+        else:
+            # the learn_rate is proportional to the similarity
+            #
+            bmu_learn_rate = bmu_similarity
 
         # the distance to all columns
         #
@@ -198,7 +209,13 @@ class AMFabric:
 
         # and the learn rates for each mini column of neurons. if mini-column has just been grown then won't be in fabric_dist so default to bmu_learn_rate
         #
-        learn_rates = [(1 - fabric_dist[coord_key]['similarity']) if coord_key in fabric_dist else bmu_learn_rate for coord_key in coords_to_update]
+        if fast_learn:
+
+            learn_rates = [(1 - fabric_dist[coord_key]['similarity']) if coord_key in fabric_dist else bmu_learn_rate
+                           for coord_key in coords_to_update]
+        else:
+            learn_rates = [fabric_dist[coord_key]['similarity'] if coord_key in fabric_dist else bmu_learn_rate
+                           for coord_key in coords_to_update]
 
         self.fabric.learn(neuro_column=neuro_column, bmu_coord=bmu_coord_key, coords=coords_to_update, learn_rates=learn_rates, hebbian_edges=hebbian_edges)
 
@@ -215,11 +232,11 @@ class AMFabric:
                      'coords_grown': list(new_coords),
                      'mean_distance':  self.fabric.mean_distance,
                      'std_distance': self.fabric.std_distance,
-        }
+                     }
 
         return learn_por
 
-    def train(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',)) -> dict:
+    def train(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',), fast_learn: bool = False) -> dict:
         """
         method trains the neural network with one sdr
 
@@ -227,6 +244,8 @@ class AMFabric:
         :param ref_id: a reference id
         :param non_hebbian_edges: a tuple of edge types identifying edges that will not be learnt using a hebbian rule and not used in the
                                 search for the Best Matching Unit
+        :param fast_learn: if true then learning rate is proportional to the distance,
+                            else if false learning rate is proportional to similarity
         :return: dict - the Path Of Reasoning
         """
         # search for the bmu and calculate anomalies/ motifs
@@ -235,19 +254,21 @@ class AMFabric:
 
         # learn the current short term memory given the search_por results
         #
-        learn_por = self.learn(search_por=search_por)
+        learn_por = self.learn(search_por=search_por, fast_learn=fast_learn)
 
         # combine pors
         #
         search_por.update(learn_por)
         return search_por
 
-    def query(self, sdr, top_n: int = 1) -> Dict[str, Union[List[str], NeuroColumn]]:
+    def query(self, sdr, top_n: int = 1, bmu_only: bool = False) -> Dict[str, Union[List[str], NeuroColumn]]:
         """
         method to query the associative memory neural network
         :param sdr: Is a sdr or list of SDRs that will be used to query the network. If a list it is assumed the order provided sequence context
                     where list[0] is oldest and list[n] is most recent. Also assumes list is not bigger than preconfigure sequence_dimension
         :param top_n: int - if > 1 then the top n neuro-columns will be merged weighted by the closeness to the query SDR(s)
+        :param bmu_only: if true the bmus search procedure is used else if False then Brute Force is used
+
         :return: dict with keys:\n
                         'coords': a list of neuro_column coordinates selected as the best matching units
                         'neuro_column': the BMU(s) neuro_column
@@ -263,10 +284,11 @@ class AMFabric:
         # search only for the edges in the query
         #
         search_edges = {query_nc[edge_key]['edge_type'] for edge_key in query_nc}
+        search_neuron_ids = {query_nc[edge_key]['neuron_id'] for edge_key in query_nc}
 
         # search the fabric
         #
-        search_results = self.fabric.distance_to_fabric(neuro_column=query_nc, bmu_search_filters=search_edges)
+        search_results = self.fabric.distance_to_fabric(neuro_column=query_nc, edge_type_filters=search_edges, neuron_id_filters=search_neuron_ids, bmu_only=bmu_only)
 
         # prepare the result to return
         #
@@ -286,19 +308,18 @@ class AMFabric:
             #
             distances = [(coord_key, search_results['fabric_distance'][coord_key]['distance'], search_results['fabric_distance'][coord_key]['similarity'])
                          for coord_key in search_results['fabric_distance']]
+
             distances.sort(key=lambda x: x[1])
             merge_factors = []
             coords_to_merge = []
             n = 0
             idx = 0
             while n < top_n and idx < len(distances):
-                if distances[idx][1] < 1.0:
-                    coords_to_merge.append(distances[idx][0])
-                    merge_factors.append(distances[idx][2])
-                    n += 1
-                    idx += 1
-                else:
-                    break
+
+                coords_to_merge.append(distances[idx][0])
+                merge_factors.append(distances[idx][2])
+                n += 1
+                idx += 1
 
             # merge the top_n neurons with a merge factor equal to similarity
             #
