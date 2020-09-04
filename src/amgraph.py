@@ -742,7 +742,7 @@ class AMFGraph(nx.MultiDiGraph):
         decomposition = nx.core_number(dg)
         return decomposition
 
-    def plot(self, dimension=2, weight_field='_prob', node_filter_func=None, edge_filter_func=None):
+    def plot(self, dimension=2, weight_field='_prob', node_filter_func=None, edge_filter_func=None, width=1000, height=900):
 
         # get the xyz coordinates using the spring force algorithm
         #
@@ -845,7 +845,7 @@ class AMFGraph(nx.MultiDiGraph):
 
             node_scatter = go.Scatter(x=x, y=y, text=node_labels, mode='markers+text', marker=dict(size=20, color=colors, opacity=0.7))
             fig = go.Figure(data=[edge_scatter, node_scatter])
-            fig.update_layout(width=900, height=900, title=dict(text='AMFGraph'),
+            fig.update_layout(width=width, height=height, title=dict(text='AMFGraph'),
                               xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                               yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
 
@@ -855,7 +855,7 @@ class AMFGraph(nx.MultiDiGraph):
             node_scatter = go.Scatter3d(x=x, y=y, z=z, text=node_labels, mode='markers+text', marker=dict(size=20, color=colors, opacity=0.7))
 
             fig = go.Figure(data=[node_scatter, edge_scatter])
-            fig.update_layout(width=900, height=900, title=dict(text='AMFGraph'),
+            fig.update_layout(width=width, height=height, title=dict(text='AMFGraph'),
                               scene=dict(
                                 xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                                 yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
@@ -873,7 +873,7 @@ if __name__ == '__main__':
 
     g.update_edge(source=('Trade', 'XYZ_123'), target=('client','abc ltd'), edge=('has', 'client'), prob=0.5)
 
-    print(g)
+    g.plot()
 
     sg_1 = g.filter_sub_graph(query={'$edge': {'$expired_ts': {'$eq': None}}})
     print(sg_1)
