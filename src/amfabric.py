@@ -62,7 +62,7 @@ class AMFabric:
         if random_seed is not None:
             random.seed(random_seed)
 
-    def search_for_bmu(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',)) -> dict:
+    def search_for_bmu(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',), fast_search: bool = True) -> dict:
         """
         method finds the bmu neuro_column that must be trained and detects if an anomaly or motif has occurred
 
@@ -70,6 +70,7 @@ class AMFabric:
         :param ref_id: a reference id
         :param non_hebbian_edges: a tuple of edge types identifying edges that will not be learnt using a hebbian rule and not used in the
                                 search for the Best Matching Unit
+        :param fast_search: If true a fast approximation for finding the BMU is used else if false a brute force search is used
         :return: dict - por
         """
         # ref ids have to be converted to strings
@@ -128,7 +129,11 @@ class AMFabric:
 
         # find the BMU by calculating the distance of the NeuroColumn to every column in the fabric
         #
-        search_results = self.fabric.distance_to_fabric(neuro_column=neuro_column, ref_id=str_ref_id, edge_type_filters=hebbian_edges, neuron_id_filters=search_neuron_ids, bmu_only=True)
+        search_results = self.fabric.distance_to_fabric(neuro_column=neuro_column,
+                                                        ref_id=str_ref_id,
+                                                        edge_type_filters=hebbian_edges,
+                                                        neuron_id_filters=search_neuron_ids,
+                                                        bmu_only=fast_search)
 
         # update the the por
         #
@@ -141,12 +146,12 @@ class AMFabric:
 
         return por
 
-    def learn(self, search_por: dict, fast_learn: bool = False) -> dict:
+    def learn(self, search_por: dict, similarity_learn: bool = True) -> dict:
         """
         method that learns the current short term memory taking into account the bmu suggested in search_por
         :param search_por: the por resulting from a previous call to search_for_bmu
-        :param fast_learn: if true then learning rate is proportional to the distance,
-                            else if false learning rate is proportional to similarity
+        :param similarity_learn: if true then learning rate is proportional to the similarity,
+                            else if false learning rate is proportional to distance (1- similarity)
         :return: learn_por
         """
 
@@ -172,14 +177,15 @@ class AMFabric:
         #
         bmu_similarity = search_por['bmu_similarity']
 
-        if fast_learn:
-            # the learn_rate is proportional to the distance
-            #
-            bmu_learn_rate = (1 - bmu_similarity)
-        else:
+        if similarity_learn:
+
             # the learn_rate is proportional to the similarity
             #
             bmu_learn_rate = bmu_similarity
+        else:
+            # the learn_rate is proportional to the distance
+            #
+            bmu_learn_rate = (1 - bmu_similarity)
 
         # the distance to all columns
         #
@@ -209,12 +215,11 @@ class AMFabric:
 
         # and the learn rates for each mini column of neurons. if mini-column has just been grown then won't be in fabric_dist so default to bmu_learn_rate
         #
-        if fast_learn:
-
-            learn_rates = [(1 - fabric_dist[coord_key]['similarity']) if coord_key in fabric_dist else bmu_learn_rate
+        if similarity_learn:
+            learn_rates = [fabric_dist[coord_key]['similarity'] if coord_key in fabric_dist else bmu_learn_rate
                            for coord_key in coords_to_update]
         else:
-            learn_rates = [fabric_dist[coord_key]['similarity'] if coord_key in fabric_dist else bmu_learn_rate
+            learn_rates = [(1 - fabric_dist[coord_key]['similarity']) if coord_key in fabric_dist else bmu_learn_rate
                            for coord_key in coords_to_update]
 
         self.fabric.learn(neuro_column=neuro_column, bmu_coord=bmu_coord_key, coords=coords_to_update, learn_rates=learn_rates, hebbian_edges=hebbian_edges)
@@ -236,7 +241,7 @@ class AMFabric:
 
         return learn_por
 
-    def train(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',), fast_learn: bool = False) -> dict:
+    def train(self, sdr: SDR, ref_id: Union[str, int], non_hebbian_edges=('generalise',), fast_search: bool = True, similarity_learn: bool = True) -> dict:
         """
         method trains the neural network with one sdr
 
@@ -244,30 +249,31 @@ class AMFabric:
         :param ref_id: a reference id
         :param non_hebbian_edges: a tuple of edge types identifying edges that will not be learnt using a hebbian rule and not used in the
                                 search for the Best Matching Unit
-        :param fast_learn: if true then learning rate is proportional to the distance,
-                            else if false learning rate is proportional to similarity
+        :param fast_search: If true a fast approximation for finding the BMU is used else if false a brute force search is used
+        :param similarity_learn: if true then learning rate is proportional to the similarity,
+                            else if false learning rate is proportional to distance (1- similarity)
         :return: dict - the Path Of Reasoning
         """
         # search for the bmu and calculate anomalies/ motifs
         #
-        search_por = self.search_for_bmu(sdr=sdr, ref_id=ref_id, non_hebbian_edges=non_hebbian_edges)
+        search_por = self.search_for_bmu(sdr=sdr, ref_id=ref_id, non_hebbian_edges=non_hebbian_edges, fast_search=fast_search)
 
         # learn the current short term memory given the search_por results
         #
-        learn_por = self.learn(search_por=search_por, fast_learn=fast_learn)
+        learn_por = self.learn(search_por=search_por, similarity_learn=similarity_learn)
 
         # combine pors
         #
         search_por.update(learn_por)
         return search_por
 
-    def query(self, sdr, top_n: int = 1, bmu_only: bool = False) -> Dict[str, Union[List[str], NeuroColumn]]:
+    def query(self, sdr, top_n: int = 1, fast_search: bool = False) -> Dict[str, Union[List[str], NeuroColumn]]:
         """
         method to query the associative memory neural network
         :param sdr: Is a sdr or list of SDRs that will be used to query the network. If a list it is assumed the order provided sequence context
                     where list[0] is oldest and list[n] is most recent. Also assumes list is not bigger than preconfigure sequence_dimension
         :param top_n: int - if > 1 then the top n neuro-columns will be merged weighted by the closeness to the query SDR(s)
-        :param bmu_only: if true the bmus search procedure is used else if False then Brute Force is used
+        :param fast_search: if true a fast approximation algorithm is used to find the BMU else if False then Brute Force is used
 
         :return: dict with keys:\n
                         'coords': a list of neuro_column coordinates selected as the best matching units
@@ -288,7 +294,7 @@ class AMFabric:
 
         # search the fabric
         #
-        search_results = self.fabric.distance_to_fabric(neuro_column=query_nc, edge_type_filters=search_edges, neuron_id_filters=search_neuron_ids, bmu_only=bmu_only)
+        search_results = self.fabric.distance_to_fabric(neuro_column=query_nc, edge_type_filters=search_edges, neuron_id_filters=search_neuron_ids, bmu_only=fast_search)
 
         # prepare the result to return
         #
@@ -400,20 +406,20 @@ class AMFabric:
             # add edge to represent the setup data
             #
             edge_properties = {'stm_size': self.stm_size,
-                               'mp_window_size': self.mp_window_size,
+                               'mp_threshold': self.mp_threshold,
                                'structure': self.structure,
                                'prune_threshold': self.prune_threshold,
                                'ref_id': str_ref_id}
 
-            pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('amfabric_setup', None), **edge_properties)
+            pg.update_edge(source=amfabric_node, target=('AMFabricSetup', '*'), edge=('has_amfabric_setup', None), prob=1.0, **edge_properties)
 
         # we will store some of the fabric stats in a single self referencing edge between the AMFabric node
         # if this edge is already in the graph then update with changes
         #
-        if amfabric_node in pg[amfabric_node] and (('amfabric_stats', None), None) in pg[amfabric_node][amfabric_node]:
+        if amfabric_node in pg[amfabric_node] and ('AMFabricStats', '*') in pg[amfabric_node]:
             # copy existing properties of edge
             #
-            edge_properties = deepcopy(pg[amfabric_node][amfabric_node][(('amfabric_stats', None), None)])
+            edge_properties = deepcopy(pg[amfabric_node][('AMFabricStats', '*')][(('has_amfabric_stats', None), None)])
 
             # update the properties as required
             #
@@ -438,19 +444,19 @@ class AMFabric:
         #
         edge_properties['ref_id'] = ref_id
 
-        pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('amfabric_stats', None), **edge_properties)
+        pg.update_edge(source=amfabric_node, target=('AMFabricStats', '*'), edge=('has_amfabric_stats', None), prob=1.0, **edge_properties)
 
         # add edge to represent the short term memory data and associated properties
         #
         edge_properties = {'short_term_memory': [deepcopy(sdr.sdr) for sdr in self.short_term_memory], 'ref_id': ref_id}
-        pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('amfabric_short_term_memory', None), **edge_properties)
+        pg.update_edge(source=amfabric_node, target=('AMFabricSTM', '*'), edge=('has_amfabric_stm', None), prob=1.0, **edge_properties)
 
         # add edge to represent the hebbian edge types seen so far
         #
         if not only_updated or self.non_hebbian_edge_types['updated']:
             edge_properties = {'non_hebbian_edge_types': list(self.non_hebbian_edge_types['edges']), 'ref_id': ref_id}
             self.non_hebbian_edge_types['updated'] = False
-            pg.update_edge(source=amfabric_node, target=amfabric_node, edge=('amfabric_non_hebbian_edge_types', None), **edge_properties)
+            pg.update_edge(source=amfabric_node, target=('AMFabricNonHebbTypes', '*'), edge=('has_amfabric_non_hebb_types', None), prob=1.0, **edge_properties)
 
         # update the edges to each neuro_column
         #
@@ -458,8 +464,8 @@ class AMFabric:
             nc_node = ('NeuroColumn', '{}:{}'.format(self.uid, coord))
 
             edge_properties = {}
-            if nc_node in pg[amfabric_node] and (('amfabric_neuro_column', None), None) in pg[amfabric_node][nc_node]:
-                edge_properties = deepcopy(pg[amfabric_node][nc_node][(('amfabric_neuro_column', None), None)])
+            if nc_node in pg[amfabric_node] and (('has_amfabric_neuro_column', None), None) in pg[amfabric_node][nc_node]:
+                edge_properties = deepcopy(pg[amfabric_node][nc_node][(('has_amfabric_neuro_column', None), None)])
 
             # upsert the changed properties
             #
@@ -471,7 +477,7 @@ class AMFabric:
             #
             edge_properties['ref_id'] = str_ref_id
 
-            pg.update_edge(source=amfabric_node, target=nc_node, edge=('amfabric_neuro_column', None), **edge_properties)
+            pg.update_edge(source=amfabric_node, target=nc_node, edge=('has_amfabric_neuro_column', None), prob=1.0, **edge_properties)
 
             added_generalised_node = False
             for edge in fabric['neuro_columns'][coord]['neuro_column']:
@@ -522,16 +528,16 @@ class AMFabric:
 
         # restore basic setup properties
         #
-        has_setup = pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('amfabric_setup', None), None)]
+        has_setup = pg[('AMFabric', self.uid)][('AMFabricSetup', '*')][(('has_amfabric_setup', None), None)]
         self.stm_size = has_setup['stm_size']
-        self.mp_window_size = has_setup['mp_window_size']
+        self.mp_threshold = has_setup['mp_threshold']
         self.structure = has_setup['structure']
         self.prune_threshold = has_setup['prune_threshold']
 
         # restore short term memory
         #
         self.short_term_memory = []
-        has_stm = pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('amfabric_short_term_memory', None), None)]
+        has_stm = pg[('AMFabric', self.uid)][('AMFabricSTM', '*')][(('has_amfabric_stm', None), None)]
         for stm_sdr in has_stm['short_term_memory']:
             sdr = SDR()
             for edge_key in stm_sdr:
@@ -547,12 +553,12 @@ class AMFabric:
 
         # non hebbian edge types seen so far
         #
-        has_non_hebbian_edge_types = pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('amfabric_non_hebbian_edge_types', None), None)]
+        has_non_hebbian_edge_types = pg[('AMFabric', self.uid)][('AMFabricNonHebbTypes', '*')][(('has_amfabric_non_hebb_types', None), None)]
         self.non_hebbian_edge_types = {'edges': set(has_non_hebbian_edge_types['non_hebbian_edge_types']), 'updated': False}
 
         # fabric stats
         #
-        has_stats = pg[('AMFabric', self.uid)][('AMFabric', self.uid)][(('amfabric_stats', None), None)]
+        has_stats = pg[('AMFabric', self.uid)][('AMFabricStats', '*')][(('has_amfabric_stats', None), None)]
         fabric = {attr: deepcopy(has_stats[attr]) for attr in has_stats if attr[0] != '_' and attr != 'ref_id'}
 
         # now neuro_columns
@@ -560,7 +566,7 @@ class AMFabric:
         fabric['neuro_columns'] = {}
 
         for target in pg[('AMFabric', self.uid)]:
-            if target != ('AMFabric', self.uid):
+            if target[0] == 'NeuroColumn':
                 for edge in pg[('AMFabric', self.uid)][target]:
                     coord_key = '{}:{}'.format(pg[('AMFabric', self.uid)][target][edge]['coord'][0], pg[('AMFabric', self.uid)][target][edge]['coord'][1])
 
@@ -602,7 +608,7 @@ class AMFabric:
 
             # ignore edges with AMFabric and NeuroColumn source nodes
             #
-            if source[0] not in ['AMFabric', 'NeuroColumn']:
+            if source[0] not in ['AMFabric', 'NeuroColumn', 'AMFabricStats', 'AMFabricSetup', 'AMFabricSTM', 'AMFabricNonHebbTypes']:
                 for target in pg[source]:
                     for edge in pg[source][target]:
                         edge_attr = pg[source][target][edge]
