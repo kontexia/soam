@@ -1,0 +1,8002 @@
+[
+    {
+        "trade_id": 0,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 245,
+        "g": 41,
+        "b": 0
+    },
+    {
+        "trade_id": 1,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 148,
+        "g": 44,
+        "b": 190
+    },
+    {
+        "trade_id": 2,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 238,
+        "g": 42,
+        "b": 43
+    },
+    {
+        "trade_id": 3,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 190,
+        "b": 13
+    },
+    {
+        "trade_id": 4,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 3,
+        "g": 84,
+        "b": 255
+    },
+    {
+        "trade_id": 5,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 79,
+        "b": 255
+    },
+    {
+        "trade_id": 6,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 162,
+        "g": 34,
+        "b": 211
+    },
+    {
+        "trade_id": 7,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 123,
+        "b": 0
+    },
+    {
+        "trade_id": 8,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 112,
+        "g": 174,
+        "b": 169
+    },
+    {
+        "trade_id": 9,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 223,
+        "b": 0
+    },
+    {
+        "trade_id": 10,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 248,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 11,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 140,
+        "g": 71,
+        "b": 48
+    },
+    {
+        "trade_id": 12,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 48,
+        "g": 185,
+        "b": 60
+    },
+    {
+        "trade_id": 13,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 125,
+        "b": 220
+    },
+    {
+        "trade_id": 14,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 15,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 16,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 108,
+        "b": 0
+    },
+    {
+        "trade_id": 17,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 18,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 106,
+        "g": 159,
+        "b": 160
+    },
+    {
+        "trade_id": 19,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 244,
+        "g": 45,
+        "b": 40
+    },
+    {
+        "trade_id": 20,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 241,
+        "g": 29,
+        "b": 0
+    },
+    {
+        "trade_id": 21,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 230,
+        "b": 0
+    },
+    {
+        "trade_id": 22,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 23,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 48,
+        "g": 73,
+        "b": 220
+    },
+    {
+        "trade_id": 24,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 238,
+        "g": 229,
+        "b": 0
+    },
+    {
+        "trade_id": 25,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 231,
+        "g": 255,
+        "b": 38
+    },
+    {
+        "trade_id": 26,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 35
+    },
+    {
+        "trade_id": 27,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 163,
+        "g": 0,
+        "b": 206
+    },
+    {
+        "trade_id": 28,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 42,
+        "g": 199,
+        "b": 47
+    },
+    {
+        "trade_id": 29,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 169,
+        "b": 30
+    },
+    {
+        "trade_id": 30,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 64,
+        "g": 129,
+        "b": 255
+    },
+    {
+        "trade_id": 31,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 126,
+        "g": 63,
+        "b": 37
+    },
+    {
+        "trade_id": 32,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 33,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 251,
+        "g": 33,
+        "b": 39
+    },
+    {
+        "trade_id": 34,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 35,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 47
+    },
+    {
+        "trade_id": 36,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 20,
+        "g": 125,
+        "b": 232
+    },
+    {
+        "trade_id": 37,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 232,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 38,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 163,
+        "g": 109,
+        "b": 115
+    },
+    {
+        "trade_id": 39,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 14,
+        "g": 132,
+        "b": 255
+    },
+    {
+        "trade_id": 40,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 60,
+        "g": 79,
+        "b": 231
+    },
+    {
+        "trade_id": 41,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 42,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 232,
+        "g": 33,
+        "b": 0
+    },
+    {
+        "trade_id": 43,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 44,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 184,
+        "g": 69,
+        "b": 50
+    },
+    {
+        "trade_id": 45,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 233,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 46,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 15,
+        "g": 123,
+        "b": 255
+    },
+    {
+        "trade_id": 47,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 34,
+        "b": 40
+    },
+    {
+        "trade_id": 48,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 69,
+        "g": 142,
+        "b": 222
+    },
+    {
+        "trade_id": 49,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 236,
+        "g": 25,
+        "b": 33
+    },
+    {
+        "trade_id": 50,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 235,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 51,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 239,
+        "g": 223,
+        "b": 0
+    },
+    {
+        "trade_id": 52,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 231,
+        "b": 0
+    },
+    {
+        "trade_id": 53,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 193,
+        "g": 0,
+        "b": 245
+    },
+    {
+        "trade_id": 54,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 231,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 55,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 230,
+        "b": 0
+    },
+    {
+        "trade_id": 56,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 239,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 57,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 3,
+        "g": 90,
+        "b": 255
+    },
+    {
+        "trade_id": 58,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 170,
+        "b": 29
+    },
+    {
+        "trade_id": 59,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 170,
+        "g": 169,
+        "b": 121
+    },
+    {
+        "trade_id": 60,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 6,
+        "g": 123,
+        "b": 225
+    },
+    {
+        "trade_id": 61,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 17,
+        "g": 138,
+        "b": 255
+    },
+    {
+        "trade_id": 62,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 179,
+        "g": 105,
+        "b": 0
+    },
+    {
+        "trade_id": 63,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 57,
+        "g": 129,
+        "b": 255
+    },
+    {
+        "trade_id": 64,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 222,
+        "b": 28
+    },
+    {
+        "trade_id": 65,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 236,
+        "g": 35,
+        "b": 34
+    },
+    {
+        "trade_id": 66,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 232,
+        "g": 226,
+        "b": 48
+    },
+    {
+        "trade_id": 67,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 232,
+        "g": 0,
+        "b": 41
+    },
+    {
+        "trade_id": 68,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 231,
+        "g": 35,
+        "b": 38
+    },
+    {
+        "trade_id": 69,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 31,
+        "b": 0
+    },
+    {
+        "trade_id": 70,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 242,
+        "g": 230,
+        "b": 35
+    },
+    {
+        "trade_id": 71,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 207,
+        "g": 46,
+        "b": 199
+    },
+    {
+        "trade_id": 72,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 56,
+        "g": 90,
+        "b": 237
+    },
+    {
+        "trade_id": 73,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 254,
+        "g": 227,
+        "b": 36
+    },
+    {
+        "trade_id": 74,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 71,
+        "g": 77,
+        "b": 255
+    },
+    {
+        "trade_id": 75,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 54,
+        "g": 76,
+        "b": 217
+    },
+    {
+        "trade_id": 76,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 217,
+        "b": 40
+    },
+    {
+        "trade_id": 77,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 28
+    },
+    {
+        "trade_id": 78,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 43,
+        "g": 196,
+        "b": 0
+    },
+    {
+        "trade_id": 79,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 251,
+        "g": 155,
+        "b": 26
+    },
+    {
+        "trade_id": 80,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 38
+    },
+    {
+        "trade_id": 81,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 68,
+        "g": 121,
+        "b": 229
+    },
+    {
+        "trade_id": 82,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 252,
+        "g": 40,
+        "b": 48
+    },
+    {
+        "trade_id": 83,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 30
+    },
+    {
+        "trade_id": 84,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 37
+    },
+    {
+        "trade_id": 85,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 252,
+        "g": 32,
+        "b": 0
+    },
+    {
+        "trade_id": 86,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 209,
+        "b": 0
+    },
+    {
+        "trade_id": 87,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 249,
+        "g": 36,
+        "b": 43
+    },
+    {
+        "trade_id": 88,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 1,
+        "g": 79,
+        "b": 216
+    },
+    {
+        "trade_id": 89,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 234,
+        "g": 0,
+        "b": 31
+    },
+    {
+        "trade_id": 90,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 91,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 47
+    },
+    {
+        "trade_id": 92,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 1,
+        "g": 124,
+        "b": 235
+    },
+    {
+        "trade_id": 93,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 49,
+        "g": 134,
+        "b": 255
+    },
+    {
+        "trade_id": 94,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 15,
+        "g": 70,
+        "b": 255
+    },
+    {
+        "trade_id": 95,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 252,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 96,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 244,
+        "g": 255,
+        "b": 46
+    },
+    {
+        "trade_id": 97,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 72,
+        "g": 90,
+        "b": 255
+    },
+    {
+        "trade_id": 98,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 99,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 64,
+        "g": 142,
+        "b": 255
+    },
+    {
+        "trade_id": 100,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 46
+    },
+    {
+        "trade_id": 101,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 102,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 27
+    },
+    {
+        "trade_id": 103,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 120,
+        "g": 107,
+        "b": 108
+    },
+    {
+        "trade_id": 104,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 228,
+        "b": 0
+    },
+    {
+        "trade_id": 105,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 48,
+        "g": 75,
+        "b": 255
+    },
+    {
+        "trade_id": 106,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 72,
+        "g": 133,
+        "b": 229
+    },
+    {
+        "trade_id": 107,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 236,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 108,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 54,
+        "g": 139,
+        "b": 255
+    },
+    {
+        "trade_id": 109,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 237,
+        "g": 48,
+        "b": 42
+    },
+    {
+        "trade_id": 110,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 158,
+        "g": 0,
+        "b": 241
+    },
+    {
+        "trade_id": 111,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 42
+    },
+    {
+        "trade_id": 112,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 26,
+        "b": 0
+    },
+    {
+        "trade_id": 113,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 12,
+        "g": 141,
+        "b": 255
+    },
+    {
+        "trade_id": 114,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 28,
+        "b": 46
+    },
+    {
+        "trade_id": 115,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 116,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 41
+    },
+    {
+        "trade_id": 117,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 229,
+        "g": 0,
+        "b": 46
+    },
+    {
+        "trade_id": 118,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 242,
+        "g": 35,
+        "b": 41
+    },
+    {
+        "trade_id": 119,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 120,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 63,
+        "g": 69,
+        "b": 255
+    },
+    {
+        "trade_id": 121,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 211,
+        "b": 39
+    },
+    {
+        "trade_id": 122,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 179,
+        "g": 59,
+        "b": 0
+    },
+    {
+        "trade_id": 123,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 182,
+        "b": 0
+    },
+    {
+        "trade_id": 124,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 251,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 125,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 17,
+        "g": 81,
+        "b": 255
+    },
+    {
+        "trade_id": 126,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 10,
+        "g": 73,
+        "b": 218
+    },
+    {
+        "trade_id": 127,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 4,
+        "g": 139,
+        "b": 255
+    },
+    {
+        "trade_id": 128,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 49,
+        "g": 118,
+        "b": 255
+    },
+    {
+        "trade_id": 129,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 216,
+        "b": 50
+    },
+    {
+        "trade_id": 130,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 231,
+        "b": 30
+    },
+    {
+        "trade_id": 131,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 223,
+        "b": 0
+    },
+    {
+        "trade_id": 132,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 215,
+        "b": 27
+    },
+    {
+        "trade_id": 133,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 179,
+        "b": 38
+    },
+    {
+        "trade_id": 134,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 251,
+        "g": 28,
+        "b": 44
+    },
+    {
+        "trade_id": 135,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 34
+    },
+    {
+        "trade_id": 136,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 63,
+        "g": 80,
+        "b": 255
+    },
+    {
+        "trade_id": 137,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 117,
+        "g": 155,
+        "b": 122
+    },
+    {
+        "trade_id": 138,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 199,
+        "g": 116,
+        "b": 0
+    },
+    {
+        "trade_id": 139,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 245,
+        "g": 255,
+        "b": 31
+    },
+    {
+        "trade_id": 140,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 230,
+        "g": 27,
+        "b": 0
+    },
+    {
+        "trade_id": 141,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 34,
+        "b": 0
+    },
+    {
+        "trade_id": 142,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 5,
+        "g": 74,
+        "b": 255
+    },
+    {
+        "trade_id": 143,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 141,
+        "g": 0,
+        "b": 252
+    },
+    {
+        "trade_id": 144,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 232,
+        "g": 26,
+        "b": 0
+    },
+    {
+        "trade_id": 145,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 49
+    },
+    {
+        "trade_id": 146,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 8,
+        "g": 136,
+        "b": 255
+    },
+    {
+        "trade_id": 147,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 39,
+        "g": 232,
+        "b": 60
+    },
+    {
+        "trade_id": 148,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 246,
+        "g": 232,
+        "b": 0
+    },
+    {
+        "trade_id": 149,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 230,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 150,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 20,
+        "g": 125,
+        "b": 255
+    },
+    {
+        "trade_id": 151,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 252,
+        "g": 31,
+        "b": 31
+    },
+    {
+        "trade_id": 152,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 153,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 230,
+        "b": 34
+    },
+    {
+        "trade_id": 154,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 61,
+        "g": 136,
+        "b": 233
+    },
+    {
+        "trade_id": 155,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 171,
+        "b": 0
+    },
+    {
+        "trade_id": 156,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 28,
+        "b": 0
+    },
+    {
+        "trade_id": 157,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 28
+    },
+    {
+        "trade_id": 158,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 9,
+        "g": 92,
+        "b": 232
+    },
+    {
+        "trade_id": 159,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 2,
+        "g": 143,
+        "b": 220
+    },
+    {
+        "trade_id": 160,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 231,
+        "g": 255,
+        "b": 45
+    },
+    {
+        "trade_id": 161,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 13,
+        "g": 74,
+        "b": 255
+    },
+    {
+        "trade_id": 162,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 251,
+        "g": 28,
+        "b": 46
+    },
+    {
+        "trade_id": 163,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 250,
+        "g": 49,
+        "b": 40
+    },
+    {
+        "trade_id": 164,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 45
+    },
+    {
+        "trade_id": 165,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 165,
+        "g": 0,
+        "b": 246
+    },
+    {
+        "trade_id": 166,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 34
+    },
+    {
+        "trade_id": 167,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 52,
+        "g": 76,
+        "b": 255
+    },
+    {
+        "trade_id": 168,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 234,
+        "g": 209,
+        "b": 45
+    },
+    {
+        "trade_id": 169,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 34,
+        "b": 0
+    },
+    {
+        "trade_id": 170,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 208,
+        "b": 0
+    },
+    {
+        "trade_id": 171,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 172,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 62,
+        "g": 124,
+        "b": 255
+    },
+    {
+        "trade_id": 173,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 213,
+        "b": 0
+    },
+    {
+        "trade_id": 174,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 122,
+        "g": 112,
+        "b": 113
+    },
+    {
+        "trade_id": 175,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 34,
+        "g": 179,
+        "b": 64
+    },
+    {
+        "trade_id": 176,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 248,
+        "g": 123,
+        "b": 37
+    },
+    {
+        "trade_id": 177,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 242,
+        "g": 221,
+        "b": 48
+    },
+    {
+        "trade_id": 178,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 47,
+        "b": 37
+    },
+    {
+        "trade_id": 179,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 252,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 180,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 45,
+        "b": 37
+    },
+    {
+        "trade_id": 181,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 6,
+        "g": 86,
+        "b": 222
+    },
+    {
+        "trade_id": 182,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 103,
+        "g": 157,
+        "b": 103
+    },
+    {
+        "trade_id": 183,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 2,
+        "g": 139,
+        "b": 255
+    },
+    {
+        "trade_id": 184,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 251,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 185,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 140,
+        "g": 108,
+        "b": 0
+    },
+    {
+        "trade_id": 186,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 187,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 242,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 188,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 194,
+        "g": 51,
+        "b": 29
+    },
+    {
+        "trade_id": 189,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 248,
+        "g": 30,
+        "b": 28
+    },
+    {
+        "trade_id": 190,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 242,
+        "g": 50,
+        "b": 48
+    },
+    {
+        "trade_id": 191,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 34,
+        "b": 38
+    },
+    {
+        "trade_id": 192,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 243,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 193,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 213,
+        "b": 0
+    },
+    {
+        "trade_id": 194,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 48,
+        "g": 121,
+        "b": 221
+    },
+    {
+        "trade_id": 195,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 20,
+        "g": 132,
+        "b": 233
+    },
+    {
+        "trade_id": 196,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 17,
+        "g": 89,
+        "b": 255
+    },
+    {
+        "trade_id": 197,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 131,
+        "b": 217
+    },
+    {
+        "trade_id": 198,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 65,
+        "g": 127,
+        "b": 215
+    },
+    {
+        "trade_id": 199,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 74,
+        "b": 227
+    },
+    {
+        "trade_id": 200,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 42,
+        "b": 50
+    },
+    {
+        "trade_id": 201,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 38,
+        "b": 45
+    },
+    {
+        "trade_id": 202,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 60,
+        "g": 90,
+        "b": 223
+    },
+    {
+        "trade_id": 203,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 240,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 204,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 44,
+        "b": 0
+    },
+    {
+        "trade_id": 205,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 249,
+        "g": 212,
+        "b": 0
+    },
+    {
+        "trade_id": 206,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 253,
+        "g": 230,
+        "b": 45
+    },
+    {
+        "trade_id": 207,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 46
+    },
+    {
+        "trade_id": 208,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 239,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 209,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 26
+    },
+    {
+        "trade_id": 210,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 229,
+        "g": 32,
+        "b": 46
+    },
+    {
+        "trade_id": 211,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 216,
+        "g": 0,
+        "b": 248
+    },
+    {
+        "trade_id": 212,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 197,
+        "g": 39,
+        "b": 255
+    },
+    {
+        "trade_id": 213,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 243,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 214,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 231,
+        "g": 28,
+        "b": 34
+    },
+    {
+        "trade_id": 215,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 67,
+        "g": 77,
+        "b": 238
+    },
+    {
+        "trade_id": 216,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 67,
+        "g": 123,
+        "b": 233
+    },
+    {
+        "trade_id": 217,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 181,
+        "b": 3
+    },
+    {
+        "trade_id": 218,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 7,
+        "g": 69,
+        "b": 255
+    },
+    {
+        "trade_id": 219,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 255,
+        "b": 26
+    },
+    {
+        "trade_id": 220,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 49,
+        "g": 251,
+        "b": 53
+    },
+    {
+        "trade_id": 221,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 253,
+        "g": 122,
+        "b": 36
+    },
+    {
+        "trade_id": 222,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 241,
+        "g": 32,
+        "b": 0
+    },
+    {
+        "trade_id": 223,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 252,
+        "g": 208,
+        "b": 35
+    },
+    {
+        "trade_id": 224,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 241,
+        "g": 121,
+        "b": 0
+    },
+    {
+        "trade_id": 225,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 17,
+        "g": 80,
+        "b": 255
+    },
+    {
+        "trade_id": 226,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 227,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 40,
+        "b": 40
+    },
+    {
+        "trade_id": 228,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 240,
+        "g": 38,
+        "b": 0
+    },
+    {
+        "trade_id": 229,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 167,
+        "g": 125,
+        "b": 127
+    },
+    {
+        "trade_id": 230,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 161,
+        "g": 122,
+        "b": 158
+    },
+    {
+        "trade_id": 231,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 247,
+        "g": 255,
+        "b": 47
+    },
+    {
+        "trade_id": 232,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 135,
+        "g": 51,
+        "b": 0
+    },
+    {
+        "trade_id": 233,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 126,
+        "g": 120,
+        "b": 0
+    },
+    {
+        "trade_id": 234,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 8,
+        "g": 128,
+        "b": 230
+    },
+    {
+        "trade_id": 235,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 249,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 236,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 37
+    },
+    {
+        "trade_id": 237,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 235,
+        "g": 43,
+        "b": 32
+    },
+    {
+        "trade_id": 238,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 253,
+        "g": 44,
+        "b": 30
+    },
+    {
+        "trade_id": 239,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 232,
+        "b": 26
+    },
+    {
+        "trade_id": 240,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 241,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 35
+    },
+    {
+        "trade_id": 242,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 250,
+        "g": 26,
+        "b": 0
+    },
+    {
+        "trade_id": 243,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 59,
+        "g": 71,
+        "b": 229
+    },
+    {
+        "trade_id": 244,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 12,
+        "g": 119,
+        "b": 255
+    },
+    {
+        "trade_id": 245,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 37
+    },
+    {
+        "trade_id": 246,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 208,
+        "b": 0
+    },
+    {
+        "trade_id": 247,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 48,
+        "g": 87,
+        "b": 255
+    },
+    {
+        "trade_id": 248,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 216,
+        "g": 40,
+        "b": 240
+    },
+    {
+        "trade_id": 249,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 250,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 243,
+        "g": 32,
+        "b": 0
+    },
+    {
+        "trade_id": 251,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 3,
+        "g": 74,
+        "b": 255
+    },
+    {
+        "trade_id": 252,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 51,
+        "g": 67,
+        "b": 225
+    },
+    {
+        "trade_id": 253,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 250,
+        "g": 255,
+        "b": 32
+    },
+    {
+        "trade_id": 254,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 255,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 256,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 72,
+        "g": 87,
+        "b": 255
+    },
+    {
+        "trade_id": 257,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 148,
+        "g": 0,
+        "b": 193
+    },
+    {
+        "trade_id": 258,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 259,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 45,
+        "g": 228,
+        "b": 0
+    },
+    {
+        "trade_id": 260,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 237,
+        "g": 46,
+        "b": 39
+    },
+    {
+        "trade_id": 261,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 64,
+        "g": 81,
+        "b": 237
+    },
+    {
+        "trade_id": 262,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 240,
+        "g": 35,
+        "b": 48
+    },
+    {
+        "trade_id": 263,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 264,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 233,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 265,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 241,
+        "g": 120,
+        "b": 32
+    },
+    {
+        "trade_id": 266,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 200,
+        "b": 10
+    },
+    {
+        "trade_id": 267,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 211,
+        "b": 0
+    },
+    {
+        "trade_id": 268,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 269,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 242,
+        "g": 26,
+        "b": 35
+    },
+    {
+        "trade_id": 270,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 57,
+        "g": 70,
+        "b": 217
+    },
+    {
+        "trade_id": 271,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 159,
+        "b": 28
+    },
+    {
+        "trade_id": 272,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 46,
+        "b": 0
+    },
+    {
+        "trade_id": 273,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 40,
+        "b": 0
+    },
+    {
+        "trade_id": 274,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 1,
+        "g": 83,
+        "b": 255
+    },
+    {
+        "trade_id": 275,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 177,
+        "g": 119,
+        "b": 105
+    },
+    {
+        "trade_id": 276,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 106,
+        "g": 165,
+        "b": 178
+    },
+    {
+        "trade_id": 277,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 199,
+        "g": 58,
+        "b": 0
+    },
+    {
+        "trade_id": 278,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 254,
+        "g": 41,
+        "b": 0
+    },
+    {
+        "trade_id": 279,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 26
+    },
+    {
+        "trade_id": 280,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 201,
+        "g": 110,
+        "b": 0
+    },
+    {
+        "trade_id": 281,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 64,
+        "g": 82,
+        "b": 255
+    },
+    {
+        "trade_id": 282,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 50,
+        "b": 49
+    },
+    {
+        "trade_id": 283,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 8,
+        "g": 139,
+        "b": 216
+    },
+    {
+        "trade_id": 284,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 232,
+        "g": 0,
+        "b": 34
+    },
+    {
+        "trade_id": 285,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 228,
+        "b": 0
+    },
+    {
+        "trade_id": 286,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 67,
+        "g": 74,
+        "b": 255
+    },
+    {
+        "trade_id": 287,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 238,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 288,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 51,
+        "g": 133,
+        "b": 228
+    },
+    {
+        "trade_id": 289,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 290,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 157,
+        "g": 0,
+        "b": 212
+    },
+    {
+        "trade_id": 291,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 241,
+        "g": 34,
+        "b": 0
+    },
+    {
+        "trade_id": 292,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 252,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 293,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 37,
+        "b": 0
+    },
+    {
+        "trade_id": 294,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 4,
+        "g": 87,
+        "b": 255
+    },
+    {
+        "trade_id": 295,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 232,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 296,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 49,
+        "g": 89,
+        "b": 222
+    },
+    {
+        "trade_id": 297,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 224,
+        "b": 0
+    },
+    {
+        "trade_id": 298,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 29,
+        "b": 0
+    },
+    {
+        "trade_id": 299,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 217,
+        "b": 42
+    },
+    {
+        "trade_id": 300,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 250,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 301,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 244,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 302,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 53,
+        "g": 122,
+        "b": 226
+    },
+    {
+        "trade_id": 303,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 45,
+        "b": 0
+    },
+    {
+        "trade_id": 304,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 12,
+        "g": 139,
+        "b": 217
+    },
+    {
+        "trade_id": 305,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 230,
+        "g": 255,
+        "b": 49
+    },
+    {
+        "trade_id": 306,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 28
+    },
+    {
+        "trade_id": 307,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 41,
+        "g": 237,
+        "b": 1
+    },
+    {
+        "trade_id": 308,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 134,
+        "b": 255
+    },
+    {
+        "trade_id": 309,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 310,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 210,
+        "b": 38
+    },
+    {
+        "trade_id": 311,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 238,
+        "g": 0,
+        "b": 33
+    },
+    {
+        "trade_id": 312,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 2,
+        "g": 81,
+        "b": 238
+    },
+    {
+        "trade_id": 313,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 92,
+        "b": 255
+    },
+    {
+        "trade_id": 314,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 237,
+        "g": 255,
+        "b": 47
+    },
+    {
+        "trade_id": 315,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 64,
+        "g": 127,
+        "b": 255
+    },
+    {
+        "trade_id": 316,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 230,
+        "g": 106,
+        "b": 0
+    },
+    {
+        "trade_id": 317,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 124,
+        "g": 124,
+        "b": 127
+    },
+    {
+        "trade_id": 318,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 247,
+        "g": 37,
+        "b": 0
+    },
+    {
+        "trade_id": 319,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 72,
+        "g": 143,
+        "b": 221
+    },
+    {
+        "trade_id": 320,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 195,
+        "g": 0,
+        "b": 255
+    },
+    {
+        "trade_id": 321,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 194,
+        "g": 73,
+        "b": 38
+    },
+    {
+        "trade_id": 322,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 35,
+        "b": 49
+    },
+    {
+        "trade_id": 323,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 40
+    },
+    {
+        "trade_id": 324,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 10,
+        "g": 134,
+        "b": 255
+    },
+    {
+        "trade_id": 325,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 135,
+        "b": 255
+    },
+    {
+        "trade_id": 326,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 327,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 30
+    },
+    {
+        "trade_id": 328,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 214,
+        "b": 42
+    },
+    {
+        "trade_id": 329,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 231,
+        "g": 45,
+        "b": 0
+    },
+    {
+        "trade_id": 330,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 232,
+        "b": 57
+    },
+    {
+        "trade_id": 331,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 332,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 236,
+        "g": 162,
+        "b": 39
+    },
+    {
+        "trade_id": 333,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 240,
+        "g": 46,
+        "b": 0
+    },
+    {
+        "trade_id": 334,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 2,
+        "g": 122,
+        "b": 255
+    },
+    {
+        "trade_id": 335,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 56,
+        "g": 120,
+        "b": 225
+    },
+    {
+        "trade_id": 336,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 11,
+        "g": 90,
+        "b": 222
+    },
+    {
+        "trade_id": 337,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 114,
+        "g": 160,
+        "b": 163
+    },
+    {
+        "trade_id": 338,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 254,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 339,
+        "client": "ABC_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 229,
+        "b": 55
+    },
+    {
+        "trade_id": 340,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 43
+    },
+    {
+        "trade_id": 341,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 191,
+        "g": 124,
+        "b": 50
+    },
+    {
+        "trade_id": 342,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 209,
+        "b": 46
+    },
+    {
+        "trade_id": 343,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 158,
+        "g": 34,
+        "b": 194
+    },
+    {
+        "trade_id": 344,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 67,
+        "g": 140,
+        "b": 255
+    },
+    {
+        "trade_id": 345,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 235,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 346,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 6,
+        "g": 69,
+        "b": 255
+    },
+    {
+        "trade_id": 347,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 217,
+        "b": 0
+    },
+    {
+        "trade_id": 348,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 249,
+        "g": 213,
+        "b": 45
+    },
+    {
+        "trade_id": 349,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 249,
+        "g": 37,
+        "b": 0
+    },
+    {
+        "trade_id": 350,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 230,
+        "g": 41,
+        "b": 0
+    },
+    {
+        "trade_id": 351,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 59,
+        "g": 143,
+        "b": 224
+    },
+    {
+        "trade_id": 352,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 34,
+        "b": 26
+    },
+    {
+        "trade_id": 353,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 237,
+        "g": 232,
+        "b": 0
+    },
+    {
+        "trade_id": 354,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 49,
+        "g": 134,
+        "b": 216
+    },
+    {
+        "trade_id": 355,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 32,
+        "b": 35
+    },
+    {
+        "trade_id": 356,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 50,
+        "g": 127,
+        "b": 229
+    },
+    {
+        "trade_id": 357,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 231,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 358,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 14,
+        "g": 71,
+        "b": 225
+    },
+    {
+        "trade_id": 359,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 230,
+        "g": 227,
+        "b": 32
+    },
+    {
+        "trade_id": 360,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 216,
+        "b": 0
+    },
+    {
+        "trade_id": 361,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 61,
+        "g": 91,
+        "b": 255
+    },
+    {
+        "trade_id": 362,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 29,
+        "b": 0
+    },
+    {
+        "trade_id": 363,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 38,
+        "b": 35
+    },
+    {
+        "trade_id": 364,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 209,
+        "b": 0
+    },
+    {
+        "trade_id": 365,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 217,
+        "b": 0
+    },
+    {
+        "trade_id": 366,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 220,
+        "b": 0
+    },
+    {
+        "trade_id": 367,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 63,
+        "g": 128,
+        "b": 224
+    },
+    {
+        "trade_id": 368,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 369,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 64,
+        "g": 125,
+        "b": 224
+    },
+    {
+        "trade_id": 370,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 251,
+        "g": 33,
+        "b": 34
+    },
+    {
+        "trade_id": 371,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 235,
+        "g": 28,
+        "b": 41
+    },
+    {
+        "trade_id": 372,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 9,
+        "g": 123,
+        "b": 222
+    },
+    {
+        "trade_id": 373,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 180,
+        "b": 0
+    },
+    {
+        "trade_id": 374,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 375,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 39,
+        "b": 29
+    },
+    {
+        "trade_id": 376,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 65,
+        "g": 127,
+        "b": 219
+    },
+    {
+        "trade_id": 377,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 176,
+        "g": 62,
+        "b": 0
+    },
+    {
+        "trade_id": 378,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 18,
+        "g": 140,
+        "b": 255
+    },
+    {
+        "trade_id": 379,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 172,
+        "b": 0
+    },
+    {
+        "trade_id": 380,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 226,
+        "b": 28
+    },
+    {
+        "trade_id": 381,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 197,
+        "g": 0,
+        "b": 198
+    },
+    {
+        "trade_id": 382,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 38,
+        "g": 251,
+        "b": 0
+    },
+    {
+        "trade_id": 383,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 28
+    },
+    {
+        "trade_id": 384,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 192,
+        "b": 9
+    },
+    {
+        "trade_id": 385,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 179,
+        "b": 32
+    },
+    {
+        "trade_id": 386,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 117,
+        "g": 178,
+        "b": 165
+    },
+    {
+        "trade_id": 387,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 45,
+        "b": 0
+    },
+    {
+        "trade_id": 388,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 30,
+        "b": 38
+    },
+    {
+        "trade_id": 389,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 40,
+        "b": 30
+    },
+    {
+        "trade_id": 390,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 168,
+        "g": 160,
+        "b": 159
+    },
+    {
+        "trade_id": 391,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 191,
+        "g": 65,
+        "b": 42
+    },
+    {
+        "trade_id": 392,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 47
+    },
+    {
+        "trade_id": 393,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 141,
+        "g": 113,
+        "b": 0
+    },
+    {
+        "trade_id": 394,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 51,
+        "g": 78,
+        "b": 255
+    },
+    {
+        "trade_id": 395,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 200,
+        "g": 67,
+        "b": 0
+    },
+    {
+        "trade_id": 396,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 39,
+        "g": 38,
+        "b": 0
+    },
+    {
+        "trade_id": 397,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 121,
+        "b": 216
+    },
+    {
+        "trade_id": 398,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 193,
+        "b": 46
+    },
+    {
+        "trade_id": 399,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 232,
+        "g": 255,
+        "b": 39
+    },
+    {
+        "trade_id": 400,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 91,
+        "b": 255
+    },
+    {
+        "trade_id": 401,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 252,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 402,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 243,
+        "g": 219,
+        "b": 48
+    },
+    {
+        "trade_id": 403,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 229,
+        "g": 47,
+        "b": 47
+    },
+    {
+        "trade_id": 404,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 247,
+        "g": 44,
+        "b": 30
+    },
+    {
+        "trade_id": 405,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 243,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 406,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 87,
+        "b": 235
+    },
+    {
+        "trade_id": 407,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 191,
+        "g": 108,
+        "b": 31
+    },
+    {
+        "trade_id": 408,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 38,
+        "b": 43
+    },
+    {
+        "trade_id": 409,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 141,
+        "g": 114,
+        "b": 40
+    },
+    {
+        "trade_id": 410,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 80,
+        "b": 232
+    },
+    {
+        "trade_id": 411,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 53,
+        "g": 132,
+        "b": 255
+    },
+    {
+        "trade_id": 412,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 195,
+        "b": 64
+    },
+    {
+        "trade_id": 413,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 239,
+        "g": 223,
+        "b": 0
+    },
+    {
+        "trade_id": 414,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 214,
+        "b": 0
+    },
+    {
+        "trade_id": 415,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 416,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 142,
+        "g": 0,
+        "b": 204
+    },
+    {
+        "trade_id": 417,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 251,
+        "b": 10
+    },
+    {
+        "trade_id": 418,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 64,
+        "g": 77,
+        "b": 223
+    },
+    {
+        "trade_id": 419,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 144,
+        "g": 66,
+        "b": 0
+    },
+    {
+        "trade_id": 420,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 51,
+        "g": 91,
+        "b": 228
+    },
+    {
+        "trade_id": 421,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 245,
+        "g": 255,
+        "b": 33
+    },
+    {
+        "trade_id": 422,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 252,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 423,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 248,
+        "g": 255,
+        "b": 28
+    },
+    {
+        "trade_id": 424,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 207,
+        "b": 41
+    },
+    {
+        "trade_id": 425,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 233,
+        "g": 31,
+        "b": 0
+    },
+    {
+        "trade_id": 426,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 73,
+        "b": 255
+    },
+    {
+        "trade_id": 427,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 51,
+        "g": 78,
+        "b": 255
+    },
+    {
+        "trade_id": 428,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 0,
+        "b": 27
+    },
+    {
+        "trade_id": 429,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 255,
+        "b": 40
+    },
+    {
+        "trade_id": 430,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 147,
+        "g": 47,
+        "b": 247
+    },
+    {
+        "trade_id": 431,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 238,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 432,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 433,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 240,
+        "b": 58
+    },
+    {
+        "trade_id": 434,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 165,
+        "b": 0
+    },
+    {
+        "trade_id": 435,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 115,
+        "g": 169,
+        "b": 109
+    },
+    {
+        "trade_id": 436,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 178,
+        "g": 59,
+        "b": 34
+    },
+    {
+        "trade_id": 437,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 132,
+        "g": 75,
+        "b": 31
+    },
+    {
+        "trade_id": 438,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 240,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 439,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 142,
+        "b": 255
+    },
+    {
+        "trade_id": 440,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 142,
+        "g": 60,
+        "b": 29
+    },
+    {
+        "trade_id": 441,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 248,
+        "g": 255,
+        "b": 40
+    },
+    {
+        "trade_id": 442,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 226,
+        "b": 0
+    },
+    {
+        "trade_id": 443,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 232,
+        "g": 35,
+        "b": 0
+    },
+    {
+        "trade_id": 444,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 162,
+        "g": 0,
+        "b": 243
+    },
+    {
+        "trade_id": 445,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 175,
+        "b": 0
+    },
+    {
+        "trade_id": 446,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 177,
+        "g": 102,
+        "b": 155
+    },
+    {
+        "trade_id": 447,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 35,
+        "g": 252,
+        "b": 0
+    },
+    {
+        "trade_id": 448,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 126,
+        "g": 117,
+        "b": 0
+    },
+    {
+        "trade_id": 449,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 171,
+        "b": 39
+    },
+    {
+        "trade_id": 450,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 4,
+        "g": 81,
+        "b": 255
+    },
+    {
+        "trade_id": 451,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 185,
+        "g": 52,
+        "b": 0
+    },
+    {
+        "trade_id": 452,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 49,
+        "b": 0
+    },
+    {
+        "trade_id": 453,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 235,
+        "g": 38,
+        "b": 41
+    },
+    {
+        "trade_id": 454,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 69,
+        "g": 90,
+        "b": 225
+    },
+    {
+        "trade_id": 455,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 119,
+        "g": 117,
+        "b": 111
+    },
+    {
+        "trade_id": 456,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 7,
+        "g": 118,
+        "b": 255
+    },
+    {
+        "trade_id": 457,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 240,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 458,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 50,
+        "b": 0
+    },
+    {
+        "trade_id": 459,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 209,
+        "b": 26
+    },
+    {
+        "trade_id": 460,
+        "client": "JKL_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 0,
+        "b": 33
+    },
+    {
+        "trade_id": 461,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 190,
+        "b": 44
+    },
+    {
+        "trade_id": 462,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 67,
+        "b": 217
+    },
+    {
+        "trade_id": 463,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 134,
+        "g": 124,
+        "b": 31
+    },
+    {
+        "trade_id": 464,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 244,
+        "g": 255,
+        "b": 42
+    },
+    {
+        "trade_id": 465,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 30
+    },
+    {
+        "trade_id": 466,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 234,
+        "g": 0,
+        "b": 29
+    },
+    {
+        "trade_id": 467,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 237,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 468,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 14,
+        "g": 82,
+        "b": 235
+    },
+    {
+        "trade_id": 469,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 470,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 156,
+        "g": 32,
+        "b": 248
+    },
+    {
+        "trade_id": 471,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 19,
+        "g": 139,
+        "b": 255
+    },
+    {
+        "trade_id": 472,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 70,
+        "g": 131,
+        "b": 255
+    },
+    {
+        "trade_id": 473,
+        "client": "JKL_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 33,
+        "b": 0
+    },
+    {
+        "trade_id": 474,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 209,
+        "b": 0
+    },
+    {
+        "trade_id": 475,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 0,
+        "b": 33
+    },
+    {
+        "trade_id": 476,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 201,
+        "g": 52,
+        "b": 0
+    },
+    {
+        "trade_id": 477,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 38,
+        "g": 29,
+        "b": 50
+    },
+    {
+        "trade_id": 478,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 250,
+        "g": 223,
+        "b": 27
+    },
+    {
+        "trade_id": 479,
+        "client": "JKL_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 46,
+        "b": 0
+    },
+    {
+        "trade_id": 480,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 184,
+        "b": 41
+    },
+    {
+        "trade_id": 481,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 177,
+        "b": 0
+    },
+    {
+        "trade_id": 482,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 182,
+        "g": 62,
+        "b": 0
+    },
+    {
+        "trade_id": 483,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 127,
+        "g": 157,
+        "b": 154
+    },
+    {
+        "trade_id": 484,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 196,
+        "g": 53,
+        "b": 52
+    },
+    {
+        "trade_id": 485,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 237,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 486,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 233,
+        "g": 43,
+        "b": 33
+    },
+    {
+        "trade_id": 487,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 45,
+        "g": 177,
+        "b": 54
+    },
+    {
+        "trade_id": 488,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 27
+    },
+    {
+        "trade_id": 489,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 250,
+        "g": 0,
+        "b": 33
+    },
+    {
+        "trade_id": 490,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 200,
+        "g": 50,
+        "b": 192
+    },
+    {
+        "trade_id": 491,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 45,
+        "b": 29
+    },
+    {
+        "trade_id": 492,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 231,
+        "b": 45
+    },
+    {
+        "trade_id": 493,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 126,
+        "b": 255
+    },
+    {
+        "trade_id": 494,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 213,
+        "b": 35
+    },
+    {
+        "trade_id": 495,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 184,
+        "g": 112,
+        "b": 0
+    },
+    {
+        "trade_id": 496,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 250,
+        "b": 0
+    },
+    {
+        "trade_id": 497,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 15,
+        "g": 120,
+        "b": 255
+    },
+    {
+        "trade_id": 498,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 228,
+        "b": 0
+    },
+    {
+        "trade_id": 499,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 27,
+        "b": 44
+    },
+    {
+        "trade_id": 500,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 55,
+        "g": 70,
+        "b": 234
+    },
+    {
+        "trade_id": 501,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 154,
+        "b": 36
+    },
+    {
+        "trade_id": 502,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 245,
+        "g": 43,
+        "b": 0
+    },
+    {
+        "trade_id": 503,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 69,
+        "g": 120,
+        "b": 227
+    },
+    {
+        "trade_id": 504,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 505,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 71,
+        "g": 72,
+        "b": 255
+    },
+    {
+        "trade_id": 506,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 156,
+        "g": 113,
+        "b": 117
+    },
+    {
+        "trade_id": 507,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 508,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 211,
+        "b": 36
+    },
+    {
+        "trade_id": 509,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 241,
+        "b": 5
+    },
+    {
+        "trade_id": 510,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 27
+    },
+    {
+        "trade_id": 511,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 241,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 512,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 44,
+        "g": 185,
+        "b": 48
+    },
+    {
+        "trade_id": 513,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 33
+    },
+    {
+        "trade_id": 514,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 64,
+        "g": 138,
+        "b": 255
+    },
+    {
+        "trade_id": 515,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 0,
+        "b": 50
+    },
+    {
+        "trade_id": 516,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 240,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 517,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 55,
+        "g": 120,
+        "b": 255
+    },
+    {
+        "trade_id": 518,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 236,
+        "b": 8
+    },
+    {
+        "trade_id": 519,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 48,
+        "g": 137,
+        "b": 255
+    },
+    {
+        "trade_id": 520,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 521,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 233,
+        "g": 209,
+        "b": 0
+    },
+    {
+        "trade_id": 522,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 198,
+        "g": 71,
+        "b": 48
+    },
+    {
+        "trade_id": 523,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 2,
+        "g": 122,
+        "b": 214
+    },
+    {
+        "trade_id": 524,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 249,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 525,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 242,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 526,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 52,
+        "g": 92,
+        "b": 255
+    },
+    {
+        "trade_id": 527,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 211,
+        "b": 0
+    },
+    {
+        "trade_id": 528,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 214,
+        "b": 29
+    },
+    {
+        "trade_id": 529,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 34,
+        "b": 0
+    },
+    {
+        "trade_id": 530,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 234,
+        "g": 0,
+        "b": 33
+    },
+    {
+        "trade_id": 531,
+        "client": "GHI_Ltd",
+        "label": "BLACK",
+        "r": 27,
+        "g": 0,
+        "b": 26
+    },
+    {
+        "trade_id": 532,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 7,
+        "g": 142,
+        "b": 217
+    },
+    {
+        "trade_id": 533,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 221,
+        "b": 25
+    },
+    {
+        "trade_id": 534,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 53,
+        "g": 85,
+        "b": 230
+    },
+    {
+        "trade_id": 535,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 38
+    },
+    {
+        "trade_id": 536,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 56,
+        "g": 134,
+        "b": 255
+    },
+    {
+        "trade_id": 537,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 188,
+        "g": 126,
+        "b": 38
+    },
+    {
+        "trade_id": 538,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 182,
+        "b": 43
+    },
+    {
+        "trade_id": 539,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 232,
+        "b": 31
+    },
+    {
+        "trade_id": 540,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 240,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 541,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 47,
+        "g": 30,
+        "b": 0
+    },
+    {
+        "trade_id": 542,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 233,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 543,
+        "client": "GHI_Ltd",
+        "label": "BLACK",
+        "r": 39,
+        "g": 0,
+        "b": 41
+    },
+    {
+        "trade_id": 544,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 66,
+        "g": 92,
+        "b": 229
+    },
+    {
+        "trade_id": 545,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 546,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 149,
+        "g": 60,
+        "b": 44
+    },
+    {
+        "trade_id": 547,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 49,
+        "b": 0
+    },
+    {
+        "trade_id": 548,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 178,
+        "g": 59,
+        "b": 0
+    },
+    {
+        "trade_id": 549,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 208,
+        "g": 30,
+        "b": 255
+    },
+    {
+        "trade_id": 550,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 50,
+        "b": 41
+    },
+    {
+        "trade_id": 551,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 5,
+        "g": 136,
+        "b": 235
+    },
+    {
+        "trade_id": 552,
+        "client": "GHI_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 46,
+        "b": 39
+    },
+    {
+        "trade_id": 553,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 70,
+        "b": 255
+    },
+    {
+        "trade_id": 554,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 239,
+        "g": 232,
+        "b": 0
+    },
+    {
+        "trade_id": 555,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 241,
+        "b": 63
+    },
+    {
+        "trade_id": 556,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 247,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 557,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 34,
+        "g": 50,
+        "b": 0
+    },
+    {
+        "trade_id": 558,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 212,
+        "g": 45,
+        "b": 190
+    },
+    {
+        "trade_id": 559,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 184,
+        "b": 0
+    },
+    {
+        "trade_id": 560,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 237,
+        "g": 230,
+        "b": 0
+    },
+    {
+        "trade_id": 561,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 248,
+        "g": 255,
+        "b": 50
+    },
+    {
+        "trade_id": 562,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 248,
+        "b": 0
+    },
+    {
+        "trade_id": 563,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 240,
+        "g": 38,
+        "b": 0
+    },
+    {
+        "trade_id": 564,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 214,
+        "b": 27
+    },
+    {
+        "trade_id": 565,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 72,
+        "g": 141,
+        "b": 218
+    },
+    {
+        "trade_id": 566,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 196,
+        "g": 53,
+        "b": 0
+    },
+    {
+        "trade_id": 567,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 246,
+        "b": 0
+    },
+    {
+        "trade_id": 568,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 569,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 125,
+        "g": 52,
+        "b": 0
+    },
+    {
+        "trade_id": 570,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 236,
+        "g": 32,
+        "b": 44
+    },
+    {
+        "trade_id": 571,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 146,
+        "g": 122,
+        "b": 51
+    },
+    {
+        "trade_id": 572,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 236,
+        "g": 172,
+        "b": 33
+    },
+    {
+        "trade_id": 573,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 31,
+        "g": 248,
+        "b": 56
+    },
+    {
+        "trade_id": 574,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 169,
+        "g": 169,
+        "b": 106
+    },
+    {
+        "trade_id": 575,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 235,
+        "g": 38,
+        "b": 0
+    },
+    {
+        "trade_id": 576,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 144,
+        "g": 120,
+        "b": 28
+    },
+    {
+        "trade_id": 577,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 231,
+        "g": 108,
+        "b": 0
+    },
+    {
+        "trade_id": 578,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 33,
+        "b": 0
+    },
+    {
+        "trade_id": 579,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 103,
+        "g": 160,
+        "b": 122
+    },
+    {
+        "trade_id": 580,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 214,
+        "b": 26
+    },
+    {
+        "trade_id": 581,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 32,
+        "b": 42
+    },
+    {
+        "trade_id": 582,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 78,
+        "b": 214
+    },
+    {
+        "trade_id": 583,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 49,
+        "g": 83,
+        "b": 255
+    },
+    {
+        "trade_id": 584,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 191,
+        "b": 53
+    },
+    {
+        "trade_id": 585,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 180,
+        "g": 64,
+        "b": 0
+    },
+    {
+        "trade_id": 586,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 28,
+        "b": 0
+    },
+    {
+        "trade_id": 587,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 188,
+        "g": 111,
+        "b": 0
+    },
+    {
+        "trade_id": 588,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 247,
+        "g": 255,
+        "b": 32
+    },
+    {
+        "trade_id": 589,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 215,
+        "g": 37,
+        "b": 255
+    },
+    {
+        "trade_id": 590,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 211,
+        "b": 0
+    },
+    {
+        "trade_id": 591,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 592,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 228,
+        "b": 64
+    },
+    {
+        "trade_id": 593,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 42,
+        "g": 232,
+        "b": 11
+    },
+    {
+        "trade_id": 594,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 595,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 45,
+        "b": 0
+    },
+    {
+        "trade_id": 596,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 49
+    },
+    {
+        "trade_id": 597,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 229,
+        "g": 39,
+        "b": 0
+    },
+    {
+        "trade_id": 598,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 159,
+        "b": 0
+    },
+    {
+        "trade_id": 599,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 8,
+        "g": 127,
+        "b": 225
+    },
+    {
+        "trade_id": 600,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 8,
+        "g": 74,
+        "b": 224
+    },
+    {
+        "trade_id": 601,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 168,
+        "g": 165,
+        "b": 168
+    },
+    {
+        "trade_id": 602,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 40,
+        "b": 45
+    },
+    {
+        "trade_id": 603,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 144,
+        "g": 105,
+        "b": 44
+    },
+    {
+        "trade_id": 604,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 180,
+        "g": 122,
+        "b": 0
+    },
+    {
+        "trade_id": 605,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 253,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 606,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 235,
+        "g": 231,
+        "b": 0
+    },
+    {
+        "trade_id": 607,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 157,
+        "g": 47,
+        "b": 246
+    },
+    {
+        "trade_id": 608,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 245,
+        "g": 40,
+        "b": 0
+    },
+    {
+        "trade_id": 609,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 71,
+        "g": 135,
+        "b": 255
+    },
+    {
+        "trade_id": 610,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 229,
+        "b": 0
+    },
+    {
+        "trade_id": 611,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 9,
+        "g": 67,
+        "b": 224
+    },
+    {
+        "trade_id": 612,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 234,
+        "g": 172,
+        "b": 42
+    },
+    {
+        "trade_id": 613,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 71,
+        "g": 128,
+        "b": 255
+    },
+    {
+        "trade_id": 614,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 173,
+        "g": 178,
+        "b": 122
+    },
+    {
+        "trade_id": 615,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 33,
+        "b": 31
+    },
+    {
+        "trade_id": 616,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 92,
+        "b": 237
+    },
+    {
+        "trade_id": 617,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 250,
+        "g": 255,
+        "b": 30
+    },
+    {
+        "trade_id": 618,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 45
+    },
+    {
+        "trade_id": 619,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 14,
+        "g": 133,
+        "b": 235
+    },
+    {
+        "trade_id": 620,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 67,
+        "g": 133,
+        "b": 237
+    },
+    {
+        "trade_id": 621,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 57,
+        "g": 131,
+        "b": 255
+    },
+    {
+        "trade_id": 622,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 236,
+        "g": 209,
+        "b": 0
+    },
+    {
+        "trade_id": 623,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 190,
+        "g": 69,
+        "b": 0
+    },
+    {
+        "trade_id": 624,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 625,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 148,
+        "g": 113,
+        "b": 33
+    },
+    {
+        "trade_id": 626,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 25
+    },
+    {
+        "trade_id": 627,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 140,
+        "g": 0,
+        "b": 255
+    },
+    {
+        "trade_id": 628,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 238,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 629,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 244,
+        "b": 64
+    },
+    {
+        "trade_id": 630,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 254,
+        "g": 109,
+        "b": 0
+    },
+    {
+        "trade_id": 631,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 33,
+        "b": 32
+    },
+    {
+        "trade_id": 632,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 237,
+        "g": 27,
+        "b": 27
+    },
+    {
+        "trade_id": 633,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 5,
+        "g": 91,
+        "b": 219
+    },
+    {
+        "trade_id": 634,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 13,
+        "g": 70,
+        "b": 219
+    },
+    {
+        "trade_id": 635,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 20,
+        "g": 73,
+        "b": 219
+    },
+    {
+        "trade_id": 636,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 165,
+        "g": 104,
+        "b": 104
+    },
+    {
+        "trade_id": 637,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 638,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 38
+    },
+    {
+        "trade_id": 639,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 0,
+        "g": 43,
+        "b": 0
+    },
+    {
+        "trade_id": 640,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 46
+    },
+    {
+        "trade_id": 641,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 128,
+        "g": 115,
+        "b": 29
+    },
+    {
+        "trade_id": 642,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 245,
+        "g": 216,
+        "b": 0
+    },
+    {
+        "trade_id": 643,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 159,
+        "g": 0,
+        "b": 255
+    },
+    {
+        "trade_id": 644,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 42,
+        "g": 249,
+        "b": 0
+    },
+    {
+        "trade_id": 645,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 61,
+        "g": 78,
+        "b": 236
+    },
+    {
+        "trade_id": 646,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 14,
+        "g": 84,
+        "b": 215
+    },
+    {
+        "trade_id": 647,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 57,
+        "g": 73,
+        "b": 255
+    },
+    {
+        "trade_id": 648,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 177,
+        "b": 0
+    },
+    {
+        "trade_id": 649,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 59,
+        "g": 88,
+        "b": 225
+    },
+    {
+        "trade_id": 650,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 21,
+        "g": 119,
+        "b": 255
+    },
+    {
+        "trade_id": 651,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 186,
+        "b": 10
+    },
+    {
+        "trade_id": 652,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 144,
+        "g": 126,
+        "b": 0
+    },
+    {
+        "trade_id": 653,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 111,
+        "g": 171,
+        "b": 108
+    },
+    {
+        "trade_id": 654,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 183,
+        "g": 69,
+        "b": 46
+    },
+    {
+        "trade_id": 655,
+        "client": "DEF_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 178,
+        "b": 6
+    },
+    {
+        "trade_id": 656,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 245,
+        "g": 255,
+        "b": 25
+    },
+    {
+        "trade_id": 657,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 240,
+        "g": 218,
+        "b": 0
+    },
+    {
+        "trade_id": 658,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 242,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 659,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 142,
+        "b": 231
+    },
+    {
+        "trade_id": 660,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 245,
+        "g": 33,
+        "b": 0
+    },
+    {
+        "trade_id": 661,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 662,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 201,
+        "g": 0,
+        "b": 255
+    },
+    {
+        "trade_id": 663,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 189,
+        "b": 0
+    },
+    {
+        "trade_id": 664,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 238,
+        "g": 40,
+        "b": 38
+    },
+    {
+        "trade_id": 665,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 159,
+        "b": 36
+    },
+    {
+        "trade_id": 666,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 238,
+        "g": 44,
+        "b": 41
+    },
+    {
+        "trade_id": 667,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 254,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 668,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 176,
+        "g": 110,
+        "b": 107
+    },
+    {
+        "trade_id": 669,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 16,
+        "g": 142,
+        "b": 216
+    },
+    {
+        "trade_id": 670,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 84,
+        "b": 255
+    },
+    {
+        "trade_id": 671,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 35
+    },
+    {
+        "trade_id": 672,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 13,
+        "g": 127,
+        "b": 255
+    },
+    {
+        "trade_id": 673,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 148,
+        "g": 101,
+        "b": 42
+    },
+    {
+        "trade_id": 674,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 67,
+        "g": 90,
+        "b": 255
+    },
+    {
+        "trade_id": 675,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 229,
+        "b": 0
+    },
+    {
+        "trade_id": 676,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 65,
+        "g": 142,
+        "b": 255
+    },
+    {
+        "trade_id": 677,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 248,
+        "g": 0,
+        "b": 39
+    },
+    {
+        "trade_id": 678,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 59,
+        "g": 68,
+        "b": 255
+    },
+    {
+        "trade_id": 679,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 245,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 680,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 92,
+        "b": 215
+    },
+    {
+        "trade_id": 681,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 10,
+        "g": 120,
+        "b": 226
+    },
+    {
+        "trade_id": 682,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 223,
+        "b": 0
+    },
+    {
+        "trade_id": 683,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 248,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 684,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 244,
+        "g": 46,
+        "b": 38
+    },
+    {
+        "trade_id": 685,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 230,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 686,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 218,
+        "b": 44
+    },
+    {
+        "trade_id": 687,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 252,
+        "g": 39,
+        "b": 39
+    },
+    {
+        "trade_id": 688,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 215,
+        "b": 0
+    },
+    {
+        "trade_id": 689,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 214,
+        "g": 0,
+        "b": 209
+    },
+    {
+        "trade_id": 690,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 66,
+        "g": 76,
+        "b": 255
+    },
+    {
+        "trade_id": 691,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 234,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 692,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 248,
+        "b": 56
+    },
+    {
+        "trade_id": 693,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 134,
+        "g": 122,
+        "b": 0
+    },
+    {
+        "trade_id": 694,
+        "client": "DEF_Ltd",
+        "label": "BLACK",
+        "r": 31,
+        "g": 31,
+        "b": 34
+    },
+    {
+        "trade_id": 695,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 696,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 697,
+        "client": "DEF_Ltd",
+        "label": "BROWN",
+        "r": 193,
+        "g": 54,
+        "b": 46
+    },
+    {
+        "trade_id": 698,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 37,
+        "b": 45
+    },
+    {
+        "trade_id": 699,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 238,
+        "g": 158,
+        "b": 0
+    },
+    {
+        "trade_id": 700,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 63,
+        "g": 127,
+        "b": 255
+    },
+    {
+        "trade_id": 701,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 173,
+        "g": 120,
+        "b": 127
+    },
+    {
+        "trade_id": 702,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 160,
+        "g": 43,
+        "b": 244
+    },
+    {
+        "trade_id": 703,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 230,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 704,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 228,
+        "b": 0
+    },
+    {
+        "trade_id": 705,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 197,
+        "g": 51,
+        "b": 1
+    },
+    {
+        "trade_id": 706,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 5,
+        "g": 83,
+        "b": 226
+    },
+    {
+        "trade_id": 707,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 38,
+        "b": 43
+    },
+    {
+        "trade_id": 708,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 60,
+        "g": 120,
+        "b": 233
+    },
+    {
+        "trade_id": 709,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 46,
+        "g": 239,
+        "b": 49
+    },
+    {
+        "trade_id": 710,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 254,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 711,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 233,
+        "g": 166,
+        "b": 41
+    },
+    {
+        "trade_id": 712,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 713,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 235,
+        "g": 31,
+        "b": 0
+    },
+    {
+        "trade_id": 714,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 8,
+        "g": 88,
+        "b": 255
+    },
+    {
+        "trade_id": 715,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 71,
+        "g": 124,
+        "b": 255
+    },
+    {
+        "trade_id": 716,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 225,
+        "b": 0
+    },
+    {
+        "trade_id": 717,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 8,
+        "g": 130,
+        "b": 236
+    },
+    {
+        "trade_id": 718,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 219,
+        "b": 0
+    },
+    {
+        "trade_id": 719,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 167,
+        "g": 158,
+        "b": 122
+    },
+    {
+        "trade_id": 720,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 232,
+        "g": 42,
+        "b": 0
+    },
+    {
+        "trade_id": 721,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 722,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 240,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 723,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 35
+    },
+    {
+        "trade_id": 724,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 231,
+        "g": 37,
+        "b": 33
+    },
+    {
+        "trade_id": 725,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 243,
+        "g": 37,
+        "b": 49
+    },
+    {
+        "trade_id": 726,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 153,
+        "g": 30,
+        "b": 201
+    },
+    {
+        "trade_id": 727,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 233,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 728,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 225,
+        "b": 39
+    },
+    {
+        "trade_id": 729,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 20,
+        "g": 128,
+        "b": 219
+    },
+    {
+        "trade_id": 730,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 200,
+        "g": 103,
+        "b": 51
+    },
+    {
+        "trade_id": 731,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 63,
+        "g": 70,
+        "b": 235
+    },
+    {
+        "trade_id": 732,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 244,
+        "g": 0,
+        "b": 42
+    },
+    {
+        "trade_id": 733,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 734,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 19,
+        "g": 84,
+        "b": 255
+    },
+    {
+        "trade_id": 735,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 229,
+        "b": 3
+    },
+    {
+        "trade_id": 736,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 246,
+        "g": 221,
+        "b": 26
+    },
+    {
+        "trade_id": 737,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 59,
+        "g": 67,
+        "b": 238
+    },
+    {
+        "trade_id": 738,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 26,
+        "b": 41
+    },
+    {
+        "trade_id": 739,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 17,
+        "g": 134,
+        "b": 255
+    },
+    {
+        "trade_id": 740,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 215,
+        "b": 0
+    },
+    {
+        "trade_id": 741,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 40,
+        "b": 0
+    },
+    {
+        "trade_id": 742,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 242,
+        "g": 37,
+        "b": 34
+    },
+    {
+        "trade_id": 743,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 246,
+        "g": 110,
+        "b": 0
+    },
+    {
+        "trade_id": 744,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 48,
+        "g": 83,
+        "b": 218
+    },
+    {
+        "trade_id": 745,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 9,
+        "g": 124,
+        "b": 255
+    },
+    {
+        "trade_id": 746,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 33,
+        "b": 0
+    },
+    {
+        "trade_id": 747,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 241,
+        "g": 34,
+        "b": 0
+    },
+    {
+        "trade_id": 748,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 70,
+        "g": 136,
+        "b": 255
+    },
+    {
+        "trade_id": 749,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 235,
+        "g": 27,
+        "b": 50
+    },
+    {
+        "trade_id": 750,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 172,
+        "g": 104,
+        "b": 115
+    },
+    {
+        "trade_id": 751,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 208,
+        "b": 0
+    },
+    {
+        "trade_id": 752,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 186,
+        "g": 55,
+        "b": 0
+    },
+    {
+        "trade_id": 753,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 40,
+        "b": 28
+    },
+    {
+        "trade_id": 754,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 46,
+        "b": 33
+    },
+    {
+        "trade_id": 755,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 21,
+        "g": 87,
+        "b": 223
+    },
+    {
+        "trade_id": 756,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 245,
+        "g": 39,
+        "b": 31
+    },
+    {
+        "trade_id": 757,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 60,
+        "g": 128,
+        "b": 231
+    },
+    {
+        "trade_id": 758,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 250,
+        "g": 215,
+        "b": 39
+    },
+    {
+        "trade_id": 759,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 760,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 13,
+        "g": 120,
+        "b": 255
+    },
+    {
+        "trade_id": 761,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 47
+    },
+    {
+        "trade_id": 762,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 231,
+        "g": 0,
+        "b": 43
+    },
+    {
+        "trade_id": 763,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 32,
+        "b": 43
+    },
+    {
+        "trade_id": 764,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 50,
+        "g": 134,
+        "b": 238
+    },
+    {
+        "trade_id": 765,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 220,
+        "b": 0
+    },
+    {
+        "trade_id": 766,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 245,
+        "g": 218,
+        "b": 44
+    },
+    {
+        "trade_id": 767,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 149,
+        "g": 48,
+        "b": 242
+    },
+    {
+        "trade_id": 768,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 232,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 769,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 38,
+        "b": 35
+    },
+    {
+        "trade_id": 770,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 31,
+        "b": 26
+    },
+    {
+        "trade_id": 771,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 5,
+        "g": 92,
+        "b": 255
+    },
+    {
+        "trade_id": 772,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 253,
+        "g": 211,
+        "b": 0
+    },
+    {
+        "trade_id": 773,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 29,
+        "b": 50
+    },
+    {
+        "trade_id": 774,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 70,
+        "g": 127,
+        "b": 219
+    },
+    {
+        "trade_id": 775,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 41
+    },
+    {
+        "trade_id": 776,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 90,
+        "b": 232
+    },
+    {
+        "trade_id": 777,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 209,
+        "b": 0
+    },
+    {
+        "trade_id": 778,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 126,
+        "b": 233
+    },
+    {
+        "trade_id": 779,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 181,
+        "b": 12
+    },
+    {
+        "trade_id": 780,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 781,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 231,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 782,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 15,
+        "g": 142,
+        "b": 238
+    },
+    {
+        "trade_id": 783,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 241,
+        "g": 0,
+        "b": 36
+    },
+    {
+        "trade_id": 784,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 51,
+        "g": 70,
+        "b": 225
+    },
+    {
+        "trade_id": 785,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 45,
+        "b": 43
+    },
+    {
+        "trade_id": 786,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 39,
+        "b": 0
+    },
+    {
+        "trade_id": 787,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 2,
+        "g": 143,
+        "b": 255
+    },
+    {
+        "trade_id": 788,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 57,
+        "g": 133,
+        "b": 255
+    },
+    {
+        "trade_id": 789,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 237,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 790,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 163,
+        "g": 38,
+        "b": 252
+    },
+    {
+        "trade_id": 791,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 253,
+        "g": 41,
+        "b": 0
+    },
+    {
+        "trade_id": 792,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 239,
+        "g": 255,
+        "b": 38
+    },
+    {
+        "trade_id": 793,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 230,
+        "b": 49
+    },
+    {
+        "trade_id": 794,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 176,
+        "b": 33
+    },
+    {
+        "trade_id": 795,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 88,
+        "b": 236
+    },
+    {
+        "trade_id": 796,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 238,
+        "g": 220,
+        "b": 0
+    },
+    {
+        "trade_id": 797,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 55,
+        "g": 91,
+        "b": 255
+    },
+    {
+        "trade_id": 798,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 9,
+        "g": 78,
+        "b": 255
+    },
+    {
+        "trade_id": 799,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 231,
+        "g": 0,
+        "b": 31
+    },
+    {
+        "trade_id": 800,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 126,
+        "g": 176,
+        "b": 120
+    },
+    {
+        "trade_id": 801,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 33,
+        "b": 40
+    },
+    {
+        "trade_id": 802,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 38
+    },
+    {
+        "trade_id": 803,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 12,
+        "g": 139,
+        "b": 229
+    },
+    {
+        "trade_id": 804,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 25,
+        "b": 0
+    },
+    {
+        "trade_id": 805,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 188,
+        "b": 13
+    },
+    {
+        "trade_id": 806,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 3,
+        "g": 85,
+        "b": 228
+    },
+    {
+        "trade_id": 807,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 130,
+        "g": 123,
+        "b": 39
+    },
+    {
+        "trade_id": 808,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 254,
+        "g": 223,
+        "b": 0
+    },
+    {
+        "trade_id": 809,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 810,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 245,
+        "g": 0,
+        "b": 50
+    },
+    {
+        "trade_id": 811,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 240,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 812,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 235,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 813,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 233,
+        "g": 0,
+        "b": 28
+    },
+    {
+        "trade_id": 814,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 63,
+        "g": 71,
+        "b": 255
+    },
+    {
+        "trade_id": 815,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 216,
+        "b": 0
+    },
+    {
+        "trade_id": 816,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 235,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 817,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 165,
+        "g": 0,
+        "b": 188
+    },
+    {
+        "trade_id": 818,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 34,
+        "g": 248,
+        "b": 0
+    },
+    {
+        "trade_id": 819,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 253,
+        "g": 164,
+        "b": 45
+    },
+    {
+        "trade_id": 820,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 244,
+        "g": 167,
+        "b": 0
+    },
+    {
+        "trade_id": 821,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 50,
+        "g": 71,
+        "b": 255
+    },
+    {
+        "trade_id": 822,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 155,
+        "g": 153,
+        "b": 118
+    },
+    {
+        "trade_id": 823,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 246,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 824,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 158,
+        "g": 124,
+        "b": 115
+    },
+    {
+        "trade_id": 825,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 198,
+        "g": 68,
+        "b": 0
+    },
+    {
+        "trade_id": 826,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 827,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 240,
+        "g": 40,
+        "b": 0
+    },
+    {
+        "trade_id": 828,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 50,
+        "g": 129,
+        "b": 255
+    },
+    {
+        "trade_id": 829,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 183,
+        "g": 58,
+        "b": 0
+    },
+    {
+        "trade_id": 830,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 69,
+        "g": 140,
+        "b": 255
+    },
+    {
+        "trade_id": 831,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 42,
+        "b": 0
+    },
+    {
+        "trade_id": 832,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 62,
+        "g": 132,
+        "b": 255
+    },
+    {
+        "trade_id": 833,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 834,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 26,
+        "b": 0
+    },
+    {
+        "trade_id": 835,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 41
+    },
+    {
+        "trade_id": 836,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 145,
+        "g": 42,
+        "b": 205
+    },
+    {
+        "trade_id": 837,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 50,
+        "g": 70,
+        "b": 255
+    },
+    {
+        "trade_id": 838,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 15,
+        "g": 85,
+        "b": 255
+    },
+    {
+        "trade_id": 839,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 180,
+        "b": 0
+    },
+    {
+        "trade_id": 840,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 36,
+        "b": 0
+    },
+    {
+        "trade_id": 841,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 62,
+        "g": 129,
+        "b": 230
+    },
+    {
+        "trade_id": 842,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 223,
+        "b": 30
+    },
+    {
+        "trade_id": 843,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 5,
+        "g": 83,
+        "b": 255
+    },
+    {
+        "trade_id": 844,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 114,
+        "b": 0
+    },
+    {
+        "trade_id": 845,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 229,
+        "b": 49
+    },
+    {
+        "trade_id": 846,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 245,
+        "g": 255,
+        "b": 43
+    },
+    {
+        "trade_id": 847,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 208,
+        "g": 0,
+        "b": 246
+    },
+    {
+        "trade_id": 848,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 155,
+        "g": 165,
+        "b": 178
+    },
+    {
+        "trade_id": 849,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 241,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 850,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 240,
+        "g": 27,
+        "b": 0
+    },
+    {
+        "trade_id": 851,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 244,
+        "g": 38,
+        "b": 0
+    },
+    {
+        "trade_id": 852,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 218,
+        "b": 0
+    },
+    {
+        "trade_id": 853,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 36,
+        "b": 0
+    },
+    {
+        "trade_id": 854,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 15,
+        "g": 122,
+        "b": 255
+    },
+    {
+        "trade_id": 855,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 61,
+        "g": 143,
+        "b": 255
+    },
+    {
+        "trade_id": 856,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 230,
+        "g": 0,
+        "b": 42
+    },
+    {
+        "trade_id": 857,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 39,
+        "b": 0
+    },
+    {
+        "trade_id": 858,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 193,
+        "b": 0
+    },
+    {
+        "trade_id": 859,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 219,
+        "b": 38
+    },
+    {
+        "trade_id": 860,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 62,
+        "g": 122,
+        "b": 255
+    },
+    {
+        "trade_id": 861,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 71,
+        "g": 124,
+        "b": 255
+    },
+    {
+        "trade_id": 862,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 62,
+        "g": 120,
+        "b": 229
+    },
+    {
+        "trade_id": 863,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 183,
+        "g": 124,
+        "b": 49
+    },
+    {
+        "trade_id": 864,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 207,
+        "b": 0
+    },
+    {
+        "trade_id": 865,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 169,
+        "b": 0
+    },
+    {
+        "trade_id": 866,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 241,
+        "g": 34,
+        "b": 46
+    },
+    {
+        "trade_id": 867,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 868,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 27,
+        "b": 0
+    },
+    {
+        "trade_id": 869,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 11,
+        "g": 133,
+        "b": 255
+    },
+    {
+        "trade_id": 870,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 39
+    },
+    {
+        "trade_id": 871,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 872,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 173,
+        "g": 160,
+        "b": 111
+    },
+    {
+        "trade_id": 873,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 250,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 874,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 222,
+        "b": 40
+    },
+    {
+        "trade_id": 875,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 182,
+        "g": 118,
+        "b": 0
+    },
+    {
+        "trade_id": 876,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 230,
+        "g": 0,
+        "b": 41
+    },
+    {
+        "trade_id": 877,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 237,
+        "g": 218,
+        "b": 38
+    },
+    {
+        "trade_id": 878,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 236,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 879,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 52,
+        "g": 134,
+        "b": 255
+    },
+    {
+        "trade_id": 880,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 51,
+        "g": 84,
+        "b": 255
+    },
+    {
+        "trade_id": 881,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 36
+    },
+    {
+        "trade_id": 882,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 230,
+        "g": 230,
+        "b": 0
+    },
+    {
+        "trade_id": 883,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 239,
+        "g": 46,
+        "b": 26
+    },
+    {
+        "trade_id": 884,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 244,
+        "g": 39,
+        "b": 0
+    },
+    {
+        "trade_id": 885,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 247,
+        "g": 213,
+        "b": 50
+    },
+    {
+        "trade_id": 886,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 205,
+        "g": 0,
+        "b": 205
+    },
+    {
+        "trade_id": 887,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 252,
+        "g": 43,
+        "b": 0
+    },
+    {
+        "trade_id": 888,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 53,
+        "g": 74,
+        "b": 225
+    },
+    {
+        "trade_id": 889,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 250,
+        "b": 0
+    },
+    {
+        "trade_id": 890,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 52,
+        "g": 134,
+        "b": 227
+    },
+    {
+        "trade_id": 891,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 41,
+        "b": 45
+    },
+    {
+        "trade_id": 892,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 233,
+        "g": 48,
+        "b": 0
+    },
+    {
+        "trade_id": 893,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 894,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 16,
+        "g": 85,
+        "b": 255
+    },
+    {
+        "trade_id": 895,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 217,
+        "b": 47
+    },
+    {
+        "trade_id": 896,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 19,
+        "g": 134,
+        "b": 255
+    },
+    {
+        "trade_id": 897,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 117,
+        "b": 0
+    },
+    {
+        "trade_id": 898,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 241,
+        "g": 255,
+        "b": 33
+    },
+    {
+        "trade_id": 899,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 231,
+        "b": 36
+    },
+    {
+        "trade_id": 900,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 113,
+        "g": 114,
+        "b": 117
+    },
+    {
+        "trade_id": 901,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 9,
+        "g": 137,
+        "b": 255
+    },
+    {
+        "trade_id": 902,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 245,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 903,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 50,
+        "g": 136,
+        "b": 255
+    },
+    {
+        "trade_id": 904,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 231,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 905,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 906,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 52,
+        "g": 76,
+        "b": 233
+    },
+    {
+        "trade_id": 907,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 3,
+        "g": 84,
+        "b": 255
+    },
+    {
+        "trade_id": 908,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 220,
+        "b": 32
+    },
+    {
+        "trade_id": 909,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 20,
+        "g": 78,
+        "b": 222
+    },
+    {
+        "trade_id": 910,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 231,
+        "g": 231,
+        "b": 0
+    },
+    {
+        "trade_id": 911,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 247,
+        "g": 226,
+        "b": 0
+    },
+    {
+        "trade_id": 912,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 138,
+        "g": 51,
+        "b": 0
+    },
+    {
+        "trade_id": 913,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 198,
+        "g": 50,
+        "b": 255
+    },
+    {
+        "trade_id": 914,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 248,
+        "g": 212,
+        "b": 39
+    },
+    {
+        "trade_id": 915,
+        "client": "PQR_Ltd",
+        "label": "YELLOW",
+        "r": 238,
+        "g": 212,
+        "b": 40
+    },
+    {
+        "trade_id": 916,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 26,
+        "b": 0
+    },
+    {
+        "trade_id": 917,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 918,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 35,
+        "g": 191,
+        "b": 12
+    },
+    {
+        "trade_id": 919,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 255,
+        "g": 179,
+        "b": 0
+    },
+    {
+        "trade_id": 920,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 249,
+        "g": 38,
+        "b": 46
+    },
+    {
+        "trade_id": 921,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 104,
+        "g": 125,
+        "b": 161
+    },
+    {
+        "trade_id": 922,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 28
+    },
+    {
+        "trade_id": 923,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 179,
+        "g": 71,
+        "b": 0
+    },
+    {
+        "trade_id": 924,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 25,
+        "b": 0
+    },
+    {
+        "trade_id": 925,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 236,
+        "g": 217,
+        "b": 40
+    },
+    {
+        "trade_id": 926,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 57,
+        "g": 119,
+        "b": 220
+    },
+    {
+        "trade_id": 927,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 36,
+        "b": 0
+    },
+    {
+        "trade_id": 928,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 230,
+        "b": 0
+    },
+    {
+        "trade_id": 929,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 142,
+        "b": 223
+    },
+    {
+        "trade_id": 930,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 12,
+        "g": 87,
+        "b": 216
+    },
+    {
+        "trade_id": 931,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 50,
+        "g": 139,
+        "b": 255
+    },
+    {
+        "trade_id": 932,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 19,
+        "g": 136,
+        "b": 214
+    },
+    {
+        "trade_id": 933,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 238,
+        "g": 219,
+        "b": 27
+    },
+    {
+        "trade_id": 934,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 251,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 935,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 243,
+        "g": 224,
+        "b": 0
+    },
+    {
+        "trade_id": 936,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 141,
+        "g": 0,
+        "b": 201
+    },
+    {
+        "trade_id": 937,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 237,
+        "g": 45,
+        "b": 34
+    },
+    {
+        "trade_id": 938,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 59,
+        "g": 71,
+        "b": 255
+    },
+    {
+        "trade_id": 939,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 189,
+        "b": 0
+    },
+    {
+        "trade_id": 940,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 31,
+        "b": 0
+    },
+    {
+        "trade_id": 941,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 241,
+        "g": 170,
+        "b": 38
+    },
+    {
+        "trade_id": 942,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 159,
+        "g": 170,
+        "b": 109
+    },
+    {
+        "trade_id": 943,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 944,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 51,
+        "g": 122,
+        "b": 255
+    },
+    {
+        "trade_id": 945,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 235,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 946,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 162,
+        "g": 30,
+        "b": 255
+    },
+    {
+        "trade_id": 947,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 247,
+        "b": 0
+    },
+    {
+        "trade_id": 948,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 16,
+        "g": 128,
+        "b": 255
+    },
+    {
+        "trade_id": 949,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 48
+    },
+    {
+        "trade_id": 950,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 133,
+        "g": 122,
+        "b": 0
+    },
+    {
+        "trade_id": 951,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 44
+    },
+    {
+        "trade_id": 952,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 249,
+        "g": 114,
+        "b": 0
+    },
+    {
+        "trade_id": 953,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 36
+    },
+    {
+        "trade_id": 954,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 65,
+        "g": 92,
+        "b": 220
+    },
+    {
+        "trade_id": 955,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 26,
+        "b": 40
+    },
+    {
+        "trade_id": 956,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 6,
+        "g": 142,
+        "b": 236
+    },
+    {
+        "trade_id": 957,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 222,
+        "b": 40
+    },
+    {
+        "trade_id": 958,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 254,
+        "g": 33,
+        "b": 0
+    },
+    {
+        "trade_id": 959,
+        "client": "GHI_Ltd",
+        "label": "GREY",
+        "r": 166,
+        "g": 163,
+        "b": 164
+    },
+    {
+        "trade_id": 960,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 237,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 961,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 244,
+        "g": 255,
+        "b": 28
+    },
+    {
+        "trade_id": 962,
+        "client": "GHI_Ltd",
+        "label": "BROWN",
+        "r": 192,
+        "g": 73,
+        "b": 40
+    },
+    {
+        "trade_id": 963,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 44,
+        "b": 0
+    },
+    {
+        "trade_id": 964,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 5,
+        "g": 89,
+        "b": 238
+    },
+    {
+        "trade_id": 965,
+        "client": "JKL_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 214,
+        "b": 0
+    },
+    {
+        "trade_id": 966,
+        "client": "ABC_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 967,
+        "client": "JKL_Ltd",
+        "label": "PURPLE",
+        "r": 209,
+        "g": 0,
+        "b": 196
+    },
+    {
+        "trade_id": 968,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 233,
+        "g": 32,
+        "b": 44
+    },
+    {
+        "trade_id": 969,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 72,
+        "g": 84,
+        "b": 224
+    },
+    {
+        "trade_id": 970,
+        "client": "MNO_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 32
+    },
+    {
+        "trade_id": 971,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 66,
+        "g": 73,
+        "b": 255
+    },
+    {
+        "trade_id": 972,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 231,
+        "b": 26
+    },
+    {
+        "trade_id": 973,
+        "client": "JKL_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 240,
+        "b": 43
+    },
+    {
+        "trade_id": 974,
+        "client": "GHI_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 975,
+        "client": "JKL_Ltd",
+        "label": "ORANGE",
+        "r": 246,
+        "g": 111,
+        "b": 0
+    },
+    {
+        "trade_id": 976,
+        "client": "JKL_Ltd",
+        "label": "GREY",
+        "r": 105,
+        "g": 171,
+        "b": 103
+    },
+    {
+        "trade_id": 977,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 20,
+        "g": 89,
+        "b": 255
+    },
+    {
+        "trade_id": 978,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 136,
+        "b": 255
+    },
+    {
+        "trade_id": 979,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 64,
+        "g": 139,
+        "b": 237
+    },
+    {
+        "trade_id": 980,
+        "client": "MNO_Ltd",
+        "label": "YELLOW",
+        "r": 249,
+        "g": 212,
+        "b": 0
+    },
+    {
+        "trade_id": 981,
+        "client": "MNO_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 129,
+        "b": 255
+    },
+    {
+        "trade_id": 982,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 245,
+        "g": 34,
+        "b": 0
+    },
+    {
+        "trade_id": 983,
+        "client": "ABC_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 77,
+        "b": 255
+    },
+    {
+        "trade_id": 984,
+        "client": "GHI_Ltd",
+        "label": "BLUE",
+        "r": 70,
+        "g": 67,
+        "b": 216
+    },
+    {
+        "trade_id": 985,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 236,
+        "g": 0,
+        "b": 0
+    },
+    {
+        "trade_id": 986,
+        "client": "PQR_Ltd",
+        "label": "RED",
+        "r": 253,
+        "g": 0,
+        "b": 45
+    },
+    {
+        "trade_id": 987,
+        "client": "GHI_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 222,
+        "b": 0
+    },
+    {
+        "trade_id": 988,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 244,
+        "g": 28,
+        "b": 49
+    },
+    {
+        "trade_id": 989,
+        "client": "DEF_Ltd",
+        "label": "BLUE",
+        "r": 58,
+        "g": 130,
+        "b": 233
+    },
+    {
+        "trade_id": 990,
+        "client": "JKL_Ltd",
+        "label": "BROWN",
+        "r": 186,
+        "g": 72,
+        "b": 0
+    },
+    {
+        "trade_id": 991,
+        "client": "ABC_Ltd",
+        "label": "YELLOW",
+        "r": 254,
+        "g": 213,
+        "b": 33
+    },
+    {
+        "trade_id": 992,
+        "client": "JKL_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 0,
+        "b": 36
+    },
+    {
+        "trade_id": 993,
+        "client": "GHI_Ltd",
+        "label": "PURPLE",
+        "r": 158,
+        "g": 39,
+        "b": 204
+    },
+    {
+        "trade_id": 994,
+        "client": "DEF_Ltd",
+        "label": "YELLOW",
+        "r": 255,
+        "g": 255,
+        "b": 0
+    },
+    {
+        "trade_id": 995,
+        "client": "GHI_Ltd",
+        "label": "GREEN",
+        "r": 0,
+        "g": 239,
+        "b": 61
+    },
+    {
+        "trade_id": 996,
+        "client": "GHI_Ltd",
+        "label": "ORANGE",
+        "r": 232,
+        "g": 114,
+        "b": 50
+    },
+    {
+        "trade_id": 997,
+        "client": "DEF_Ltd",
+        "label": "RED",
+        "r": 255,
+        "g": 43,
+        "b": 0
+    },
+    {
+        "trade_id": 998,
+        "client": "JKL_Ltd",
+        "label": "BLUE",
+        "r": 20,
+        "g": 140,
+        "b": 229
+    },
+    {
+        "trade_id": 999,
+        "client": "PQR_Ltd",
+        "label": "BLUE",
+        "r": 0,
+        "g": 92,
+        "b": 255
+    }
+]
