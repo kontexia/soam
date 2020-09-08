@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from typing import Optional, Dict, Union
-from dask.distributed import Client, Variable, Lock, ActorFuture, Future, TimeoutError, Pub, Sub
+from typing import Optional, Dict, Union, List
+from dask.distributed import Client, Variable, Lock, ActorFuture, TimeoutError
 from src.kv_cache import KVGraphCache, KVCacheValueType
 
 
@@ -47,39 +47,52 @@ class DistributedCache:
         distributed_store_name_key = 'KVCache:{}:{}'.format(store_name, key)
         return Lock(distributed_store_name_key)
 
-    def get_dist_cache(self, store_name: str, restore: bool = False) -> ActorFuture:
+    def create_distributed_store(self, store_name: str, key: Optional[Union[List[str], str]] = None, restore: bool = True):
         """
-        method gets a distributed cache from the Dask Scheduler if it exists.
-        If it doesnt exists then it creates it first
-        :param store_name: the store name for the cache
-        :param restore: If True cache is restored from DB if it doesnt already exist
-        :return: an actor future pointing to the distributed KVCache
+        method to initialise a store and restore
+        :param store_name: the store_name
+        :param key: a key or list of keys to restore
+        :param restore: If true then restore from database
+        :return: True if restored else false
         """
+        store_lock = self.lock_store(store_name=store_name)
+        store_lock.acquire()
 
-        with self.lock_store(store_name):
+        # create a distributed variable with the kv_cache object
+        #
+        distributed_store_name = 'KVCache_{}'.format(store_name)
 
-            # create a distributed variable with the kv_cache object
+        # flag indicating if restored from DB
+        #
+        result = False
+
+        try:
+            # try to get the cache
             #
-            distributed_store_name = 'KVCache:{}'.format(store_name)
+            Variable(distributed_store_name).get(timeout=0.1)
 
-            # if the distributed variable
-            try:
-                Variable(distributed_store_name).get(timeout=0.1)
-            except TimeoutError:
-                new_cache_future = self.client.submit(KVGraphCache, self.config, actor=True)
-                Variable(distributed_store_name).set(new_cache_future)
+        except TimeoutError:
 
-            dist_store_var = Variable(distributed_store_name).get()
-            new_cache_actor = dist_store_var.result()
+            # the distributed variable does not exist so create it
+            #
+            cache_future = self.client.submit(KVGraphCache, self.config, actor=True)
 
-            # restore from DB if it exists
+            # create the distributed variable and store the new cache actor
+            #
+            Variable(distributed_store_name).set(cache_future)
+
+            # only restore if not in cache and asked to
             #
             if restore:
-                new_cache_actor.restore(store_name=store_name, include_history=False)
+                cache = cache_future.result()
+                cache.restore(store_name=store_name, key=key, include_history=False)
+                result = True
 
-        return new_cache_actor
+        store_lock.release()
 
-    def set_kv(self, store_name: str, key: str, value: KVCacheValueType, persist=True) -> ActorFuture:
+        return result
+
+    def set_kv(self, store_name: str, key: str, value: KVCacheValueType, persist: bool = True, lock_cache: bool = True) -> ActorFuture:
         """
         method to add a key value pair to a store. If key already exists then will overwrite
 
@@ -87,74 +100,127 @@ class DistributedCache:
         :param key: the unique key within the store
         :param value: the data to save
         :param persist: If true the changes will be persisted in database
+        :param lock_cache: If True the cache will be locked before accessing. If False it assumes a lock has already been acquired
         :return: ActorFuture with True if success else False
         """
 
-        # if we wish to update existing the restore first if it doesnt exist
-        #
-        cache = self.get_dist_cache(store_name=store_name)
-        result = cache.set_kv(store_name=store_name, key=key, value=value)
-        if persist:
-            cache.persist(store_name=store_name)
+        distributed_store_name = 'KVCache_{}'.format(store_name)
 
-        # publish key that has changed
-        #
-        pub = Pub(store_name)
-        pub.put({'action': 'set', 'key': key})
+        try:
+            dist_cache_var = Variable(distributed_store_name).get(timeout=0.1)
+            cache = dist_cache_var.result()
+
+            if lock_cache:
+                cache_lock = self.lock_key(store_name=store_name, key=key)
+                cache_lock.acquire()
+            else:
+                cache_lock = None
+
+            result = cache.set_kv(store_name=store_name, key=key, value=value)
+            if persist:
+                cache.persist(store_name=store_name)
+
+            if cache_lock is not None:
+                cache_lock.release()
+
+        except TimeoutError:
+            result = None
 
         return result
 
-    def del_kv(self, store_name: str, key: Optional[str] = None, persist=True) -> ActorFuture:
+    def del_kv(self, store_name: str, key: Optional[str] = None, persist=True, lock_cache: bool = True) -> ActorFuture:
         """
         method to delete a key within a store or the whole store. If the store/key has been persisted then the delete will be propagated when persist() is called
 
         :param store_name: the store name
         :param key: the key to delete
         :param persist: If true the changes will be persisted in database
+        :param lock_cache: If True the cache will be locked before accessing. If False it assumes a lock has already been acquired
         :return: ActorFuture with True if success else False
         """
-        cache = self.get_dist_cache(store_name=store_name)
-        result = cache.del_kv(store_name=store_name, key=key, delete_from_db=persist)
-        if persist:
-            cache.persist(store_name=store_name)
 
-        # publish key that has changed
-        #
-        pub = Pub(store_name)
-        pub.put({'action': 'delete', 'key': key})
+        distributed_store_name = 'KVCache_{}'.format(store_name)
+
+        try:
+            dist_cache_var = Variable(distributed_store_name).get(timeout=0.1)
+            cache = dist_cache_var.result()
+
+            if lock_cache:
+                cache_lock = self.lock_key(store_name=store_name, key=key)
+                cache_lock.acquire()
+            else:
+                cache_lock = None
+
+            result = cache.del_kv(store_name=store_name, key=key, delete_from_db=persist)
+            if persist:
+                cache.persist(store_name=store_name)
+
+            if cache_lock is not None:
+                cache_lock.release()
+
+        except TimeoutError:
+            result = None
 
         return result
 
-    def get_kv(self, store_name: str, key: Optional[str] = None, restore: bool = True) -> ActorFuture:
+    def get_kv(self, store_name: str, key: Optional[str] = None, lock_cache: bool = True) -> ActorFuture:
         """
         method to retrieve a stored value
         :param store_name: the store name
         :param key: the key within the store
-        :param restore: If true DB is checked if store doesnt already exist
+        :param lock_cache: If True the cache will be locked before accessing. If False it assumes a lock has already been acquired
         :return: ActorFuture with either KVCacheValueType or None if it doesnt exist
         """
-        cache = self.get_dist_cache(store_name=store_name, restore=restore)
-        result = cache.get_kv(store_name=store_name, key=key)
+
+        distributed_store_name = 'KVCache_{}'.format(store_name)
+
+        try:
+            dist_cache_var = Variable(distributed_store_name).get(timeout=0.1)
+            cache = dist_cache_var.result()
+
+            if lock_cache:
+                cache_lock = self.lock_key(store_name=store_name, key=key)
+                cache_lock.acquire()
+            else:
+                cache_lock = None
+
+            result = cache.get_kv(store_name=store_name, key=key)
+
+            if cache_lock is not None:
+                cache_lock.release()
+
+        except TimeoutError:
+            result = None
+
         return result
 
-    def restore(self, store_name, include_history: bool = False) -> bool:
+    def restore(self, store_name, include_history: bool = False, lock_cache: bool = True) -> bool:
         """
         method to restore a store_name and optionally specific key
         :param store_name: the store_name to restore
         :param include_history: If True restore all history
+        :param lock_cache: If True the cache will be locked before accessing. If False it assumes a lock has already been acquired
         :return: ActorFuture with True if restored else False
         """
-        cache = self.get_dist_cache(store_name=store_name)
-        result = cache.restore(store_name=store_name, include_history=include_history)
-        return result
 
-    @staticmethod
-    def listen_for_updates(store_name, timeout=None):
-        """
-        method to listen for any changes to a particular store. Will wait for messages for that store or return after specified timeout
-        :param store_name: the store name to listen to
-        :param timeout: the timeout to wait for messages
-        :return: the message which will be a dict with keys: {'action': set or delete, 'key': the key that changed}
-        """
-        sub = Sub(store_name)
-        return sub.get(timeout=timeout)
+        distributed_store_name = 'KVCache_{}'.format(store_name)
+
+        try:
+            dist_cache_var = Variable(distributed_store_name).get(timeout=0.1)
+            cache = dist_cache_var.result()
+
+            if lock_cache:
+                cache_lock = self.lock_store(store_name=store_name)
+                cache_lock.acquire()
+            else:
+                cache_lock = None
+
+            result = cache.restore(store_name=store_name, include_history=include_history)
+
+            if cache_lock is not None:
+                cache_lock.release()
+
+        except TimeoutError:
+            result = None
+
+        return result

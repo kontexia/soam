@@ -4,18 +4,12 @@
 import time
 import random
 
-from dask.distributed import Client, LocalCluster
 import plotly.graph_objects as go
 
-from src.amgraph import AMFGraph
 from src.amfabric import AMFabric
-from src.distributed_cache import DistributedCache
+from src.sdr import SDR
 
 import json
-from dotenv import load_dotenv
-import os
-
-import pprint as pp
 
 
 def print_anomalies(amf, por_results):
@@ -56,7 +50,7 @@ def print_anomalies(amf, por_results):
     fig.show()
 
 
-def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
+def plot_fabric_3d(fabric, title, coords_to_highlight=None, neurons_to_plot=None, short_term_memory=1):
     x_node = []
     y_node = []
     z_node = []
@@ -64,23 +58,19 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
     x_edge = []
     y_edge = []
     z_edge = []
-
     labels = []
     sizes = []
-
     pairs = set()
-
     nos_winners = 0
     sum_distance = 0.0
     sum_mapped = 0
-    if neuron_ids is not None:
-        neurons_to_plot = neuron_ids
-    else:
-        neurons_to_plot = [n for n in range(max_neurons)]
-    if coords is not None:
-        coords_to_processes = coords
-    else:
-        coords_to_processes = list(fabric['neuro_columns'].keys())
+
+    #
+    if neurons_to_plot is None:
+        neurons_to_plot = [n for n in range(short_term_memory)]
+
+    if coords_to_highlight is None:
+        coords_to_highlight = list(fabric['neuro_columns'].keys())
 
     for coord_id in fabric['neuro_columns'].keys():
 
@@ -90,14 +80,15 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
             sum_mapped += fabric['neuro_columns'][coord_id]['n_bmu']
 
         for neuron_id in neurons_to_plot:
-            if 'colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'r') in fabric['neuro_columns'][coord_id]['neuro_column']:
+            if 'trade:*:{}:{}:{}:{}:{}'.format('has_rgb', 'r', neuron_id, 'rgb', 'r') in fabric['neuro_columns'][coord_id]['neuro_column']:
 
+                # if neuron in the top of the column and has been trained then increase size
+                #
                 if neuron_id == neurons_to_plot[0] and fabric['neuro_columns'][coord_id]['n_bmu'] + fabric['neuro_columns'][coord_id]['n_nn'] > 0:
                     sizes.append(20 + fabric['neuro_columns'][coord_id]['n_bmu'])
                 else:
                     sizes.append(15)
 
-                labels.append(coord_id + '_' + str(neuron_id))
                 nc = fabric['neuro_columns'][coord_id]['neuro_column']
 
                 x = fabric['neuro_columns'][coord_id]['coord'][0]
@@ -108,10 +99,10 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
                 y_node.append(y)
                 z_node.append(z)
 
-                if coord_id in coords_to_processes:
-                    r = round(nc['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'r')]['numeric'])
-                    g = round(nc['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'g')]['numeric'])
-                    b = round(nc['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'b')]['numeric'])
+                if coord_id in coords_to_highlight:
+                    r = round(nc['trade:*:{}:{}:{}:{}:{}'.format('has_rgb', 'r', neuron_id, 'rgb', 'r')]['numeric'])
+                    g = round(nc['trade:*:{}:{}:{}:{}:{}'.format('has_rgb', 'g', neuron_id, 'rgb', 'g')]['numeric'])
+                    b = round(nc['trade:*:{}:{}:{}:{}:{}'.format('has_rgb', 'b', neuron_id, 'rgb', 'b')]['numeric'])
                     opacity = 1.0
                 else:
                     r = 255
@@ -120,6 +111,23 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
                     opacity = 0.7
                 colors.append('rgba({},{},{},{})'.format(r, g, b, opacity))
 
+                labels.append(
+                    'NeuroColumn: {}<br>Neuron: {}<br>n_BMU: {}<br>last_bmu: {}<br>n_nn: {}<br>last_nn: {}<br>mean_dist: {}<br>mean_sim: {}<br>r: {}<br>g:{}<br>b:{}<br>community:{}<br>community_prob:{}'.format(
+                        coord_id,
+                        neuron_id,
+                        fabric['neuro_columns'][coord_id]['n_bmu'],
+                        fabric['neuro_columns'][coord_id]['last_bmu'],
+                        fabric['neuro_columns'][coord_id]['n_nn'],
+                        fabric['neuro_columns'][coord_id]['last_nn'],
+                        fabric['neuro_columns'][coord_id]['mean_distance'] if 'mean_distance' in fabric['neuro_columns'][coord_id] else None,
+                        fabric['neuro_columns'][coord_id]['mean_similarity'] if 'mean_similarity' in fabric['neuro_columns'][coord_id] else None,
+                        r, g, b,
+                        fabric['neuro_columns'][coord_id]['community_label'],
+                        fabric['neuro_columns'][coord_id]['community_label_prob'],
+                        ))
+
+                # connect neurons in same column
+                #
                 if neuron_id < neurons_to_plot[-1]:
                     pair = (min((x, y, neuron_id), (x, y, neuron_id + 1)), max((x, y, neuron_id), (x, y, neuron_id + 1)))
 
@@ -138,6 +146,8 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
                     z_edge.append(nn_z)
                     z_edge.append(None)
 
+                # connect neuro_columns
+                #
                 for nn_id in fabric['neuro_columns'][coord_id]['nn']:
                     nn_x = fabric['neuro_columns'][nn_id]['coord'][0]
                     nn_y = fabric['neuro_columns'][nn_id]['coord'][1]
@@ -159,7 +169,7 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
                         z_edge.append(nn_z)
                         z_edge.append(None)
 
-    neuron_scatter = go.Scatter3d(x=x_node, y=y_node, z=z_node, text=labels, mode='markers', marker=dict(size=sizes, color=colors, opacity=1.0))
+    neuron_scatter = go.Scatter3d(x=x_node, y=y_node, z=z_node, hovertext=labels, mode='markers', marker=dict(size=sizes, color=colors, opacity=1.0))
 
     amf_edge_scatter = go.Scatter3d(x=x_edge, y=y_edge, z=z_edge, mode='lines', line=dict(width=0.5, color='grey'))
 
@@ -171,11 +181,10 @@ def print_fabric_3d(fabric, title, coords=None, neuron_ids=None, max_neurons=1):
         mean_mapped = 0
 
     fig = go.Figure(data=[neuron_scatter, amf_edge_scatter])
-    fig.update_layout(width=1000, height=1000, title=dict(text=title),
+    fig.update_layout(width=1200, height=1200, title=dict(text=title),
                       scene=dict(xaxis_title='X Coord', yaxis_title='Y Coord', zaxis_title='Sequence'))
     print('Nos Mini Columns', len(fabric['neuro_columns']), 'Now Winners:', nos_winners, 'Mean Distance:', mean_distance, 'Mean n_BMU:', mean_mapped)
     fig.show()
-
 
 def print_neurons_raw_data(raw_data, fabric, title, neuron_ids=None, max_neurons=1):
     raw_x = []
@@ -214,10 +223,10 @@ def print_neurons_raw_data(raw_data, fabric, title, neuron_ids=None, max_neurons
                 neuron_label.append(None)
                 neuron_size.append(10)
 
-            neuron_x.append(fabric['neuro_columns'][coord]['neuro_column']['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'r')]['numeric'])
-            neuron_y.append(fabric['neuro_columns'][coord]['neuro_column']['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'g')]['numeric'])
-            neuron_z.append(fabric['neuro_columns'][coord]['neuro_column']['colour_interest:*:{}:None:{}:{}:{}'.format('has_rgb', neuron_id, 'rgb', 'b')]['numeric'])
-            neuron_colour.append('rgb({},{},{})'.format(round(neuron_x[-1]), round(neuron_y[-1]), round(neuron_z[-1])))
+            neuron_x.append(fabric['neuro_columns'][coord]['neuro_column']['trade:*:{}:{}:{}:{}:{}'.format('has_rgb', 'r', neuron_id, 'rgb', 'r')]['numeric'])
+            neuron_y.append(fabric['neuro_columns'][coord]['neuro_column']['trade:*:{}:{}:{}:{}:{}'.format('has_rgb', 'g', neuron_id, 'rgb', 'g')]['numeric'])
+            neuron_z.append(fabric['neuro_columns'][coord]['neuro_column']['trade:*:{}:{}:{}:{}:{}'.format('has_rgb', 'b', neuron_id, 'rgb', 'b')]['numeric'])
+            neuron_colour.append('rgb({},{},{})'.format(int(neuron_x[-1]), int(neuron_y[-1]), int(neuron_z[-1])))
 
     neuron_scatter = go.Scatter3d(x=neuron_x, y=neuron_y, z=neuron_z, text=neuron_label, mode='markers+text', marker=dict(size=neuron_size, color=neuron_colour, opacity=0.7))
 
@@ -228,90 +237,123 @@ def print_neurons_raw_data(raw_data, fabric, title, neuron_ids=None, max_neurons
     fig.show()
 
 
+def plot_sim_density(fabric_sim):
+
+    min_x = 10000
+    min_y = 10000
+    max_x = -10000
+    max_y = -10000
+    for coord in fabric_sim:
+        if fabric_sim[coord]['coord'][0] > max_x:
+            max_x = fabric_sim[coord]['coord'][0]
+        elif fabric_sim[coord]['coord'][0] < min_x:
+            min_x = fabric_sim[coord]['coord'][0]
+        if fabric_sim[coord]['coord'][1] > max_y:
+            max_y = fabric_sim[coord]['coord'][1]
+        elif fabric_sim[coord]['coord'][1] < min_y:
+            min_y = fabric_sim[coord]['coord'][1]
+
+    z = []
+    for y in range(min_y, max_y + 1):
+        z.append([0.0] * (max_x - min_x + 1))
+        for x in range(min_x, max_x + 1):
+            coord = '{}:{}'.format(x, y)
+            if coord in fabric_sim:
+                z[y + abs(min_y)][x + abs(min_x)] = fabric_sim[coord]['mean_similarity']
+
+    surface = go.Surface(z=z)
+
+    fig = go.Figure(data=[surface])
+    fig.update_layout(scene=dict(xaxis_title='X', yaxis_title='Y', zaxis_title='Similarity'),
+                      width=800, height=900)
+    fig.show()
+
+
+def plot_edge_dist(edge_dist):
+    dist = []
+    max_dist = []
+    label = []
+    for edge in edge_dist:
+        coord = edge[0]
+        dist.append(edge[1]['distance'])
+        label.append(str(coord))
+        """
+        if edge[1]['mean_distance'][1] > 1 and edge[1]['mean_distance'][3] > 1:
+            max_dist.append(max(((edge[1]['mean_distance'][0] * edge[1]['mean_distance'][1]) - edge[1]['distance'])/(edge[1]['mean_distance'][1] - 1),
+                                ((edge[1]['mean_distance'][2] * edge[1]['mean_distance'][3]) - edge[1]['distance']) / (edge[1]['mean_distance'][3] - 1)
+                                ))
+        else:
+        """
+        max_dist.append(edge[1]['mean'])
+
+    edge_dist_scatter = go.Scatter(name='motif threshold', text=label, x=[idx for idx in range(len(dist))], y=dist, mode='lines', line=dict(width=1.0, color='red'))
+    max_dist_scatter = go.Scatter(name='motif threshold', text=label, x=[idx for idx in range(len(max_dist))], y=max_dist, mode='lines', line=dict(width=1.0, color='blue'))
+
+    fig = go.Figure(data=[edge_dist_scatter, max_dist_scatter])
+    fig.update_layout(scene=dict(xaxis_title='edge', yaxis_title='distance'), width=1400, height=900,
+                      )
+    fig.show()
+
+
 def test():
 
     start_time = time.time()
 
-    file_name = '../data/example_colours.json'
+    file_name = '../data/rainbow_trades.json'
     with open(file_name, 'r') as fp:
         raw_data = json.load(fp)
 
     print('raw data record:', raw_data[:1])
 
-    raw_data_graph = AMFGraph()
+    training_sdrs = {}
     for record in raw_data:
-        node_id = ('colour_interest', str(record['record_id']))
-        node_attr = {(('has_rgb', None), ('rgb', 'r')): {'prob': 1.0, 'numeric': record['r'], 'numeric_min': 0, 'numeric_max': 255},
-                     (('has_rgb', None), ('rgb', 'g')): {'prob': 1.0, 'numeric': record['g'], 'numeric_min': 0, 'numeric_max': 255},
-                     (('has_rgb', None), ('rgb', 'b')): {'prob': 1.0, 'numeric': record['b'], 'numeric_min': 0, 'numeric_max': 255},
-                     (('has_label', None), ('colour', record['COLOUR'])): {'prob': 1.0},
-                     }
-        raw_data_graph.set_node(node=node_id, node_attr=node_attr)
+        if record['client'] not in training_sdrs:
+            training_sdrs[record['client']] = []
+        sdr = SDR()
+        sdr.set_item(source_node=('trade', '*'),
+                     edge=('generalise', None),
+                     target_node=('trade', str(record['trade_id'])),
+                     probability=1.0
+                     )
 
-    random.seed(291065)
+        for field in ['r', 'g', 'b']:
+            sdr.set_item(source_node=('trade', '*'),
+                         edge=('has_rgb', field),
+                         target_node=('rgb', field),
+                         probability=1.0,
+                         numeric=record[field],
+                         numeric_min=0,
+                         numeric_max=255
+                         )
 
-    short_term_memory = 5
+        training_sdrs[record['client']].append((record['trade_id'], sdr))
+
+    short_term_memory = 1
     amf = AMFabric(uid='colours',
                    short_term_memory=short_term_memory,
-                   mp_threshold=0.20,
+                   mp_threshold=0.15,
                    structure='star',
-                   prune_threshold=0.0)
+                   prune_threshold=0.0,
+                   random_seed=221166)
 
     por_results = []
 
+    client = 'ABC_Ltd'
     s_1 = time.time()
-    for rec_id in range(len(raw_data)):
-        sdr = raw_data_graph.get_node_sdr(node=('colour_interest', str(rec_id)), nos_hops=2,
-                                          generalised_node_name='*', target_node_edge=('generalise', None))
-        por = amf.train(sdr=sdr, ref_id=rec_id)
+    for rec_id in range(len(training_sdrs[client])):
+        por = amf.train(sdr=training_sdrs[client][rec_id][1], ref_id=training_sdrs[client][rec_id][0], non_hebbian_edges=('generalise', ), fast_search=False)
         por_results.append(por)
     e_1 = time.time()
+
     print('loop', e_1 - s_1)
 
-    fabric = amf.decode_fabric()
-    print_fabric_3d(fabric=fabric, title='Trained AMF', neuron_ids=[0, 1, 2, 3, 4])
+    fabric = amf.decode_fabric(community_sdr=True)
 
-    print_fabric_3d(fabric=fabric, title='Trained AMF', neuron_ids=[0, 1, 2, 3, 4], coords=['-1:0'])
+    plot_fabric_3d(fabric=fabric, title='Trained AMF', neurons_to_plot=[0])
 
-    print_neurons_raw_data(raw_data=raw_data, fabric=fabric, title='End of Run', neuron_ids=[0])
-
-    print_anomalies(amf=amf, por_results=por_results)
-
-    context = []
-    context_colour_sequence = []
-
-    start_idx = random.randint(0, len(raw_data) - short_term_memory)
-    end_idx = start_idx + short_term_memory
-
-    nos_context = 0
-    for rec_id in range(start_idx, end_idx):
-        context_colour_sequence.append(raw_data[rec_id]['COLOUR'])
-        sdr = raw_data_graph.get_node_sdr(node=('colour_interest', str(rec_id)), nos_hops=2, exclude_edges={('has_rgb', None)})
-
-        if nos_context < short_term_memory - 1:
-
-            context.append(sdr)
-            nos_context += 1
-
-    print('predict sequence from idx {} given {}'.format(start_idx, context_colour_sequence[:-1]), '\n')
-    print('Expect {}'.format(context_colour_sequence[-1]), '\n')
-
-    result = amf.query(sdr=context, top_n=2)
-
-    sdr_result = [(result['neuro_column'][key]['edge_type'],
-                   result['neuro_column'][key]['target_type'], result['neuro_column'][key]['target_uid'],
-                   result['neuro_column'][key]['neuron_id'],
-                   result['neuro_column'][key]['prob'], result['neuro_column'][key]['numeric'] if 'numeric' in result['neuro_column'][key] else None)
-                  for key in result['neuro_column']
-                  if result['neuro_column'][key]['edge_type'] != 'colour_interest']
-    sdr_result.sort(key=lambda x: (x[3], x[0], x[1], -x[4]))
-    print(sdr_result)
-
-    end_time = time.time()
-    print(end_time - start_time)
-
-
+    communities = amf.get_communities()
     print('finished')
+
 
 
 if __name__ == '__main__':
