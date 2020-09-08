@@ -63,10 +63,10 @@ class NeuralFabric:
         self.motif = {}
         """ the motifs detected so far, keyed by ref_id"""
 
-        self.anomaly_threshold = None
+        self.anomaly_threshold = -1.0
         """ the current distance threshold above which an anomaly is detected """
 
-        self.motif_threshold = None
+        self.motif_threshold = -1.0
         """ the current distance threshold below which a motif is detected """
 
         self.mapped = 0
@@ -338,7 +338,7 @@ class NeuralFabric:
 
         if self.mapped >= window_size:
 
-            if self.motif_threshold is not None and self.anomaly_threshold is not None:
+            if self.motif_threshold > -1.0 and self.anomaly_threshold > -1.0:
                 # check if this is a new low distance indicating a motif
                 #
                 if distance <= self.motif_threshold:
