@@ -312,7 +312,7 @@ def test():
         sdr = SDR()
         sdr.set_item(source_node=('trade', '*'),
                      edge=('generalise', None),
-                     target_node=('trade', record['trade_id']),
+                     target_node=('trade', str(record['trade_id'])),
                      probability=1.0
                      )
 
