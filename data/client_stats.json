@@ -1,0 +1,144 @@
+{
+    "DEF_Ltd": {
+        "nos_sequences": 59,
+        "nos_trades": 175,
+        "seq_idx": 1,
+        "state": "normal",
+        "pattern": true,
+        "anomaly_seq": 21,
+        "normal_dist": [
+            "RED",
+            "BLUE",
+            "YELLOW"
+        ],
+        "anomaly_dist": [
+            "GREEN",
+            "BROWN",
+            "BLACK"
+        ],
+        "noise": 0.2,
+        "anomaly_trade_id": 363,
+        "anomaly_trade_offset": 60,
+        "normal_trade_id": 703,
+        "normal_trade_offset": 120
+    },
+    "JKL_Ltd": {
+        "nos_sequences": 25,
+        "nos_trades": 178,
+        "seq_idx": 7,
+        "state": "normal",
+        "pattern": true,
+        "anomaly_seq": 4,
+        "normal_dist": [
+            "PURPLE",
+            "GREEN",
+            "ORANGE",
+            "GREY",
+            "BROWN",
+            "RED",
+            "BLUE",
+            "YELLOW"
+        ],
+        "anomaly_dist": [
+            "BLACK"
+        ],
+        "noise": 0.2,
+        "anomaly_trade_id": 460,
+        "anomaly_trade_offset": 80,
+        "normal_trade_id": 490,
+        "normal_trade_offset": 83
+    },
+    "ABC_Ltd": {
+        "nos_sequences": 59,
+        "nos_trades": 172,
+        "seq_idx": 0,
+        "state": "normal",
+        "pattern": true,
+        "anomaly_seq": 2,
+        "normal_dist": [
+            "RED",
+            "BLUE",
+            "YELLOW"
+        ],
+        "anomaly_dist": [
+            "GREEN"
+        ],
+        "noise": 0.2,
+        "anomaly_trade_id": 339,
+        "anomaly_trade_offset": 60,
+        "normal_trade_id": 345,
+        "normal_trade_offset": 61
+    },
+    "GHI_Ltd": {
+        "nos_sequences": 23,
+        "nos_trades": 158,
+        "seq_idx": 3,
+        "state": "normal",
+        "pattern": true,
+        "anomaly_seq": 4,
+        "normal_dist": [
+            "PURPLE",
+            "GREEN",
+            "ORANGE",
+            "GREY",
+            "BROWN",
+            "RED",
+            "BLUE",
+            "YELLOW"
+        ],
+        "anomaly_dist": [
+            "BLACK"
+        ],
+        "noise": 0.2,
+        "anomaly_trade_id": 531,
+        "anomaly_trade_offset": 80,
+        "normal_trade_id": 558,
+        "normal_trade_offset": 83
+    },
+    "MNO_Ltd": {
+        "nos_sequences": 54,
+        "nos_trades": 161,
+        "seq_idx": 2,
+        "state": "normal",
+        "pattern": false,
+        "anomaly_seq": 11,
+        "normal_dist": [
+            "RED",
+            "BLUE",
+            "YELLOW"
+        ],
+        "anomaly_dist": [
+            "RED",
+            "BLUE",
+            "YELLOW"
+        ],
+        "noise": 0.2,
+        "anomaly_trade_id": 331,
+        "anomaly_trade_offset": 60,
+        "normal_trade_id": 560,
+        "normal_trade_offset": 90
+    },
+    "PQR_Ltd": {
+        "nos_sequences": 53,
+        "nos_trades": 156,
+        "seq_idx": 0,
+        "state": "normal",
+        "pattern": false,
+        "anomaly_seq": 11,
+        "normal_dist": [
+            "RED",
+            "BLUE",
+            "YELLOW"
+        ],
+        "anomaly_dist": [
+            "RED",
+            "BLUE",
+            "YELLOW"
+        ],
+        "noise": 0.2,
+        "anomaly_trade_id": 375,
+        "anomaly_trade_offset": 60,
+        "normal_trade_id": 583,
+        "normal_trade_offset": 90
+    }
+}
