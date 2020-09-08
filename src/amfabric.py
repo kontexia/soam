@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from copy import deepcopy
+from copy import deepcopy, copy
 from src.sdr import SDR
 from src.neuro_column import NeuroColumn
 
@@ -115,6 +115,7 @@ class AMFabric:
             hebbian_edges = {neuro_column[edge_key]['edge_type']
                              for edge_key in neuro_column
                              if neuro_column[edge_key]['edge_type'] not in self.non_hebbian_edge_types['edges']}
+
         else:
             hebbian_edges = None
 
@@ -124,7 +125,9 @@ class AMFabric:
 
         # if the fabric is empty initialise
         #
+        initial_setup = False
         if len(self.fabric.neurons) == 0:
+            initial_setup = True
             self.fabric.grow(example_neuro_column=neuro_column, hebbian_edges=hebbian_edges)
 
         # find the BMU by calculating the distance of the NeuroColumn to every column in the fabric
@@ -135,14 +138,27 @@ class AMFabric:
                                                         neuron_id_filters=search_neuron_ids,
                                                         bmu_only=fast_search)
 
-        # update the the por
+        # create the por
         #
-        por['bmu'] = search_results['bmu_coord']
-        por['bmu_distance'] = search_results['bmu_distance']
-        por['bmu_similarity'] = search_results['bmu_similarity']
-        por['anomaly'] = search_results['anomaly']
-        por['motif'] = search_results['motif']
-        por['fabric_distance'] = search_results['fabric_distance']
+        if initial_setup:
+            # if we have just created the first neurocolumns then force the first bmu to have coordinate 0, 0
+            #
+            por['bmu'] = '0:0'
+            por['bmu_distance'] = search_results['fabric_distance']['0:0']['distance']
+            por['bmu_similarity'] = search_results['fabric_distance']['0:0']['similarity']
+            por['anomaly'] = search_results['anomaly']
+            por['motif'] = search_results['motif']
+            por['fabric_distance'] = search_results['fabric_distance']
+
+        else:
+            # select actual bmu
+            #
+            por['bmu'] = search_results['bmu_coord']
+            por['bmu_distance'] = search_results['bmu_distance']
+            por['bmu_similarity'] = search_results['bmu_similarity']
+            por['anomaly'] = search_results['anomaly']
+            por['motif'] = search_results['motif']
+            por['fabric_distance'] = search_results['fabric_distance']
 
         return por
 
@@ -197,13 +213,15 @@ class AMFabric:
         existing_coords = set(self.fabric.neurons.keys())
         new_coords = set()
         if ((self.fabric.structure == 'star' and len(self.fabric.neurons[bmu_coord_key]['nn']) < 4) or
-            (self.fabric.structure == 'box' and len(self.fabric.neurons[bmu_coord_key]['nn']) < 8)):
+            (self.fabric.structure == 'square' and len(self.fabric.neurons[bmu_coord_key]['nn']) < 8)):
             self.fabric.grow(example_neuro_column=neuro_column, coord_key=bmu_coord_key, hebbian_edges=hebbian_edges)
             new_coords = set(self.fabric.neurons.keys()) - existing_coords
 
         # update the bmu and its neighbours stats
         #
-        self.fabric.update_bmu_stats(bmu_coord_key=bmu_coord_key, distance=bmu_distance, similarity=bmu_similarity)
+        # self.fabric.update_bmu_stats(bmu_coord_key=bmu_coord_key, distance=bmu_distance, similarity=bmu_similarity)
+
+        self.fabric.update_bmu_stats(bmu_coord_key=bmu_coord_key, fabric_dist=fabric_dist)
 
         # get neighbourhood of neurons to learn
         #
@@ -349,6 +367,35 @@ class AMFabric:
                                     reset_updated=False)
         return fabric
 
+    def get_communities(self):
+        """
+        method to return the minimum number of communities
+
+        :return: dict keyed by community coord and values a set of neuro_column coords
+        """
+
+        communities = {}
+
+        for key in self.fabric.communities:
+            if key not in communities:
+                communities[key] = copy(self.fabric.communities[key])
+            else:
+                communities[key].update(self.fabric.communities[key])
+
+            for parent_key in self.fabric.communities:
+                if parent_key != key and key in self.fabric.communities[parent_key]:
+                    if parent_key not in communities:
+                        communities[parent_key] = copy(communities[key])
+
+                    else:
+                        communities[parent_key].update(communities[key])
+                    communities[parent_key].add(key)
+
+                    del communities[key]
+                    break
+
+        return communities
+
     def get_anomalies(self) -> dict:
         """
         method returns a copy of the fabric anomalies, keyed by ref_id
@@ -368,7 +415,7 @@ class AMFabric:
         method to return a graph representation (persistence graph) of the fabric
 
         :param ref_id: a unique reference that will be tagged on every changed edge
-        :param pg_to_update: If provided this amfgraph will be updated
+        :param pg_to_update: If provided this AMFGraph will be updated
         :param only_updated: If True only the changed data is included
         :return: the persistence graph
         """
@@ -430,6 +477,9 @@ class AMFabric:
                 if attr in ['anomaly', 'motif']:
                     for idx in fabric[attr]:
                         edge_properties[attr][idx] = fabric[attr][idx]
+
+                elif attr == 'communities':
+                    edge_properties[attr] = list(fabric[attr])
 
                 # this edge will not include neuro_column data
                 #
@@ -560,6 +610,7 @@ class AMFabric:
         #
         has_stats = pg[('AMFabric', self.uid)][('AMFabricStats', '*')][(('has_amfabric_stats', None), None)]
         fabric = {attr: deepcopy(has_stats[attr]) for attr in has_stats if attr[0] != '_' and attr != 'ref_id'}
+        fabric['communities'] = set(fabric['communities'])
 
         # now neuro_columns
         #
