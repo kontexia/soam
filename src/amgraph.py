@@ -100,9 +100,9 @@ class AMFGraph(nx.MultiDiGraph):
                            '_numeric_max': numeric_max
                            }
 
-        # allow properties to override settings
+        # allow properties to override settings, ignoring the internal properties starting with '_'
         #
-        edge_properties.update(properties)
+        edge_properties.update({attr: properties[attr] for attr in properties if attr[0] != '_'})
         self.add_edge(source, target, key=edge_key, **edge_properties)
 
     def update_edge(self, source: Node_Type, target: Node_Type, edge: Edge_Type,
@@ -253,8 +253,11 @@ class AMFGraph(nx.MultiDiGraph):
 
         # create the node if it doesnt already exist
         #
-        if node_prop is not None:
-            self.add_node(node, _created_ts=ts, _updated=True, **node_prop)
+        if node not in self:
+            if node_prop is not None:
+                self.add_node(node, _created_ts=ts, _updated=True, **node_prop)
+            else:
+                self.add_node(node, _created_ts=ts, _updated=True)
 
         # create the stemmed version of the node if required
         #
@@ -554,10 +557,10 @@ class AMFGraph(nx.MultiDiGraph):
                         break
                 elif key == '$created_ts':
                     value = item_to_check[1]['_created_ts']
-                elif key == '$expired_ts' and isinstance(item_to_check[0], tuple):
+                elif key == '$expired_ts':
                     # expired_ts held in the edge_key tuple
                     #
-                    value = item_to_check[0][2]
+                    value = item_to_check[0][1]
                 elif key in item_to_check[1]:
                     value = item_to_check[1][key]
                 else:
@@ -739,7 +742,7 @@ class AMFGraph(nx.MultiDiGraph):
         decomposition = nx.core_number(dg)
         return decomposition
 
-    def plot(self, dimension=2, weight_field='_prob', node_filter_func=None, edge_filter_func=None):
+    def plot(self, dimension=2, weight_field='_prob', node_filter_func=None, edge_filter_func=None, width=1000, height=900):
 
         # get the xyz coordinates using the spring force algorithm
         #
@@ -756,7 +759,7 @@ class AMFGraph(nx.MultiDiGraph):
         edge_labels = []
         colors = []
         types = {}
-        color_id = 0
+        color_id = 1
 
         nodes_to_display = []
 
@@ -842,7 +845,7 @@ class AMFGraph(nx.MultiDiGraph):
 
             node_scatter = go.Scatter(x=x, y=y, text=node_labels, mode='markers+text', marker=dict(size=20, color=colors, opacity=0.7))
             fig = go.Figure(data=[edge_scatter, node_scatter])
-            fig.update_layout(width=900, height=900, title=dict(text='AMFGraph'),
+            fig.update_layout(width=width, height=height, title=dict(text='AMFGraph'),
                               xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                               yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
 
@@ -852,7 +855,7 @@ class AMFGraph(nx.MultiDiGraph):
             node_scatter = go.Scatter3d(x=x, y=y, z=z, text=node_labels, mode='markers+text', marker=dict(size=20, color=colors, opacity=0.7))
 
             fig = go.Figure(data=[node_scatter, edge_scatter])
-            fig.update_layout(width=900, height=900, title=dict(text='AMFGraph'),
+            fig.update_layout(width=width, height=height, title=dict(text='AMFGraph'),
                               scene=dict(
                                 xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                                 yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
@@ -865,61 +868,14 @@ if __name__ == '__main__':
 
     g = AMFGraph()
 
-    #  identify the node with a tuple with format (<NODE_TYPE>, <NODE_UID>)
-    #
-    node_id = ('Trade', 'XYZ_123')
 
-    # define static properties of the node as a simple dictionary
-    #
-    node_properties = {'other_id': 123}
+    g.set_edge(source=('Trade', 'XYZ_123'), target=('client', 'abc ltd'), edge=('has', 'client'), prob=1.0)
 
-    # define any 'attributes' of Trade with a dictionary with the following format:
-    #
-    # edge_to attribute_key = (<RELATIONSHIP>, <ATTRIBUTE_NODE_ID>)
-    # edge properties = either <WEIGHT> or (<WEIGHT>, <VALUE>, <MIN_VALUE>, <MAX_VALUE>)
-    #
-    node_attr = {(('has_client', None), ('client', 'abc ltd')): {'prob': 1.0},  # probability of edge is 1.0
-                 (('has_platform', None), ('platform', 'electronic')): {'prob': 1.0},  # probability of edge is 1.0
-                 (('has_product', None), ('product', 'swap')): {'prob': 1.0},  # probability of edge is 1.0
+    g.update_edge(source=('Trade', 'XYZ_123'), target=('client','abc ltd'), edge=('has', 'client'), prob=0.5)
 
-                 # here we set a probability of edge to 1.0, we also associate numeric value 800mio, minimum value of 0, max value of 1 bio to the edge
-                 #
-                 (('has_nominal', None), ('nominal', 'swap_nominal')): {'prob': 1.0, 'numeric': 800000000, 'numeric_min': 0, 'numeric_max': 1000000000}
-                 }
+    g.plot()
 
-    # one can specify extra properties for every edge created
-    #
-    edge_properties = {'other_id': 123}
-
-    # add the node
-    #
-    g.set_node(node=node_id, node_attr=node_attr, node_prop=node_properties, edge_prop=edge_properties, timestamp=None)
-
-    #  you can print the graph
-    #
-    print(g)
-
-    # and you can plot the resulting graph
-    #
-    g.plot(dimension=3)
-
-    # define a dictionary of the attributes to be inserted/ updated
-    #
-    upsert_attr = {(('has_nominal', None), ('nominal', 'swap_nominal')): {'numeric': 5000000}}
-
-    # define a set of 'attribute relationships" to be expired
-    #
-    expire_attr = {(('has_interest', None), ('interest', 'banking'), 0)}
-
-    edge_properties = {'update_id': 321}
-
-    g.update_node(node=node_id, upsert_attr=upsert_attr, expire_attr=expire_attr, edge_prop=edge_properties, timestamp=None)
-
-    print(g)
-
-    #  plot the graph filtering on expired_timestamp is None
-    #
-    g.plot(dimension=3, edge_filter_func=lambda x: x[1] is None)
-
+    sg_1 = g.filter_sub_graph(query={'$edge': {'$expired_ts': {'$eq': None}}})
+    print(sg_1)
 
 
