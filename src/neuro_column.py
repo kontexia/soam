@@ -725,14 +725,11 @@ class NeuroColumn:
         edge_key: EdgeKeyType
 
         for edge_key in self.edges:
-            if self.edges[edge_key]['prob'] > max_prob:
+            if max_edge_key is None or self.edges[edge_key]['prob'] >= max_prob:
                 max_edge_key = edge_key
                 max_prob = self.edges[edge_key]['prob']
 
-        if max_edge_key is not None:
-            return self.edges[max_edge_key]
-        else:
-            return None
+        return self.edges[max_edge_key]
 
     def __str__(self):
         """
