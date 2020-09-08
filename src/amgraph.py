@@ -759,7 +759,7 @@ class AMFGraph(nx.MultiDiGraph):
         edge_labels = []
         colors = []
         types = {}
-        color_id = 0
+        color_id = 1
 
         nodes_to_display = []
 
