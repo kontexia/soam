@@ -489,6 +489,7 @@ class AMFabric:
             # edge does not exist so create the properties as required
             #
             edge_properties = {attr: fabric[attr] for attr in fabric if attr not in ['neuro_columns']}
+            edge_properties['communities'] = list(edge_properties['communities'])
 
         # add in the ref_id
         #
