@@ -14,6 +14,7 @@ class NeuralFabric:
     uid = cython.declare(str, visibility='public')
     neurons = cython.declare(dict, visibility='public')
     max_stm = cython.declare(cython.int, visibility='public')
+    mp_threshold = cython.declare(cython.double, visibility='public')
     mp_window = cython.declare(list, visibility='public')
     anomaly = cython.declare(dict, visibility='public')
     motif = cython.declare(dict, visibility='public')
@@ -30,7 +31,12 @@ class NeuralFabric:
     structure = cython.declare(str, visibility='public')
     prune_threshold = cython.declare(cython.double, visibility='public')
 
-    def __init__(self, uid: str, max_short_term_memory: cython.int = 1, mp_threshold: cython.float = 0.1, structure: str = 'star', prune_threshold: float = 0.00001):
+    def __init__(self,
+                 uid: str,
+                 max_short_term_memory: cython.int = 1,
+                 mp_threshold: float = 0.1,
+                 structure: str = 'star',
+                 prune_threshold: float = 0.00001):
         """
         class to represent the columns of neurons in the associative memory fabric.
         Each column is keyed by an x, y coordinate pair key and consists of an collection of sdrs
