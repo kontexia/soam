@@ -15,12 +15,12 @@ class DatabaseManagerFactory:
         if config_file_path is not None:
             databases_configuration_file_path = os.path.expanduser(config_file_path)
         else:
-            databases_configuration_file_path = '../data_fabric/databases_configuration.json'
+            databases_configuration_file_path = 'databases_configuration.json'
 
         if queries_file_path is not None:
             database_queries_file_path = os.path.expanduser(queries_file_path)
         else:
-            database_queries_file_path = '../data_fabric/database_queries.json'
+            database_queries_file_path = 'database_queries.json'
 
         if database_system == 'arango_db':
             return ArangoDBDatabaseManager(
