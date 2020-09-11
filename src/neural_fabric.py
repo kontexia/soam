@@ -387,6 +387,7 @@ class NeuralFabric:
         nn_key: str
         delta: cython.double
         count: int
+        n_mapped: int
 
         # update the fabric properties
         #
@@ -544,10 +545,13 @@ class NeuralFabric:
             if coord_key not in fabric_sim:
                 fabric_sim[coord_key] = {'nn': {},
                                          'mean_similarity': 0.0,
+                                         'mean_distance': 0.0,
                                          'mean_density': self.neurons[coord_key]['n_bmu'],
                                          'coord': self.neurons[coord_key]['coord'],
                                          'n_bmu': self.neurons[coord_key]['n_bmu'],
-                                         'n_nn': self.neurons[coord_key]['n_nn']}
+                                         'min_similarity': float('inf')
+                                         }
+
             for nn_key in self.neurons[coord_key]['nn']:
                 if nn_key in fabric_sim and coord_key in fabric_sim[nn_key]['nn']:
                     fabric_sim[coord_key]['nn'][nn_key] = fabric_sim[nn_key]['nn'][coord_key]
@@ -559,6 +563,11 @@ class NeuralFabric:
 
                 fabric_sim[coord_key]['mean_density'] += self.neurons[nn_key]['n_bmu']
                 fabric_sim[coord_key]['mean_similarity'] += fabric_sim[coord_key]['nn'][nn_key]['similarity']
+                fabric_sim[coord_key]['mean_distance'] += fabric_sim[coord_key]['nn'][nn_key]['distance']
+                if fabric_sim[coord_key]['nn'][nn_key]['similarity'] < fabric_sim[coord_key]['min_similarity']:
+                    fabric_sim[coord_key]['min_similarity'] = fabric_sim[coord_key]['nn'][nn_key]['similarity']
+
+            fabric_sim[coord_key]['mean_distance'] = fabric_sim[coord_key]['mean_distance'] / len(self.neurons[coord_key]['nn'])
             fabric_sim[coord_key]['mean_similarity'] = fabric_sim[coord_key]['mean_similarity'] / len(self.neurons[coord_key]['nn'])
             fabric_sim[coord_key]['mean_density'] = fabric_sim[coord_key]['mean_density'] / (len(self.neurons[coord_key]['nn']) + 1)
         return fabric_sim
