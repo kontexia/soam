@@ -57,6 +57,8 @@ class AMFabric:
         self.non_hebbian_edge_types = {'edges': set(), 'updated': True}
         """ the edge_types that are not to be learned using a hebbian rule """
 
+        self.hebbian_edge_types = {'edges': set(), 'updated': True}
+
         # seed the random number generator if required
         #
         if random_seed is not None:
@@ -116,6 +118,7 @@ class AMFabric:
                              for edge_key in neuro_column
                              if neuro_column[edge_key]['edge_type'] not in self.non_hebbian_edge_types['edges']}
 
+            self.hebbian_edge_types['edges'].update(hebbian_edges)
         else:
             hebbian_edges = None
 
