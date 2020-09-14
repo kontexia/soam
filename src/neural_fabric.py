@@ -155,9 +155,7 @@ class NeuralFabric:
                                        'mean_distance': 0.0,
                                        'sum_similarity': 0.0,
                                        'mean_similarity': 0.0,
-                                       'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
-                                       'community_label': None,
-                                       'community_label_prob': 0.0,
+                                       'community': -1,
                                        'updated': True,     # set ot True so that it will be decoded at least once
                                        'nn': {}
                                        }
@@ -476,128 +474,177 @@ class NeuralFabric:
             self.neurons[coord_key]['neuro_column'].learn(neuro_column=neuro_column, learn_rate=learn_rate, hebbian_edges=hebbian_edges, is_bmu=bmu)
 
     @cython.ccall
-    def community_update(self, bmu_coord_key: str, learn_rate: cython.double):
+    def cluster_neuro_columns(self, similarity_mx: dict, threshold: float, ignore_nc: set = None) -> tuple:
         """
-        method to hebbian update the community SDR for the bmu neurons and its neighbours
+        method to find clusters of neuro_columns separated by a similarity threshold
+        :param similarity_mx: dict of dicts keyed by neuro_column keys containing the similarity measure
+        :param threshold: the similarity measure to sepearate the clusters
+        :param ignore_nc: set of neuro_columns to ignore
+        :return: tuple of cluster dict, mean cluster similarity, mean size in cluster, minimum cluster size
+        """
 
-        :param bmu_coord_key: str - the bmu
-        :param learn_rate: double - the learn rate for all updates
+        # prepare a list of unallocated neuro_columns, ignoring neuro_columns when required
+        #
+        unallocated_nc: list = [nc for nc in similarity_mx if ignore_nc is None or nc not in ignore_nc]
+
+        # initialise cluster id and cluster dictionary
+        #
+        cluster_id: int = 0
+        clusters: dict = {}
+
+        mean_cluster_size: float = 0.0
+        mean_cluster_similarity: float = 0.0
+        min_cluster_size: int = len(unallocated_nc)
+        max_cluster_size: int = 0
+        max_cluster_id: int = -1
+
+        # help cython type these variables
+        #
+        nc: str
+        nn_nc: str
+        nc_1: str
+        nc_2: str
+        processed: set
+
+        # this is an iterative process implemented using a list of things to processes (rather than a recursive design)
+        #
+        nc_to_process = [unallocated_nc[0]]
+        while len(nc_to_process) > 0:
+
+            # process the first neuro_column
+            #
+            nc = nc_to_process.pop(0)
+
+            # if the cluster_id is not in the cluster then create it
+            #
+            if cluster_id not in clusters:
+                clusters[cluster_id] = {'neuro_columns': set(), 'mean_similarity': 0.0}
+
+            # allocate this neuro_column to existing cluster
+            # and removed from unallocated list
+            #
+            clusters[cluster_id]['neuro_columns'].add(nc)
+            unallocated_nc.remove(nc)
+
+            # find the neighbours to this neuro_column that must be processed
+            #
+            for nn_nc in similarity_mx[nc]:
+                if nn_nc in unallocated_nc and nn_nc not in nc_to_process and similarity_mx[nc][nn_nc] >= threshold:
+                    nc_to_process.append(nn_nc)
+
+            # if there are no more neuro_columns to process then this cluster is complete
+            #
+            if len(nc_to_process) == 0:
+
+                # calc the mean of the existing cluster
+                #
+                processed = set()
+                for nc_1 in clusters[cluster_id]['neuro_columns']:
+                    for nc_2 in clusters[cluster_id]['neuro_columns']:
+                        if nc_1 != nc_2 and (nc_2, nc_1) not in processed:
+                            processed.add((nc_1, nc_2))
+                            clusters[cluster_id]['mean_similarity'] += similarity_mx[nc_1][nc_2]
+
+                if len(processed) > 0:
+                    clusters[cluster_id]['mean_similarity'] = clusters[cluster_id]['mean_similarity'] / len(processed)
+                else:
+                    # if only one neuro_column in the cluster then default the mean_similarity to the threshold
+                    #
+                    clusters[cluster_id]['mean_similarity'] = threshold
+
+                # update the mean_similarity and size across all clusters
+                #
+                mean_cluster_similarity += clusters[cluster_id]['mean_similarity']
+                mean_cluster_size += len(clusters[cluster_id]['neuro_columns'])
+
+                if len(clusters[cluster_id]['neuro_columns']) < min_cluster_size:
+                    min_cluster_size = len(clusters[cluster_id]['neuro_columns'])
+
+                if len(clusters[cluster_id]['neuro_columns']) > max_cluster_size:
+                    max_cluster_size = len(clusters[cluster_id]['neuro_columns'])
+                    max_cluster_id = cluster_id
+
+                # now create new cluster_id if there are still neuro_columns unallocated
+                #
+                if len(unallocated_nc) > 0:
+                    cluster_id += 1
+                    nc_to_process.append(unallocated_nc[0])
+
+        # finalise means across all clusters
+        #
+        mean_cluster_similarity = mean_cluster_similarity / len(clusters)
+        mean_cluster_size = mean_cluster_size / len(clusters)
+
+        return clusters, mean_cluster_similarity, mean_cluster_size, min_cluster_size, max_cluster_size, max_cluster_id
+
+    def update_communities(self, min_cluster_size: int = 2, start_threshold: float = 0.6, step: float = 0.01, edge_type_filters: set = None):
+        """
+        method to find the clusters of neuro_columns based on the measured similarity
+        :param min_cluster_size: minimum number of neuro_columns allowed in a cluster
+        :param start_threshold: starting similarity threshold
+        :param step: increment in similarity threshold during search
+        :param edge_type_filters: the edges to consider when calculating the similarity between neuro_columns
         :return: None
         """
 
-        # declare variable types to help cython
+        # calculate a matrix of similarities between all neuro_columns
         #
-        coords_to_update: list
-        nn_key: str
-        coord_key: str
-        bmu_coord_nc: NeuroColumn
-        curr_community_edge: dict
-
-        # get list of coordinates to update
-        #
-        coords_to_update = [nn_key for nn_key in self.neurons[bmu_coord_key]['nn']]
-        coords_to_update.append(bmu_coord_key)
-
-        for coord_key in coords_to_update:
-
-            bmu_coord_nc = NeuroColumn()
-
-            # create an sdr to represent the bmu coordinates
-            #
-            bmu_coord_nc.upsert(edge_type='in_community', edge_uid='',
-                                source_type='NeuroColumn', source_uid=coord_key,
-                                target_type='NeuroColumn', target_uid=bmu_coord_key,
-                                neuron_id=0,
-                                prob=1.0)
-
-            self.neurons[coord_key]['community_nc'].learn(neuro_column=bmu_coord_nc, learn_rate=learn_rate)
-
-            self.neurons[coord_key]['updated'] = True
-
-            curr_community_edge = self.neurons[coord_key]['community_nc'].get_edge_by_max_probability()
-            if curr_community_edge is not None:
-
-                # remove this coord from the current community if it has changed
-                #
-                if (self.neurons[coord_key]['community_label'] != curr_community_edge['target_uid'] and
-                        self.neurons[coord_key]['community_label'] in self.communities and
-                        coord_key in self.communities[self.neurons[coord_key]['community_label']]):
-
-                    self.communities[self.neurons[coord_key]['community_label']].remove(coord_key)
-                    if len(self.communities[self.neurons[coord_key]['community_label']]) == 0:
-                        del self.communities[self.neurons[coord_key]['community_label']]
-
-                # update the community label for this column of neurons
-                #
-                self.neurons[coord_key]['community_label'] = curr_community_edge['target_uid']
-                self.neurons[coord_key]['community_label_prob'] = curr_community_edge['prob']
-
-                if self.neurons[coord_key]['community_label'] not in self.communities:
-                    self.communities[self.neurons[coord_key]['community_label']] = {coord_key}
-                else:
-                    self.communities[self.neurons[coord_key]['community_label']].add(coord_key)
-
-    def get_fabric_similarity(self, edge_type_filters):
-
-        fabric_sim = {}
+        similarity_mx = {}
 
         for coord_key in self.neurons:
-            if coord_key not in fabric_sim:
-                fabric_sim[coord_key] = {'nn': {},
-                                         'mean_similarity': 0.0,
-                                         'mean_distance': 0.0,
-                                         'mean_density': self.neurons[coord_key]['n_bmu'],
-                                         'coord': self.neurons[coord_key]['coord'],
-                                         'n_bmu': self.neurons[coord_key]['n_bmu'],
-                                         'min_similarity': float('inf')
-                                         }
 
-            for nn_key in self.neurons[coord_key]['nn']:
-                if nn_key in fabric_sim and coord_key in fabric_sim[nn_key]['nn']:
-                    fabric_sim[coord_key]['nn'][nn_key] = fabric_sim[nn_key]['nn'][coord_key]
+            if coord_key not in similarity_mx:
+                similarity_mx[coord_key] = {}
+
+            for nn_key in self.neurons:
+
+                # ignore self similarity joins
+                #
+                if nn_key != coord_key:
+
+                    # reuse similarity calc if already performed before
+                    #
+                    if nn_key in similarity_mx and coord_key in similarity_mx[nn_key]:
+                        similarity_mx[coord_key][nn_key] = similarity_mx[nn_key][coord_key]
+                    else:
+
+                        distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=self.neurons[nn_key]['neuro_column'],
+                                                                                                          edge_type_filters=edge_type_filters)
+                        similarity_mx[coord_key][nn_key] = similarity
+
+        threshold = start_threshold
+        prev_clusters = {}
+        finished = False
+        ignore_nc = None
+        max_cluster_size = len(self.neurons) - min_cluster_size
+
+        while not finished:
+
+            clusters = self.cluster_neuro_columns(similarity_mx=similarity_mx, threshold=threshold, ignore_nc=ignore_nc)
+
+            if clusters[3] <= min_cluster_size:
+                # if there is a single cluster that is too large then carry on
+                #
+                if clusters[4] >= max_cluster_size:
+                    ignore_nc = set()
+                    for community in clusters[0]:
+                        if community != clusters[5]:
+                            ignore_nc.update(clusters[0][community]['neuro_columns'])
                 else:
+                    finished = True
+            else:
+                prev_clusters = clusters
+                threshold += step
+                if threshold >= 1.0:
+                    finished = True
 
-                    distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=self.neurons[nn_key]['neuro_column'],
-                                                                                                      edge_type_filters=edge_type_filters)
-                    fabric_sim[coord_key]['nn'][nn_key] = {'similarity': similarity, 'distance': distance}
+        self.communities = prev_clusters[0]
+        if ignore_nc is not None:
+            self.communities[-1] = ignore_nc
 
-                fabric_sim[coord_key]['mean_density'] += self.neurons[nn_key]['n_bmu']
-                fabric_sim[coord_key]['mean_similarity'] += fabric_sim[coord_key]['nn'][nn_key]['similarity']
-                fabric_sim[coord_key]['mean_distance'] += fabric_sim[coord_key]['nn'][nn_key]['distance']
-                if fabric_sim[coord_key]['nn'][nn_key]['similarity'] < fabric_sim[coord_key]['min_similarity']:
-                    fabric_sim[coord_key]['min_similarity'] = fabric_sim[coord_key]['nn'][nn_key]['similarity']
-
-            fabric_sim[coord_key]['mean_distance'] = fabric_sim[coord_key]['mean_distance'] / len(self.neurons[coord_key]['nn'])
-            fabric_sim[coord_key]['mean_similarity'] = fabric_sim[coord_key]['mean_similarity'] / len(self.neurons[coord_key]['nn'])
-            fabric_sim[coord_key]['mean_density'] = fabric_sim[coord_key]['mean_density'] / (len(self.neurons[coord_key]['nn']) + 1)
-        return fabric_sim
-
-    def get_fabric_distances(self, edge_type_filters):
-
-        fabric_dist = {}
-
-        for coord_key in self.neurons:
-            if coord_key not in fabric_dist:
-                fabric_dist[coord_key] = {'nn': {},
-                                          'mean_distance': 0.0,
-                                          'coord': self.neurons[coord_key]['coord'],
-                                          'n_bmu': self.neurons[coord_key]['n_bmu'],
-                                          'n_nn': self.neurons[coord_key]['n_nn']}
-
-            for nn_key in self.neurons[coord_key]['nn']:
-                if nn_key in fabric_dist and coord_key in fabric_dist[nn_key]['nn']:
-                    fabric_dist[coord_key]['nn'][nn_key] = fabric_dist[nn_key]['nn'][coord_key]
-                else:
-
-                    distance, similarity, por = self.neurons[coord_key]['neuro_column'].calc_distance(neuro_column=self.neurons[nn_key]['neuro_column'],
-                                                                                                      edge_type_filters=edge_type_filters)
-                    fabric_dist[coord_key]['nn'][nn_key] = distance
-                fabric_dist[coord_key]['mean_distance'] += fabric_dist[coord_key]['nn'][nn_key]
-
-            fabric_dist[coord_key]['n_edges'] = len(self.neurons[coord_key]['nn'])
-            fabric_dist[coord_key]['mean_distance'] = fabric_dist[coord_key]['mean_distance'] / fabric_dist[coord_key]['n_edges']
-
-        return fabric_dist
+        for community in self.communities:
+            for coord_key in self.communities[community]['neuro_columns']:
+                self.neurons[coord_key]['community'] = community
 
     def merge_neurons(self, coords: list, merge_factors: list) -> NeuroColumn:
         """
@@ -636,7 +683,7 @@ class NeuralFabric:
             merged_column.merge(neuro_column=self.neurons[coord_key]['neuro_column'], merge_factor=merge_factor)
         return merged_column
 
-    def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, reset_updated: bool = False, community_sdr: bool = False) -> dict:
+    def decode(self, coords: set = None, all_details: bool = True, only_updated: bool = False, reset_updated: bool = False) -> dict:
         """
         method to decode the entire fabric
 
@@ -644,7 +691,6 @@ class NeuralFabric:
         :param all_details: If True then all fabric properties will be included else if False just the NeuroColumns
         :param only_updated: If True only the changed data willbe included else if False then all data
         :param reset_updated: If True the update flags will be reset to False else if False the update flags left as is
-        :param community_sdr: If True then the community sdr is included
         :return: dictionary representation of the fabric properties
         """
 
@@ -674,9 +720,12 @@ class NeuralFabric:
                       'mean_distance': self.mean_distance,
                       'sum_similarity': self.sum_similarity,
                       'mean_similarity': self.mean_similarity,
-                      'neuro_columns': {},
-                      'communities': {community: {nc for nc in self.communities[community]} for community in self.communities}
+                      'neuro_columns': {}
                       }
+
+            fabric['communities'] = {community: {'neuro_columns': [nc for nc in self.communities[community]['neuro_columns']],
+                                                 'mean_similarity': self.communities[community]['mean_similarity']
+                                                 } for community in self.communities}
 
             if reset_updated:
                 for ref_id in fabric['anomaly']:
@@ -703,11 +752,9 @@ class NeuralFabric:
                                                                if isinstance(self.neurons[coord_key][n_attr], set)
                                                                else self.neurons[coord_key][n_attr])
                                                       for n_attr in self.neurons[coord_key]
-                                                      if n_attr not in ['neuro_column', 'community_nc', 'updated']}
+                                                      if n_attr not in ['neuro_column', 'updated']}
 
                 fabric['neuro_columns'][coord_key]['neuro_column'] = self.neurons[coord_key]['neuro_column'].decode(only_updated)
-                if community_sdr:
-                    fabric['neuro_columns'][coord_key]['community_nc'] = self.neurons[coord_key]['community_nc'].decode(only_updated)
 
         return fabric
 
@@ -742,9 +789,7 @@ class NeuralFabric:
                                        'mean_distance': fabric['neuro_columns'][coord_key]['mean_distance'],
                                        'sum_similarity': fabric['neuro_columns'][coord_key]['sum_similarity'],
                                        'mean_similarity': fabric['neuro_columns'][coord_key]['mean_similarity'],
-                                       'community_nc': NeuroColumn(prune_threshold=self.prune_threshold),
-                                       'community_label': fabric['neuro_columns'][coord_key]['community_label'],
-                                       'community_label_prob': fabric['neuro_columns'][coord_key]['community_label_prob'],
+                                       'community': fabric['neuro_columns'][coord_key]['community'],
                                        'updated': False,
                                        'nn': fabric['neuro_columns'][coord_key]['nn']
                                        }
@@ -753,8 +798,3 @@ class NeuralFabric:
             #
             for neuron_id in fabric['neuro_columns'][coord_key]['neuro_column']:
                 self.neurons[coord_key]['neuro_column'].upsert_sdr(sdr=fabric['neuro_columns'][coord_key]['neuro_column'][neuron_id], neuron_id=neuron_id)
-
-            # init the community neuro_column
-            #
-            self.neurons[coord_key]['community_nc'].upsert_sdr(sdr=fabric['neuro_columns'][coord_key]['community_nc'], neuron_id=0)
-

@@ -3,6 +3,7 @@
 
 import time
 import random
+from copy import deepcopy
 
 import plotly.graph_objects as go
 
@@ -50,7 +51,7 @@ def print_anomalies(amf, por_results):
     fig.show()
 
 
-def plot_fabric_3d(fabric, title, coords_to_highlight=None, neurons_to_plot=None, short_term_memory=1):
+def plot_fabric_3d(fabric, title, coords_to_highlight=None, neurons_to_plot=None, short_term_memory=1, edges_to_cut=None):
     x_node = []
     y_node = []
     z_node = []
@@ -112,7 +113,7 @@ def plot_fabric_3d(fabric, title, coords_to_highlight=None, neurons_to_plot=None
                 colors.append('rgba({},{},{},{})'.format(r, g, b, opacity))
 
                 labels.append(
-                    'NeuroColumn: {}<br>Neuron: {}<br>n_BMU: {}<br>last_bmu: {}<br>n_nn: {}<br>last_nn: {}<br>mean_dist: {}<br>mean_sim: {}<br>r: {}<br>g:{}<br>b:{}<br>community:{}<br>community_prob:{}'.format(
+                    'NeuroColumn: {}<br>Neuron: {}<br>n_BMU: {}<br>last_bmu: {}<br>n_nn: {}<br>last_nn: {}<br>mean_dist: {}<br>mean_sim: {}<br>r: {}<br>g:{}<br>b:{}<br>community:{}'.format(
                         coord_id,
                         neuron_id,
                         fabric['neuro_columns'][coord_id]['n_bmu'],
@@ -122,8 +123,8 @@ def plot_fabric_3d(fabric, title, coords_to_highlight=None, neurons_to_plot=None
                         fabric['neuro_columns'][coord_id]['mean_distance'] if 'mean_distance' in fabric['neuro_columns'][coord_id] else None,
                         fabric['neuro_columns'][coord_id]['mean_similarity'] if 'mean_similarity' in fabric['neuro_columns'][coord_id] else None,
                         r, g, b,
-                        fabric['neuro_columns'][coord_id]['community_label'],
-                        fabric['neuro_columns'][coord_id]['community_label_prob'],
+                        fabric['neuro_columns'][coord_id]['community'],
+
                         ))
 
                 # connect neurons in same column
@@ -149,12 +150,13 @@ def plot_fabric_3d(fabric, title, coords_to_highlight=None, neurons_to_plot=None
                 # connect neuro_columns
                 #
                 for nn_id in fabric['neuro_columns'][coord_id]['nn']:
+
                     nn_x = fabric['neuro_columns'][nn_id]['coord'][0]
                     nn_y = fabric['neuro_columns'][nn_id]['coord'][1]
 
                     pair = (min((x, y, neuron_id), (nn_x, nn_y, neuron_id)), max((x, y, neuron_id), (nn_x, nn_y, neuron_id)))
 
-                    if pair not in pairs:
+                    if pair not in pairs and (edges_to_cut is None or (((x, y), (nn_x, nn_y)) not in edges_to_cut and ((nn_x, nn_y), (x, y)) not in edges_to_cut)):
                         pairs.add(pair)
                         nn_z = max(neurons_to_plot) - neuron_id
                         x_edge.append(x)
@@ -338,7 +340,7 @@ def test():
 
     por_results = []
 
-    client = 'ABC_Ltd'
+    client = 'GHI_Ltd'
     s_1 = time.time()
     for rec_id in range(len(training_sdrs[client])):
         por = amf.train(sdr=training_sdrs[client][rec_id][1], ref_id=training_sdrs[client][rec_id][0], non_hebbian_edges=('generalise', ), fast_search=False)
@@ -347,14 +349,15 @@ def test():
 
     print('loop', e_1 - s_1)
 
-    fabric = amf.decode_fabric(community_sdr=True)
+    fabric = amf.decode_fabric()
 
     plot_fabric_3d(fabric=fabric, title='Trained AMF', neurons_to_plot=[0])
 
-    communities = amf.get_communities()
     print('finished')
 
 
 
+
 if __name__ == '__main__':
+
     test()
