@@ -19,6 +19,9 @@ class AMFabric:
                  mp_threshold: float = 0.1,
                  structure: str = 'star',
                  prune_threshold: float = 0.00001,
+                 min_cluster_size: int = 2,
+                 cluster_start_threshold: float = 0.5,
+                 cluster_step: float = 0.01,
                  random_seed=None) -> None:
         """
         class that implements the associative memory fabric
@@ -28,7 +31,10 @@ class AMFabric:
         :param mp_threshold: the noise threshold used to determine anomalies and motifs using matrix profile
         :param structure: str - 'star' structure each column has 4 neighbours  or 'box' structure where each column has 8 neighbours
         :param prune_threshold: float - threshold below which learnt edges are assumed to have zero probability and removed
-
+        :param min_cluster_size: minimum number of neuro_columns allowed in a cluster
+        :param cluster_start_threshold: starting similarity threshold
+        :param cluster_step: increment in similarity threshold during search
+        :param random_seed: a seed to ensure repeatable experiments
         """
 
         # fabric components setup during initialisation
@@ -58,6 +64,19 @@ class AMFabric:
         """ the edge_types that are not to be learned using a hebbian rule """
 
         self.hebbian_edge_types = {'edges': set(), 'updated': True}
+        """ the edge types that can be learned using a hebbian rule """
+
+        self.persist_graph = None
+        """ the persist graph describing the fabric """
+
+        self.min_cluster_size = min_cluster_size
+        """ the minimum number of neuro_columns allowed in a cluster """
+
+        self.cluster_start_threshold = cluster_start_threshold
+        """ the similarity theshold to start the search for clusters of neuro_columns """
+
+        self.cluster_step = cluster_step
+        """ the increment in similarity threshold used in searching for clusters of neuro_columns """
 
         # seed the random number generator if required
         #
@@ -352,7 +371,7 @@ class AMFabric:
 
         return result
 
-    def decode_fabric(self, all_details: bool = False, min_cluster_size=1, start_threshold=0.6, step=0.005) -> dict:
+    def decode_fabric(self, all_details: bool = False, min_cluster_size: Optional[int] = None, start_threshold: Optional[float] = None, step: Optional[float] = None) -> dict:
         """
         method extracts the neural fabric into a dict structure whilst decoding each SDR
         :param all_details: if True will include all details of the fabric
@@ -361,6 +380,13 @@ class AMFabric:
         :param step: increment in similarity threshold during search
         :return: dictionary keyed by neuron column coordinates containing all the attributes
         """
+
+        if min_cluster_size is None:
+            min_cluster_size = self.min_cluster_size
+        if start_threshold is None:
+            start_threshold = self.cluster_start_threshold
+        if step is None:
+            step = self.cluster_step
 
         # make sure communities have been updated
         #
@@ -374,18 +400,26 @@ class AMFabric:
                                     reset_updated=False)
         return fabric
 
-    def get_communities(self, min_cluster_size=2, start_threshold=0.6, step=0.01):
+    def get_communities(self, min_cluster_size: int = None, start_threshold: float = None, step: float = None):
         """
         method to find the minimum number of communities
+        :param min_cluster_size: minimum number of neuro_columns allowed in a cluster
+        :param start_threshold: starting similarity threshold
+        :param step: increment in similarity threshold during search
         :return: None
         """
+
+        if min_cluster_size is None:
+            min_cluster_size = self.min_cluster_size
+        if start_threshold is None:
+            start_threshold = self.cluster_start_threshold
+        if step is None:
+            step = self.cluster_step
 
         self.fabric.update_communities(min_cluster_size=min_cluster_size,
                                        start_threshold=start_threshold,
                                        step=step,
                                        edge_type_filters=self.hebbian_edge_types['edges'])
-
-        return
 
     def get_anomalies(self) -> dict:
         """
@@ -401,9 +435,9 @@ class AMFabric:
         """
         return deepcopy(self.fabric.motif)
 
-    def get_persist_graph(self, ref_id: Union[str, int], pg_to_update: Optional[AMFGraph] = None, only_updated: bool = True):
+    def update_persist_graph(self, ref_id: Union[str, int], pg_to_update: Optional[AMFGraph] = None, only_updated: bool = True):
         """
-        method to return a graph representation (persistence graph) of the fabric
+        method to update a graph representation (persistence graph) of the fabric
 
         :param ref_id: a unique reference that will be tagged on every changed edge
         :param pg_to_update: If provided this AMFGraph will be updated
@@ -421,9 +455,11 @@ class AMFabric:
         # we will either update existing or create a new graph
         #
         if pg_to_update is None:
-            pg = AMFGraph()
+            if self.persist_graph is None:
+                self.persist_graph = AMFGraph()
+
         else:
-            pg = pg_to_update
+            self.persist_graph = pg_to_update
 
         # get a copy of the fabric data
         #
@@ -437,8 +473,8 @@ class AMFabric:
 
         # make sure node representing this part of the fabric is in graph
         #
-        if amfabric_node not in pg:
-            pg.set_node(node=amfabric_node)
+        if amfabric_node not in self.persist_graph:
+            self.persist_graph.set_node(node=amfabric_node)
 
             # add edge to represent the setup data
             #
@@ -446,17 +482,21 @@ class AMFabric:
                                'mp_threshold': self.mp_threshold,
                                'structure': self.structure,
                                'prune_threshold': self.prune_threshold,
+                               'min_cluster_size': self.min_cluster_size,
+                               'cluster_start_threshold': self.cluster_start_threshold,
+                               'cluster_step': self.cluster_step,
                                'ref_id': str_ref_id}
 
-            pg.update_edge(source=amfabric_node, target=('AMFabricSetup', '*'), edge=('has_amfabric_setup', None), prob=1.0, **edge_properties)
+            self.persist_graph.update_edge(source=amfabric_node, target=('AMFabricSetup', '*'), edge=('has_amfabric_setup', None), prob=1.0, **edge_properties)
 
         # we will store some of the fabric stats in a single self referencing edge between the AMFabric node
         # if this edge is already in the graph then update with changes
         #
-        if amfabric_node in pg[amfabric_node] and ('AMFabricStats', '*') in pg[amfabric_node]:
+        if amfabric_node in self.persist_graph[amfabric_node] and ('AMFabricStats', '*') in self.persist_graph[amfabric_node]:
+
             # copy existing properties of edge
             #
-            edge_properties = deepcopy(pg[amfabric_node][('AMFabricStats', '*')][(('has_amfabric_stats', None), None)])
+            edge_properties = deepcopy(self.persist_graph[amfabric_node][('AMFabricStats', '*')][(('has_amfabric_stats', None), None)])
 
             # update the properties as required
             #
@@ -481,12 +521,12 @@ class AMFabric:
         #
         edge_properties['ref_id'] = ref_id
 
-        pg.update_edge(source=amfabric_node, target=('AMFabricStats', '*'), edge=('has_amfabric_stats', None), prob=1.0, **edge_properties)
+        self.persist_graph.update_edge(source=amfabric_node, target=('AMFabricStats', '*'), edge=('has_amfabric_stats', None), prob=1.0, **edge_properties)
 
         # add edge to represent the short term memory data and associated properties
         #
         edge_properties = {'short_term_memory': [deepcopy(sdr.sdr) for sdr in self.short_term_memory], 'ref_id': ref_id}
-        pg.update_edge(source=amfabric_node, target=('AMFabricSTM', '*'), edge=('has_amfabric_stm', None), prob=1.0, **edge_properties)
+        self.persist_graph.update_edge(source=amfabric_node, target=('AMFabricSTM', '*'), edge=('has_amfabric_stm', None), prob=1.0, **edge_properties)
 
         # add edge to represent the edge types seen so far
         #
@@ -498,7 +538,7 @@ class AMFabric:
             self.non_hebbian_edge_types['updated'] = False
             self.hebbian_edge_types['updated'] = False
 
-            pg.update_edge(source=amfabric_node, target=('AMFabricEdgeTypes', '*'), edge=('has_amfabric_edge_types', None), prob=1.0, **edge_properties)
+            self.persist_graph.update_edge(source=amfabric_node, target=('AMFabricEdgeTypes', '*'), edge=('has_amfabric_edge_types', None), prob=1.0, **edge_properties)
 
         # update the edges to each neuro_column
         #
@@ -506,8 +546,8 @@ class AMFabric:
             nc_node = ('NeuroColumn', '{}:{}'.format(self.uid, coord))
 
             edge_properties = {}
-            if nc_node in pg[amfabric_node] and (('has_amfabric_neuro_column', None), None) in pg[amfabric_node][nc_node]:
-                edge_properties = deepcopy(pg[amfabric_node][nc_node][(('has_amfabric_neuro_column', None), None)])
+            if nc_node in self.persist_graph[amfabric_node] and (('has_amfabric_neuro_column', None), None) in self.persist_graph[amfabric_node][nc_node]:
+                edge_properties = deepcopy(self.persist_graph[amfabric_node][nc_node][(('has_amfabric_neuro_column', None), None)])
 
             # upsert the changed properties
             #
@@ -519,9 +559,8 @@ class AMFabric:
             #
             edge_properties['ref_id'] = str_ref_id
 
-            pg.update_edge(source=amfabric_node, target=nc_node, edge=('has_amfabric_neuro_column', None), prob=1.0, **edge_properties)
+            self.persist_graph.update_edge(source=amfabric_node, target=nc_node, edge=('has_amfabric_neuro_column', None), prob=1.0, **edge_properties)
 
-            added_generalised_node = False
             for edge in fabric['neuro_columns'][coord]['neuro_column']:
 
                 # the name of the edge has to be qualified by the fabric neuro_column
@@ -549,16 +588,33 @@ class AMFabric:
 
                 edge_key = (fabric['neuro_columns'][coord]['neuro_column'][edge]['edge_type'], edge_uid)
 
-                pg.update_edge(source=source_node, target=target_node, edge=edge_key,
-                               prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
-                               generalised_edge_uid=fabric['neuro_columns'][coord]['neuro_column'][edge]['edge_uid'],
-                               neuro_column=coord,
-                               coord=fabric['neuro_columns'][coord]['coord'],
-                               amfabric=self.uid,
-                               neuron_id=fabric['neuro_columns'][coord]['neuro_column'][edge]['neuron_id'],
-                               ref_id=str_ref_id)
+                self.persist_graph.update_edge(source=source_node, target=target_node, edge=edge_key,
+                                               prob=prob, numeric=numeric, numeric_min=numeric_min, numeric_max=numeric_max,
+                                               generalised_edge_uid=fabric['neuro_columns'][coord]['neuro_column'][edge]['edge_uid'],
+                                               neuro_column=coord,
+                                               coord=fabric['neuro_columns'][coord]['coord'],
+                                               amfabric=self.uid,
+                                               neuron_id=fabric['neuro_columns'][coord]['neuro_column'][edge]['neuron_id'],
+                                               ref_id=str_ref_id)
 
-        return pg
+        return self.persist_graph
+
+    def get_persist_graph(self, ref_id: str) -> AMFGraph:
+        """
+        method to return the current persist_graph
+        :return: the persist_graph
+        """
+
+        # make sure communities have been updated
+        #
+        self.fabric.update_communities(min_cluster_size=self.min_cluster_size,
+                                       start_threshold=self.cluster_start_threshold,
+                                       step=self.cluster_step,
+                                       edge_type_filters=self.hebbian_edge_types['edges'])
+
+        self.update_persist_graph(ref_id=ref_id, only_updated=True)
+
+        return self.persist_graph
 
     def set_persist_graph(self, pg: AMFGraph) -> None:
         """
@@ -568,6 +624,10 @@ class AMFabric:
         :return: None
         """
 
+        # make sure the persist graph is rebuilt next time get_persist_graph is called
+        #
+        self.persist_graph = None
+
         # restore basic setup properties
         #
         has_setup = pg[('AMFabric', self.uid)][('AMFabricSetup', '*')][(('has_amfabric_setup', None), None)]
@@ -575,6 +635,9 @@ class AMFabric:
         self.mp_threshold = has_setup['mp_threshold']
         self.structure = has_setup['structure']
         self.prune_threshold = has_setup['prune_threshold']
+        self.min_cluster_size = has_setup['min_cluster_size']
+        self.cluster_start_threshold = has_setup['cluster_start_threshold']
+        self.cluster_step = has_setup['cluster_step']
 
         # restore short term memory
         #
