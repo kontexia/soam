@@ -577,7 +577,7 @@ class NeuralFabric:
 
         return clusters, mean_cluster_similarity, mean_cluster_size, min_cluster_size, max_cluster_size, max_cluster_id
 
-    def update_communities(self, min_cluster_size: int = 2, start_threshold: float = 0.6, step: float = 0.01, edge_type_filters: set = None):
+    def update_communities(self, min_cluster_size: int = 2, start_threshold: float = 0.5, step: float = 0.01, edge_type_filters: set = None):
         """
         method to find the clusters of neuro_columns based on the measured similarity
         :param min_cluster_size: minimum number of neuro_columns allowed in a cluster
@@ -640,11 +640,12 @@ class NeuralFabric:
 
         self.communities = prev_clusters[0]
         if ignore_nc is not None:
-            self.communities[-1] = ignore_nc
+            self.communities[-1] = {'neuro_columns': ignore_nc, 'mean_similarity': -1}
 
         for community in self.communities:
             for coord_key in self.communities[community]['neuro_columns']:
                 self.neurons[coord_key]['community'] = community
+                self.neurons[coord_key]['updated'] = True
 
     def merge_neurons(self, coords: list, merge_factors: list) -> NeuroColumn:
         """
