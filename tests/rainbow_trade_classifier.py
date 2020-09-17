@@ -336,11 +336,15 @@ def test():
                    mp_threshold=0.15,
                    structure='star',
                    prune_threshold=0.0,
-                   random_seed=221166)
+                   random_seed=221166,
+                   min_cluster_size=2,
+                   cluster_start_threshold=0.5,
+                   cluster_step=0.01
+                   )
 
     por_results = []
 
-    client = 'GHI_Ltd'
+    client = 'MNO_Ltd'
     s_1 = time.time()
     for rec_id in range(len(training_sdrs[client])):
         por = amf.train(sdr=training_sdrs[client][rec_id][1], ref_id=training_sdrs[client][rec_id][0], non_hebbian_edges=('generalise', ), fast_search=False)
