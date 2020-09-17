@@ -166,11 +166,13 @@ class AMFabric:
             # if we have just created the first neurocolumns then force the first bmu to have coordinate 0, 0
             #
             por['bmu'] = '0:0'
-            por['bmu_distance'] = search_results['fabric_distance']['0:0']['distance']
-            por['bmu_similarity'] = search_results['fabric_distance']['0:0']['similarity']
+            por['bmu_distance'] = 0.0       # by forcing distance to 0.0 /similarity to 1.0 then neuro_column 0:0 will effectively copy the sdr
+            por['bmu_similarity'] = 1.0
             por['anomaly'] = search_results['anomaly']
             por['motif'] = search_results['motif']
             por['fabric_distance'] = search_results['fabric_distance']
+            por['fabric_distance']['0:0']['distance'] = 0.0
+            por['fabric_distance']['0:0']['similarity'] = 1.0
 
         else:
             # select actual bmu
