@@ -273,12 +273,24 @@ class NeuralFabric:
                                           'similarity': similarity,
                                           'last_bmu': self.neurons[coord_key]['last_bmu'],
                                           'por': por}
-                if fabric_dist[coord_key]['distance'] <= bmu_dist:
-                    bmu_dist = fabric_dist[coord_key]['distance']
-                    bmu_similarity = fabric_dist[coord_key]['similarity']
-                    bmu_coord_key = coord_key
 
-        if bmu_only:
+                if fabric_dist[coord_key]['distance'] <= bmu_dist:
+
+                    if bmu_dist == 0.0:
+                        # as the best distance is already 0 then only change to this neuro_column if it is a more active bmu
+                        #
+                        if self.neurons[coord_key]['n_bmu'] > self.neurons[bmu_coord_key]['n_bmu']:
+                            bmu_dist = fabric_dist[coord_key]['distance']
+                            bmu_similarity = fabric_dist[coord_key]['similarity']
+                            bmu_coord_key = coord_key
+                    else:
+                        bmu_dist = fabric_dist[coord_key]['distance']
+                        bmu_similarity = fabric_dist[coord_key]['similarity']
+                        bmu_coord_key = coord_key
+
+        # if we were using the fast search of just bmus and the distance is > 0.0 then check the nearest neighbours
+        #
+        if bmu_only and bmu_dist > 0.0:
             new_bmu_coord_key = None
             for coord_key in self.neurons[bmu_coord_key]['nn']:
                 if coord_key not in fabric_dist:
@@ -589,7 +601,17 @@ class NeuralFabric:
 
         # calculate a matrix of similarities between all neuro_columns
         #
-        similarity_mx = {}
+        similarity_mx: dict = {}
+        coord_key: str
+        nn_key: str
+        distance: float
+        similarity: float
+        por: dict
+        threshold: float = start_threshold
+        prev_clusters: Optional[tuple] = None
+        finished: bool = False
+        ignore_nc: Optional[set] = None
+        max_cluster_size: int = len(self.neurons) - min_cluster_size
 
         for coord_key in self.neurons:
 
@@ -612,12 +634,6 @@ class NeuralFabric:
                                                                                                           edge_type_filters=edge_type_filters)
                         similarity_mx[coord_key][nn_key] = similarity
 
-        threshold = start_threshold
-        prev_clusters = {}
-        finished = False
-        ignore_nc = None
-        max_cluster_size = len(self.neurons) - min_cluster_size
-
         while not finished:
 
             clusters = self.cluster_neuro_columns(similarity_mx=similarity_mx, threshold=threshold, ignore_nc=ignore_nc)
@@ -638,7 +654,8 @@ class NeuralFabric:
                 if threshold >= 1.0:
                     finished = True
 
-        self.communities = prev_clusters[0]
+        if prev_clusters is not None and len(prev_clusters) > 0:
+            self.communities = prev_clusters[0]
         if ignore_nc is not None:
             self.communities[-1] = {'neuro_columns': ignore_nc, 'mean_similarity': -1}
 
