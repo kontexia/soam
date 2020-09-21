@@ -100,6 +100,10 @@ def train_fabric():
                         fast_search=False)
         por_results.append(por)
 
+    p_results = []
+    for por in por_results:
+        p_results.append(por.result())
+
     # and persist
     #
     result = amf.persist_fabric(fabric_uid=client)
