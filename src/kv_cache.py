@@ -352,33 +352,34 @@ class KVGraphCache:
 
         return True
 
-    def set_kv(self, store_name: str, key: str, value: KVCacheValueType) -> bool:
+    def set_kv(self, store_name: str, key: str, value: KVCacheValueType, set_update_flag: bool = True) -> bool:
         """
         method to add a key value pair to a store. If key already exists then will overwrite
 
         :param store_name: the store name
         :param key: the unique key within the store
         :param value: the data to save
+        :param set_update_flag: if true then the update flag will be set
         :return: None
         """
 
         if store_name not in self._store:
             self._store[store_name] = {key: {'value': value,  # the data
                                              'persisted': False,  # indicates if this has been persisted to the database before
-                                             'updated': True  # indicates if it's been updated and needs persisting
+                                             'updated': set_update_flag  # indicates if it's been updated and needs persisting
                                              }
                                        }
             stored = True
         elif key not in self._store[store_name]:
             self._store[store_name][key] = {'value': value,  # the data
                                             'persisted': False,  # indicates if this has been persisted to the database before
-                                            'updated': True  # indicates if it's been updated and needs persisting
+                                            'updated': set_update_flag  # indicates if it's been updated and needs persisting
                                             }
             stored = True
         else:
             self._store[store_name][key]['value'] = value
             self._store[store_name][key]['persisted'] = False
-            self._store[store_name][key]['updated'] = True
+            self._store[store_name][key]['updated'] = set_update_flag
             stored = True
 
         return stored
