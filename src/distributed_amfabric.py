@@ -31,6 +31,8 @@ class DistributedAMFabric:
         else:
             self.client = dask_client
 
+        # the cache to save persistent graphs and por records in
+        #
         self.cache = DistributedCache(config=config, dask_client=dask_client)
 
     @staticmethod
@@ -53,6 +55,7 @@ class DistributedAMFabric:
                                   cluster_start_threshold: float = 0.5,
                                   cluster_step: float = 0.01,
                                   random_seed: Optional[Union[str, int]] = None,
+                                  save_por_history: bool = True,
                                   restore: bool = True) -> bool:
         """
         method to create / restore a distributed AMFabric
@@ -66,6 +69,7 @@ class DistributedAMFabric:
         :param cluster_step: increment in similarity threshold during search
         :param random_seed: a seed for the randomisation of the fabric
         :param restore: If True then the fabric will be restored from the database
+        :param save_por_history: If True then the por history will be saved
         :return: True if successfully restored else false
         """
 
@@ -101,6 +105,7 @@ class DistributedAMFabric:
                                                cluster_start_threshold,
                                                cluster_step,
                                                random_seed,
+                                               save_por_history,
                                                actor=True)
 
             # create the distributed variable and store the new fabric actor
@@ -123,6 +128,14 @@ class DistributedAMFabric:
                     fabric = fabric_future.result()
                     fabric.set_persist_graph(pg=pg)
                     result = True
+            else:
+                # make sure the distributed cache has a store for the persistent graph
+                #
+                self.cache.create_distributed_store(store_name=self.config['fabric_graph'], restore=False)
+
+            # create a cache for the por
+            #
+            self.cache.create_distributed_store(store_name='{}_por'.format(self.config['fabric_graph']), restore=False)
 
         fabric_lock.release()
 
@@ -248,6 +261,7 @@ class DistributedAMFabric:
             if persist:
                 pg = fabric.update_persist_graph(only_updated=True, ref_id=ref_id)
                 pg = pg.result()
+
             if fabric_lock is not None:
                 fabric_lock.release()
 
@@ -288,7 +302,18 @@ class DistributedAMFabric:
             fabric_key = 'AMFabric_{}'.format(fabric_uid)
             pg_future = fabric.get_persist_graph('persist')
             pg = pg_future.result()
-            result = self.cache.set_kv(store_name=self.config['fabric_graph'], key=fabric_key, value=pg, persist=True)
+            result = self.cache.set_kv(store_name=self.config['fabric_graph'], key=fabric_key, value=pg, set_update_flag=True, persist=True)
+
+            por_future = fabric.get_por_history()
+            pors = por_future.result()
+            persist = False
+            for por_idx in range(len(pors)):
+
+                # if this is the last record then set persist flag
+                #
+                if por_idx == len(pors) - 1:
+                    persist = True
+                self.cache.set_kv(store_name='{}_por'.format(self.config['fabric_graph']), key=pors[por_idx]['uid'], value=pors[por_idx], set_update_flag=True, persist=persist)
 
             if fabric_lock is not None:
                 fabric_lock.release()

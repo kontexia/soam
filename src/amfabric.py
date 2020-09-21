@@ -22,7 +22,8 @@ class AMFabric:
                  min_cluster_size: int = 2,
                  cluster_start_threshold: float = 0.5,
                  cluster_step: float = 0.01,
-                 random_seed=None) -> None:
+                 random_seed=None,
+                 save_por_history=False) -> None:
         """
         class that implements the associative memory fabric
 
@@ -35,6 +36,7 @@ class AMFabric:
         :param cluster_start_threshold: starting similarity threshold
         :param cluster_step: increment in similarity threshold during search
         :param random_seed: a seed to ensure repeatable experiments
+        :param save_por_history: If true tge por history will be saved
         """
 
         # fabric components setup during initialisation
@@ -78,6 +80,12 @@ class AMFabric:
         self.cluster_step = cluster_step
         """ the increment in similarity threshold used in searching for clusters of neuro_columns """
 
+        self.save_por_history = save_por_history
+        """ flag to indicate if the por history must be saved """
+
+        self.por_history = []
+        """ the history of por """
+
         # seed the random number generator if required
         #
         if random_seed is not None:
@@ -103,7 +111,16 @@ class AMFabric:
 
         # start building the por
         #
-        por = {'ref_id': str_ref_id,
+        por = {# unique reference for this por
+               'uid': '{}:{}'.format(self.uid, ref_id),
+
+               # the fabric
+               #
+               'fabric': self.uid,
+
+               # the reference id for this update
+               #
+               'ref_id': str_ref_id,
 
                # the current anomaly threshold before any update
                #
@@ -137,6 +154,8 @@ class AMFabric:
                              for edge_key in neuro_column
                              if neuro_column[edge_key]['edge_type'] not in self.non_hebbian_edge_types['edges']}
 
+            # keep track of the hebbian edges
+            #
             self.hebbian_edge_types['edges'].update(hebbian_edges)
         else:
             hebbian_edges = None
@@ -243,8 +262,6 @@ class AMFabric:
 
         # update the bmu and its neighbours stats
         #
-        # self.fabric.update_bmu_stats(bmu_coord_key=bmu_coord_key, distance=bmu_distance, similarity=bmu_similarity)
-
         self.fabric.update_bmu_stats(bmu_coord_key=bmu_coord_key, fabric_dist=fabric_dist)
 
         # get neighbourhood of neurons to learn
@@ -276,6 +293,12 @@ class AMFabric:
                      'mean_distance':  self.fabric.mean_distance,
                      'std_distance': self.fabric.std_distance,
                      }
+
+        # update the history of por
+        #
+        por = deepcopy(search_por)
+        por.update(learn_por)
+        self.por_history.append(por)
 
         return learn_por
 
@@ -487,6 +510,7 @@ class AMFabric:
                                'min_cluster_size': self.min_cluster_size,
                                'cluster_start_threshold': self.cluster_start_threshold,
                                'cluster_step': self.cluster_step,
+                               'save_por_history': self.save_por_history,
                                'ref_id': str_ref_id}
 
             self.persist_graph.update_edge(source=amfabric_node, target=('AMFabricSetup', '*'), edge=('has_amfabric_setup', None), prob=1.0, **edge_properties)
@@ -601,6 +625,15 @@ class AMFabric:
 
         return self.persist_graph
 
+    def get_por_history(self) -> list:
+        """
+        method to return history of por and then empties the list
+        :return: the por history
+        """
+        history = copy(self.por_history)
+        self.por_history = []
+        return history
+
     def get_persist_graph(self, ref_id: str) -> AMFGraph:
         """
         method to return the current persist_graph
@@ -640,6 +673,8 @@ class AMFabric:
         self.min_cluster_size = has_setup['min_cluster_size']
         self.cluster_start_threshold = has_setup['cluster_start_threshold']
         self.cluster_step = has_setup['cluster_step']
+        self.save_por_history = has_setup['save_por_history']
+        self.por_history = []
 
         # restore short term memory
         #

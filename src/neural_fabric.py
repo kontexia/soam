@@ -314,12 +314,12 @@ class NeuralFabric:
         anomaly = False
         motif = False
         if ref_id is not None:
-            anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_dist[bmu_coord_key]['por'], ref_id=ref_id)
+            anomaly, motif = self.detect_anomaly_motif(bmu_coord_key=bmu_coord_key, distance=bmu_dist, por=fabric_dist[bmu_coord_key]['por'], ref_id=ref_id, update_id=(self.mapped + 1))
 
         return {'bmu_coord': bmu_coord_key, 'bmu_distance': bmu_dist, 'bmu_similarity': bmu_similarity,
                 'anomaly': anomaly, 'motif': motif, 'fabric_distance': fabric_dist}
 
-    def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: dict, ref_id: str) -> tuple:
+    def detect_anomaly_motif(self, bmu_coord_key: str, distance: float, por: dict, ref_id: str, update_id: int) -> tuple:
         """
         method to detect if an anomaly or motif has occurred based on the recent max and min bmu distances. This is an implementation of matrix profile
 
@@ -327,6 +327,7 @@ class NeuralFabric:
         :param distance: double - bmu distance
         :param por: - path of reasoning dict
         :param ref_id: str - the reference id of this update
+        :param update_id: the training id of this update
         :return: tuple of bools with format (anomaly, motif)
         """
 
@@ -359,11 +360,11 @@ class NeuralFabric:
                 #
                 if distance <= self.motif_threshold:
 
-                    self.motif[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.motif_threshold, 'por': por, 'updated': True}
+                    self.motif[ref_id] = {'update_id': update_id, 'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.motif_threshold, 'por': por, 'updated': True}
                     motif = True
 
                 if distance >= self.anomaly_threshold:
-                    self.anomaly[ref_id] = {'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.anomaly_threshold, 'por': por, 'updated': True}
+                    self.anomaly[ref_id] = {'update_id': update_id, 'bmu_coord': bmu_coord_key, 'distance': distance, 'threshold': self.anomaly_threshold, 'por': por, 'updated': True}
                     anomaly = True
 
             # calculate the exponential moving average of the matrix profile
@@ -403,6 +404,8 @@ class NeuralFabric:
         #
         self.mapped += 1
 
+        # ignore the first 20 samples
+        #
         if self.mapped >= 20:
             if self.mapped == 20:
                 self.sum_distance = fabric_dist[bmu_coord_key]['distance']
@@ -411,6 +414,9 @@ class NeuralFabric:
                 self.mean_similarity = fabric_dist[bmu_coord_key]['similarity']
 
             else:
+
+                # calculate the online mean and standard deviation
+                #
                 count = self.mapped - 20
                 delta = self.mean_distance + ((fabric_dist[bmu_coord_key]['distance'] - self.mean_distance) / count)
 
