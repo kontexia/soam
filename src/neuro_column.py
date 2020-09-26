@@ -113,7 +113,7 @@ class NeuroColumn:
 
             # normalise numeric if min and max provided
             #
-            if numeric_min is not None and numeric_min is not None:
+            if numeric_min is not None and numeric_max is not None:
                 self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)
                 self.edges[edge_key]['numeric_min'] = numeric_min
                 self.edges[edge_key]['numeric_max'] = numeric_max
