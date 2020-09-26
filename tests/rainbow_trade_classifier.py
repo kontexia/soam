@@ -425,7 +425,7 @@ def test():
 
     por_results = []
 
-    client = 'MNO_Ltd'
+    client = 'ABC_Ltd'
     s_1 = time.time()
     for rec_id in range(len(training_sdrs[client])):
         por = amf.train(sdr=training_sdrs[client][rec_id][1], ref_id=training_sdrs[client][rec_id][0], non_hebbian_edges=('generalise', ), fast_search=False)
@@ -437,6 +437,8 @@ def test():
     fabric = amf.decode_fabric(all_details=True)
 
     plot_fabric_3d(fabric=fabric, title='Trained AMF', neurons_to_plot=[0])
+
+    plot_matrix_profile(amf, por_results, std_factor=1)
 
     print('finished')
 

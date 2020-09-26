@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from typing import Optional, Tuple, Set
+from typing import Optional, Tuple, Set, List
 import networkx as nx
 import time
 from copy import deepcopy
@@ -84,7 +84,7 @@ class AMFGraph(nx.MultiDiGraph):
         #
         edge_key = (edge, None)
 
-        # remove exiting edge if it exists
+        # remove existing edge if it exists
         #
         if self.has_edge(source, target, key=edge_key):
             self.remove_edge(source, target, key=edge_key)
@@ -93,6 +93,7 @@ class AMFGraph(nx.MultiDiGraph):
         # note that '$' indicates special properties and distinguishes them from names of properties provided by library user
         #
         edge_properties = {'_created_ts': ts,
+                           '_expired_ts': None,
                            '_updated': True,             # flag indicating if it has been updated since last saved or restored
                            '_prob': prob,
                            '_numeric': numeric,
@@ -143,6 +144,7 @@ class AMFGraph(nx.MultiDiGraph):
 
             prev_properties = deepcopy(self[source][target][exist_edge_key])
             prev_properties['_updated'] = True
+            prev_properties['_expired_ts'] = ts
 
             # define the expired edge key - order is important and must be inline with edge key tuple constants defined above
             #
@@ -210,6 +212,7 @@ class AMFGraph(nx.MultiDiGraph):
             #
             prev_properties.update(properties)
             prev_properties['_updated'] = True
+            prev_properties['_expired_ts'] = ts
 
             # define the expired edge key - order is important and must be inline with edge key tuple constants defined above
             #
@@ -432,7 +435,7 @@ class AMFGraph(nx.MultiDiGraph):
                                                                  '_target_uid': target[1],
                                                                  '_edge_type': edge_key[EDGE_TYPE][0],
                                                                  '_edge_uid': edge_key[EDGE_TYPE][1],
-                                                                 '_expired_ts': edge_key[EDGE_EXPIRY],
+                                                                 #'_expired_ts': edge_key[EDGE_EXPIRY],
                                                                  **{prop: edge_prop[prop] for prop in edge_prop if prop != '_updated'}})
                 edge_prop['_updated'] = False
 
@@ -442,7 +445,9 @@ class AMFGraph(nx.MultiDiGraph):
         for edge in edges:
             edge_prop = {prop: edge[prop]
                          for prop in edge
-                         if prop not in ['_id', '_key', '_rev', '_from', '_to', '_source_uid', '_target_uid', '_source_type', '_target_type', '_edge_type', '_edge_uid', '_expired_ts']}
+                         #if prop not in ['_id', '_key', '_rev', '_from', '_to', '_source_uid', '_target_uid', '_source_type', '_target_type', '_edge_type', '_edge_uid', '_expired_ts']
+                         if prop not in ['_id', '_key', '_rev', '_from', '_to', '_source_uid', '_target_uid', '_source_type', '_target_type', '_edge_type', '_edge_uid']
+                         }
             self.add_edge((edge['_source_type'], edge['_source_uid']), (edge['_target_type'], edge['_target_uid']),
                           key=((edge['_edge_type'], edge['_edge_uid']), edge['_expired_ts']),
                           _updated=False, **edge_prop)
@@ -558,9 +563,11 @@ class AMFGraph(nx.MultiDiGraph):
                 elif key == '$created_ts':
                     value = item_to_check[1]['_created_ts']
                 elif key == '$expired_ts':
+                    value = item_to_check[1]['_expired_ts']
+
                     # expired_ts held in the edge_key tuple
                     #
-                    value = item_to_check[0][1]
+                    #value = item_to_check[0][1]
                 elif key in item_to_check[1]:
                     value = item_to_check[1][key]
                 else:
@@ -647,11 +654,11 @@ class AMFGraph(nx.MultiDiGraph):
         result_graph = self.edge_subgraph(edges)
         return result_graph
 
-    def _get_attr_sdr(self, node, nos_hops, exclude_nodes, exclude_edges=None, generalised_node_name=None) -> SDR:
+    def _get_attr_sdr(self, node, n_hops, exclude_nodes, exclude_edges=None, generalised_node_name=None) -> SDR:
         """
         recursive method to extract all nodes connected to a node
         :param node: the node to find connections from
-        :param nos_hops: the number of hops from node to find connections
+        :param n_hops: the number of hops from node to find connections
         :param exclude_edges: edges to ignore
         :param exclude_nodes: nodes not to revisit
         :param generalised_node_name: a substitute for node name
@@ -661,7 +668,10 @@ class AMFGraph(nx.MultiDiGraph):
         sdr = SDR()
         for target in self[node]:
             for edge in self[node][target]:
-                if exclude_edges is None or edge not in exclude_edges:
+
+                # only extract non expired, non excluded edges
+                #
+                if self[node][target][edge]['_expired_ts'] is None and (exclude_edges is None or edge not in exclude_edges):
                     edge_prob = self[node][target][edge]['_prob']
                     edge_numeric = None
                     edge_min = None
@@ -679,39 +689,49 @@ class AMFGraph(nx.MultiDiGraph):
                         src = node
                     sdr.set_item(source_node=src, edge=edge[EDGE_TYPE], target_node=target, probability=edge_prob, numeric=edge_numeric, numeric_min=edge_min, numeric_max=edge_max)
 
-                    if nos_hops - 1 > 0 and target not in exclude_nodes:
-                        sdr.update(self._get_attr_sdr(node=target, nos_hops=nos_hops - 1, exclude_nodes={target, *exclude_nodes}, exclude_edges=exclude_edges))
+                    if n_hops - 1 > 0 and target not in exclude_nodes:
+                        sdr.update(self._get_attr_sdr(node=target, n_hops=n_hops - 1, exclude_nodes={target, *exclude_nodes}, exclude_edges=exclude_edges))
         return sdr
 
-    def get_node_sdr(self, node: Node_Type,
-                     nos_hops: int = 1,
+    def get_node_sdr(self, extract_node_type: Node_Type_Type,
+                     extract_node_uid: Optional[Node_Uid_Type] = None,
+                     n_hops: int = 1,
                      exclude_edges: Set[Edge_Type] = None,
-                     target_node_edge: Optional[Edge_Type] = None,
-                     generalised_node_name: str = '*') -> SDR:
+                     extract_node_edge: Optional[Edge_Type] = None,
+                     generalised_node_name: str = '*') -> List[Tuple[Node_Type, SDR]]:
         """
         method that returns an SDR of a sub graph connected to node
 
-        :param node: the node to extract the sub graph for
-        :param nos_hops: the number of hops from node to search
+        :param extract_node_type: the node type to extract the sub graph for
+        :param extract_node_uid: the node uid to extract the sub graph for
+        :param n_hops: the number of hops from node to search
         :param exclude_edges: edge types to exclude from the extract
-        :param target_node_edge: If not None then node will be included in the SDR, connected to the generalised node via an edge with name 'target_node_name'
+        :param extract_node_edge: If not None then extract node will be included in the SDR, connected to the generalised node via an edge with name: extract_node_name
         :param generalised_node_name: a string to represent the generalised name of parameter node
-        :return: SDR
+        :return: list of SDRs
         """
 
-        sdr = SDR()
-        if node in self:
+        if extract_node_uid is not None:
+            nodes_to_extract = [(extract_node_type, extract_node_uid)]
+        else:
+            nodes_to_extract = [n for n in self if n[0] == extract_node_type]
+
+        sdrs = []
+        for node in nodes_to_extract:
+            sdr = SDR()
 
             # add the generalised edge to the target node if required
             #
-            if target_node_edge is not None:
-                sdr.set_item(source_node=(node[0], generalised_node_name), edge=target_node_edge, target_node=node, probability=1.0, numeric=None, numeric_min=None, numeric_max=None)
+            if extract_node_edge is not None:
+                sdr.set_item(source_node=(node[0], generalised_node_name), edge=extract_node_edge, target_node=node, probability=1.0, numeric=None, numeric_min=None, numeric_max=None)
 
             # get any attributes
             #
-            sdr.update(self._get_attr_sdr(node=node, nos_hops=nos_hops, generalised_node_name=generalised_node_name, exclude_nodes={node}, exclude_edges=exclude_edges))
+            sdr.update(self._get_attr_sdr(node=node, n_hops=n_hops, generalised_node_name=generalised_node_name, exclude_nodes={node}, exclude_edges=exclude_edges))
 
-        return sdr
+            sdrs.append((node, sdr))
+
+        return sdrs
 
     def get_target_node(self, node: Node_Type, edge_filter_func=None):
         result = None
@@ -863,19 +883,30 @@ class AMFGraph(nx.MultiDiGraph):
         fig.show()
 
 
-
 if __name__ == '__main__':
 
     g = AMFGraph()
 
+    g.set_edge(source=('Trade', 'XYZ_123'), target=('Client', 'abc ltd'), edge=('has', 'client'), prob=1.0)
 
-    g.set_edge(source=('Trade', 'XYZ_123'), target=('client', 'abc ltd'), edge=('has', 'client'), prob=1.0)
+    g.update_edge(source=('Trade', 'XYZ_123'), target=('Client', 'abc ltd'), edge=('has', 'client'), prob=0.5)
 
-    g.update_edge(source=('Trade', 'XYZ_123'), target=('client','abc ltd'), edge=('has', 'client'), prob=0.5)
+    g.set_edge(source=('Trade', 'ABC_123'), target=('Client', 'abc ltd'), edge=('has', 'client'), prob=1.0)
+
+    g.set_edge(source=('Client', 'abc ltd'), target=('Location', 'london'), edge=('has', 'location'), prob=1.0)
 
     g.plot()
 
     sg_1 = g.filter_sub_graph(query={'$edge': {'$expired_ts': {'$eq': None}}})
+
     print(sg_1)
+
+    sdrs_1 = g.get_node_sdr(extract_node_type='Trade', n_hops=1)
+
+    sdrs_2 = g.get_node_sdr(extract_node_type='Trade', n_hops=2)
+
+
+    print('finished')
+
 
 
