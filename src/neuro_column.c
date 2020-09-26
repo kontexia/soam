@@ -2593,7 +2593,7 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
     /* "src/neuro_column.py":116
  *             # normalise numeric if min and max provided
  *             #
- *             if numeric_min is not None and numeric_min is not None:             # <<<<<<<<<<<<<<
+ *             if numeric_min is not None and numeric_max is not None:             # <<<<<<<<<<<<<<
  *                 self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)
  *                 self.edges[edge_key]['numeric_min'] = numeric_min
  */
@@ -2604,7 +2604,7 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
       __pyx_t_9 = __pyx_t_11;
       goto __pyx_L6_bool_binop_done;
     }
-    __pyx_t_11 = (__pyx_v_numeric_min != Py_None);
+    __pyx_t_11 = (__pyx_v_numeric_max != Py_None);
     __pyx_t_10 = (__pyx_t_11 != 0);
     __pyx_t_9 = __pyx_t_10;
     __pyx_L6_bool_binop_done:;
@@ -2612,7 +2612,7 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
 
       /* "src/neuro_column.py":117
  *             #
- *             if numeric_min is not None and numeric_min is not None:
+ *             if numeric_min is not None and numeric_max is not None:
  *                 self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)             # <<<<<<<<<<<<<<
  *                 self.edges[edge_key]['numeric_min'] = numeric_min
  *                 self.edges[edge_key]['numeric_max'] = numeric_max
@@ -2636,7 +2636,7 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
       /* "src/neuro_column.py":118
- *             if numeric_min is not None and numeric_min is not None:
+ *             if numeric_min is not None and numeric_max is not None:
  *                 self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)
  *                 self.edges[edge_key]['numeric_min'] = numeric_min             # <<<<<<<<<<<<<<
  *                 self.edges[edge_key]['numeric_max'] = numeric_max
@@ -2670,7 +2670,7 @@ static PyObject *__pyx_f_3src_12neuro_column_11NeuroColumn_upsert(struct __pyx_o
       /* "src/neuro_column.py":116
  *             # normalise numeric if min and max provided
  *             #
- *             if numeric_min is not None and numeric_min is not None:             # <<<<<<<<<<<<<<
+ *             if numeric_min is not None and numeric_max is not None:             # <<<<<<<<<<<<<<
  *                 self.edges[edge_key]['numeric'] = (numeric - numeric_min) / (numeric_max - numeric_min)
  *                 self.edges[edge_key]['numeric_min'] = numeric_min
  */
