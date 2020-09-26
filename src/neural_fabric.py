@@ -491,7 +491,6 @@ class NeuralFabric:
             learn_rate = learn_rates[idx]
             self.neurons[coord_key]['neuro_column'].learn(neuro_column=neuro_column, learn_rate=learn_rate, hebbian_edges=hebbian_edges, is_bmu=bmu)
 
-    @cython.ccall
     def cluster_neuro_columns(self, similarity_mx: dict, threshold: float, ignore_nc: set = None) -> tuple:
         """
         method to find clusters of neuro_columns separated by a similarity threshold
