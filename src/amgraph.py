@@ -659,7 +659,7 @@ class AMFGraph(nx.MultiDiGraph):
         recursive method to extract all nodes connected to a node
         :param node: the node to find connections from
         :param n_hops: the number of hops from node to find connections
-        :param exclude_edges: edges to ignore
+        :param exclude_edges: edges types to ignore
         :param exclude_nodes: nodes not to revisit
         :param generalised_node_name: a substitute for node name
         :return: SDR
@@ -669,9 +669,9 @@ class AMFGraph(nx.MultiDiGraph):
         for target in self[node]:
             for edge in self[node][target]:
 
-                # only extract non expired, non excluded edges
+                # only extract non expired, non excluded edges types
                 #
-                if self[node][target][edge]['_expired_ts'] is None and (exclude_edges is None or edge not in exclude_edges):
+                if self[node][target][edge]['_expired_ts'] is None and (exclude_edges is None or edge[0][0] not in exclude_edges):
                     edge_prob = self[node][target][edge]['_prob']
                     edge_numeric = None
                     edge_min = None
@@ -696,7 +696,7 @@ class AMFGraph(nx.MultiDiGraph):
     def get_node_sdr(self, extract_node_type: Node_Type_Type,
                      extract_node_uid: Optional[Node_Uid_Type] = None,
                      n_hops: int = 1,
-                     exclude_edges: Set[Edge_Type] = None,
+                     exclude_edges: Set[Edge_Type_Type] = None,
                      extract_node_edge: Optional[Edge_Type] = None,
                      generalised_node_name: str = '*') -> List[Tuple[Node_Type, SDR]]:
         """
@@ -887,13 +887,13 @@ if __name__ == '__main__':
 
     g = AMFGraph()
 
-    g.set_edge(source=('Trade', 'XYZ_123'), target=('Client', 'abc ltd'), edge=('has', 'client'), prob=1.0)
+    g.set_edge(source=('Trade', 'XYZ_123'), target=('Client', 'abc ltd'), edge=('has_client', 'client'), prob=1.0)
 
-    g.update_edge(source=('Trade', 'XYZ_123'), target=('Client', 'abc ltd'), edge=('has', 'client'), prob=0.5)
+    g.update_edge(source=('Trade', 'XYZ_123'), target=('Client', 'abc ltd'), edge=('has_client', 'client'), prob=0.5)
 
-    g.set_edge(source=('Trade', 'ABC_123'), target=('Client', 'abc ltd'), edge=('has', 'client'), prob=1.0)
+    g.set_edge(source=('Trade', 'ABC_123'), target=('Client', 'abc ltd'), edge=('has_client', 'client'), prob=1.0)
 
-    g.set_edge(source=('Client', 'abc ltd'), target=('Location', 'london'), edge=('has', 'location'), prob=1.0)
+    g.set_edge(source=('Client', 'abc ltd'), target=('Location', 'london'), edge=('has_location', None), prob=1.0)
 
     g.plot()
 
@@ -905,8 +905,6 @@ if __name__ == '__main__':
 
     sdrs_2 = g.get_node_sdr(extract_node_type='Trade', n_hops=2)
 
+    sdrs_3 = g.get_node_sdr(extract_node_type='Trade', n_hops=2, exclude_edges={'has_location'})
 
     print('finished')
-
-
-
