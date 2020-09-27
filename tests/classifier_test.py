@@ -261,9 +261,12 @@ def test():
 
     s_1 = time.time()
     for rec_id in range(len(raw_data)):
-        sdr = raw_data_graph.get_node_sdr(node=('colour_interest', str(rec_id)), nos_hops=2,
-                                          generalised_node_name='*', target_node_edge=('generalise', None))
-        por = amf.train(sdr=sdr, ref_id=rec_id)
+        sdrs = raw_data_graph.get_node_sdr(extract_node_type='colour_interest',
+                                           extract_node_uid=str(rec_id),
+                                           n_hops=2,
+                                           generalised_node_name='*',
+                                           extract_node_edge=('generalise', None))
+        por = amf.train(sdr=sdrs[0][1], ref_id=rec_id)
         por_results.append(por)
     e_1 = time.time()
     print('loop', e_1 - s_1)
@@ -286,11 +289,14 @@ def test():
     nos_context = 0
     for rec_id in range(start_idx, end_idx):
         context_colour_sequence.append(raw_data[rec_id]['COLOUR'])
-        sdr = raw_data_graph.get_node_sdr(node=('colour_interest', str(rec_id)), nos_hops=2, exclude_edges={('has_rgb', None)})
+        sdrs = raw_data_graph.get_node_sdr(extract_node_type='colour_interest',
+                                           extract_node_uid=str(rec_id),
+                                           n_hops=2,
+                                           exclude_edges={'has_rgb'})
 
         if nos_context < short_term_memory - 1:
 
-            context.append(sdr)
+            context.append(sdrs[0][1])
             nos_context += 1
 
     print('predict sequence from idx {} given {}'.format(start_idx, context_colour_sequence[:-1]), '\n')
