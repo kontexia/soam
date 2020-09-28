@@ -150,15 +150,17 @@ class AMFabric:
                 self.non_hebbian_edge_types['edges'].update(non_hebbian_edges)
                 self.non_hebbian_edge_types['updated'] = True
 
-            hebbian_edges = {neuro_column[edge_key]['edge_type']
-                             for edge_key in neuro_column
-                             if neuro_column[edge_key]['edge_type'] not in self.non_hebbian_edge_types['edges']}
+        # update the hebbian edges
+        #
+        hebbian_edges = {neuro_column[edge_key]['edge_type']
+                         for edge_key in neuro_column
+                         if neuro_column[edge_key]['edge_type'] not in self.non_hebbian_edge_types['edges']}
 
+        if len(self.hebbian_edge_types['edges'] & hebbian_edges) != len(self.hebbian_edge_types['edges'] | hebbian_edges):
             # keep track of the hebbian edges
             #
             self.hebbian_edge_types['edges'].update(hebbian_edges)
-        else:
-            hebbian_edges = None
+            self.hebbian_edge_types['updated'] = True
 
         # get set of neuron_ids to search for
         #
@@ -169,13 +171,13 @@ class AMFabric:
         initial_setup = False
         if len(self.fabric.neurons) == 0:
             initial_setup = True
-            self.fabric.grow(example_neuro_column=neuro_column, hebbian_edges=hebbian_edges)
+            self.fabric.grow(example_neuro_column=neuro_column, hebbian_edges=self.hebbian_edge_types['edges'])
 
         # find the BMU by calculating the distance of the NeuroColumn to every column in the fabric
         #
         search_results = self.fabric.distance_to_fabric(neuro_column=neuro_column,
                                                         ref_id=str_ref_id,
-                                                        edge_type_filters=hebbian_edges,
+                                                        edge_type_filters=self.hebbian_edge_types['edges'],
                                                         neuron_id_filters=search_neuron_ids,
                                                         bmu_only=fast_search)
 
