@@ -92,7 +92,7 @@ class DistributedCache:
 
         return result
 
-    def set_kv(self, store_name: str, key: str, value: KVCacheValueType, set_update_flag: bool = True, persist: bool = True, lock_cache: bool = True) -> ActorFuture:
+    def set_kv(self, store_name: str, key: str, value: KVCacheValueType, set_update_flag: bool = True, persist: bool = True, keep_cache: bool = True, lock_cache: bool = True) -> ActorFuture:
         """
         method to add a key value pair to a store. If key already exists then will overwrite
 
@@ -102,6 +102,8 @@ class DistributedCache:
         :param set_update_flag: If true then the update flag will be set
         :param persist: If true the changes will be persisted in database
         :param lock_cache: If True the cache will be locked before accessing. If False it assumes a lock has already been acquired
+        :param keep_cache: If False then cache will be deleted after being persisted
+
         :return: ActorFuture with True if success else False
         """
 
@@ -119,7 +121,7 @@ class DistributedCache:
 
             result = cache.set_kv(store_name=store_name, key=key, value=value, set_update_flag=set_update_flag)
             if persist:
-                result = cache.persist(store_name=store_name)
+                result = cache.persist(store_name=store_name, keep_cache=keep_cache)
 
             if cache_lock is not None:
                 cache_lock.release()
