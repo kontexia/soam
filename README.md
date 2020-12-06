@@ -1,5 +1,5 @@
 # SOAM
-Python 3.7+ Implementation of Self Organising Associative Memory that can use Dask to scale and Cython for performance optimisations
+Python 3.7+ Implementation of Self Organising Associative Memory that can use Dask to scale and Cython for performance optimisations.
 SOAM is an example of an explainable Neural Network that uses online Hebbian learning of Network Graphs to cluster, classify and predict.
 
 Library can be used as pure Python or cythonised by running:
@@ -24,6 +24,7 @@ Library can be used as pure Python or cythonised by running:
 ### Network Graph Modules
 * amgraph.py - implements AMFGraph class (based on Networkx Multi Directional Graph) providing auditing of updates
 * sdr.py - implements SDR - a sparse data representation of a network graph suitable for training AMFabric
+* subgraph.py - implements SubGraph - a sparse data reprersentation of a netwrok graph suitable for training Neuro-Gas fabric
 
 ### In-memory Cache
 * kv_cache.py - implements a simple key value cache that provides persistence and understands AMFGraph 
@@ -37,10 +38,14 @@ Library can be used as pure Python or cythonised by running:
 * neural_fabric.py - Cython optimised implementation of a fabric of neuro_columns
 * amfabric.py - implementation of an online, self organising associative memory fabric
 * distributed_amfabric - a Dask distributed AMFabric
+* neuro_gas_fabric - implementation of the neuro-gas fabric model (defined as functions to facilitate Dask version)
+* distibuted_neuro_gas - a Dask distributed neuro-gas fabric
 
 ## Tests Modules
 * rainbow_trade_classifier - reads in rainbow trade data from /data dir and trains an in-memory AMFabric
 * distributed_amfabric_test - reads in rainbow trade data from /data dir and trains a Dask distributed AMFabric
+* neuro_gas_test - tests for neuro-gas fabric
+* training_publisher - publisher to train distributed neuro-gas fabric
 
 ## Tutorial Jupyter Lab Notebooks
 ** NOTE ** notebooks rely on Plotly Jupyter Lab extensions that require installation of Node.js and access to npm.
