@@ -143,7 +143,7 @@ def add_domain(fabric: dict,
 
         # dictionary of mins and maxes keyed by group of edge types
         #
-        'sdr_edge_min_max': {},
+        'sg_edge_min_max': {},
 
         # edge types used for finding the bmu
         #
@@ -202,7 +202,7 @@ def add_neuron(fabric: dict,
         #
         'ema_error': 0.0,
 
-        # the learned edges to other neurons
+        # the learnt edges to other neurons
         #
         'synapses': SubGraph(),
 
@@ -404,27 +404,27 @@ def normalise_sub_graph(fabric: dict,
 
             # update the global min and max for this edge
             #
-            if group not in fabric['domains'][domain]['sdr_edge_min_max']:
-                fabric['domains'][domain]['sdr_edge_min_max'][group] = {'min': norm_sg[edge]['numeric'] - 0.001, 'max': norm_sg[edge]['numeric'],
-                                                                        'prev_min': norm_sg[edge]['numeric'] - 0.001, 'prev_max': norm_sg[edge]['numeric']}
+            if group not in fabric['domains'][domain]['sg_edge_min_max']:
+                fabric['domains'][domain]['sg_edge_min_max'][group] = {'min': norm_sg[edge]['numeric'] - 0.001, 'max': norm_sg[edge]['numeric'],
+                                                                       'prev_min': norm_sg[edge]['numeric'] - 0.001, 'prev_max': norm_sg[edge]['numeric']}
 
-            elif norm_sg[edge]['numeric'] < fabric['domains'][domain]['sdr_edge_min_max'][group]['min']:
-                fabric['domains'][domain]['sdr_edge_min_max'][group]['prev_min'] = fabric['domains'][domain]['sdr_edge_min_max'][group]['min']
-                fabric['domains'][domain]['sdr_edge_min_max'][group]['prev_max'] = fabric['domains'][domain]['sdr_edge_min_max'][group]['max']
+            elif norm_sg[edge]['numeric'] < fabric['domains'][domain]['sg_edge_min_max'][group]['min']:
+                fabric['domains'][domain]['sg_edge_min_max'][group]['prev_min'] = fabric['domains'][domain]['sg_edge_min_max'][group]['min']
+                fabric['domains'][domain]['sg_edge_min_max'][group]['prev_max'] = fabric['domains'][domain]['sg_edge_min_max'][group]['max']
 
-                fabric['domains'][domain]['sdr_edge_min_max'][group]['min'] = norm_sg[edge]['numeric']
+                fabric['domains'][domain]['sg_edge_min_max'][group]['min'] = norm_sg[edge]['numeric']
                 renormalise_edges.add(edge)
 
-            elif norm_sg[edge]['numeric'] > fabric['domains'][domain]['sdr_edge_min_max'][group]['max']:
-                fabric['domains'][domain]['sdr_edge_min_max'][group]['prev_min'] = fabric['domains'][domain]['sdr_edge_min_max'][group]['min']
-                fabric['domains'][domain]['sdr_edge_min_max'][group]['prev_max'] = fabric['domains'][domain]['sdr_edge_min_max'][group]['max']
-                fabric['domains'][domain]['sdr_edge_min_max'][group]['max'] = norm_sg[edge]['numeric']
+            elif norm_sg[edge]['numeric'] > fabric['domains'][domain]['sg_edge_min_max'][group]['max']:
+                fabric['domains'][domain]['sg_edge_min_max'][group]['prev_min'] = fabric['domains'][domain]['sg_edge_min_max'][group]['min']
+                fabric['domains'][domain]['sg_edge_min_max'][group]['prev_max'] = fabric['domains'][domain]['sg_edge_min_max'][group]['max']
+                fabric['domains'][domain]['sg_edge_min_max'][group]['max'] = norm_sg[edge]['numeric']
                 renormalise_edges.add(edge)
 
             # normalise the numeric
             #
-            norm_sg[edge]['numeric'] = ((norm_sg[edge]['numeric'] - fabric['domains'][domain]['sdr_edge_min_max'][group]['min']) /
-                                         (fabric['domains'][domain]['sdr_edge_min_max'][group]['max'] - fabric['domains'][domain]['sdr_edge_min_max'][group]['min']))
+            norm_sg[edge]['numeric'] = ((norm_sg[edge]['numeric'] - fabric['domains'][domain]['sg_edge_min_max'][group]['min']) /
+                                         (fabric['domains'][domain]['sg_edge_min_max'][group]['max'] - fabric['domains'][domain]['sg_edge_min_max'][group]['min']))
 
     # if the global mins and maxes have changed then need to renormalise existing neurons
     #
@@ -453,13 +453,13 @@ def normalise_sub_graph(fabric: dict,
                     # first denormalise using previous min and max
                     #
                     denorm_numeric = ((n_sg[edge]['numeric'] *
-                                       (fabric['domains'][domain]['sdr_edge_min_max'][group]['prev_max'] - fabric['domains'][domain]['sdr_edge_min_max'][group]['prev_min'])) +
-                                      fabric['domains'][domain]['sdr_edge_min_max'][group]['prev_min'])
+                                       (fabric['domains'][domain]['sg_edge_min_max'][group]['prev_max'] - fabric['domains'][domain]['sg_edge_min_max'][group]['prev_min'])) +
+                                      fabric['domains'][domain]['sg_edge_min_max'][group]['prev_min'])
 
                     # then normalise using new min and max
                     #
-                    n_sg[edge]['numeric'] = ((denorm_numeric - fabric['domains'][domain]['sdr_edge_min_max'][group]['min']) /
-                                              (fabric['domains'][domain]['sdr_edge_min_max'][group]['max'] - fabric['domains'][domain]['sdr_edge_min_max'][group]['min']))
+                    n_sg[edge]['numeric'] = ((denorm_numeric - fabric['domains'][domain]['sg_edge_min_max'][group]['min']) /
+                                              (fabric['domains'][domain]['sg_edge_min_max'][group]['max'] - fabric['domains'][domain]['sg_edge_min_max'][group]['min']))
 
     return norm_sg
 
@@ -481,13 +481,13 @@ def denormalise_sub_graph(fabric: dict,
 
     for edge in denorm_sg:
 
-        # if the edge has been normalised then it will be present in fabric['domains'][domain]['sdr_edge_min_max']
+        # if the edge has been normalised then it will be present in fabric['domains'][domain]['sg_edge_min_max']
         #
         if denorm_sg[edge]['numeric'] is not None and denorm_sg[edge]['edge_type'] in fabric['normalise_groups']:
             group = fabric['normalise_groups'][denorm_sg[edge]['edge_type']]
             denorm_sg[edge]['numeric'] = ((denorm_sg[edge]['numeric'] *
-                                           (fabric['domains'][domain]['sdr_edge_min_max'][group]['max'] - fabric['domains'][domain]['sdr_edge_min_max'][group]['min'])) +
-                                          fabric['domains'][domain]['sdr_edge_min_max'][group]['min'])
+                                           (fabric['domains'][domain]['sg_edge_min_max'][group]['max'] - fabric['domains'][domain]['sg_edge_min_max'][group]['min'])) +
+                                          fabric['domains'][domain]['sg_edge_min_max'][group]['min'])
     return denorm_sg
 
 
@@ -630,7 +630,7 @@ def train_domain(fabric: dict,
             #
             'bmu_threshold': None,
 
-            # the ID of a neruon that has just been created
+            # the ID of a neuron that has just been created
             #
             'created_id': None,
 
@@ -916,6 +916,7 @@ def learn_temporal(fabric: dict,
         ltm_sg = SubGraph()
 
         edge_types_to_learn = set()
+
         # long_term_memory memorises the denormalised incoming SubGraph
         #
         for edge in sub_graph:
