@@ -79,7 +79,7 @@ def moon_test(generalise=1.0):
                        domain='SPATIAL',
                        title='Moon')
 
-    viz.plot_neurons_versus_train_sdr(training_sgs=[training_sgs[i][0] for i in training_sgs],
+    viz.plot_neurons_versus_train_sg(training_sgs=[training_sgs[i][0] for i in training_sgs],
                                       fabric=decoded_fabric,
                                       xyz_edges={('has_x', None): {'axis': 'x',
                                                                    'min': -3,
@@ -174,7 +174,7 @@ def swiss_roll_test(generalise=1.0):
                        domain='SPATIAL',
                        title='Swiss Roll')
 
-    viz.plot_neurons_versus_train_sdr(training_sgs=[training_sgs[i][0] for i in training_sgs],
+    viz.plot_neurons_versus_train_sg(training_sgs=[training_sgs[i][0] for i in training_sgs],
                                       fabric=decoded_fabric,
                                       xyz_edges={('has_x', None): {'axis': 'x',
                                                                    'min': -12,
@@ -277,7 +277,7 @@ def colour_test(generalise=1.0):
 
         end_time = time.time()
 
-        print(f'{client} avg time {(end_time - start_time) / len(training_sgs)} secs')
+        print(f'{client} avg time {(end_time - start_time) / len(training_sgs[client])} secs')
 
         decoded_fabric = ng.decode_fabric(fabrics[client])
 
@@ -285,18 +285,18 @@ def colour_test(generalise=1.0):
                            domain='SPATIAL',
                            title=client + ' SPATIAL')
 
-        viz.plot_neurons_versus_train_sdr(training_sgs=[record[1] for record in training_sgs[client]],
-                                          fabric=decoded_fabric,
-                                          xyz_edges={('has_rgb', 'r'): {'axis': 'x',
-                                                                        'min': 0,
-                                                                        'max': 255},
-                                                     ('has_rgb', 'g'): {'axis': 'y',
-                                                                        'min': 0,
-                                                                        'max': 255},
-                                                     ('has_rgb', 'b'): {'axis': 'z',
-                                                                        'min': 0,
-                                                                        'max': 255}},
-                                          title=client + ' SPATIAL')
+        viz.plot_neurons_versus_train_sg(training_sgs=[record[1] for record in training_sgs[client]],
+                                         fabric=decoded_fabric,
+                                         xyz_edges={('has_rgb', 'r'): {'axis': 'x',
+                                                                       'min': 0,
+                                                                       'max': 255},
+                                                    ('has_rgb', 'g'): {'axis': 'y',
+                                                                       'min': 0,
+                                                                       'max': 255},
+                                                    ('has_rgb', 'b'): {'axis': 'z',
+                                                                       'min': 0,
+                                                                       'max': 255}},
+                                         title=client + ' SPATIAL')
 
         viz.plot_anomalies(fabric=decoded_fabric, domain='SPATIAL', por_results=pors[client], title=client + " SPATIAL")
         viz.plot_anomalies(fabric=decoded_fabric, domain='TEMPORAL', por_results=pors[client], title=client + " TEMPORAL")
