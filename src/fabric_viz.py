@@ -150,14 +150,14 @@ def plot_fabric_3d(fabric, domain, title, colour_edges=None):
     fig.update_layout(width=1200, height=1200, title=dict(text=title),
                       scene=dict(xaxis_title='X', yaxis_title='Y', zaxis_title='Z'))
 
-    print(f"Domain {domain} Nos Neuron_columns: {len(neurons)} Nos Mapped: {fabric['domains'][domain]['mapped']} Mean Distance: {fabric['domains'][domain]['ema_error']:.2f}")
+    print(f"Domain {domain} Nos Neurons: {len(neurons)} Nos Mapped: {fabric['domains'][domain]['mapped']} Mean Distance: {fabric['domains'][domain]['ema_error']:.2f}")
 
     fig.show()
 
 
 # plot the neurons in RGB space
 #
-def plot_neurons_versus_train_sdr(training_sgs, fabric, xyz_edges, title):
+def plot_neurons_versus_train_sg(training_sgs, fabric, xyz_edges, title):
     train_colour = []
     scenes = {'x': 'x',
               'y': 'y',
