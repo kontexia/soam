@@ -105,7 +105,7 @@ class PubSub:
             #
             del self.subscriptions[topic]
 
-    def publish(self, topic: str, msg: PubSubMsgType) -> bool:
+    def publish(self, topic: str, msg: PubSubMsgType, persist=True) -> bool:
         """
         method to publish a message
         :param topic: the topic of the message
@@ -148,14 +148,24 @@ class PubSub:
                 self.publications[topic]['pub'].put(msg)
 
                 with self.cache.lock_key(store_name='published', key=topic):
-                    self.cache.set_kv(store_name='published', key='{}:{}'.format(msg['topic'], msg['msg_id']), value=msg, lock_cache=False)
+                    self.cache.set_kv(store_name='published',
+                                      key='{}:{}'.format(msg['topic'], msg['msg_id']),
+                                      value=msg,
+                                      lock_cache=False,
+                                      keep_cache=False,
+                                      persist=persist)
 
             # then publish this message
             #
             self.publications[topic]['pub'].put(data_packet)
             published_key = '{}:{}'.format(data_packet['topic'], data_packet['msg_id'])
             with self.cache.lock_key(store_name='published', key=published_key):
-                self.cache.set_kv(store_name='published', key=published_key, value=data_packet, lock_cache=False)
+                self.cache.set_kv(store_name='published',
+                                  key=published_key,
+                                  value=data_packet,
+                                  lock_cache=False,
+                                  keep_cache=False,
+                                  persist=persist)
             published = True
         else:
             # no subscribers so cache
@@ -165,7 +175,7 @@ class PubSub:
 
         return published
 
-    def listen(self, timeout: float = None) -> int:
+    def listen(self, timeout: float = None, persist=True) -> int:
         """
         method to listen for subscribed messages - if any arrive then the associated callback function will be called
 
@@ -182,7 +192,7 @@ class PubSub:
                     processed_key = '{}:{}:{}'.format(msg['topic'], msg['msg_id'], self.uid)
                     msg['subscriber'] = self.uid
                     msg['topic_msg_id'] = '{}:{}'.format(msg['topic'], msg['msg_id'])
-                    self.cache.set_kv(store_name='subscribed', key=processed_key, value=msg, lock_cache=True)
+                    self.cache.set_kv(store_name='subscribed', key=processed_key, value=msg, lock_cache=True, keep_cache=False, persist=persist)
                     nos_processed += 1
                 except TimeoutError:
                     time.sleep(0.1)
